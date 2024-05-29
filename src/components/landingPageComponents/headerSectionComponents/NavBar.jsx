@@ -47,7 +47,7 @@ function NavBar() {
                 ))}
             </ul>
             <div className="">
-                <button onClick={()=> navigate()} className="bg-accent text-primary font-poppins md:text-lg  rounded-lg py-2 px-4 capitalize font-medium">Register</button>
+                <button onClick={()=> navigate('/signup')} className="bg-accent text-primary font-poppins md:text-lg  rounded-lg py-2 px-4 capitalize font-medium">Register</button>
             </div>
         </div>
     </nav>
