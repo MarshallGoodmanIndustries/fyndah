@@ -11,10 +11,13 @@ import {
   Ellipse7,
   signup_bg,
 } from "../../assets/images/index";
+import { Radio, RadioGroup, Stack } from '@chakra-ui/react'
+// import codes from "country-calling-code";
 
 function SignUp() {
   const [revealPassword, setRevealPassword] = useState(false);
   const [revealConfirmPassword, setRevealConfirmPassword] = useState(false);
+  const [value, setValue] = useState('sms')
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -30,16 +33,20 @@ function SignUp() {
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
+    countryCodeSelect: "",
   });
 
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
+    countryCodeSelect: "",
   });
 
   const handleChange = (e) => {
@@ -75,10 +82,21 @@ function SignUp() {
       if (signupFormData.email.trim() === "") {
         newErrors.email = "Please enter your valid email address!";
       }
+      // Validate phone number
+      const phoneRegex = /^\+?[0-9]+$/;
+      if (signupFormData.phone.trim() === "") {
+        newErrors.phone = "Please enter your Phone Number!";
+      } else if (!phoneRegex.test(signupFormData.phone)) {
+        newErrors.phone = "Please enter a valid phone number!";
+      }
+
       if (signupFormData.confirmPassword !== signupFormData.password) {
         newErrors.confirmPassword = "Passwords do not match!";
       } else if (signupFormData.confirmPassword.trim() === "") {
         newErrors.confirmPassword = "Password should not be empty!";
+      }
+      if (signupFormData.countryCodeSelect.trim() === "") {
+        newErrors.countryCodeSelect = "Please select a country code!";
       }
 
       //check for errors
@@ -259,6 +277,54 @@ function SignUp() {
           </div>
 
           <div className="flex flex-col gap-1 md:col-span-2">
+            <label htmlFor="email">
+              Phone Number<span className="text-red-500 ml-2">*</span>
+            </label>
+            <div className="flex gap-4">
+              {/* <div>
+              <Select name="countryCodeSelect"
+           >
+                <SelectTrigger className="w-[170px]">
+                  <SelectValue placeholder="Country code" />
+                </SelectTrigger>
+                <SelectContent>
+                  {codes.map((code, index) => (
+                    <SelectItem key={index} value={code.countryCodes[0]}>
+                      {" "}
+                      +{code.countryCodes[0]} <span> {"  "} {code.isoCode3} </span>{" "}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.countryCodeSelect && (
+                  <p className="text-red-600 text-[0.75rem] lg:text-[1rem]">
+                    {" "}
+                    {errors.countryCodeSelect}{" "}
+                  </p>
+                )}
+              </div> */}
+
+              {/* <div className="w-full"> */}
+              <input
+                value={signupFormData.phone}
+                onChange={handleChange}
+                type="text"
+                name="phone"
+                id="phone"
+                className="outline-none border w-full border-solid grid-cols-4 border-textGrey text-blackclr text-base rounded-lg p-2"
+              />
+
+              {errors.phone && (
+                <p className="text-red-600 text-[0.75rem] lg:text-[1rem]">
+                  {" "}
+                  {errors.phone}{" "}
+                </p>
+              )}
+              {/* </div> */}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1 md:col-span-2">
             <label htmlFor="password">
               Password<span className="text-red-500 ml-2">*</span>
             </label>
@@ -289,6 +355,7 @@ function SignUp() {
               </p>
             )}
           </div>
+
           <div className="flex flex-col gap-1 md:col-span-2">
             <label htmlFor="confirmPassword">
               Confirm Password<span className="text-red-500 ml-2">*</span>
@@ -319,6 +386,16 @@ function SignUp() {
                 {errors.confirmPassword}{" "}
               </p>
             )}
+          </div>
+
+          <div className="flex flex-col gap-5">
+            <p>Verify your account using: </p>
+            <RadioGroup onChange={setValue} value={value}>
+      <Stack direction='row'>
+        <Radio colorScheme="orange" value='sms'>Phone</Radio>
+        <Radio colorScheme="orange" value='email'>Email</Radio>
+      </Stack>
+    </RadioGroup>
           </div>
 
           <button
