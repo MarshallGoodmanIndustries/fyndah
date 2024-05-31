@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { landingPageNavMenu } from "../../../routes/Navigations";
 import { Button } from "../../uiComponents";
@@ -10,8 +10,40 @@ import classNames from "classnames";
 function NavBar() {
     const navigate = useNavigate();
     const [revealNav, setRevealNav] = useState(false);
+    const [stickyEffect, setStickyEffect] = useState(false);
+    const [vw, setVw] = useState(null);
+
+    const checkViewWidth = ()=> {
+        setVw(window.innerWidth);
+    }
+
+    // hide mobile nav bar when Home link is clicked
+    useEffect(()=>{
+        if(vw <= 680){
+            setRevealNav(false);
+            setVw(null);
+        }
+    }, [vw]);
+
+    // navbar background sticky scroll effect
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 150 ) {
+                setStickyEffect(true);
+            }else{
+                setStickyEffect(false);
+            } 
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+   
+
   return (
-    <nav className='flex justify-between items-center z-50 bg-secondary w-full h-[16dvh] px-4 sm:px-5 md:px-6 lg:px-16'>
+    <nav className={classNames( stickyEffect && "sticky top-0 shadow-md shadow-secondary", 'flex justify-between items-center z-50 bg-primary w-full h-[16dvh] transition-all duration-300 px-4 sm:px-5 md:px-6 lg:px-16')}>
         <div className='max-w-[8rem] md:max-w-[10rem] h-auto transform -translate-x-3'>
             <img src={logo} className='w-full h-full object-cover' alt="Fyndah logo" />
         </div>
@@ -27,8 +59,8 @@ function NavBar() {
                 </div>
                 <ul className="flex flex-col sm:flex-row items-center gap-4">
                     {landingPageNavMenu.map(({title, url}, index) => (
-                        <li key={index}>
-                            <NavLink to={url} className="text-base md:text-lg font-poppins font-normal">{title}</NavLink>
+                        <li key={index} onClick={url == '/' ? () => checkViewWidth() : null}>
+                            <NavLink to={url} className="text-base hover:text-accent transition-colors duration-300 font-poppins font-light">{title}</NavLink>
                         </li>
                     ))}
                 </ul>
@@ -42,12 +74,12 @@ function NavBar() {
             <ul className="flex items-center gap-4">
                 {landingPageNavMenu.map(({title, url}, index) => (
                     <li key={index}>
-                        <NavLink to={url} className="md:text-lg font-poppins font-normal">{title}</NavLink>
+                        <NavLink to={url} className="md:text-lg hover:text-accent transition-colors duration-300 font-poppins font-light">{title}</NavLink>
                     </li>
                 ))}
             </ul>
             <div className="">
-                <button onClick={()=> navigate()} className="bg-accent text-primary font-poppins md:text-lg  rounded-lg py-2 px-4 capitalize font-medium">Register</button>
+                <button onClick={()=> navigate('/signup')} className="bg-accent text-primary font-poppins md:text-lg  rounded-lg py-1 px-4 capitalize font-light">Register</button>
             </div>
         </div>
     </nav>

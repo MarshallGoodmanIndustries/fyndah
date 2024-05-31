@@ -15,6 +15,7 @@ export default {
         secondary: '#edf2fb',
         accent: '#ed8936',
         accentDark: '#ed7a36',
+        textDark: "rgb(40, 40, 40)",
       },
     },
   },
