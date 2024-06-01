@@ -5,40 +5,24 @@ import classNames from "classnames";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { AiFillLike } from "react-icons/ai";
 import { FaComment } from "react-icons/fa6";
-import axios from "axios";
 // import { IoSendSharp } from "react-icons/io5";
 
 // prevCommentUserImg, prevCommentUserText, userImg
 
-const FeaturedPost = ({profileImg, username, timePosted, textContent, imgContent, noOflikes, noOfComments}) => {
+const FeaturedPost_inner = ({profileImg, username, timePosted, textContent, imgContent, noOflikes, noOfComments}) => {
     const [like, setLike] = useState(false);
     const [likeCount, setLikeCount] = useState(noOflikes);
     const [comment, setComment] = useState(false);
 
-    const handleLike = async ()=>{
-        if(like == false){
-           const url = "https://axelonepostfeature.onrender.com/api/post/664de0da660d36f7d1d/like";
-
-            try {
-                const response = await axios.post(url);
-                console.log(response.data);
-            } catch (error) {
-                console.log(error.message);
-            }
-            setLike(true);
-            setLikeCount(prevLikeCount => prevLikeCount + 1);
-        }else{
-            const url = "https://axelonepostfeature.onrender.com/api/post/664de0da660d36f7290edd1d/unlike";
-            try {
-                const response = await axios.post(url);
-                console.log(response.data)
-            } catch (error) {
-                console.log(error.message);
-            }
-            setLike(false);
-            setLikeCount(prevLikeCount => prevLikeCount - 1);
-        }
-    }
+    // const handleLike = ()=>{
+    //     if(like == false){
+    //         setLike(true);
+    //         setLikeCount(prevLikeCount => prevLikeCount + 1);
+    //     }else{
+    //         setLike(false);
+    //         setLikeCount(prevLikeCount => prevLikeCount - 1);
+    //     }
+    // }
   return (
     <section className="flex w-full max-w-[300px] gap-2 rounded-lg">
         {/* user profile image container */}
@@ -117,4 +101,4 @@ const FeaturedPost = ({profileImg, username, timePosted, textContent, imgContent
   )
 }
 
-export default FeaturedPost;
+export default FeaturedPost_inner;

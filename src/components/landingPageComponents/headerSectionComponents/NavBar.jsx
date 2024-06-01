@@ -43,7 +43,7 @@ function NavBar() {
    
 
   return (
-    <nav className={classNames( stickyEffect && "sticky top-0 shadow-md shadow-secondary", 'flex justify-between items-center z-50 bg-primary w-full h-[16dvh] transition-all duration-300 px-4 sm:px-5 md:px-6 lg:px-16')}>
+    <nav className={classNames( stickyEffect && "sticky top-0 shadow-sm shadow-secondary", 'flex justify-between items-center z-50 bg-primary w-full h-[16dvh] transition-all duration-300 px-4 sm:px-5 md:px-6 lg:px-16')}>
         <div className='max-w-[8rem] md:max-w-[10rem] h-auto transform -translate-x-3'>
             <img src={logo} className='w-full h-full object-cover' alt="Fyndah logo" />
         </div>
@@ -79,7 +79,7 @@ function NavBar() {
                 ))}
             </ul>
             <div className="">
-                <button onClick={()=> navigate('/signup')} className="bg-accent text-primary font-poppins md:text-lg  rounded-lg py-1 px-4 capitalize font-light">Register</button>
+                <button onClick={()=> navigate('/signup')} className="bg-accent text-primary font-poppins md:text-lg rounded-lg py-1 px-4 capitalize font-light">Register</button>
             </div>
         </div>
     </nav>

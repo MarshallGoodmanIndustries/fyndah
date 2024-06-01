@@ -1,4 +1,4 @@
-import { NavBar, HeroSection, FeaturedPosts } from "../landingPageComponents";
+import { NavBar, HeroSection, FeaturedPosts, Footer } from "../landingPageComponents";
 
 
 function LandingPage() {
@@ -11,6 +11,7 @@ function LandingPage() {
       <main>
         <FeaturedPosts />
       </main>
+      <Footer />
     </>
   )
 }
