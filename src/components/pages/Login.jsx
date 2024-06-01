@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { FaPlus, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { BsBoxArrowLeft } from "react-icons/bs";
@@ -11,12 +11,14 @@ import {
   Ellipse7,
   signup_bg,
 } from "../../assets/images/index";
-
+import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 function Login() {
   const [revealPassword, setRevealPassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { setAuthToken } = useContext(AuthContext);
 
   useEffect(() => {
     window.scrollTo({
@@ -26,7 +28,7 @@ function Login() {
     });
   }, [location]);
 
-  const [signupFormData, setSignupFormData] = useState({
+  const [loginFormData, setLoginFormData] = useState({
     email: "",
     password: "",
   });
@@ -39,8 +41,8 @@ function Login() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setSignupFormData({
-      ...signupFormData,
+    setLoginFormData({
+      ...loginFormData,
       [name]: value,
     });
 
@@ -50,43 +52,50 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
-    //validate inputs
-    try {
-      e.preventDefault();
-      const newErrors = {};
-      if (signupFormData.password.trim() === "") {
-        newErrors.password = "Password is required!";
-      }
-      if (signupFormData.email.trim() === "") {
-        newErrors.email = "Please Enter Your Registered Email Address!";
-      }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = {};
 
-      //check for errors
-      if (Object.values(newErrors).some((error) => error !== "")) {
-        setErrors(newErrors);
-      } else {
-        //form submission successful
+    if (loginFormData.password.trim() === "") {
+      newErrors.password = "Password is required!";
+    }
+    if (loginFormData.email.trim() === "") {
+      newErrors.email = "Please enter your registered email address!";
+    }
+
+    if (Object.values(newErrors).some((error) => error !== "")) {
+      setErrors(newErrors);
+    } else {
+      try {
+        const response = await axios.post(
+          'https://api.fyndah.com/api/v1/auth/login',
+          {
+            email_or_username: loginFormData.email,
+            password: loginFormData.password,
+          }
+        );
+
+        if (response.status === 200) {
+          const token = response.data.token.original.access_token;
+          setAuthToken(token);
+          Swal.fire({
+            icon: 'success',
+            title: 'Successful...',
+            text: 'Successfully logged in',
+          });
+          navigate('/dashboard');
+        } else {
+          throw new Error("Login failed");
+        }
+      } catch (error) {
         Swal.fire({
-          icon: "success",
-          title: "Successful...",
-          text: "You have been succesfully logged in!",
-          timer: 3000,
-          timerProgressBar: true,
-          // footer: '<a href="#">Could not register your account try again later..., ${error}</a>'
+          icon: "error",
+          title: "Oops...",
+          text: "Login Failed!",
+          footer: `<a href="#">Could not log in. Please try again later. ${error.message}</a>`,
         });
-        console.log("Form submitted", signupFormData);
-        navigate("/");
+        console.error(error);
       }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Authentication Failed!",
-        footer:
-          '<a href="#">App encountered an error while being logged in. Kindly Try again later..., ${error}</a>',
-      });
-      console.error(error);
     }
   };
 
@@ -111,10 +120,10 @@ function Login() {
       {/* sign up sub heading */}
       <div className="relative z-10">
         <p className="text-accentDark text-lg md:text-xl font-medium font-dmsans">
-        Welcome Back!
+          Welcome Back!
         </p>
         <h2 className="text-black text-3xl md:text-4xl font-bold font-lato capitalize mt-4 mb-8 xxsm:max-w-[100%] max-w-[90%] sm:max-w-[60%] md:max-w-[80%]">
-        Continue your search for the best services near you!
+          Continue your search for the best services near you!
         </h2>
         <div className="flex items-center">
           <div className="w-[2rem] h-[2rem] rounded-[50%] overflow-hidden bg-white relative z-[5] shadow-lg border-2 border-solid border-primary">
@@ -164,8 +173,10 @@ function Login() {
           <h3 className="text-2xl text-accentDark font-bold font-lato mb-2">
             Welcome Back<span className="text-buttonBottom">!</span>
           </h3>
-          <p className="text-textGrey text-sm md:text-base font-light">
-          Eager to connect with skilled professionals near you? Rejoin our dynamic community and continue your journey to finding the best local services near you!
+          <p className="text-textGrey text-sm md:text-base font-normal">
+            Eager to connect with skilled professionals near you? Rejoin our
+            dynamic community and continue your journey to finding the best
+            local services near you!
           </p>
         </div>
         <form
@@ -179,7 +190,7 @@ function Login() {
               Email<span className="text-red-500 ml-2">*</span>
             </label>
             <input
-              value={signupFormData.email}
+              value={loginFormData.email}
               onChange={handleChange}
               type="email"
               name="email"
@@ -201,7 +212,7 @@ function Login() {
             </label>
             <div className="relative w-full border border-solid border-textGrey rounded-lg">
               <input
-                value={signupFormData.password}
+                value={loginFormData.password}
                 onChange={handleChange}
                 type={revealPassword ? "text" : "password"}
                 name="password"
@@ -226,7 +237,7 @@ function Login() {
               </p>
             )}
           </div>
-          
+
           <button
             className="bg-accentDark text-white p-2 hover:text-[#fdba74] transition-all duration-300 rounded-lg font-lato text-lg md:col-span-2"
             type="submit"
@@ -239,7 +250,7 @@ function Login() {
         <div className="flex justify-center items-center gap-2">
           <h3 className="lg:font-semibold font-medium">New Here?</h3>
           <Link
-            to="/login"
+            to="/signup"
             className="text-accentDark hover:text-[#c2410c] font-semibold text-[1.1rem] lg:text-[1.3rem]"
           >
             Register
