@@ -11,13 +11,14 @@ import {
   Ellipse7,
   signup_bg,
 } from "../../assets/images/index";
-import { Radio, RadioGroup, Stack } from '@chakra-ui/react'
+// import { Radio, RadioGroup, Stack } from '@chakra-ui/react'
+import axios from "axios";
 // import codes from "country-calling-code";
 
 function SignUp() {
   const [revealPassword, setRevealPassword] = useState(false);
   const [revealConfirmPassword, setRevealConfirmPassword] = useState(false);
-  const [value, setValue] = useState('sms')
+  // const [value, setValue] = useState('sms')
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,20 +34,22 @@ function SignUp() {
     firstName: "",
     lastName: "",
     email: "",
-    phone: "",
+    username: "",
+    // phone: "",
     password: "",
     confirmPassword: "",
-    countryCodeSelect: "",
+    // countryCodeSelect: "",
   });
 
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    phone: "",
+    // username: "",
+    // phone: "",
     password: "",
     confirmPassword: "",
-    countryCodeSelect: "",
+    // countryCodeSelect: "",
   });
 
   const handleChange = (e) => {
@@ -63,69 +66,88 @@ function SignUp() {
     });
   };
 
-  const handleSubmit = (e) => {
-    //validate inputs
-    try {
-      e.preventDefault();
-      const newErrors = {};
-      if (signupFormData.firstName.trim() === "") {
-        newErrors.firstName = "Please enter a first name!";
-      }
-      if (signupFormData.lastName.trim() === "") {
-        newErrors.lastName = "Please enter a last name!";
-      }
-      if (signupFormData.password.trim() === "") {
-        newErrors.password = "Password is required!";
-      } else if (signupFormData.password.length < 8) {
-        newErrors.password = "Password must be at least 8 characters";
-      }
-      if (signupFormData.email.trim() === "") {
-        newErrors.email = "Please enter your valid email address!";
-      }
-      // Validate phone number
-      const phoneRegex = /^\+?[0-9]+$/;
-      if (signupFormData.phone.trim() === "") {
-        newErrors.phone = "Please enter your Phone Number!";
-      } else if (!phoneRegex.test(signupFormData.phone)) {
-        newErrors.phone = "Please enter a valid phone number!";
-      }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = {};
 
-      if (signupFormData.confirmPassword !== signupFormData.password) {
-        newErrors.confirmPassword = "Passwords do not match!";
-      } else if (signupFormData.confirmPassword.trim() === "") {
-        newErrors.confirmPassword = "Password should not be empty!";
-      }
-      if (signupFormData.countryCodeSelect.trim() === "") {
-        newErrors.countryCodeSelect = "Please select a country code!";
-      }
+    if (signupFormData.firstName.trim() === "") {
+      newErrors.firstName = "Please enter a first name!";
+    }
+    if (signupFormData.lastName.trim() === "") {
+      newErrors.lastName = "Please enter a last name!";
+    }
+    if (signupFormData.password.trim() === "") {
+      newErrors.password = "Password is required!";
+    } else if (signupFormData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
+    if (signupFormData.email.trim() === "") {
+      newErrors.email = "Please enter your valid email address!";
+    }
+    // const phoneRegex = /^\+?[0-9]+$/;
+    // if (signupFormData.phone.trim() === "") {
+    //   newErrors.phone = "Please enter your Phone Number!";
+    // } else if (!phoneRegex.test(signupFormData.phone)) {
+    //   newErrors.phone = "Please enter a valid phone number!";
+    // }
 
-      //check for errors
-      if (Object.values(newErrors).some((error) => error !== "")) {
-        setErrors(newErrors);
-      } else {
-        //form submission successful
+    if (signupFormData.confirmPassword !== signupFormData.password) {
+      newErrors.confirmPassword =
+        "The password field confirmation does not match!";
+    } else if (signupFormData.confirmPassword.trim() === "") {
+      newErrors.confirmPassword = "Password should not be empty!";
+    }
+    // if (signupFormData.countryCodeSelect.trim() === "") {
+    //   newErrors.countryCodeSelect = "Please select a country code!";
+    // }
+
+    if (Object.values(newErrors).some((error) => error !== "")) {
+      setErrors(newErrors);
+    } else {
+      // Swal.fire({
+      //         icon: "success",
+      //         title: "Successful...",
+      //         text: "Successfully logged in",
+      //       });
+      //       console.log("Form submitted", signupFormData);
+            
+      //       navigate("/dashboard");
+      try {
+        const response = await axios.post(
+          "https://api.fyndah.com/api/v1/auth/users",
+          {
+            firstname: signupFormData.firstName,
+            lastname: signupFormData.lastName,
+            email: signupFormData.email,
+            username: signupFormData.username,
+            password: signupFormData.password,
+            password_confirmation: signupFormData.confirmPassword,
+          }
+        );
+
+        if (response.data.status == "success") {
+          Swal.fire({
+            icon: "success",
+            title: "Successful...",
+            text: "Account created successfully. Use the Email token for email verification.",
+          });
+          console.log("Form submitted", signupFormData);
+          navigate("/dashboard");
+        } else {
+          throw new Error("Registration failed");
+        }
+      } catch (error) {
         Swal.fire({
-          icon: "success",
-          title: "Successful...",
-          text: "You have been registered succesfully!",
-          timer: 3000,
-          timerProgressBar: true,
-          // footer: '<a href="#">Could not register your account try again later..., ${error}</a>'
+          icon: "error",
+          title: "Oops...",
+          text: "Registration Failed!",
+          footer: `<a href="#">Could not register your account. Please try again later. ${error.message}</a>`,
         });
-        console.log("Form submitted", signupFormData);
-        navigate("/");
+        console.error(error);
       }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Registration Failed!",
-        footer:
-          '<a href="#">Could not register your account try again later..., ${error}</a>',
-      });
-      console.error(error);
     }
   };
+
 
   return (
     <section className="relative w-full h-full bg-white px-3 sm:px-4 md:px-6 lg:px-20 py-16 md:py-8 grid items-center grid-cols-1 md:grid-cols-2 gap-16 md:gap-8">
@@ -154,7 +176,7 @@ function SignUp() {
           Sign Up, discover reliable services near you ,{" "}
           <span className="text-buttonBottom">&</span> simplify your life today!
         </h2>
-        <div className="flex items-center">
+        <div className="flex  items-center">
           <div className="w-[2rem] h-[2rem] rounded-[50%] overflow-hidden bg-white relative z-[5] shadow-lg border-2 border-solid border-primary">
             <img
               src={Ellipse2}
@@ -202,7 +224,7 @@ function SignUp() {
           <h3 className="text-2xl text-accentDark font-bold font-lato mb-2">
             Join Us<span className="text-buttonBottom">!</span>
           </h3>
-          <p className="text-textGrey text-sm md:text-base font-light">
+          <p className="text-textGrey text-sm md:text-base font-normal">
             Ready to connect with top local professionals? Join our vibrant
             community and find professionals near you!
           </p>
@@ -256,6 +278,27 @@ function SignUp() {
           </div>
 
           <div className="flex flex-col gap-1 md:col-span-2">
+            <label htmlFor="lastName">
+              Username<span className="text-red-500 ml-2"></span>
+            </label>
+            <input
+              value={signupFormData.username}
+              onChange={handleChange}
+              type="text"
+              name="username"
+              id="username"
+              className="outline-none border border-solid border-textGrey text-blackclr text-base rounded-lg p-2"
+            />
+
+            {errors.username && (
+              <p className="text-red-600 text-[0.75rem] lg:text-[1rem]">
+                {" "}
+                {errors.username}{" "}
+              </p>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-1 md:col-span-2">
             <label htmlFor="email">
               Email<span className="text-red-500 ml-2">*</span>
             </label>
@@ -276,12 +319,12 @@ function SignUp() {
             )}
           </div>
 
-          <div className="flex flex-col gap-1 md:col-span-2">
+          {/* <div className="flex flex-col gap-1 md:col-span-2">
             <label htmlFor="email">
               Phone Number<span className="text-red-500 ml-2">*</span>
             </label>
             <div className="flex gap-4">
-              {/* <div>
+              <div>
               <Select name="countryCodeSelect"
            >
                 <SelectTrigger className="w-[170px]">
@@ -302,9 +345,9 @@ function SignUp() {
                     {errors.countryCodeSelect}{" "}
                   </p>
                 )}
-              </div> */}
+              </div>
 
-              {/* <div className="w-full"> */}
+              <div className="w-full">
               <input
                 value={signupFormData.phone}
                 onChange={handleChange}
@@ -320,9 +363,9 @@ function SignUp() {
                   {errors.phone}{" "}
                 </p>
               )}
-              {/* </div> */}
+              </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-1 md:col-span-2">
             <label htmlFor="password">
@@ -388,7 +431,7 @@ function SignUp() {
             )}
           </div>
 
-          <div className="flex flex-col gap-5">
+          {/* <div className="flex flex-col gap-5">
             <p>Verify your account using: </p>
             <RadioGroup onChange={setValue} value={value}>
       <Stack direction='row'>
@@ -396,7 +439,7 @@ function SignUp() {
         <Radio colorScheme="orange" value='email'>Email</Radio>
       </Stack>
     </RadioGroup>
-          </div>
+          </div> */}
 
           <button
             className="bg-accentDark text-white p-2 hover:text-[#fdba74] transition-all duration-300 rounded-lg font-lato text-lg md:col-span-2"
@@ -417,6 +460,7 @@ function SignUp() {
           </Link>
         </div>
       </div>
+
     </section>
   );
 }
