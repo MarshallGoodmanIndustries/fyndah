@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { LandingPage, SignUp, Login, BusinessProfileSetup, AdProfileSetup, UserProfileSetup,
     AdminLayout, Profile, FavoriteBusiness, LogOut, Messages, CreateBusiness,
+    MyBusiness,
  } from "../components/pages";
 import { PageNotFound } from "../components/errorPages";
 function Routes() {
@@ -64,6 +65,11 @@ function Routes() {
               {
                 path: 'logout',
                 element: <LogOut />,
+                errorElement: <PageNotFound />
+              },
+              {
+                path: 'mybusiness',
+                element: <MyBusiness />,
                 errorElement: <PageNotFound />
               },
               
