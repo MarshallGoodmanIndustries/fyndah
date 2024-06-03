@@ -10,5 +10,9 @@ import Ellipse7 from './signup/Ellipse7.png'
 import signup_bg from './signup/signup_bg.png'
 import userImg from '../images/dashboard/userImg.jpg'
 import userImg2 from '../images/dashboard/userImg2.jpg'
+import businessImg from '../images/dashboard/businessImg.jpg'
+import businessImg2 from '../images/dashboard/businessImg2.jpeg'
 
-export { logo,searchbg1, searchbg2, searchbg3, Ellipse2, Ellipse4, Ellipse5, Ellipse6, Ellipse7, signup_bg, userImg, userImg2 };
+export { logo,searchbg1, searchbg2, searchbg3, Ellipse2, Ellipse4, Ellipse5, Ellipse6, 
+    Ellipse7, signup_bg, userImg, userImg2, businessImg, businessImg2, 
+};

@@ -45,7 +45,7 @@ function SignUp() {
     firstName: "",
     lastName: "",
     email: "",
-    // username: "",
+    username: "",
     // phone: "",
     password: "",
     confirmPassword: "",
@@ -75,6 +75,9 @@ function SignUp() {
     }
     if (signupFormData.lastName.trim() === "") {
       newErrors.lastName = "Please enter a last name!";
+    }
+    if (signupFormData.username.trim() === "") {
+      newErrors.username = "Please enter a user name!";
     }
     if (signupFormData.password.trim() === "") {
       newErrors.password = "Password is required!";
@@ -110,7 +113,7 @@ function SignUp() {
       //         text: "Successfully logged in",
       //       });
       //       console.log("Form submitted", signupFormData);
-            
+
       //       navigate("/dashboard");
       try {
         const response = await axios.post(
@@ -130,6 +133,8 @@ function SignUp() {
             icon: "success",
             title: "Successful...",
             text: "Account created successfully. Use the Email token for email verification.",
+            timer: 2000,
+            timerProgressBar: true,
           });
           console.log("Form submitted", signupFormData);
           navigate("/dashboard");
@@ -147,7 +152,6 @@ function SignUp() {
       }
     }
   };
-
 
   return (
     <section className="relative w-full h-full bg-white px-3 sm:px-4 md:px-6 lg:px-20 py-16 md:py-8 grid items-center grid-cols-1 md:grid-cols-2 gap-16 md:gap-8">
@@ -279,7 +283,7 @@ function SignUp() {
 
           <div className="flex flex-col gap-1 md:col-span-2">
             <label htmlFor="lastName">
-              Username<span className="text-red-500 ml-2"></span>
+              Username<span className="text-red-500 ml-2">*</span>
             </label>
             <input
               value={signupFormData.username}
@@ -460,7 +464,6 @@ function SignUp() {
           </Link>
         </div>
       </div>
-
     </section>
   );
 }
