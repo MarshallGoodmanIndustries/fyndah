@@ -19,3 +19,27 @@
     border-radius: 10px;
 }
 
+@media screen and (max-width: 768px) {
+    .checkbox .chakra-checkbox__label{
+        font-size: 0.7rem !important;
+    }
+    
+    .user-profile-input.chakra-input.css-1tutghe {
+        font-size: 0.9rem !important;
+    }
+}
+@media  (min-width: 400px) and (max-width: 768px) {
+    .checkbox .chakra-checkbox__label{
+        font-size: 1rem !important;
+    }
+    
+    .user-profile-input.chakra-input.css-1tutghe {
+        font-size: 1rem !important;
+    }
+}
+@media  (min-width: 1000px) and (max-width: 1200px) {
+    .checkbox .chakra-checkbox__label{
+        font-size: 0.9rem !important;
+    }
+}
+

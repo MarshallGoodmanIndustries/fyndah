@@ -60,7 +60,7 @@ function Login() {
       newErrors.password = "Password is required!";
     }
     if (loginFormData.email.trim() === "") {
-      newErrors.email = "Please enter your registered email address!";
+      newErrors.email = "Please enter your registered email address or username!";
     }
 
     if (Object.values(newErrors).some((error) => error !== "")) {
@@ -68,7 +68,7 @@ function Login() {
     } else {
       try {
         const response = await axios.post(
-          'https://api.fyndah.com/api/v1/auth/login',
+          "https://api.fyndah.com/api/v1/auth/login",
           {
             email_or_username: loginFormData.email,
             password: loginFormData.password,
@@ -79,9 +79,11 @@ function Login() {
           const token = response.data.token.original.access_token;
           setAuthToken(token);
           Swal.fire({
-            icon: 'success',
-            title: 'Successful...',
-            text: 'Successfully logged in',
+            icon: "success",
+            title: "Successful...",
+            text: "Successfully logged in",
+            timer: 2000,
+            timerProgressBar: true,
           });
           
           // check if there is a last route session variable set
@@ -92,7 +94,7 @@ function Login() {
               navigate(lastRoute);
             } else {
               //navigate to dashboard
-              navigate('/dashboard');
+              navigate("/dashboard/profile");
             }
           }, 3000);
         } else {
@@ -198,12 +200,12 @@ function Login() {
         >
           <div className="flex flex-col gap-1 md:col-span-2">
             <label htmlFor="email">
-              Email<span className="text-red-500 ml-2">*</span>
+              Email or username<span className="text-red-500 ml-2">*</span>
             </label>
             <input
               value={loginFormData.email}
               onChange={handleChange}
-              type="email"
+              type="text"
               name="email"
               id="email"
               className="outline-none border border-solid border-textGrey text-blackclr text-base rounded-lg p-2"
