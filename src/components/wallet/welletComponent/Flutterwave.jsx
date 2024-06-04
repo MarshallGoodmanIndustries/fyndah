@@ -23,6 +23,7 @@ function Flutterwave() {
 
     const handlePayment = async () => {
         try {
+            setPaymentData(paymentData)
             const result = await initiatePayment(paymentData);
             console.log('Payment initiated successfully:', result);
             // Handle the successful payment initiation

@@ -3,7 +3,7 @@ import {logo_white} from '../../assets/images/index'
 import { FaBell } from 'react-icons/fa6'
 import { BsListUl } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
-import { Avatar} from '@chakra-ui/react'
+import { Avatar } from '@chakra-ui/react';
 
 const Header = ({handleToggle, toggle}) => {
   // const UserList = ['U', 'Lucy', 'Tom', 'Edward'];
@@ -34,7 +34,7 @@ const Header = ({handleToggle, toggle}) => {
       <div className='flex items-center justify-end md:gap-[1.8rem] gap-[1rem] lg:col-span-3 xl:col-span-2 col-span-2'>
         <span className='relative cursor-pointer'>
           <FaBell className=' size-[18px] md:size-[22px]' />
-          <p className='absolute top-[-5px] left-2 text-white rounded-full bg-navyBlue px-1 text-[11px]'>
+          <p className='absolute top-[-5px] left-2 text-white rounded-full bg-lightRed px-1 text-[11px]'>
             {' '}
             {notificationNumber}{' '}
           </p>

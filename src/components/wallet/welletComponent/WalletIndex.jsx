@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import PayLeadsForm from "./PayLeadsForm";
+import Flutterwave from "./Flutterwave";
 // import Flutterwave from "./Flutterwave";
 // import Flutterwave from "./Flutterwave";
 
@@ -31,13 +32,14 @@ function WalletIndex() {
         setIsModalOpen(false);
         navigate();
         // for the payment
-        try {
-            const payment = await axios.post('https://api.fyndah.com/api/v1/organization/flutterwave/pay')
-            console.log(payment.data);
-        } catch (error) {
-            console.log(error);
-        }
-        console.log(addAmountWallet, "from walletindex")
+        // try {
+        //     const payment = await axios.post('https://api.fyndah.com/api/v1/organization/flutterwave/pay')
+        //     console.log(payment.data);
+        // } catch (error) {
+        //     console.log(error);
+        // }
+        // console.log(addAmountWallet, "from walletindex")
+        <Flutterwave />
     };
     // this for the second modal to pay for leads
     const redirectToPayLeadsForm = async () => {
@@ -96,7 +98,7 @@ function WalletIndex() {
         <div>
             <div className="flex flex-col items-center min-h-screen bg-gray-100 p-6">
                 <div className="w-full max-w-xl mt-5 p-4 bg-white rounded-lg shadow-md">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row items-center justify-between">
                         <h2 className="text-gray-600">Hello,</h2>
                         <h2 className="text-gray-600">Bemia Johnson</h2>
                     </div>
@@ -104,7 +106,7 @@ function WalletIndex() {
                         <h3 className="text-xl">Total Balance</h3>
                         <p className="text-2xl font-bold" onChange={lowBalance}>$8,458.00</p>
                     </div>
-                    <div className="mt-4 flex justify-between">
+                    <div className="mt-4 flex flex-col sm:flex-row sm:justify-between space-y-4 sm:space-y-0">
                         <button className="flex flex-col items-center" onClick={openModal}>
                             <MdPayment className="p-2 bg-blue-200 hover:text-blue-800 text-blue-500 rounded-full text-4xl" />
                             <span className="text-sm mt-1">Add Funds</span>
@@ -117,25 +119,20 @@ function WalletIndex() {
                             <FaRegChartBar className="p-2 bg-green-200 hover:text-green-800 text-green-500 rounded-full text-4xl" />
                             <span className="text-sm mt-1">Stats</span>
                         </button>
-                        {/* <button className="flex flex-col items-center">
-                            <MdPayment className="p-2 bg-pink-200 hover:text-pink-800 text-pink-500 rounded-full text-4xl" />
-                            <span className="text-sm mt-1">Payment</span>
-                        </button> */}
                     </div>
                     <div className="mt-6">
-
                         <h3 className="text-lg font-bold">Transactions history <hr className="p-2" /></h3>
-                        <div className="flex justify-between">
+                        <div className="flex flex-col sm:flex-row sm:justify-between space-y-4 sm:space-y-0">
                             <div className="flex items-center">
                                 <label htmlFor="startDate" className="font-bold mr-1">Start Date:</label>
-                                <input type="date" id="startDate" value={startDate} onChange={handleChangeStartDate} />
+                                <input type="date" id="startDate" value={startDate} onChange={handleChangeStartDate} className="border rounded-md p-2" />
                             </div>
                             <div className="flex items-center">
                                 <label htmlFor="endDate" className="font-bold mr-1">End Date:</label>
-                                <input type="date" size={10} id="endDate" value={endDate} onChange={handleChangeEndDate} />
+                                <input type="date" size={10} id="endDate" value={endDate} onChange={handleChangeEndDate} className="border rounded-md p-2" />
                             </div>
                         </div>
-                        <ul className="h-64  overflow-y-auto mt-9">
+                        <ul className="h-64 overflow-y-auto mt-9">
                             <div className="flex justify-between">
                                 <p className="font-bold">Transaction Type</p>
                                 <p className="font-bold">Amount</p>
@@ -143,24 +140,20 @@ function WalletIndex() {
                             </div>
                             {filterTransactions().map((transaction, index) => (
                                 <li key={index} className="flex justify-between mt-7">
-                                    <span>
-                                        {transaction.description}
-                                    </span>
-                                    <span>
-                                        {transaction.amount}
-                                    </span>
-                                    <span>
-                                        {transaction.date}
-                                    </span>
+                                    <span>{transaction.description}</span>
+                                    <span>{transaction.amount}</span>
+                                    <span>{transaction.date}</span>
                                 </li>
                             ))}
                         </ul>
                     </div>
                 </div>
+
+                <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToFlutterwave} />
+                <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} />
             </div>
 
-            <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToFlutterwave} />
-            <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} />
+
 
             {/* <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 py-6">
                 <form className="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md">

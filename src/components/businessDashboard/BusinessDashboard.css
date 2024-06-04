@@ -1,5 +1,5 @@
 
-.admin-layout {
+.business-layout {
     display: grid;
     background-color: #fff;
     /* color: #FFFFFF; */
@@ -10,17 +10,17 @@
     ;
     grid-template-columns: 250px 1fr ; /* Fixed sidebar width and dynamic outlet width */
 }
-.admin-sidebar {
+.business-sidebar {
     grid-area: admin-sidebar;
-    background-color: #EC1908;
+    background-color: #00024C;
     min-height: 90vh;
 }
-.admin-header {
+.business-header {
     grid-area: admin-header;
     position: sticky;
     top: 0;
     height: 10vh;
-    background-color: #EC1908;
+    background-color: #00024C;
     z-index: 1; /* Ensure the header stays on top */
 }
 .admin-outlet {
