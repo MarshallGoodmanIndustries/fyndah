@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
-import { FaUserLarge } from "react-icons/fa6";
-import { MdAddBusiness } from "react-icons/md";
 import { AiFillMessage } from "react-icons/ai";
-import { BiSolidBusiness } from "react-icons/bi";
 import { RiLogoutCircleLine } from "react-icons/ri";
-import { TbBusinessplan } from "react-icons/tb";
+import { BsActivity } from "react-icons/bs";
+import { AiOutlineStock } from "react-icons/ai";
+import { FaUserCircle } from "react-icons/fa";
+import { CiViewTimeline } from "react-icons/ci";
+import { MdOutlineRateReview } from "react-icons/md";
+import { GiWallet } from "react-icons/gi";
 // import { IoMdArrowDropright } from "react-icons/io";
 
 const SideBar = ({handleToggle }) => {
@@ -19,36 +21,36 @@ const SideBar = ({handleToggle }) => {
   return (
     <div className='px-[1rem] text-white font-inter py-[1rem]'>
 
-      {/* PROFILE */}
-      <Link to='profile'>
+      {/* posts */}
+      <Link to='posts'>
       <div onClick={() => {
         handleToggle,
         handleItemClick(1)
       }} 
       className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(1) ? "bg-white text-textDark" : "text-white"} `}>
         <span>
-        <FaUserLarge className='size-[1rem] lg:size-[1.25rem]' />
+        <BsActivity className='size-[1rem] lg:size-[1.25rem]' />
         </span>
-        <h2 className='text-[1.1rem] mt-0 font-normal'>Profile</h2>
+        <h2 className='text-[1.1rem] mt-0 font-normal'>Posts</h2>
       </div>
       </Link>
 
-      {/* favorite business */}
-      <Link to='favoritebusiness'>
+      {/* leads */}
+      <Link to='leads'>
       <div onClick={() => {
         handleToggle,
         handleItemClick(2)
       }} 
       className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(2) ? "bg-white text-textDark" : "text-white"} `}>
         <span>
-        <MdAddBusiness className='size-[1rem] lg:size-[1.25rem]' />
+        <AiOutlineStock className='size-[1rem] lg:size-[1.25rem]' />
         </span>
-        <h2 className='text-[1.1rem] mt-0 font-normal'>Favorite Businesses</h2>
+        <h2 className='text-[1.1rem] mt-0 font-normal'>Leads</h2>
       </div>
       </Link>
 
-      {/* messages */}
-      <Link to='messages'>
+      {/* business messages */}
+      <Link to='businessmessages'>
       <div onClick={() => {
         handleToggle,
         handleItemClick(3)
@@ -61,47 +63,71 @@ const SideBar = ({handleToggle }) => {
       </div>
       </Link>
 
-      {/* createbuisness */}
-      <Link to='createbuisness'>
+      {/* business profile */}
+      <Link to='businessprofile'>
       <div onClick={() => {
         handleToggle,
         handleItemClick(4)
       }} 
       className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(4) ? "bg-white text-textDark" : "text-white"} `}>
         <span>
-        <BiSolidBusiness className='size-[1rem] lg:size-[1.25rem]' />
+        <FaUserCircle className='size-[1rem] lg:size-[1.25rem]' />
         </span>
-        <h2 className='text-[1.1rem] mt-0 font-normal'>Create a business</h2>
+        <h2 className='text-[1.1rem] mt-0 font-normal'>Profile</h2>
       </div>
       </Link>
 
-      {/* mybusiness */}
-      <Link to='mybusiness'>
+      {/* timeline */}
+      <Link to='timeline'>
       <div onClick={() => {
         handleToggle,
         handleItemClick(5)
       }} 
       className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(5) ? "bg-white text-textDark" : "text-white"} `}>
         <span>
-        <TbBusinessplan className='size-[1rem] lg:size-[1.25rem]' />
+        <CiViewTimeline className='size-[1rem] lg:size-[1.25rem]' />
         </span>
-        <h2 className='text-[1.1rem] mt-0 font-normal'>My Business</h2>
-
-        {/* <span>
-          <IoMdArrowDropright className='size-[1rem] lg:size-[1.25rem]'  />
-        </span> */}
+        <h2 className='text-[1.1rem] mt-0 font-normal'>Timeline</h2>
       </div>
       </Link>
 
-      <div className='h-[15rem] lg:h-[20rem]' ></div>
-
-      {/* logout */}
-      <Link to='logout'>
+      {/* reviews */}
+      <Link to='reviews'>
       <div onClick={() => {
         handleToggle,
         handleItemClick(6)
       }} 
       className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(6) ? "bg-white text-textDark" : "text-white"} `}>
+        <span>
+        <MdOutlineRateReview className='size-[1rem] lg:size-[1.25rem]' />
+        </span>
+        <h2 className='text-[1.1rem] mt-0 font-normal'>Reviews</h2>
+      </div>
+      </Link>
+
+      {/* wallet */}
+      <Link to='wallet'>
+      <div onClick={() => {
+        handleToggle,
+        handleItemClick(7)
+      }} 
+      className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(7) ? "bg-white text-textDark" : "text-white"} `}>
+        <span>
+        <GiWallet className='size-[1rem] lg:size-[1.25rem]' />
+        </span>
+        <h2 className='text-[1.1rem] mt-0 font-normal'>Wallet</h2>
+      </div>
+      </Link>
+
+      <div className='h-[9rem] lg:h-[14rem]' ></div>
+
+      {/* logout */}
+      <Link to='businesslogout'>
+      <div onClick={() => {
+        handleToggle,
+        handleItemClick(8)
+      }} 
+      className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(8) ? "bg-white text-textDark" : "text-white"} `}>
         <span>
         <RiLogoutCircleLine className='size-[1rem] lg:size-[1.25rem]' />
         </span>

@@ -3,6 +3,9 @@ import { LandingPage, SignUp, Login, BusinessProfileSetup, AdProfileSetup, UserP
     AdminLayout, Profile, FavoriteBusiness, LogOut, Messages, CreateBusiness,
     MyBusiness,
  } from "../components/pages";
+ import {BusinessDashboardLayout, Leads, BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
+  Reviews, Wallet
+ } from '../components/businessDashboard/index'
 import { PageNotFound } from "../components/errorPages";
 function Routes() {
     const router = createBrowserRouter([
@@ -70,6 +73,56 @@ function Routes() {
               {
                 path: 'mybusiness',
                 element: <MyBusiness />,
+                errorElement: <PageNotFound />
+              },
+              
+            ]
+          },
+
+          //business dashboard layout
+          {
+            path: `/businessDashboard/:id`,
+            element: <BusinessDashboardLayout />,
+            errorElement: <PageNotFound />,
+            children: [
+              {
+                path: 'posts',
+                element: <Posts />,
+                errorElement: <PageNotFound />
+              },
+              {
+                path: 'leads',
+                element: <Leads />,
+                errorElement: <PageNotFound />
+              },
+              {
+                path: 'businessmessages',
+                element: <BusinessMessages />,
+                errorElement: <PageNotFound />
+              },
+              {
+                path: 'businesslogout',
+                element: <BusinessLogOut />,
+                errorElement: <PageNotFound />
+              },
+              {
+                path: 'businessprofile',
+                element: <BusinessProfile />,
+                errorElement: <PageNotFound />
+              },
+              {
+                path: 'timeline',
+                element: <Timeline />,
+                errorElement: <PageNotFound />
+              },
+              {
+                path: 'reviews',
+                element: <Reviews />,
+                errorElement: <PageNotFound />
+              },
+              {
+                path: 'wallet',
+                element: <Wallet />,
                 errorElement: <PageNotFound />
               },
               

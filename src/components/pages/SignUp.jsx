@@ -137,7 +137,7 @@ function SignUp() {
             timerProgressBar: true,
           });
           console.log("Form submitted", signupFormData);
-          navigate("/dashboard");
+          navigate("/dashboard/profile");
         } else {
           throw new Error("Registration failed");
         }
