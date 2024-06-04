@@ -12,10 +12,12 @@ import LogOut from "../userDashboard/LogOut.jsx";
 import Messages from "../userDashboard/Messages.jsx";
 import CreateBusiness from "../userDashboard/CreateBusiness.jsx";
 import MyBusiness from "../userDashboard/MyBusiness.jsx";
+import Wallet from "../wallet/Wallet.jsx";
 
 
 
 
-export { LandingPage, SignUp, Login, BusinessProfileSetup, AdProfileSetup, UserProfileSetup, Profile,
-    AdminLayout, Dashboard, FavoriteBusiness, LogOut, Messages, CreateBusiness, MyBusiness,
- };
+export {
+    LandingPage, SignUp, Login, BusinessProfileSetup, AdProfileSetup, UserProfileSetup, Profile,
+    AdminLayout, Dashboard, FavoriteBusiness, LogOut, Messages, CreateBusiness, MyBusiness, Wallet
+};

@@ -17,6 +17,21 @@ export default {
         accentDark: '#ed7a36',
         textDark: "rgb(40, 40, 40)",
       },
+      keyframes: {
+        zoomIn: {
+          '0%': {
+            transform: 'scale(0.9)',
+            opacity: '0',
+          },
+          '100%': {
+            transform: 'scale(1)',
+            opacity: '1',
+          },
+        },
+      },
+      animation: {
+        zoomIn: 'zoomIn 0.3s ease-out',
+      },
     },
   },
   plugins: [
