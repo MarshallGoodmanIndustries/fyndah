@@ -40,7 +40,7 @@ const Header = ({handleToggle, toggle}) => {
           </p>
         </span>
         <div className='flex gap-3 items-center'>
-        <Avatar size='sm' name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
+        <Avatar size='sm'  name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
           {/* <Avatar size='default' className='bg-[#f56a00] align-middle md:text-[1rem] text-[0.85rem] font-semibold text-white'> {userInitials} </Avatar> */}
           <h2 className='font-bold lg:block hidden text-[1rem]'> {user} </h2>
         </div>

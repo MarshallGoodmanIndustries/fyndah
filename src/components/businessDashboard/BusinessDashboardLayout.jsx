@@ -18,7 +18,7 @@ const BusinessDashboardLayout = () => {
         <section className={`business-sidebar w-[250px] z-20 duration-500 ease-in-out sm:block ${toggle ? 'block' : 'hidden'}`}>
           <SideBar handleToggle={handleToggle} toggle={toggle} />
         </section>
-        <section className='business-outlet'>
+        <section className='business-outlet w-screen'>
         <Outlet />
         </section>
         

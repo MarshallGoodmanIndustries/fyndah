@@ -12,8 +12,10 @@
 }
 .business-sidebar {
     grid-area: admin-sidebar;
+    position: fixed;
+    top: 10vh;
+    height: 90vh;
     background-color: #00024C;
-    min-height: 90vh;
 }
 .business-header {
     grid-area: admin-header;
@@ -68,7 +70,8 @@
   }
   
 
-@media (min-width: 800px) and (max-width: 1023px) {
+
+  @media (min-width: 800px) and (max-width: 1023px) {
     .admin-layout {
         grid-template-columns: 0px 1fr ; /* Fixed sidebar width and dynamic outlet width */
         /* width: 100vw; */
