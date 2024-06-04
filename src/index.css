@@ -35,3 +35,6 @@
     }
 }
 
+html{
+    scroll-behavior: smooth;
+}

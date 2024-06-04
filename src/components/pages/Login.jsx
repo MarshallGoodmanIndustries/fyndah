@@ -77,6 +77,7 @@ function Login() {
 
         if (response.status === 200) {
           const token = response.data.token.original.access_token;
+          console.log(token);
           setAuthToken(token);
           Swal.fire({
             icon: "success",
