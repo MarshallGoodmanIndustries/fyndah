@@ -10,3 +10,12 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+#postBox{
+    scrollbar-width: thin;
+}
+#postBox::-webkit-scrollbar {
+    width: 20px; /* Adjust the width as needed */
+    border-radius: 10px;
+}
+

@@ -100,6 +100,8 @@ const landingPageFooterMenu = [
     },
 ]
 
+const featuredPostsLoadingDummy = [1,2,3,4,5,6,7,8,9];
 
 
-export {landingPageNavMenu, landingPageFooterMenu,  searchQueryCategories, searchQueryRatings, searchQueryBusinessProfiles};
+
+export {landingPageNavMenu, landingPageFooterMenu,  searchQueryCategories, searchQueryRatings, searchQueryBusinessProfiles, featuredPostsLoadingDummy};
