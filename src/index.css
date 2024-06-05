@@ -10,7 +10,11 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
-
+.businessTimelineSibling + .businessTimelineSibling{
+    border-top: 1px solid rgb(209 213 219 / 1);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
 #postBox{
     scrollbar-width: thin;
 }

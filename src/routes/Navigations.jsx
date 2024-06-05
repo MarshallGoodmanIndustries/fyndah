@@ -1,5 +1,6 @@
 import { businesslogo } from "../assets/images";
 
+
 const landingPageNavMenu = [
     {
         title: "Home",
@@ -77,6 +78,87 @@ const searchQueryBusinessProfiles = [
       }
 ]
 
+const featuredPostsLoadingDummy = [1,2,3,4,5,6,7,8,9];
+
+const timelineDummyData = [
+    {
+        timestamp: "June 3rd, 2024",
+        details: [
+            {
+                timelineImg: businesslogo,
+                timelineUserName: "MGM",
+                timelineReaction: "likes",
+                timelinePostIdUsername: "patrickstar",
+                timelinePostIdDescription: 'This is my first post description',
+            },
+            {
+                timelineImg: businesslogo,
+                timelineUserName: "MGM",
+                timelineReaction: "likes",
+                timelinePostIdUsername: "patrickstar",
+                timelinePostIdDescription: 'This is my first post description',
+            },
+        ]
+    },
+    {
+        timestamp: "June 2nd, 2024",
+        details: [
+            {
+                timelineImg: businesslogo,
+                timelineUserName: "MGM",
+                timelineReaction: "likes",
+                timelinePostIdUsername: "ken",
+                timelinePostIdDescription: 'This is my first post description',
+            },
+            {
+                timelineImg: businesslogo,
+                timelineUserName: "MGM",
+                timelineReaction: "commented",
+                timelinePostIdUsername: "ken",
+                timelinePostIdDescription: 'This is my first post description',
+            },
+        ]
+    },
+    {
+        timestamp: "June 1st, 2024",
+        details: [
+            {
+                timelineImg: businesslogo,
+                timelineUserName: "MGM",
+                timelineReaction: "likes",
+                timelinePostIdUsername: "Lilian",
+                timelinePostIdDescription: 'This is my first post description',
+            },
+        ]
+    },
+    {
+        timestamp: "May 28th, 2024",
+        details: [
+            {
+                timelineImg: businesslogo,
+                timelineUserName: "MGM",
+                timelineReaction: "commented",
+                timelinePostIdUsername: "Linda",
+                timelinePostIdDescription: 'This is my first post description',
+            },
+            {
+                timelineImg: businesslogo,
+                timelineUserName: "MGM",
+                timelineReaction: "likes",
+                timelinePostIdUsername: "Linda",
+                timelinePostIdDescription: 'This is my first post description',
+            },
+            {
+                timelineImg: businesslogo,
+                timelineUserName: "MGM",
+                timelineReaction: "likes",
+                timelinePostIdUsername: "Linda",
+                timelinePostIdDescription: 'This is my first post description',
+            },
+        ]
+    },
+    
+];
 
 const landingPageFooterMenu = [
     {
@@ -101,8 +183,5 @@ const landingPageFooterMenu = [
     },
 ]
 
-const featuredPostsLoadingDummy = [1,2,3,4,5,6,7,8,9];
 
-
-
-export {landingPageNavMenu, landingPageFooterMenu,  searchQueryCategories, searchQueryRatings, searchQueryBusinessProfiles, featuredPostsLoadingDummy};
+export {landingPageNavMenu, landingPageFooterMenu,  searchQueryCategories, searchQueryRatings, searchQueryBusinessProfiles, timelineDummyData, featuredPostsLoadingDummy};

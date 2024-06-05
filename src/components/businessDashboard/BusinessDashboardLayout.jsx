@@ -21,7 +21,6 @@ const BusinessDashboardLayout = () => {
         <section className='business-outlet w-screen'>
         <Outlet />
         </section>
-        
     </div>
   )
 }
