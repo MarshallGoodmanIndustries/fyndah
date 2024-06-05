@@ -11,6 +11,14 @@
     background-size: cover;
 }
 
+#postBox{
+    scrollbar-width: thin;
+}
+#postBox::-webkit-scrollbar {
+    width: 20px; /* Adjust the width as needed */
+    border-radius: 10px;
+}
+
 @media screen and (max-width: 768px) {
     .checkbox .chakra-checkbox__label{
         font-size: 0.7rem !important;
