@@ -33,26 +33,19 @@ function WalletIndex() {
     const { authToken } = useContext(AuthContext)
     // for the first modal to flutterwave
     const redirectToFlutterwave = async () => {
-        setIsModalOpen(false);
+        setIsModalOpen(true);
         navigate('');
-
-
-
         // for the payment
         try {
-            // const token = localStorage.getItem('authToken')
-
             const details = {
-                organization_id: 'devin',
                 amount: addAmountWallet,
-                user_id: 1
 
             }
-            const payment = await axios.post('https://api.fyndah.com/api/v1/organization/flutterwave/pay', details, {
+            const API = 'https://api.fyndah.com/api/v1/organization/flutterwave/pay'
+            const payment = await axios.post(API, details, {
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${authToken}`
+                    'Authorization': `Bearer ${authToken}`,
                 }
             })
             console.log(payment.data);
@@ -205,20 +198,15 @@ function WalletIndex() {
                             </tbody>
                         </table> */}
 
-                        <ul className="h-64 overflow-y-auto mt-9">
+                        <ul className="h-64 overflow-x-auto overflow-y-auto mt-9">
                             <div className="flex justify-between">
-                                <p className="font-bold">Transaction ID</p>
-                                <p className="font-bold">Amount</p>
-                                <p className="font-bold">Payment Type</p>
-                                <p className="font-bold">Payment Status</p>
-                                <p className="font-bold">Date</p>
-                                <p className="font-bold">Export</p>
+                                <p className="p-1 font-bold">Transaction ID</p>
+                                <p className="p-1 font-bold">Amount</p>
+                                <p className="p-1 font-bold">Payment Type</p>
+                                <p className="p-1 font-bold">Payment Status</p>
+                                <p className="p-1 font-bold">Date</p>
+                                <p className="p-1 font-bold">Export</p>
                             </div>
-                            <li className="flex justify-between mt-7">
-                                <span>sf</span>
-                                <span></span>
-                                <span></span>
-                            </li>
                             {filterTransactions().map((transaction, index) => (
                                 <li key={index} className="flex justify-between mt-7">
                                     <span>{transaction.description}</span>
@@ -229,10 +217,10 @@ function WalletIndex() {
                         </ul>
                     </div>
                 </div>
+                <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToFlutterwave} />
+                <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} />
             </div>
 
-            <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToFlutterwave} />
-            <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} />
 
 
 
