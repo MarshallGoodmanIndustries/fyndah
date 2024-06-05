@@ -11,14 +11,14 @@ const AdminLayout = () => {
   }
 
   return (
-    <div className='admin-layout font-inter'>
-      <section className='admin-header'>
+    <div className='admin-layout w-full font-roboto'>
+      <section className='admin-header w-full'>
         <Header toggle={toggle} handleToggle={handleToggle} />
       </section>
         <section className={`admin-sidebar w-[250px] z-20 duration-500 ease-in-out sm:block ${toggle ? 'block' : 'hidden'}`}>
           <SideBar handleToggle={handleToggle} toggle={toggle} />
         </section>
-        <section className='admin-outlet w-screen'>
+        <section className='admin-outlet w-full md:w-auto '>
         <Outlet />
         </section>
         
