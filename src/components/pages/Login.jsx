@@ -85,7 +85,18 @@ function Login() {
             timer: 2000,
             timerProgressBar: true,
           });
-          navigate("/dashboard/profile");
+          
+          // check if there is a last route session variable set
+          const lastRoute = sessionStorage.getItem("lastRoute");
+          setTimeout(() => {
+            if (lastRoute) {
+              //navigate to the last route
+              navigate(lastRoute);
+            } else {
+              //navigate to dashboard
+              navigate("/dashboard/profile");
+            }
+          }, 3000);
         } else {
           throw new Error("Login failed");
         }

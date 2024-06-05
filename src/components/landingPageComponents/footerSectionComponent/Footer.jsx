@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { landingPageFooterMenu } from "../../../routes/Navigations";
 import { logo_white } from "../../../assets/images";
 import { FaLocationDot } from "react-icons/fa6";
@@ -10,18 +12,17 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { MdOutlineArrowOutward } from "react-icons/md";
 
 const Footer = () => {
-  
 
   return (
     <footer className="bg-[#0a1128] px-4 sm:px-5 py-16 md:px-6 lg:px-16 font-poppins">
       <div className="flex flex-wrap gap-12">
         {/* brand group */}
         <div className="flex-1 md:flex-[1.5]">
-           <div className="max-w-[8rem] md:max-w-[10rem] h-auto transform -translate-x-3">
-                <a href="/">
-                    <img src={logo_white} className="w-full h-auto object-cover" alt="brand logo" />
-                </a>
-            </div>
+          <div className="max-w-[8rem] md:max-w-[10rem] h-auto transform -translate-x-3">
+              <Link to="/">
+                  <img src={logo_white} className="w-full h-auto object-cover" alt="brand logo" />
+              </Link>
+          </div>
           <h3 className="text-base text-primary my-4">Fyndah is an expansive business database with a wide range of data points. We aim to be the most comprehensive directory of the web today.</h3>
           <p className="text-sm text-primary font-normal">© 2024 Marshall Goodman Industries Ltd. All rights reserved</p>
         </div>
