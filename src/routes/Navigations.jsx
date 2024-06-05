@@ -11,6 +11,7 @@ const landingPageNavMenu = [
     },
 ];
 
+
 const searchQueryCategories = [
     "Professional Services",
     "Healthcare",

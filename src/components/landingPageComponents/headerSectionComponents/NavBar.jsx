@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { landingPageNavMenu } from "../../../routes/Navigations";
 import { Button } from "../../uiComponents";
@@ -6,8 +6,11 @@ import { HiMiniBars3BottomRight } from "react-icons/hi2";
 import { RxCross2 } from "react-icons/rx";
 import { logo } from "../../../assets/images";
 import classNames from "classnames";
+import { AuthContext } from "../../context/AuthContext";
+
 
 function NavBar() {
+    const { authToken } = useContext(AuthContext);
     const navigate = useNavigate();
     const [revealNav, setRevealNav] = useState(false);
     const [stickyEffect, setStickyEffect] = useState(false);
@@ -16,6 +19,14 @@ function NavBar() {
     const checkViewWidth = ()=> {
         setVw(window.innerWidth);
     }
+
+    const handleRedirectionBtn = ()=> {
+        if(!authToken){
+            navigate("/signup");
+        }else{
+            navigate("/dashboard/profile")
+        }
+    };
 
     // hide mobile nav bar when Home link is clicked
     useEffect(()=>{
@@ -65,7 +76,7 @@ function NavBar() {
                     ))}
                 </ul>
                 <div className="">
-                    <Button title="Sign up" action={()=> navigate('/signup')} />
+                    <Button title={!authToken ? "Register" : "My profile"} action={handleRedirectionBtn} />
                 </div>
            </div>
 
@@ -79,7 +90,7 @@ function NavBar() {
                 ))}
             </ul>
             <div className="">
-                <button onClick={()=> navigate('/signup')} className="bg-accent text-primary font-poppins md:text-lg rounded-lg py-1 px-4 capitalize font-light">Register</button>
+                <button onClick={handleRedirectionBtn} className="bg-accent text-primary font-poppins md:text-lg rounded-lg py-1 px-4 capitalize font-light">{!authToken ? "Register" : "My profile"}</button>
             </div>
         </div>
     </nav>
