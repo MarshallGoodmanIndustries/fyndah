@@ -86,7 +86,7 @@ function Login() {
             timer: 2000,
             timerProgressBar: true,
           });
-          navigate("/dashboard/profile");
+          navigate("/dashboard");
         } else {
           throw new Error("Login failed");
         }
