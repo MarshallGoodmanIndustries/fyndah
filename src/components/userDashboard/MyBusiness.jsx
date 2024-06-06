@@ -72,6 +72,7 @@ function MyBusiness() {
             id: 2,
             name: "London brewery",
         },
+        
     ]
 
     const handlePathChange = (id) => {
