@@ -4,8 +4,8 @@ import { businesslogo } from "../../assets/images";
 const Timeline = () => {
     return ( 
         <>
-            <section className="w-full flex sm:justify-end py-4 px-4 sm:px-5 md:px-6 lg:px-8">
-                <section className="w-full sm:max-w-[65%] md:max-w-[70%] lg:max-w-[75%] xl:max-w-[80%] flex flex-col items-center lg:items-start lg:flex-row pt-4 pb-6 gap-4 border-b border-gray-300">
+            <section className="w-full flex sm:justify-end py-4 px-4 sm:px-5 md:px-6 lg:px-8 ">
+                <section className="w-full border flex flex-col items-center lg:items-start lg:flex-row p-2 sm:p-4 pt-4 pb-6 gap-4 border-b border-gray-300 rounded-lg">
                     <div className="w-fit">
                         <div className="max-w-24 rounded-full border-2 border-primary border-opacity-20">
                             <img src={businesslogo} className="w-full h-full" alt="business timeline display" />

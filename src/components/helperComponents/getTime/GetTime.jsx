@@ -27,7 +27,7 @@ const  TimeAgo = ({ isoString }) => {
   const timeAgo = getTimeAgo(date);
 
   return (
-    <div>{timeAgo}</div>
+    <span>{timeAgo}</span>
   );
 }
 
