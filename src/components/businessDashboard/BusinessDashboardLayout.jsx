@@ -21,7 +21,6 @@ const BusinessDashboardLayout = () => {
         <section className='business-outlet w-full md:w-auto'>
         <Outlet />
         </section>
-        
     </div>
   )
 }

@@ -16,6 +16,8 @@ import MyBusiness from "../userDashboard/MyBusiness.jsx";
 
 
 
-export { LandingPage, SignUp, Login, BusinessProfileSetup, AdProfileSetup, UserProfileSetup, Profile,
+
+export {
+    LandingPage, SignUp, Login, BusinessProfileSetup, AdProfileSetup, UserProfileSetup, Profile,
     AdminLayout, Dashboard, FavoriteBusiness, LogOut, Messages, CreateBusiness, MyBusiness,
- };
+};

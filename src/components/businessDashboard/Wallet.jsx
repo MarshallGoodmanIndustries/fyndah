@@ -1,7 +1,9 @@
-function Wallet () {
+import WalletIndex from "../wallet/welletComponent/WalletIndex";
+
+function Wallet() {
     return (
         <div>
-           Wallet
+            <WalletIndex />
         </div>
     )
 }
