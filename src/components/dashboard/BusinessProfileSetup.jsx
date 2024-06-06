@@ -9,6 +9,7 @@ import { AuthContext } from "../context/AuthContext";
 import { Country, State, City } from "country-state-city";
 
 const BusinessProfileSetup = () => {
+    let token1 ="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5kYWguY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzE3NjY5OTQ0LCJleHAiOjE3MTc2NzM1NDQsIm5iZiI6MTcxNzY2OTk0NCwianRpIjoiMVdTREZlVHRkbWFFaFBLdyIsInN1YiI6IjU1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.616Nzc6zYOcC9xwBKcSyor1Wh0jJJ4Ep63-iPHC2bjg"
   const [categoryValue, setCategoryValue] = useState("");
   const [subCategoryValue, setSubCategoryValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
@@ -151,7 +152,7 @@ const BusinessProfileSetup = () => {
   //   const handleMaximum = (event) => {
   //     setMaximum(event.target.value);
   //   };
-let token1="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5kYWguY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzE3NjE3NTc4LCJleHAiOjE3MTc2MjExNzgsIm5iZiI6MTcxNzYxNzU3OCwianRpIjoiNEtQRG84TzhQVVkzQU1ETSIsInN1YiI6IjU0IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.I-UyPXmKyhVLLYi5dtzwCEX94Ft6SFU5_JEWOhBOzsA"
+let token4="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5kYWguY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzE3NjE3NTc4LCJleHAiOjE3MTc2MjExNzgsIm5iZiI6MTcxNzYxNzU3OCwianRpIjoiNEtQRG84TzhQVVkzQU1ETSIsInN1YiI6IjU0IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.I-UyPXmKyhVLLYi5dtzwCEX94Ft6SFU5_JEWOhBOzsA"
   const sendProfile = {
     business_category_ids: getSelectCategory,
     business_unit_ids: getSelectSubCategory,
@@ -275,7 +276,7 @@ let token1="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5
           {
             headers: {
               Accept: "application/json",
-              Authorization: `Bearer ${token1}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
