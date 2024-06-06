@@ -1,11 +1,13 @@
 import { userImg } from "../../assets/images/index";
-import { Input, useOutsideClick, ListItem, Box, List } from "@chakra-ui/react";
+import { Input, useOutsideClick, ListItem, Box, List, Button } from "@chakra-ui/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { MdOutlineLocationCity } from "react-icons/md";
 import { FaLocationDot, FaMapLocation } from "react-icons/fa6";
 import { Checkbox } from "@chakra-ui/react";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const UserProfileSetup = () => {
   const [isDropdownVisible, setIsDropdownVisible] = useState({
@@ -23,8 +25,11 @@ const UserProfileSetup = () => {
   const stateRef = useRef();
   const citiesRef = useRef();
   const { authToken } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [interests, setInterests] = useState([]);
+
+  const address = `${citiesInput}, ${stateInput}`
 
   const interestsList = [
     "Food and Cooking",
@@ -156,7 +161,7 @@ const UserProfileSetup = () => {
         );
         console.log(countryResponse.data);
         setCountries(countryResponse.data);
-
+  
         const stateResponse = await axios.get(
           `https://api.fyndah.com/api/v1/locations/states/${countryInput}`,
           {
@@ -167,7 +172,7 @@ const UserProfileSetup = () => {
         );
         console.log(stateResponse.data);
         setStates(stateResponse.data);
-
+  
         const citiesResponse = await axios.get(
           `https://api.fyndah.com/api/v1/locations/cities/${stateInput}`,
           {
@@ -182,9 +187,12 @@ const UserProfileSetup = () => {
         console.error("Error fetching data", error);
       }
     };
-
-    fetchData();
-  }, [authToken, countryInput, stateInput]);
+  
+    if (authToken) {
+      fetchData();
+    }
+  }, [authToken, countryInput, stateInput, citiesInput]);
+  
 
   const filteredCountries = countries.filter((country) =>
     country.country_name.toLowerCase().includes(countryInput.toLowerCase())
@@ -197,6 +205,46 @@ const UserProfileSetup = () => {
   );
 
   console.log(interests);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "https://api.fyndah.com/api/v1/users/profile",
+        {
+          country_of_residence: countryInput,
+          address: address,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Successful...",
+          text: "Account created successfully. Use the Email token for email verification.",
+          timer: 2000,
+          timerProgressBar: true,
+        });
+        console.log("Form submitted", response.data);
+        navigate("/dashboard/profile");
+      } else {
+        throw new Error("Registration failed");
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Registration Failed!",
+        footer: `<a href="#">Could not set up profile. Please try again later. ${error.message}</a>`,
+      });
+      console.error(error);
+    }
+  }
 
   return (
     <div className="relative ">
@@ -215,6 +263,7 @@ const UserProfileSetup = () => {
         </h1>
 
         <form
+        onSubmit={handleSubmit}
           className="grid grid-cols-1 font-roboto lg:grid-cols-2 gap-[2rem] lg:gap-[2rem] xl:gap-[4rem]"
           action=""
         >
@@ -432,6 +481,8 @@ const UserProfileSetup = () => {
                 </Checkbox>
               ))}
             </div>
+
+            <Button type="submit">Submit</Button>
           </div>
         </form>
       </div>
