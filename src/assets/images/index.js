@@ -15,6 +15,8 @@ import userImg2 from '../images/dashboard/userImg2.jpg'
 import businessImg from '../images/dashboard/businessImg.jpg'
 import businessImg2 from '../images/dashboard/businessImg2.jpeg'
 
+
+
 export { logo, logo_white, searchbg3, businesslogo, Ellipse2, Ellipse4, Ellipse5, Ellipse6, 
     Ellipse7, signup_bg, userImg, userImg2, businessImg, businessImg2, 
 };

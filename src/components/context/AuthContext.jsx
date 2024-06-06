@@ -3,13 +3,14 @@ import { createContext, useEffect, useState } from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [authToken, setAuthToken] = useState(localStorage.getItem('authToken') || null);
+  const [authToken, setAuthToken] = useState(sessionStorage.getItem('authToken') || null);
+  
 
   useEffect(() => {
     if (authToken) {
-      localStorage.setItem('authToken', authToken);
+      sessionStorage.setItem('authToken', authToken);
     } else {
-      localStorage.removeItem('authToken');
+      sessionStorage.removeItem('authToken');
     }
   }, [authToken]);
 

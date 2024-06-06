@@ -1,7 +1,8 @@
 import Button from "./Button";
-import FeaturedPost from "./FeaturedPost";
+import { FeaturedPost, FeaturedPostLoading } from "./post";
+import { BusinessTimeline } from "./business";
 import SearchBusinessProfile from "./SearchBusinessProfile";
 import Loading from "./Loading";
 
 
-export {Button, FeaturedPost, SearchBusinessProfile, Loading};
+export {Button, FeaturedPost,FeaturedPostLoading, SearchBusinessProfile, Loading};
