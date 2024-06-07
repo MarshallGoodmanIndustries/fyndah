@@ -27,17 +27,17 @@ function Routes() {
       errorElement: <PageNotFound />
     },
     {
-      path: "/businessprofilesetup",
+      path: "/business-profile-setup",
       element: <BusinessProfileSetup />,
       errorElement: <PageNotFound />
     },
     {
-      path: "/adprofilesetup",
+      path: "/ad-profile-setup",
       element: <AdProfileSetup />,
       errorElement: <PageNotFound />
     },
     {
-      path: "/userprofilesetup",
+      path: "/user-profile-setup",
       element: <UserProfileSetup />,
       errorElement: <PageNotFound />
     },
@@ -108,7 +108,7 @@ function Routes() {
           errorElement: <PageNotFound />
         },
         {
-          path: 'businessprofile',
+          path: 'business-profile',
           element: <BusinessProfile />,
           errorElement: <PageNotFound />
         },

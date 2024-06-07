@@ -40,7 +40,7 @@ const FeaturedPost = ({postId, profileImg, username, timePosted, textContent, im
     //load initial comments
     useEffect(() => {
         getComments();
-    }, [])
+    }, [getComments])
 
     const handleLike = async ()=>{
 

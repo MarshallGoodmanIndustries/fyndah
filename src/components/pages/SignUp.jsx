@@ -122,7 +122,14 @@ function SignUp() {
 
       window.scrollTo(0, 0);
     } else {
-      // navigate("/dashboard/profile");
+      Swal.fire({
+              icon: "success",
+              title: "Successful...",
+              text: "Successfully signed-up in check you email for verification link",
+            });
+            console.log("Form submitted", signupFormData);
+
+            navigate("/dashboard/profile");
       try {
         const response = await axios.post(
           "https://api.fyndah.com/api/v1/auth/users",

@@ -19,7 +19,7 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { RiEdit2Fill } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa6";
 import { Textarea } from "@chakra-ui/react";
@@ -31,24 +31,44 @@ import { FaPeopleRobbery } from "react-icons/fa6";
 import { RiMailSettingsFill } from "react-icons/ri";
 import { FaCaretDown } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
+import { useParams } from "react-router-dom";
 
 function BusinessProfile() {
+  const { authToken} = useContext(AuthContext);
+  const { id } = useParams(); // Extract the 'id' parameter from the URL
+  
   const [inputDefaultStates, setInputDefaultStates] = useState({
-    firstName: "Phil",
-    lastName: "Collins",
-    bio: "XYZ Enterprises specializes in innovative tech solutions for small and medium-sized businesses, delivering cutting-edge software and personalized customer service. Our team of experts is dedicated to driving growth and efficiency through tailored technology strategies.",
-    location: "Oak Avenue, Denver, United States",
-    businessRegNumber: "",
-    category: "",
-    addProduct: "",
-    removeProduct: "",
+    businessName: "",
+    email: "",
+    phone: "",
+    bio: "",
+    address: "",
+    city: "",
+    state: "",
+    country: "",
+    zip_code: "",
+    website: "",
+    size: "",
+    industry: "",
+    subdomain: "",
   });
 
   const [isEditable, setIsEditable] = useState({
-    firstName: false,
-    lastName: false,
+    businessName: false,
+    email: false,
+    phone: false,
     bio: false,
-    location: false,
+    address: false,
+    city: false,
+    state: false,
+    country: false,
+    zip_code: false,
+    website: false,
+    size: false,
+    industry: false,
+    subdomain: false,
   });
 
   const handleChange = (e) => {
@@ -88,6 +108,48 @@ function BusinessProfile() {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    const fetchBusinessProfileData = async () => {
+      try {
+        const businessProfileResponse = await axios.get(
+          `https://api.fyndah.com/api/v1/organization/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        const businessData = businessProfileResponse.data.data;
+
+        setInputDefaultStates({
+          businessName: businessData.org_name || "",
+          email: businessData.email || "",
+          phone: businessData.phone || "",
+          bio: businessData.org_bio || "",
+          address: businessData.address || "",
+          city: businessData.city || "",
+          state: businessData.state || "",
+          country: businessData.country || "",
+          zip_code: businessData.zip_code || "",
+          website: businessData.website || "",
+          size: businessData.size || "",
+          industry: businessData.industry || "",
+          subdomain: businessData.subdomain || "",
+        });
+
+        console.log(businessData);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    fetchBusinessProfileData();
+  }, [authToken, id]);
+
+  const location = `${inputDefaultStates.address}  ${inputDefaultStates.city}`
+  console.log("my id:", id)
 
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
@@ -154,10 +216,10 @@ function BusinessProfile() {
       {/* ACCOUNT DETAILS */}
       <div className="mt-[2.5rem]">
         <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
-          Marshall Associates
+          {inputDefaultStates.businessName}
         </h2>
         <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
-          Oak Avenue, Denver, United States
+          {location}
         </h2>
       </div>
 
@@ -174,18 +236,19 @@ function BusinessProfile() {
         {/* FORM */}
         <form onSubmit={handleSubmit} action="">
           <div className="lg:grid block grid-cols-2 gap-x-[4rem] gap-y-[2rem]">
-            {/* FIRST NAME */}
+
+            {/* BUSINESS NAME */}
             <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
                 <label
                   className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
-                  htmlFor="firstName"
+                  htmlFor="businessName"
                 >
-                  First Name
+                  Business Name
                 </label>
                 <span
                   className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("firstName")}
+                  onClick={() => toggleEdit("businessName")}
                 >
                   {" "}
                   <RiEdit2Fill /> Edit
@@ -197,30 +260,30 @@ function BusinessProfile() {
                   <FaRegUser color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.firstName}
-                  name="firstName"
+                  disabled={!isEditable.businessName}
+                  name="businessName"
                   border="2px solid #d1d5db"
                   className="border"
                   variant="outline"
-                  value={inputDefaultStates.firstName}
+                  value={inputDefaultStates.businessName}
                   onChange={handleChange}
-                  placeholder="First Name"
+                  placeholder="Business Name"
                 />
               </InputGroup>
             </div>
 
-            {/* LAST NAME */}
+            {/* EMAIL */}
             <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
                 <label
                   className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
-                  htmlFor="lastName"
+                  htmlFor="email"
                 >
-                  Last Name
+                  Email
                 </label>
                 <span
                   className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("lastName")}
+                  onClick={() => toggleEdit("email")}
                 >
                   {" "}
                   <RiEdit2Fill /> Edit
@@ -232,14 +295,15 @@ function BusinessProfile() {
                   <FaRegUser color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.lastName}
-                  name="lastName"
+                  disabled={!isEditable.email}
+                  name="email"
+                  type="email"
                   border="2px solid #d1d5db"
                   className="border"
                   variant="outline"
-                  value={inputDefaultStates.lastName}
+                  value={inputDefaultStates.email}
                   onChange={handleChange}
-                  placeholder="Last Name"
+                  placeholder="Email"
                 />
               </InputGroup>
             </div>
@@ -274,18 +338,18 @@ function BusinessProfile() {
               />
             </div>
 
-            {/* LOCATION */}
+            {/* PHONE */}
             <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
                 <label
                   className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
-                  htmlFor="location"
+                  htmlFor="phone"
                 >
-                  Location
+                  Business Phone
                 </label>
                 <span
                   className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("location")}
+                  onClick={() => toggleEdit("phone")}
                 >
                   {" "}
                   <RiEdit2Fill /> Edit
@@ -297,30 +361,30 @@ function BusinessProfile() {
                   <MdLocationPin color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.location}
-                  name="location"
+                  disabled={!isEditable.phone}
+                  name="phone"
                   border="2px solid #d1d5db"
                   className="border"
                   variant="outline"
-                  value={inputDefaultStates.location}
+                  value={inputDefaultStates.phone}
                   onChange={handleChange}
-                  placeholder="Location"
+                  placeholder="Enter Phone"
                 />
               </InputGroup>
             </div>
 
-            {/* BSUINESS REG NO */}
+            {/* ADDRESS */}
             <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
                 <label
                   className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
-                  htmlFor="businessregnumber"
+                  htmlFor="address"
                 >
-                  Add Business Registration Number
+                  Business Address
                 </label>
                 <span
                   className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("businessRegNumber")}
+                  onClick={() => toggleEdit("address")}
                 >
                   {" "}
                   <RiEdit2Fill /> Edit
@@ -332,14 +396,224 @@ function BusinessProfile() {
                   <FaMonument color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.businessRegNumber}
-                  name="businessRegNumber"
+                  disabled={!isEditable.address}
+                  name="address"
                   border="2px solid #d1d5db"
                   className="border"
                   variant="outline"
-                  value={inputDefaultStates.businessRegNumber}
+                  value={inputDefaultStates.address}
                   onChange={handleChange}
-                  placeholder="Add a business registration number"
+                  placeholder="Enter Business Address"
+                />
+              </InputGroup>
+            </div>
+
+            {/* CITY */}
+            <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
+              <div className="flex items-center justify-between">
+                <label
+                  className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
+                  htmlFor="city"
+                >
+                  Business City
+                </label>
+                <span
+                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
+                  onClick={() => toggleEdit("city")}
+                >
+                  {" "}
+                  <RiEdit2Fill /> Edit
+                </span>
+              </div>
+
+              <InputGroup>
+                <InputRightElement pointerEvents="none">
+                  <FaMonument color="text-[#d1d5db]" />
+                </InputRightElement>
+                <Input
+                  disabled={!isEditable.city}
+                  name="city"
+                  border="2px solid #d1d5db"
+                  className="border"
+                  variant="outline"
+                  value={inputDefaultStates.city}
+                  onChange={handleChange}
+                  placeholder="Enter Business City"
+                />
+              </InputGroup>
+            </div>
+
+            {/* STATE */}
+            <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
+              <div className="flex items-center justify-between">
+                <label
+                  className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
+                  htmlFor="state"
+                >
+                  Business State
+                </label>
+                <span
+                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
+                  onClick={() => toggleEdit("state")}
+                >
+                  {" "}
+                  <RiEdit2Fill /> Edit
+                </span>
+              </div>
+
+              <InputGroup>
+                <InputRightElement pointerEvents="none">
+                  <FaMonument color="text-[#d1d5db]" />
+                </InputRightElement>
+                <Input
+                  disabled={!isEditable.state}
+                  name="state"
+                  border="2px solid #d1d5db"
+                  className="border"
+                  variant="outline"
+                  value={inputDefaultStates.state}
+                  onChange={handleChange}
+                  placeholder="Enter Business State"
+                />
+              </InputGroup>
+            </div>
+
+            {/* COUNTRY */}
+            <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
+              <div className="flex items-center justify-between">
+                <label
+                  className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
+                  htmlFor="country"
+                >
+                  Business Country
+                </label>
+                <span
+                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
+                  onClick={() => toggleEdit("country")}
+                >
+                  {" "}
+                  <RiEdit2Fill /> Edit
+                </span>
+              </div>
+
+              <InputGroup>
+                <InputRightElement pointerEvents="none">
+                  <FaMonument color="text-[#d1d5db]" />
+                </InputRightElement>
+                <Input
+                  disabled={!isEditable.country}
+                  name="country"
+                  border="2px solid #d1d5db"
+                  className="border"
+                  variant="outline"
+                  value={inputDefaultStates.country}
+                  onChange={handleChange}
+                  placeholder="Enter Business Country"
+                />
+              </InputGroup>
+            </div>
+
+            {/* ZIP CODE */}
+            <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
+              <div className="flex items-center justify-between">
+                <label
+                  className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
+                  htmlFor="zip_code"
+                >
+                  Zip Code
+                </label>
+                <span
+                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
+                  onClick={() => toggleEdit("zip_code")}
+                >
+                  {" "}
+                  <RiEdit2Fill /> Edit
+                </span>
+              </div>
+
+              <InputGroup>
+                <InputRightElement pointerEvents="none">
+                  <FaMonument color="text-[#d1d5db]" />
+                </InputRightElement>
+                <Input
+                  disabled={!isEditable.zip_code}
+                  name="zip_code"
+                  border="2px solid #d1d5db"
+                  className="border"
+                  variant="outline"
+                  value={inputDefaultStates.zip_code}
+                  onChange={handleChange}
+                  placeholder="Enter Zip Code"
+                />
+              </InputGroup>
+            </div>
+
+            {/* WEBSITE */}
+            <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
+              <div className="flex items-center justify-between">
+                <label
+                  className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
+                  htmlFor="website"
+                >
+                  Website
+                </label>
+                <span
+                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
+                  onClick={() => toggleEdit("website")}
+                >
+                  {" "}
+                  <RiEdit2Fill /> Edit
+                </span>
+              </div>
+
+              <InputGroup>
+                <InputRightElement pointerEvents="none">
+                  <FaMonument color="text-[#d1d5db]" />
+                </InputRightElement>
+                <Input
+                  disabled={!isEditable.website}
+                  name="website"
+                  border="2px solid #d1d5db"
+                  className="border"
+                  variant="outline"
+                  value={inputDefaultStates.website}
+                  onChange={handleChange}
+                  placeholder="Enter Business Website"
+                />
+              </InputGroup>
+            </div>
+
+            {/* INDUSTRY */}
+            <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
+              <div className="flex items-center justify-between">
+                <label
+                  className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
+                  htmlFor="industry"
+                >
+                  Industry
+                </label>
+                <span
+                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
+                  onClick={() => toggleEdit("industry")}
+                >
+                  {" "}
+                  <RiEdit2Fill /> Edit
+                </span>
+              </div>
+
+              <InputGroup>
+                <InputRightElement pointerEvents="none">
+                  <FaMonument color="text-[#d1d5db]" />
+                </InputRightElement>
+                <Input
+                  disabled={!isEditable.industry}
+                  name="industry"
+                  border="2px solid #d1d5db"
+                  className="border"
+                  variant="outline"
+                  value={inputDefaultStates.industry}
+                  onChange={handleChange}
+                  placeholder="Enter Industry"
                 />
               </InputGroup>
             </div>
@@ -388,7 +662,7 @@ function BusinessProfile() {
 
             {/* INVENTORY MANAGEMENT */}
 
-            <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-0 text-[0.8rem] lg:text-[1.1rem] font-semibold">
+            {/* <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-0 text-[0.8rem] lg:text-[1.1rem] font-semibold">
               INVENTORY MANAGEMENT
             </div>
 
@@ -444,10 +718,10 @@ function BusinessProfile() {
                 </Tbody>
                 <Tfoot></Tfoot>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
 
             {/* STOCKS */}
-            <h2 className="text-navyBlue font-medium text-[0.8rem] lg:text-[1.1rem]">
+            {/* <h2 className="text-navyBlue font-medium text-[0.8rem] lg:text-[1.1rem]">
               STOCK
             </h2>
 
@@ -484,17 +758,17 @@ function BusinessProfile() {
                 </Tbody>
                 <Tfoot></Tfoot>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
 
             {/* CATEGORIES */}
 
-            <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
+            {/* <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
               CATEGORIES
-            </h2>
+            </h2> */}
 
-            <div className="col-span-2 flex flex-col gap-[1rem]">
+            {/* <div className="col-span-2 flex flex-col gap-[1rem]"> */}
               {/* ADD CATEGORY */}
-              <div className="flex mb-[0.5rem] lg:mb-0 w-full  lg:w-1/2 flex-col gap-2 lg:gap-2">
+              {/* <div className="flex mb-[0.5rem] lg:mb-0 w-full  lg:w-1/2 flex-col gap-2 lg:gap-2">
                 <label
                   className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
                   htmlFor="category"
@@ -511,10 +785,10 @@ function BusinessProfile() {
                   onChange={handleChange}
                   placeholder="Add Category"
                 />
-              </div>
+              </div> */}
 
               {/* edit CATEGORY */}
-              <div className="lg:flex block mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
+              {/* <div className="lg:flex block mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
                 <h2
                   className="font-normal text-lightRed mb-[0.5rem] lg:mb-0 text-[0.9rem] lg:text-[1.1rem]"
                 >
@@ -538,9 +812,9 @@ function BusinessProfile() {
                       onChange={handleChange}
                       placeholder="Add a product"
                     />
-                  </div>
+                  </div> */}
 
-                  <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
+                  {/* <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
                     <h2 className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]">
                       Remove Product
                     </h2>
@@ -570,9 +844,9 @@ function BusinessProfile() {
                         </>
                       )}
                     </Menu>
-                  </div>
+                  </div> */}
 
-                  <div className="flex mb-[1rem]  lg:mb-0 flex-col gap-2 lg:gap-2">
+                  {/* <div className="flex mb-[1rem]  lg:mb-0 flex-col gap-2 lg:gap-2">
                     <h2 className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]">
                       Move Product
                     </h2>
@@ -602,13 +876,13 @@ function BusinessProfile() {
                         </>
                       )}
                     </Menu>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  </div> */}
+                {/* </div> */}
+              {/* </div> */}
+            {/* </div> */}
 
             {/* STOCKS */}
-            <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
+            {/* <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
               ORDERS
             </h2>
 
@@ -645,10 +919,10 @@ function BusinessProfile() {
                 </Tbody>
                 <Tfoot></Tfoot>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
 
             {/* SALES */}
-            <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
+            {/* <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
               SALES
             </h2>
 
@@ -693,7 +967,7 @@ function BusinessProfile() {
                 </Tbody>
                 <Tfoot></Tfoot>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
           </div>
         </form>
       </div>

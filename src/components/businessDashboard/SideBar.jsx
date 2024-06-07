@@ -11,7 +11,7 @@ import { GiWallet } from "react-icons/gi";
 // import { IoMdArrowDropright } from "react-icons/io";
 
 const SideBar = ({handleToggle }) => {
-  const [active, setActive] = useState(1)
+  const [active, setActive] = useState(4)
   const handleItemClick = (index) => {
     setActive(index);
     handleToggle();
@@ -20,6 +20,20 @@ const SideBar = ({handleToggle }) => {
   const isItemActive = (index) => index === active;
   return (
     <div className='px-[1rem] text-white font-inter py-[1rem]'>
+
+      {/* business profile */}
+      <Link to='business-profile'>
+      <div onClick={() => {
+        handleToggle,
+        handleItemClick(4)
+      }} 
+      className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(4) ? "bg-white text-textDark" : "text-white"} `}>
+        <span>
+        <FaUserCircle className='size-[1rem] lg:size-[1.25rem]' />
+        </span>
+        <h2 className='text-[1.1rem] mt-0 font-normal'>Profile</h2>
+      </div>
+      </Link>
 
       {/* posts */}
       <Link to='posts'>
@@ -63,19 +77,7 @@ const SideBar = ({handleToggle }) => {
       </div>
       </Link>
 
-      {/* business profile */}
-      <Link to='businessprofile'>
-      <div onClick={() => {
-        handleToggle,
-        handleItemClick(4)
-      }} 
-      className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(4) ? "bg-white text-textDark" : "text-white"} `}>
-        <span>
-        <FaUserCircle className='size-[1rem] lg:size-[1.25rem]' />
-        </span>
-        <h2 className='text-[1.1rem] mt-0 font-normal'>Profile</h2>
-      </div>
-      </Link>
+      
 
       {/* timeline */}
       <Link to='timeline'>
