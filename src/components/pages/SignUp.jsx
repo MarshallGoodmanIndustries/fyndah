@@ -107,14 +107,6 @@ function SignUp() {
     if (Object.values(newErrors).some((error) => error !== "")) {
       setErrors(newErrors);
     } else {
-      Swal.fire({
-              icon: "success",
-              title: "Successful...",
-              text: "Successfully signed-up in check you email for verification link",
-            });
-            console.log("Form submitted", signupFormData);
-
-            navigate("/dashboard/profile");
       try {
         const response = await axios.post(
           "https://api.fyndah.com/api/v1/auth/users",

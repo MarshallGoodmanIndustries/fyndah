@@ -15,7 +15,7 @@ import {
   TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { RiEdit2Fill } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa6";
 import { Textarea } from "@chakra-ui/react";
@@ -24,15 +24,21 @@ import { FaMonument } from "react-icons/fa";
 import { PiUserSwitchFill } from "react-icons/pi";
 import { TiUserDelete } from "react-icons/ti";
 import Swal from "sweetalert2";
+import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 function Profile() {
+  const { authToken } = useContext(AuthContext);
+  const [errorMessage, setErrorMessage] = useState("")
   const [inputDefaultStates, setInputDefaultStates] = useState({
-    firstName: "Phil",
-    lastName: "Collins",
-    bio: "Aspiring astronaut by day, stargazing baker by night. I'm always reaching for the sky, whether with a telescope or a whisk.",
-    location: "Oak Avenue, Denver, United States",
+    firstName: "",
+    lastName: "",
+    bio: "",
+    location: "",
     businessRegNumber: "",
   });
+
+  const fullName = `${inputDefaultStates.firstName}  ${inputDefaultStates.lastName}`
 
   const [isEditable, setIsEditable] = useState({
     firstName: false,
@@ -57,17 +63,36 @@ function Profile() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
-      console.log(inputDefaultStates);
-      Swal.fire({
-        icon: "success",
-        title: "Successful...",
-        text: "Profile updated successfully",
-        timer: 2000,
-        timerProgressBar: true,
-      });
+      const response = await axios.post(
+        "https://api.fyndah.com/api/v1/users/profile",
+        {
+          firstname: inputDefaultStates.firstName,
+          lastname: inputDefaultStates.lastName,
+          address: inputDefaultStates.location,
+
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Successful...",
+          text: "Profile updated successfully",
+          timer: 2000,
+          timerProgressBar: true,
+        });
+        console.log("Form submitted", response.data);
+      } else {
+        throw new Error("Profile Update failed");
+      }
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -78,6 +103,73 @@ function Profile() {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const profileResponse = await axios.get(
+          "https://api.fyndah.com/api/v1/users/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        const userData = profileResponse.data.data.user;
+
+        setInputDefaultStates({
+          firstName: userData.firstname || "",
+          lastName: userData.lastname || "",
+          location: userData.address || "",
+          businessRegNumber: "", // Add the respective data field if available in the response
+        });
+
+        console.log(profileResponse.data);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    fetchProfileData();
+  }, [authToken]);
+
+  // const switchAccount = async () => {
+  //   try {
+  //     const 
+
+  //     const response = await axios.post(
+  //       "https://api.fyndah.com/api/v1/users/organizations/1/switch",
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${authToken}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       Swal.fire({
+  //         icon: "success",
+  //         title: `${response.data.status}........`,
+  //         text: `${response.data.message}`,
+  //         timer: 2000,
+  //         timerProgressBar: true,
+  //       });
+  //       console.log("Form submitted", response.data);
+  //     } else {
+  //       setErrorMessage(response.data.message)
+  //       throw new Error("Profile Update failed");
+  //     }
+  //   } catch (error) {
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Oops...",
+  //       text: `${errorMessage}`,
+  //       footer: `<a href="#">Could not update profile. Please try again later. ${error.message}</a>`,
+  //     });
+  //     console.error(error);
+  //   }
+  // }
 
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
@@ -117,10 +209,10 @@ function Profile() {
           </Box>
 
           <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
-            Phil Collins
+            {fullName}
           </h2>
           <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
-            Oak Avenue, Denver, United States
+            {inputDefaultStates.location}
           </h2>
         </div>
 
@@ -212,7 +304,7 @@ function Profile() {
             </div>
 
             {/* BIO */}
-            <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
+            {/* <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
                 <label
                   className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
@@ -239,7 +331,7 @@ function Profile() {
                 placeholder="Input bio text here"
                 size="sm"
               />
-            </div>
+            </div> */}
 
             {/* LOCATION */}
             <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
@@ -277,7 +369,7 @@ function Profile() {
             </div>
 
             {/* BSUINESS REG NO */}
-            <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
+            {/* <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
                 <label
                   className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
@@ -309,7 +401,7 @@ function Profile() {
                   placeholder="Add a business registration number"
                 />
               </InputGroup>
-            </div>
+            </div> */}
 
             {/* SAVE BUTTON */}
             <div className="flex justify-center">
@@ -328,27 +420,27 @@ function Profile() {
               <PiUserSwitchFill className=" size-4 lg:size-5" />
             </div>
 
-            <div className="flex items-center gap-[1rem]">
+            {/* <div className="flex items-center gap-[1rem]">
               <h2 className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                 Delete Account
               </h2>
               <TiUserDelete className="size-4 lg:size-5" />
-            </div>
+            </div> */}
 
-            <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
+            {/* <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
               WISHLIST
-            </div>
+            </div> */}
 
-            <ul className="">
+            {/* <ul className="">
               <li className="text-[0.9rem]">Marshall Associates</li>
               <li className="text-[0.9rem]">Daisy Dawn</li>
-            </ul>
+            </ul> */}
 
-            <div className="col-span-2 my-[2rem] uppercase flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
+            {/* <div className="col-span-2 my-[2rem] uppercase flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
               Purchasing History
-            </div>
+            </div> */}
 
-            <TableContainer whiteSpace="wrap" className="col-span-2 text-[0.8rem] lg:text-[1rem]" width="100%">
+            {/* <TableContainer whiteSpace="wrap" className="col-span-2 text-[0.8rem] lg:text-[1rem]" width="100%">
               <Table variant="simple">
                 <TableCaption>
                   All Transactions made within the app
@@ -374,7 +466,7 @@ function Profile() {
                 </Tbody>
                 <Tfoot></Tfoot>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
           </div>
         </form>
       </div>

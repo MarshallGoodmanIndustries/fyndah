@@ -159,9 +159,10 @@ const UserProfileSetup = () => {
             },
           }
         );
-        console.log(countryResponse.data);
-        setCountries(countryResponse.data);
-  
+        console.log(countryResponse.data.countries);
+        const countryArray = Object.values(countryResponse.data.countries);
+        setCountries(countryArray);
+
         const stateResponse = await axios.get(
           `https://api.fyndah.com/api/v1/locations/states/${countryInput}`,
           {
@@ -170,32 +171,30 @@ const UserProfileSetup = () => {
             },
           }
         );
-        console.log(stateResponse.data);
-        setStates(stateResponse.data);
-  
+        console.log(stateResponse.data.states);
+        setStates(stateResponse.data.states);
+
         const citiesResponse = await axios.get(
-          `https://api.fyndah.com/api/v1/locations/cities/${stateInput}`,
+          `https://api.fyndah.com/api/v1/locations/cities/${countryInput}/${stateInput}`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
             },
           }
         );
-        console.log(citiesResponse.data);
-        setCities(citiesResponse.data);
+        console.log(citiesResponse.data.states);
+        setCities(citiesResponse.data.states);
       } catch (error) {
         console.error("Error fetching data", error);
       }
     };
-  
-    if (authToken) {
-      fetchData();
-    }
-  }, [authToken, countryInput, stateInput, citiesInput]);
+
+    fetchData();
+  }, [authToken, countryInput, stateInput]);
   
 
   const filteredCountries = countries.filter((country) =>
-    country.country_name.toLowerCase().includes(countryInput.toLowerCase())
+    country.toLowerCase().includes(countryInput.toLowerCase())
   );
   const filteredStates = states.filter((state) =>
     state.state_name.toLowerCase().includes(stateInput.toLowerCase())
@@ -230,6 +229,8 @@ const UserProfileSetup = () => {
           timer: 2000,
           timerProgressBar: true,
         });
+        console.log("country, state, city", countryInput, stateInput, citiesInput)
+        console.log("My interests: ", interests);
         console.log("Form submitted", response.data);
         navigate("/dashboard/profile");
       } else {
@@ -245,6 +246,8 @@ const UserProfileSetup = () => {
       console.error(error);
     }
   }
+
+  
 
   return (
     <div className="relative ">
