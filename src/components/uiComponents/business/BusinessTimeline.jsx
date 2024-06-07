@@ -6,7 +6,7 @@ const BusinessTimeline = () => {
     <section>
         <section className="w-full h-full flex flex-col gap-8 sm:items-end p-8">
             {timelineDummyData?.map((data, index) => (
-                <div key={index} className="flex flex-col gap-2 p-2 sm:p-4 w-full sm:max-w-[55%] md:max-w-[65%] lg:max-w-[75%] xl:max-w-[80%]  rounded-lg border border-gray-300">
+                <div key={index} className="flex flex-col gap-2 p-2 sm:p-4 w-full rounded-lg border border-gray-300">
                     <h2 className="font-poppins font-medium text-textDark text-base sm:text-lg">{data.timestamp}</h2>
                     <ul>
                         {data.details?.map((detail, index) => (

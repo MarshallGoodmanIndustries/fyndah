@@ -19,6 +19,7 @@ function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const { setAuthToken, setUserData } = useContext(AuthContext);
+  const [loading,setLoading]=useState(false)
 
   useEffect(() => {
     window.scrollTo({
@@ -55,7 +56,8 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-  
+    setLoading(true)
+
     if (loginFormData.password.trim() === "") {
       newErrors.password = "Password is required!";
     }
@@ -92,6 +94,8 @@ function Login() {
               timer: 2000,
               timerProgressBar: true,
             });
+            setLoading(false)
+
   
             // Check if there is a last route session variable set
             const lastRoute = sessionStorage.getItem("lastRoute");
@@ -125,9 +129,11 @@ function Login() {
           icon: "error",
           title: "Oops...",
           text: "Login Failed!",
-          footer: `<a href="#">Could not log in. Please try again later. ${error.message}</a>`,
+          footer: `<a href="#">Could not log in. Please try again later. ${error.response.data.message}</a>`,
         });
         console.error("Login error", error);
+        setLoading(false)
+
       }
     }
   };
@@ -276,7 +282,8 @@ function Login() {
             className="bg-accentDark text-white p-2 hover:text-[#fdba74] transition-all duration-300 rounded-lg font-lato text-lg md:col-span-2"
             type="submit"
           >
-            Login
+                       {loading? "loading...":"submit"}
+
           </button>
         </form>
 

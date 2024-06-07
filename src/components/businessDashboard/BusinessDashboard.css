@@ -70,15 +70,15 @@
 }
 
 
-@media (min-width: 700px) and (max-width: 1023px) {
+@media (min-width: 620px) and (max-width: 1023px) {
   .business-layout {
       grid-template-columns: 250px 1fr ; /* Fixed sidebar width and dynamic outlet width */
       /* width: 100vw; */
   }
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 620px) {
   .business-layout {
-      grid-template-columns: 25px 1fr ; /* Fixed sidebar width and dynamic outlet width */
+      grid-template-columns: 0px 1fr ; /* Fixed sidebar width and dynamic outlet width */
       /* width: 100vw; */
   }
 }
