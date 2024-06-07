@@ -8,9 +8,12 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import PayLeadsForm from "./PayLeadsForm";
 import { AuthContext } from "../../context/AuthContext";
-import DateRangePicker from "./BalanceToDateModal";
+
 import Swal from "sweetalert2";
 import { ImSpinner9 } from "react-icons/im";
+import DateRangePicker from "./BalanceDateRangePicker";
+import AllTransaction from "./AllTransaction";
+import DateTransaction from "./DateTransaction";
 
 
 
@@ -91,6 +94,16 @@ function WalletIndex() {
                     },
                 }
             );
+            if (!authToken) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops! Something went wrong",
+                    text: "Seems you having network issues, please try again later.",
+                    timer: 4000,
+                    timerProgressBar: true,
+                });
+                navigate("/login")
+            }
             setTransactions(response.data.balance);
             console.log(response.data)// Assuming the balance is available under `response.data.balance`
         } catch (error) {
@@ -121,13 +134,13 @@ function WalletIndex() {
 
 
 
-    const handleChangeStartDate = (e) => {
-        setStartDate(e.target.value);
-    };
+    // const handleChangeStartDate = (e) => {
+    //     setStartDate(e.target.value);
+    // };
 
-    const handleChangeEndDate = (e) => {
-        setEndDate(e.target.value);
-    };
+    // const handleChangeEndDate = (e) => {
+    //     setEndDate(e.target.value);
+    // };
 
     return (
         <div>
@@ -170,34 +183,16 @@ function WalletIndex() {
                             <h3 className="text-lg font-bold">Transactions history </h3>
                         </div>
                         <hr className="p-2" />
-                        <div className=" mr-4">
-                            <DateRangePicker />
-                        </div>
-                        <div className="flex sm:flex-row justify-center  sm:space-y-0">
-                            <div className="flex items-center mr-3">
-
-                                {/* <label htmlFor="startDate" className="font-bold text-sm mr-1">Start Date:</label> */}
-                                <input
-                                    type="date"
-                                    id="startDate"
-                                    value={startDate}
-                                    onChange={handleChangeStartDate}
-                                    className="border w-32 w-custom rounded-md p-2" />
+                        <div className="mt-4 flex sm:flex-row justify-between sm:space-y-0 ">
+                            <div className=" mr-4">
+                                <DateRangePicker />
                             </div>
-                            <div className="flex items-center">
-                                {/* <label htmlFor="endDate" className="font-bold text-sm mr-1">End Date:</label> */}
-                                <input
-                                    type="date"
-                                    size={10}
-                                    id="endDate"
-                                    value={endDate}
-                                    onChange={handleChangeEndDate}
-                                    className="border w-32 w-custom rounded-md p-2" />
+                            <div className="mr-4">
+                                <DateTransaction />
                             </div>
-
                         </div>
-
-                        <ul className="h-64 overflow-x-auto overflow-y-auto mt-9">
+                        <AllTransaction />
+                        {/* <ul className="h-64 overflow-x-auto overflow-y-auto mt-9">
                             <div className="flex justify-between">
                                 <p className="p-1 font-bold">Transaction ID</p>
                                 <p className="p-1 font-bold">Amount</p>
@@ -205,22 +200,22 @@ function WalletIndex() {
                                 <p className="p-1 font-bold">Payment Status</p>
                                 <p className="p-1 font-bold">Date</p>
                                 <p className="p-1 font-bold">Export</p>
-                            </div>
-                            {/* {filterTransactions().map((transaction, index) => (
+                            </div> */}
+                        {/* {filterTransactions().map((transaction, index) => (
                                 <li key={index} className="flex justify-between mt-7">
                                     <span>{transaction.description}</span>
                                     <span>{transaction.amount}</span>
                                     <span>{transaction.date}</span>
                                 </li>
                             ))} */}
-                        </ul>
-                    </div>
+                        {/* </ul> */}
+                        {/* </div> */}
 
-                    <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToFlutterwave} />
-                    <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} />
+                        <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToFlutterwave} />
+                        <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} />
+                    </div>
                 </div>
             </div>
-
 
 
 
