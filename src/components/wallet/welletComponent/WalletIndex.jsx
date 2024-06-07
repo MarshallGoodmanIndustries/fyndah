@@ -8,6 +8,9 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import PayLeadsForm from "./PayLeadsForm";
 import { AuthContext } from "../../context/AuthContext";
+import DateRangePicker from "./BalanceToDateModal";
+import Swal from "sweetalert2";
+import { ImSpinner9 } from "react-icons/im";
 
 
 
@@ -33,7 +36,7 @@ function WalletIndex() {
     const closeModal2 = () => setIsModalOpen2(false);
     const [addAmountWallet, setAddAmountWallet] = useState('')
     const [payLeadsForm, setPayLeadsForm] = useState('')
-
+    const [isLoading, setIsLoading] = useState(false)
     const { authToken } = useContext(AuthContext)
     // for the first modal to flutterwave
     const redirectToFlutterwave = async () => {
@@ -74,33 +77,47 @@ function WalletIndex() {
         }
     }
 
-
+    const fetchWalletBalance = async () => {
+        try {
+            setIsLoading(true)
+            const body = { org_id: orgId };
+            const url = 'https://api.fyndah.com/api/v1/organization/wallet/balance';
+            const response = await axios.post(
+                url, body,
+                {
+                    headers: {
+                        Accept: 'application/json',
+                        'Authorization': `Bearer ${authToken}`,
+                    },
+                }
+            );
+            setTransactions(response.data.balance);
+            console.log(response.data)// Assuming the balance is available under `response.data.balance`
+        } catch (error) {
+            console.error("Error fetching wallet balance:", error);
+            if (error.response ? error.response.data : error.message) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops! Something went wrong",
+                    text: "Seems you having network issues, please try again later.",
+                    timer: 4000,
+                    timerProgressBar: true,
+                });
+            }
+            setIsLoading(false);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
 
     useEffect(() => {
-        const fetchWalletBalance = async () => {
-            try {
-                const body = { org_id: orgId };
-                const url = 'https://api.fyndah.com/api/v1/organization/wallet/balance';
-                const response = await axios.post(
-                    url, body,
-                    {
-                        headers: {
-                            Accept: 'application/json',
-                            'Authorization': `Bearer ${authToken}`,
-                        },
-                    }
-                );
-                setTransactions(response.data.balance);
-                console.log(response.data)// Assuming the balance is available under `response.data.balance`
-            } catch (error) {
-                console.error("Error fetching wallet balance:", error);
-            }
-        };
-
         fetchWalletBalance();
-    }, [authToken]);
+    }, [])
 
+    // const handleStats = () => {
+    //     navigate()
+    // }
 
 
 
@@ -118,11 +135,21 @@ function WalletIndex() {
                 <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl mt-5 p-4 bg-white rounded-lg shadow-md">
                     <div className="flex flex-col sm:flex-row items-center justify-between">
                         <h2 className="text-gray-600">Hello,</h2>
+
                         <h2 className="text-gray-600">Bemia Johnson</h2>
                     </div>
                     <div className="mt-4 p-4 bg-blue-500 hover:bg-blue-700 text-white rounded-lg text-center">
                         <h3 className="text-xl">Total Balance</h3>
-                        <p className="text-2xl font-bold" onChange={lowBalance}>{transactions}</p>
+                        {isLoading ? (
+                            <div className="flex justify-center items-center">
+                                <p> <ImSpinner9 className="animate-spin text-white hover:text-gray-300" size={22} /> </p>
+                            </div>
+                        ) : (
+                            <div>
+                                <p className="text-2xl font-bold" onChange={lowBalance}><span className="text-sm md:text-base lg:text-lg">NGN</span> {transactions}</p>
+
+                            </div>
+                        )}
                     </div>
                     <div className="mt-4 flex sm:flex-row justify-center sm:space-y-0 ">
                         <button className="flex flex-col mr-3  items-center" onClick={openModal}>
@@ -143,9 +170,13 @@ function WalletIndex() {
                             <h3 className="text-lg font-bold">Transactions history </h3>
                         </div>
                         <hr className="p-2" />
+                        <div className=" mr-4">
+                            <DateRangePicker />
+                        </div>
                         <div className="flex sm:flex-row justify-center  sm:space-y-0">
                             <div className="flex items-center mr-3">
-                                <label htmlFor="startDate" className="font-bold text-sm mr-1">Start Date:</label>
+
+                                {/* <label htmlFor="startDate" className="font-bold text-sm mr-1">Start Date:</label> */}
                                 <input
                                     type="date"
                                     id="startDate"
@@ -154,7 +185,7 @@ function WalletIndex() {
                                     className="border w-32 w-custom rounded-md p-2" />
                             </div>
                             <div className="flex items-center">
-                                <label htmlFor="endDate" className="font-bold text-sm mr-1">End Date:</label>
+                                {/* <label htmlFor="endDate" className="font-bold text-sm mr-1">End Date:</label> */}
                                 <input
                                     type="date"
                                     size={10}
@@ -184,9 +215,10 @@ function WalletIndex() {
                             ))} */}
                         </ul>
                     </div>
+
+                    <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToFlutterwave} />
+                    <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} />
                 </div>
-                <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToFlutterwave} />
-                <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} />
             </div>
 
 

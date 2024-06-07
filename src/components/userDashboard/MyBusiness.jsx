@@ -4,6 +4,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Swal from "sweetalert2";
+import { ImSpinner9 } from "react-icons/im"
 
 
 function MyBusiness() {
@@ -107,11 +108,13 @@ function MyBusiness() {
 
     if (isLoading) {
         return <div className="flex items-center justify-center h-screen">
-            <p>Loading...</p>
+            <p> <ImSpinner9 className="animate-spin text-red-500 hover:text-red-800" size={50} /> </p>
+
         </div>
     } else if (loading) {
         return <div className="flex items-center justify-center h-screen">
-            <p>Loading...</p>
+            <p> <ImSpinner9 className="animate-spin text-red-500 hover:text-red-800" size={50} /> </p>
+
         </div>
     }
 
