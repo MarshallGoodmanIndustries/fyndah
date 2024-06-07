@@ -7,7 +7,7 @@ function Messages() {
   const [message, setMessage] = useState([]);
   
   const [message1, setMessage1] = useState([]);
-  console.log(message1);
+//   console.log(message1);
   const [id,setId]=useState("")
   console.log(id);
   useEffect(() => {
@@ -36,8 +36,8 @@ function Messages() {
 
 
 
-  useEffect(() => {
-    const fetchData = async () => {
+//   useEffect(() => {
+    const fetchData = async (id) => {
       try {
         const conversation = await axios.get(
           "https://axelonepostfeature.onrender.com/api/messages/"+id,
@@ -55,21 +55,21 @@ function Messages() {
       }
     };
 
-      fetchData();
+    //   
     
-  }, []);
+//   }, []);
 
-  const [showMessage, setShowMessage] = useState(false);
+//   const [showMessage, setShowMessage] = useState(false);
   const [messageInChatBox, setMessageInChatBox] = useState([]);
   console.log(messageInChatBox);
   const handleSHowMessageBox = (eachUserId) => {
-    const messageInTheChat = eachUserId.map(
-      (message) => message.conversationId==message.conversationId
-    );
-    console.log(messageInTheChat);
-   
+    fetchData(eachUserId);
 
-    setShowMessage(true);
+    console.log(message1);
+    // const messageInTheChat=message1.find((item)=>item.conversationId==eachUserId._id)
+
+   
+// console.log(messageInTheChat);
   
 
   };
@@ -82,12 +82,11 @@ function Messages() {
             <div key={item._id}
             className="gap-8 px-10"
               onClick={() => {
-                handleSHowMessageBox(item);
+                handleSHowMessageBox(item._id);
               }}>
               <div className="" >
                 <h1>{item._id}</h1>
-                {/* <h1>{item.members}</h1>
-                <h1>{item.updatedAt}</h1> */}
+               
               </div>
             </div>
           );
@@ -95,7 +94,7 @@ function Messages() {
       </div>
 
       <div className="p-5 m-5 border w-full">
-        {showMessage ? (
+        {/* {showMessage ? (
           <div className="col-span-3 px-4 py-10 border w-full">
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex justify-end">
@@ -124,7 +123,7 @@ function Messages() {
           </div>
         ) : (
           <h1>click on a message to start a conversation</h1>
-        )}
+        )} */}
       </div>
 
       {/* <div className="col-span-3 px-4 py-10 border w-full">
