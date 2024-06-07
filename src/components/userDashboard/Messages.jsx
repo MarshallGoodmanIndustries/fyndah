@@ -5,11 +5,9 @@ import axios from "axios";
 function Messages() {
   const { authToken } = useContext(AuthContext);
   const [message, setMessage] = useState([]);
-  
   const [message1, setMessage1] = useState([]);
-  console.log(message1);
-  const [id,setId]=useState("")
-  console.log(id);
+  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -23,7 +21,6 @@ function Messages() {
           }
         );
         setMessage(conversation.data);
-        console.log(conversation.data);
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -32,47 +29,40 @@ function Messages() {
     if (authToken) {
       fetchData();
     }
-  }, []);
+  }, [authToken]);
 
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const conversation = await axios.get(
-          "https://axelonepostfeature.onrender.com/api/messages/"+id,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              Accept: "application/json",
-            },
-          }
-        );
-        console.log(conversation.data);
-        setMessage1(conversation.data);
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
-    };
-
-      fetchData();
-    
-  }, []);
-
-  const [showMessage, setShowMessage] = useState(false);
-  const [messageInChatBox, setMessageInChatBox] = useState([]);
-  console.log(messageInChatBox);
-  const handleSHowMessageBox = (eachUserId) => {
-    const messageInTheChat = eachUserId.map(
-      (message) => message.conversationId==message.conversationId
-    );
-    console.log(messageInTheChat);
-   
-
-    setShowMessage(true);
+  // fetch message data specific to ids
+  const fetchData = async (id) => {
+    try {
+      const conversation = await axios.get(
+        `https://axelonepostfeature.onrender.com/api/messages/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            Accept: "application/json",
+          },
+        }
+      );
+      setMessage1(conversation.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+      
   
 
+  // const [showMessage, setShowMessage] = useState(false);
+  // const [messageInChatBox, setMessageInChatBox] = useState([]);
+  // console.log(messageInChatBox);
+
+  const handleSHowMessageBox = (userId) => {
+    fetchData(userId);
+    //perform comparison operation below
+    // message1.find()
+    
+    // setShowMessage(true);
   };
+
   return (
     <div className="py-10 flex items-top justify-between">
       <div className="gap-4 grid">
@@ -80,9 +70,9 @@ function Messages() {
         {message?.map((item) => {
           return (
             <div key={item._id}
-            className="gap-8 px-10"
+            className="gap-8 px-10 cursor-pointer"
               onClick={() => {
-                handleSHowMessageBox(item);
+                handleSHowMessageBox(item._id);
               }}>
               <div className="" >
                 <h1>{item._id}</h1>
@@ -94,7 +84,7 @@ function Messages() {
         })}
       </div>
 
-      <div className="p-5 m-5 border w-full">
+      {/* <div className="p-5 m-5 border w-full">
         {showMessage ? (
           <div className="col-span-3 px-4 py-10 border w-full">
             <div className="bg-white p-6 rounded-lg shadow-md">
@@ -125,7 +115,7 @@ function Messages() {
         ) : (
           <h1>click on a message to start a conversation</h1>
         )}
-      </div>
+      </div> */}
 
       {/* <div className="col-span-3 px-4 py-10 border w-full">
             <div className="bg-white p-6 rounded-lg shadow-md">
