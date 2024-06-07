@@ -2,20 +2,24 @@
 
 import { FaRegChartBar, FaWallet } from "react-icons/fa"
 import { MdPayment } from "react-icons/md"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Modal from "./Modal";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import PayLeadsForm from "./PayLeadsForm";
 import { AuthContext } from "../../context/AuthContext";
-// import Flutterwave from "./Flutterwave";
-// import Flutterwave from "./Flutterwave";
-// import Flutterwave from "./Flutterwave";
+
 
 
 function WalletIndex() {
     const navigate = useNavigate();
     const [lowBal, setLowBal] = useState(false);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [transactions, setTransactions] = useState([]);
+    const { id } = useParams();
+    const orgId = { id: id };
+
     // const [isLoading, setIsLoading] = useState(true)
 
     // for adding funds to wallet v
@@ -56,7 +60,7 @@ function WalletIndex() {
         // <Flutterwave />
     };
     // this for the second modal to pay for leads
-    const redirectToPayLeadsForm = async () => {
+    const redirectToPayLeadsForm = async () => { //purchase for lead function
         setIsModalOpen2(false);
 
         console.log(payLeadsForm, "from walletindex")
@@ -70,22 +74,20 @@ function WalletIndex() {
         }
     }
 
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [transactions, setTransactions] = useState([]);
-    const orgId = "devin";
+
+
+
     useEffect(() => {
         const fetchWalletBalance = async () => {
             try {
+                const body = { org_id: orgId };
+                const url = 'https://api.fyndah.com/api/v1/organization/wallet/balance';
                 const response = await axios.post(
-                    'https://api.fyndah.com/api/v1/organization/wallet/balance',
-                    null,
+                    url, body,
                     {
                         headers: {
                             Accept: 'application/json',
-                        },
-                        params: {
-                            org_id: orgId,
+                            'Authorization': `Bearer ${authToken}`,
                         },
                     }
                 );
@@ -97,20 +99,10 @@ function WalletIndex() {
         };
 
         fetchWalletBalance();
-    }, [orgId]);
+    }, [authToken]);
 
 
-    const filterTransactions = () => {
-        // Filter transactions based on selected date range
-        const filteredTransactions = transactions.filter(transaction => {
-            const transactionDate = new Date(transaction.date);
-            const start = startDate ? new Date(startDate) : null;
-            const end = endDate ? new Date(endDate) : null;
 
-            return (!start || transactionDate >= start) && (!end || transactionDate <= end);
-        });
-        return filteredTransactions;
-    };
 
     const handleChangeStartDate = (e) => {
         setStartDate(e.target.value);
@@ -130,7 +122,7 @@ function WalletIndex() {
                     </div>
                     <div className="mt-4 p-4 bg-blue-500 hover:bg-blue-700 text-white rounded-lg text-center">
                         <h3 className="text-xl">Total Balance</h3>
-                        <p className="text-2xl font-bold" onChange={lowBalance}>$8,458.00</p>
+                        <p className="text-2xl font-bold" onChange={lowBalance}>{transactions}</p>
                     </div>
                     <div className="mt-4 flex sm:flex-row justify-center sm:space-y-0 ">
                         <button className="flex flex-col mr-3  items-center" onClick={openModal}>
@@ -173,30 +165,6 @@ function WalletIndex() {
                             </div>
 
                         </div>
-                        {/* <table className="  mt-9">
-                            <thead>
-                                <tr className="bg-gray-100">
-                                    <th className="p-4 font-bold">Transaction ID</th>
-                                    <th className="p-4 font-bold">Amount</th>
-                                    <th className="p-4 font-bold">Payment Type</th>
-                                    <th className="p-4 font-bold">Payment Status</th>
-                                    <th className="p-4 font-bold">Date</th>
-                                    <th className="p-4 font-bold">Export</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filterTransactions().map((transaction, index) => (
-                                    <tr key={index} className="hover:bg-gray-50">
-                                        <td className="p-4">{transaction.id}</td>
-                                        <td className="p-4">{transaction.amount}</td>
-                                        <td className="p-4">{transaction.paymentType}</td>
-                                        <td className="p-4">{transaction.status}</td>
-                                        <td className="p-4">{transaction.date}</td>
-                                        <td className="p-4"><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Export</button></td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table> */}
 
                         <ul className="h-64 overflow-x-auto overflow-y-auto mt-9">
                             <div className="flex justify-between">
@@ -207,13 +175,13 @@ function WalletIndex() {
                                 <p className="p-1 font-bold">Date</p>
                                 <p className="p-1 font-bold">Export</p>
                             </div>
-                            {filterTransactions().map((transaction, index) => (
+                            {/* {filterTransactions().map((transaction, index) => (
                                 <li key={index} className="flex justify-between mt-7">
                                     <span>{transaction.description}</span>
                                     <span>{transaction.amount}</span>
                                     <span>{transaction.date}</span>
                                 </li>
-                            ))}
+                            ))} */}
                         </ul>
                     </div>
                 </div>
