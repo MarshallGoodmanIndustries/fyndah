@@ -45,7 +45,7 @@ function WalletIndex() {
                 amount: addAmountWallet,
 
             }
-            const API = 'https://api.fyndah.com/api/v1/organization/flutterwave/pay'
+            const API = 'https://api.fyndah.com/api/v1/organization/flutterwave/pay'// still have error here
             const payment = await axios.post(API, details, {
                 headers: {
                     'Accept': 'application/json',

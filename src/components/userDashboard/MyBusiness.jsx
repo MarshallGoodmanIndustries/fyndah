@@ -21,7 +21,7 @@ function MyBusiness() {
         if (!authToken) {
             console.log("Token not provided");
         } else {
-            console.log(authToken); // Logging the token to verify it's present
+            console.log("token provided"); // Logging the token to verify it's present
         }
 
         const API = 'https://api.fyndah.com/api/v1/users/organizations/connected';
@@ -62,25 +62,11 @@ function MyBusiness() {
 
 
 
-<<<<<<< HEAD
-=======
-    const myBusinesses = [
-        {
-            id: orgId,
-            name: "Marshall Associates",
-        },
-        {
-            id: 2,
-            name: "London brewery",
-        },
-        
-    ]
->>>>>>> 125463f28a95314bf1499b0e075a3e7aae202afc
 
     const handlePathChange = async (id) => {
         const url = `https://api.fyndah.com/api/v1/users/organizations/${id}/switch`
         const body = { id: id }
-        console.log(body)
+
         try {
             setLoading(true)
             const response = await axios.post(url, body, {
@@ -88,7 +74,7 @@ function MyBusiness() {
                     'Authorization': `Bearer ${authToken}`,
                 }
             })
-            console.log(response.data)
+
             if (response.data.message === "Switched to business successfully") {
                 Swal.fire({
                     icon: "success",
@@ -100,7 +86,7 @@ function MyBusiness() {
             }
             navigate(`/businessDashboard/${id}/posts`)
         } catch (error) {
-            console.log(error.massage)
+
             if (error.response ? error.response.data : error.message) {
                 Swal.fire({
                     icon: "error",
@@ -138,7 +124,6 @@ function MyBusiness() {
                         <span>
                             < TbPointFilled className="text-accentDark" />
                         </span>
-                        <p>ID: {business.id}</p>
                         <li onClick={() => handlePathChange(business.id)} className="cursor-pointer hover:text-accentDark" > {business.org_name} </li>
 
                     </div>
