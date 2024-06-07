@@ -19,6 +19,9 @@ function Modal({ addAmountWallet, setAddAmountWallet, isOpen, onClose, onRedirec
     }
     return (
         <div>
+
+
+
             <div className="fixed inset-0 bg-gray-600 p-6 bg-opacity-50 flex justify-center items-center">
                 <div className="bg-white p-8 rounded shadow-md text-center animate-zoomIn">
                     <h2 className="text-xl mb-4">Enter Amount</h2>
