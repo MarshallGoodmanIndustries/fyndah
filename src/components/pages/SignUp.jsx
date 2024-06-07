@@ -1,8 +1,10 @@
 import Swal from "sweetalert2";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { FaPlus, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { BsBoxArrowLeft } from "react-icons/bs";
+import { AuthContext } from "../context/AuthContext";
+
 import {
   Ellipse2,
   Ellipse4,
@@ -16,6 +18,8 @@ import axios from "axios";
 // import codes from "country-calling-code";
 
 function SignUp() {
+  const { authToken } = useContext(AuthContext);
+
   const [revealPassword, setRevealPassword] = useState(false);
   const [revealConfirmPassword, setRevealConfirmPassword] = useState(false);
   const [showForm, setShowForm] = useState(true);
@@ -129,6 +133,12 @@ function SignUp() {
             username: signupFormData.username,
             password: signupFormData.password,
             password_confirmation: signupFormData.confirmPassword,
+          },
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
           }
         );
 
