@@ -32,7 +32,6 @@ const FeaturedPost = ({postId, profileImg, username, timePosted, textContent, im
         try {
             const response = await axios.get(url);
             setCommentsData(response.data.data.comments);
-            console.log("comments: ", response.data.data.comments);
         } catch (error) {
             console.log(error);
         }
@@ -41,7 +40,6 @@ const FeaturedPost = ({postId, profileImg, username, timePosted, textContent, im
     //load initial comments
     useEffect(() => {
         getComments();
-        console.log("loaded comments");
     }, [])
 
     const handleLike = async ()=>{

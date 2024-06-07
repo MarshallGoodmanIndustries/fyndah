@@ -62,6 +62,20 @@ function MyBusiness() {
 
 
 
+<<<<<<< HEAD
+=======
+    const myBusinesses = [
+        {
+            id: orgId,
+            name: "Marshall Associates",
+        },
+        {
+            id: 2,
+            name: "London brewery",
+        },
+        
+    ]
+>>>>>>> 125463f28a95314bf1499b0e075a3e7aae202afc
 
     const handlePathChange = async (id) => {
         const url = `https://api.fyndah.com/api/v1/users/organizations/${id}/switch`

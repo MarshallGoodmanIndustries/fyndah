@@ -1,9 +1,7 @@
-function CreateBusiness () {
-    return (
-        <div>
-            Create a Business
-        </div>
-    )
+import BusinessProfileSetup from "../dashboard/BusinessProfileSetup";
+
+function CreateBusiness() {
+  return <BusinessProfileSetup />;
 }
 
 export default CreateBusiness;

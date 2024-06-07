@@ -17,15 +17,13 @@ const FeaturedPosts = () => {
       try {
         const response = await axios.get(url);
         setPosts(response.data.data.posts);
-        console.log(response.data.data.posts);
       } catch (error) {
         console.log(error.message);
       }
     }
     getPosts();
   }, []);
-  
-  console.log("posts: ", posts);
+ 
 
   return (
     <div className="grid grid-cols-1 items-center sm:grid-cols-2 md:grid-cols-3 gap-8 py-16 px-4 sm:px-5 md:px-6 lg:px-8">

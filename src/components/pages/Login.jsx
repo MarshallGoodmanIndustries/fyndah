@@ -18,7 +18,7 @@ function Login() {
   const [revealPassword, setRevealPassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { setAuthToken } = useContext(AuthContext);
+  const { setAuthToken, setUserData } = useContext(AuthContext);
 
   useEffect(() => {
     window.scrollTo({
@@ -55,14 +55,14 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-
+  
     if (loginFormData.password.trim() === "") {
       newErrors.password = "Password is required!";
     }
     if (loginFormData.email.trim() === "") {
       newErrors.email = "Please enter your registered email address or username!";
     }
-
+  
     if (Object.values(newErrors).some((error) => error !== "")) {
       setErrors(newErrors);
     } else {
@@ -74,31 +74,51 @@ function Login() {
             password: loginFormData.password,
           }
         );
-
+  
         if (response.status === 200) {
+          console.log("API Response:", response.data);
           const token = response.data.token.original.access_token;
-          setAuthToken(token);
-          Swal.fire({
-            icon: "success",
-            title: "Successful...",
-            text: "Successfully logged in",
-            timer: 2000,
-            timerProgressBar: true,
-          });
-          
-          // check if there is a last route session variable set
-          const lastRoute = sessionStorage.getItem("lastRoute");
-          setTimeout(() => {
-            if (lastRoute) {
-              //navigate to the last route
-              navigate(lastRoute);
-            } else {
-              //navigate to dashboard
-              navigate("/dashboard/profile");
-            }
-          }, 3000);
+          const userData = response.data.data;  // Directly access the data object
+          console.log("User Data: ", userData);
+          console.log("User Token: ", token);
+  
+          if (userData) {
+            setUserData(userData);  // Set the user data in the auth context
+            setAuthToken(token);    // Set the auth token in the auth context
+            Swal.fire({
+              icon: "success",
+              title: "Successful...",
+              text: "Successfully logged in",
+              timer: 2000,
+              timerProgressBar: true,
+            });
+  
+            // Check if there is a last route session variable set
+            const lastRoute = sessionStorage.getItem("lastRoute");
+            setTimeout(() => {
+              if (lastRoute) {
+                // Navigate to the last route
+                navigate(lastRoute);
+              } else {
+                // Navigate to the dashboard
+                navigate("/dashboard/profile");
+              }
+            }, 3000);
+          } else {
+            console.error("User data is not in the expected format or empty");
+            Swal.fire({
+              icon: "error",
+              title: "Error...",
+              text: "User data is not in the expected format or empty",
+            });
+          }
         } else {
-          throw new Error("Login failed");
+          console.error("API responded with status:", response.status);
+          Swal.fire({
+            icon: "error",
+            title: "Error...",
+            text: `API responded with status: ${response.status}`,
+          });
         }
       } catch (error) {
         Swal.fire({
@@ -107,10 +127,11 @@ function Login() {
           text: "Login Failed!",
           footer: `<a href="#">Could not log in. Please try again later. ${error.message}</a>`,
         });
-        console.error(error);
+        console.error("Login error", error);
       }
     }
   };
+  
 
   return (
     <section className="relative w-full h-screen bg-white px-3 sm:px-4 md:px-6 lg:px-20 py-16 md:py-8 grid items-center grid-cols-1 md:grid-cols-2 gap-16 md:gap-8">
