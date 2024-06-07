@@ -19,10 +19,9 @@ import DateTransaction from "./DateTransaction";
 
 function WalletIndex() {
     const navigate = useNavigate();
-    const [lowBal, setLowBal] = useState(false);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [lowBal, setLowBal] = useState(null);
     const [transactions, setTransactions] = useState([]);
+
     const { id } = useParams();
     const orgId = { id: id };
 
@@ -72,13 +71,7 @@ function WalletIndex() {
         console.log(payLeadsForm, "from walletindex")
     };
 
-    const lowBalance = () => {
-        if (lowBal === true) {
-            setLowBal(true);
-        } else {
-            setLowBal(false)
-        }
-    }
+
 
     const fetchWalletBalance = async () => {
         try {
@@ -105,6 +98,7 @@ function WalletIndex() {
                 navigate("/login")
             }
             setTransactions(response.data.balance);
+            setLowBal(response.data.balance);
             console.log(response.data)// Assuming the balance is available under `response.data.balance`
         } catch (error) {
             console.error("Error fetching wallet balance:", error);
@@ -126,21 +120,21 @@ function WalletIndex() {
 
     useEffect(() => {
         fetchWalletBalance();
+        if (lowBal !== null && lowBal <= 4999) {
+            Swal.fire({
+                icon: "warning",
+                title: "Warning Message!!!",
+                text: "Your balance is below 5000 make a quick topup.",
+                timer: 2000,
+                timerProgressBar: true,
+            });
+        }
     }, [])
 
     // const handleStats = () => {
     //     navigate()
     // }
 
-
-
-    // const handleChangeStartDate = (e) => {
-    //     setStartDate(e.target.value);
-    // };
-
-    // const handleChangeEndDate = (e) => {
-    //     setEndDate(e.target.value);
-    // };
 
     return (
         <div>
@@ -159,7 +153,7 @@ function WalletIndex() {
                             </div>
                         ) : (
                             <div>
-                                <p className="text-2xl font-bold" onChange={lowBalance}><span className="text-sm md:text-base lg:text-lg">NGN</span> {transactions}</p>
+                                <p className="text-2xl font-bold"><span className="text-sm md:text-base lg:text-lg">NGN</span> {transactions}</p>
 
                             </div>
                         )}
@@ -192,47 +186,12 @@ function WalletIndex() {
                             </div>
                         </div>
                         <AllTransaction />
-                        {/* <ul className="h-64 overflow-x-auto overflow-y-auto mt-9">
-                            <div className="flex justify-between">
-                                <p className="p-1 font-bold">Transaction ID</p>
-                                <p className="p-1 font-bold">Amount</p>
-                                <p className="p-1 font-bold">Payment Type</p>
-                                <p className="p-1 font-bold">Payment Status</p>
-                                <p className="p-1 font-bold">Date</p>
-                                <p className="p-1 font-bold">Export</p>
-                            </div> */}
-                        {/* {filterTransactions().map((transaction, index) => (
-                                <li key={index} className="flex justify-between mt-7">
-                                    <span>{transaction.description}</span>
-                                    <span>{transaction.amount}</span>
-                                    <span>{transaction.date}</span>
-                                </li>
-                            ))} */}
-                        {/* </ul> */}
-                        {/* </div> */}
 
                         <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToFlutterwave} />
                         <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} />
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-            {/* <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 py-6">
-                <form className="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold text-gray-700">Payment Details</h2>
-                    <input type="text" placeholder="Card Number" className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                    <input type="text" placeholder="Expiration Date" className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                    <input type="text" placeholder="CVV" className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                    <button type="submit" className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Pay Now
-                    </button>
-                </form>
-            </div> */}
         </div>
     )
 }
