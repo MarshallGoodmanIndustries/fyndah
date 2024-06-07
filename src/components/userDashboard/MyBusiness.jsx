@@ -84,7 +84,7 @@ function MyBusiness() {
                     timerProgressBar: true,
                 });
             }
-            navigate(`/businessDashboard/${id}/posts`)
+            navigate(`/businessDashboard/${id}/business-profile`)
         } catch (error) {
 
             if (error.response ? error.response.data : error.message) {

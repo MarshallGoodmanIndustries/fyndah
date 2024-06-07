@@ -33,9 +33,12 @@ import { FaCaretDown } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import { useParams } from "react-router-dom";
 
 function BusinessProfile() {
-  const { authToken, businessId } = useContext(AuthContext);
+  const { authToken} = useContext(AuthContext);
+  const { id } = useParams(); // Extract the 'id' parameter from the URL
+  
   const [inputDefaultStates, setInputDefaultStates] = useState({
     businessName: "",
     email: "",
@@ -110,7 +113,7 @@ function BusinessProfile() {
     const fetchBusinessProfileData = async () => {
       try {
         const businessProfileResponse = await axios.get(
-          `https://api.fyndah.com/api/v1/organization/${businessId}`,
+          `https://api.fyndah.com/api/v1/organization/${id}`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -143,7 +146,10 @@ function BusinessProfile() {
     }
 
     fetchBusinessProfileData();
-  }, [authToken, businessId]);
+  }, [authToken, id]);
+
+  const location = `${inputDefaultStates.address}  ${inputDefaultStates.city}`
+  console.log("my id:", id)
 
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
@@ -210,10 +216,10 @@ function BusinessProfile() {
       {/* ACCOUNT DETAILS */}
       <div className="mt-[2.5rem]">
         <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
-          Marshall Associates
+          {inputDefaultStates.businessName}
         </h2>
         <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
-          Oak Avenue, Denver, United States
+          {location}
         </h2>
       </div>
 
@@ -656,7 +662,7 @@ function BusinessProfile() {
 
             {/* INVENTORY MANAGEMENT */}
 
-            <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-0 text-[0.8rem] lg:text-[1.1rem] font-semibold">
+            {/* <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-0 text-[0.8rem] lg:text-[1.1rem] font-semibold">
               INVENTORY MANAGEMENT
             </div>
 
@@ -712,10 +718,10 @@ function BusinessProfile() {
                 </Tbody>
                 <Tfoot></Tfoot>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
 
             {/* STOCKS */}
-            <h2 className="text-navyBlue font-medium text-[0.8rem] lg:text-[1.1rem]">
+            {/* <h2 className="text-navyBlue font-medium text-[0.8rem] lg:text-[1.1rem]">
               STOCK
             </h2>
 
@@ -752,17 +758,17 @@ function BusinessProfile() {
                 </Tbody>
                 <Tfoot></Tfoot>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
 
             {/* CATEGORIES */}
 
-            <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
+            {/* <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
               CATEGORIES
-            </h2>
+            </h2> */}
 
-            <div className="col-span-2 flex flex-col gap-[1rem]">
+            {/* <div className="col-span-2 flex flex-col gap-[1rem]"> */}
               {/* ADD CATEGORY */}
-              <div className="flex mb-[0.5rem] lg:mb-0 w-full  lg:w-1/2 flex-col gap-2 lg:gap-2">
+              {/* <div className="flex mb-[0.5rem] lg:mb-0 w-full  lg:w-1/2 flex-col gap-2 lg:gap-2">
                 <label
                   className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
                   htmlFor="category"
@@ -779,10 +785,10 @@ function BusinessProfile() {
                   onChange={handleChange}
                   placeholder="Add Category"
                 />
-              </div>
+              </div> */}
 
               {/* edit CATEGORY */}
-              <div className="lg:flex block mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
+              {/* <div className="lg:flex block mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
                 <h2
                   className="font-normal text-lightRed mb-[0.5rem] lg:mb-0 text-[0.9rem] lg:text-[1.1rem]"
                 >
@@ -806,9 +812,9 @@ function BusinessProfile() {
                       onChange={handleChange}
                       placeholder="Add a product"
                     />
-                  </div>
+                  </div> */}
 
-                  <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
+                  {/* <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
                     <h2 className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]">
                       Remove Product
                     </h2>
@@ -838,9 +844,9 @@ function BusinessProfile() {
                         </>
                       )}
                     </Menu>
-                  </div>
+                  </div> */}
 
-                  <div className="flex mb-[1rem]  lg:mb-0 flex-col gap-2 lg:gap-2">
+                  {/* <div className="flex mb-[1rem]  lg:mb-0 flex-col gap-2 lg:gap-2">
                     <h2 className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]">
                       Move Product
                     </h2>
@@ -870,13 +876,13 @@ function BusinessProfile() {
                         </>
                       )}
                     </Menu>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  </div> */}
+                {/* </div> */}
+              {/* </div> */}
+            {/* </div> */}
 
             {/* STOCKS */}
-            <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
+            {/* <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
               ORDERS
             </h2>
 
@@ -913,10 +919,10 @@ function BusinessProfile() {
                 </Tbody>
                 <Tfoot></Tfoot>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
 
             {/* SALES */}
-            <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
+            {/* <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
               SALES
             </h2>
 
@@ -961,7 +967,7 @@ function BusinessProfile() {
                 </Tbody>
                 <Tfoot></Tfoot>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
           </div>
         </form>
       </div>
