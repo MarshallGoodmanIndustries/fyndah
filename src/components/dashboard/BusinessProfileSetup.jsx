@@ -9,7 +9,7 @@ import { AuthContext } from "../context/AuthContext";
 import { Country, State, City } from "country-state-city";
 
 const BusinessProfileSetup = () => {
-    let token1 ="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5kYWguY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzE3NjY5OTQ0LCJleHAiOjE3MTc2NzM1NDQsIm5iZiI6MTcxNzY2OTk0NCwianRpIjoiMVdTREZlVHRkbWFFaFBLdyIsInN1YiI6IjU1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.616Nzc6zYOcC9xwBKcSyor1Wh0jJJ4Ep63-iPHC2bjg"
+  let token1 = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5kYWguY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzE3NjY5OTQ0LCJleHAiOjE3MTc2NzM1NDQsIm5iZiI6MTcxNzY2OTk0NCwianRpIjoiMVdTREZlVHRkbWFFaFBLdyIsInN1YiI6IjU1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.616Nzc6zYOcC9xwBKcSyor1Wh0jJJ4Ep63-iPHC2bjg"
   const [categoryValue, setCategoryValue] = useState("");
   const [subCategoryValue, setSubCategoryValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
@@ -152,7 +152,7 @@ const BusinessProfileSetup = () => {
   //   const handleMaximum = (event) => {
   //     setMaximum(event.target.value);
   //   };
-let token4="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5kYWguY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzE3NjE3NTc4LCJleHAiOjE3MTc2MjExNzgsIm5iZiI6MTcxNzYxNzU3OCwianRpIjoiNEtQRG84TzhQVVkzQU1ETSIsInN1YiI6IjU0IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.I-UyPXmKyhVLLYi5dtzwCEX94Ft6SFU5_JEWOhBOzsA"
+  let token4 = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5kYWguY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzE3NjE3NTc4LCJleHAiOjE3MTc2MjExNzgsIm5iZiI6MTcxNzYxNzU3OCwianRpIjoiNEtQRG84TzhQVVkzQU1ETSIsInN1YiI6IjU0IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.I-UyPXmKyhVLLYi5dtzwCEX94Ft6SFU5_JEWOhBOzsA"
   const sendProfile = {
     business_category_ids: getSelectCategory,
     business_unit_ids: getSelectSubCategory,
@@ -169,8 +169,8 @@ let token4="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5
     country: "nigeria",
     state: "lagos",
     city: "ikeja",
-    long:"20.1",
-    lat:"40.55"
+    long: "20.1",
+    lat: "40.55"
   };
   // console.log(sendProfile);
   const log = () => {
@@ -387,7 +387,7 @@ let token4="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5
     <div className="md:grid  items-center bg-secondary p-10">
 
 
-        <Test />
+      <Test />
       <div className="px-5 py-5 grid items-center justify-center md:px-20 bg-gradient-to-r ">
         <div className="p-5 rounded-lg shadow-lg border">
           <h1 className="text-2xl text-accent mb-4">
