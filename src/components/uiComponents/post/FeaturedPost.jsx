@@ -11,9 +11,11 @@ import { TimeAgo } from "../../helperComponents";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { AiFillLike } from "react-icons/ai";
 import { FaComment } from "react-icons/fa6";
+import { BiSolidMessageDetail } from "react-icons/bi";
+import ConfirmationModal from "./ConfirmationModal";
 
 
-const FeaturedPost = ({postId, profileImg, username, timePosted, textContent, imgContent, noOflikes}) => {
+const FeaturedPost = ({postId, organizationId, profileImg, username, timePosted, textContent, imgContent, noOflikes}) => {
     const { authToken } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
@@ -22,6 +24,7 @@ const FeaturedPost = ({postId, profileImg, username, timePosted, textContent, im
     const [comment, setComment] = useState(false);
     const [commentsData, setCommentsData] = useState([]);
     const [timeAgo, setTimeAgo] = useState();
+    const [confirmationModal, setConfirmationModal] = useState(false);
     
      
     
@@ -40,7 +43,7 @@ const FeaturedPost = ({postId, profileImg, username, timePosted, textContent, im
     //load initial comments
     useEffect(() => {
         getComments();
-    }, [getComments])
+    }, [])
 
     const handleLike = async ()=>{
 
@@ -90,13 +93,22 @@ const FeaturedPost = ({postId, profileImg, username, timePosted, textContent, im
              }
         }
     }
+
+    const handleMessage = ()=> {
+        if(!authToken){
+            //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+            sessionStorage.setItem("lastRoute", location.pathname)
+            navigate('/login');
+        }else{
+            setConfirmationModal(true);
+        }
+    }
     useEffect(() => {
         setTimeAgo(<TimeAgo isoString={timePosted} />);
     },[timePosted])
     
-    
   return (
-    <section className="flex w-full max-w-[300px] gap-2 rounded-lg justify-self-center">
+    <section className="relative flex w-full max-w-[300px] gap-2 rounded-lg justify-self-center">
         {/* user profile image container */}
         <div className="w-full max-w-12 h-full rounded-full overflow-hidden">
             <img src={profileImg} alt="business profile display" />
@@ -115,7 +127,7 @@ const FeaturedPost = ({postId, profileImg, username, timePosted, textContent, im
                     <img src={imgContent} className="w-full h-full object-cover" alt="image describing post" />
                 </div>
             </div>
-            <div>
+            <div className="">
                 {/* no of reactions container*/}
                 <div className="flex items-center gap-4">
                     {/* likes icon container */}
@@ -128,6 +140,12 @@ const FeaturedPost = ({postId, profileImg, username, timePosted, textContent, im
                         <FaComment className={classNames("w-5 h-5 text-gray-600")} />
                         {commentsData.length}
                     </div>
+
+                    <div onClick={handleMessage} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
+                        <BiSolidMessageDetail className="w-5 h-5 text-gray-600" />
+                    </div>
+
+                    {confirmationModal && (<ConfirmationModal setConfirmationModal={setConfirmationModal} org_id={organizationId} />)}
                 </div>
                     
                 {comment && <FeaturedPost_inner 

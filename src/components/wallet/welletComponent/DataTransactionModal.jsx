@@ -1,6 +1,7 @@
 // AnimatedModal.js
 // import { useState } from 'react';
 
+// import { FaDollarSign } from 'react-icons/fa';
 import './modal.css'; // Added custom CSS
 
 const DateTransactionModal = ({ isOpenModal, handleCloseModal, startDate, endDate, data }) => {
@@ -57,7 +58,7 @@ const DateTransactionModal = ({ isOpenModal, handleCloseModal, startDate, endDat
                                         <tr key={transaction.id || 'default-key'}>
                                             <td className="px-6 py-4 whitespace-nowrap">{transaction.uuid || 'N/A'}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">{transaction.type || 'Unknown Type'}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{transaction.amount || '0'}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap"><span className="text-xs">USD</span>  {transaction.amount || '0'}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">{transaction.created_at || 'Not Available'}</td>
                                         </tr>
                                     ))

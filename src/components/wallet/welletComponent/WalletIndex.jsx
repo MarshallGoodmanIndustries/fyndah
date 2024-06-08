@@ -1,12 +1,12 @@
 // import React from 'react'
 
-import { FaRegChartBar, FaWallet } from "react-icons/fa"
+import { FaRegChartBar, } from "react-icons/fa"
 import { MdPayment } from "react-icons/md"
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "./Modal";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import PayLeadsForm from "./PayLeadsForm";
+// import PayLeadsForm from "./PayLeadsForm";
 import { AuthContext } from "../../context/AuthContext";
 
 import Swal from "sweetalert2";
@@ -14,6 +14,7 @@ import { ImSpinner9 } from "react-icons/im";
 import DateRangePicker from "./BalanceDateRangePicker";
 import AllTransaction from "./AllTransaction";
 import DateTransaction from "./DateTransaction";
+import StatisticsModal from "./StatisticsModal";
 
 
 
@@ -22,8 +23,9 @@ function WalletIndex() {
     const [lowBal, setLowBal] = useState(null);
     const [transactions, setTransactions] = useState([]);
 
-    const { id } = useParams();
+    const { id, name } = useParams();
     const orgId = { id: id };
+    const organization_name = { name: name }
 
     // const [isLoading, setIsLoading] = useState(true)
 
@@ -32,12 +34,16 @@ function WalletIndex() {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
+    const [StatsIsModalOpen, setStatsIsModalOpen] = useState(false);
+    const StatsOpenModal = () => setStatsIsModalOpen(true);
+    const StatsCloseModal = () => setStatsIsModalOpen(false);
+
     // for purchase leads modal
-    const [isModalOpen2, setIsModalOpen2] = useState(false);
-    const openModal2 = () => setIsModalOpen2(true);
-    const closeModal2 = () => setIsModalOpen2(false);
+    // const [isModalOpen2, setIsModalOpen2] = useState(false);
+    // const openModal2 = () => setIsModalOpen2(true);
+    // const closeModal2 = () => setIsModalOpen2(false);
     const [addAmountWallet, setAddAmountWallet] = useState('')
-    const [payLeadsForm, setPayLeadsForm] = useState('')
+    // const [payLeadsForm, setPayLeadsForm] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const { authToken } = useContext(AuthContext)
     // for the first modal to flutterwave
@@ -65,11 +71,11 @@ function WalletIndex() {
         // <Flutterwave />
     };
     // this for the second modal to pay for leads
-    const redirectToPayLeadsForm = async () => { //purchase for lead function
-        setIsModalOpen2(false);
+    // const redirectToPayLeadsForm = async () => { //purchase for lead function
+    //     setIsModalOpen2(false);
 
-        console.log(payLeadsForm, "from walletindex")
-    };
+    //     console.log(payLeadsForm, "from walletindex")
+    // };
 
 
 
@@ -87,7 +93,7 @@ function WalletIndex() {
                     },
                 }
             );
-            if (!authToken) {
+            if (response.data.message == "Token has expired. Please log in again") {
                 Swal.fire({
                     icon: "error",
                     title: "Oops! Something went wrong",
@@ -95,8 +101,9 @@ function WalletIndex() {
                     timer: 4000,
                     timerProgressBar: true,
                 });
-                navigate("/login")
+
             }
+
             setTransactions(response.data.balance);
             setLowBal(response.data.balance);
             console.log(response.data)// Assuming the balance is available under `response.data.balance`
@@ -110,6 +117,7 @@ function WalletIndex() {
                     timer: 4000,
                     timerProgressBar: true,
                 });
+                navigate("/login")
             }
             setIsLoading(false);
         } finally {
@@ -143,7 +151,7 @@ function WalletIndex() {
                     <div className="flex flex-col sm:flex-row items-center justify-between">
                         <h2 className="text-gray-600">Hello,</h2>
 
-                        <h2 className="text-gray-600">Bemia Johnson</h2>
+                        <h2 className="text-gray-600">{organization_name.name}</h2>
                     </div>
                     <div className="mt-4 p-4 bg-blue-500 hover:bg-blue-700 text-white rounded-lg text-center">
                         <h3 className="text-xl">Total Balance</h3>
@@ -153,7 +161,7 @@ function WalletIndex() {
                             </div>
                         ) : (
                             <div>
-                                <p className="text-2xl font-bold"><span className="text-sm md:text-base lg:text-lg">NGN</span> {transactions}</p>
+                                <p className="text-2xl font-bold"><span className="text-sm md:text-base text-center lg:text-lg">USD</span> {transactions}</p>
 
                             </div>
                         )}
@@ -163,11 +171,11 @@ function WalletIndex() {
                             <MdPayment className="p-2 bg-blue-200 hover:text-blue-800 text-blue-500 rounded-full text-4xl" />
                             <span className="text-sm mt-1">Add Funds</span>
                         </button>
-                        <button className="flex flex-col items-center mr-5" onClick={openModal2}>
+                        {/* <button className="flex flex-col items-center mr-5" onClick={openModal2}>
                             <FaWallet className="p-2 bg-red-200 hover:text-red-800 text-red-500 rounded-full text-4xl" />
                             <span className="text-sm mt-1">Purchase Leads</span>
-                        </button>
-                        <button className="flex flex-col items-center">
+                        </button> */}
+                        <button className="flex flex-col items-center" onClick={StatsOpenModal}>
                             <FaRegChartBar className="p-2 bg-green-200 hover:text-green-800 text-green-500 rounded-full text-4xl" />
                             <span className="text-sm mt-1">Statistics</span>
                         </button>
@@ -188,7 +196,8 @@ function WalletIndex() {
                         <AllTransaction />
 
                         <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToFlutterwave} />
-                        <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} />
+                        {/* <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} /> */}
+                        <StatisticsModal isOpen={StatsIsModalOpen} onClose={StatsCloseModal} />
                     </div>
                 </div>
             </div>
