@@ -27,7 +27,7 @@ const Posts = () => {
         setPreviewSrc("");
         setImage(null);
    }
-
+   
  
 
    const handlePostSubmission = async (e) => {
@@ -38,7 +38,7 @@ const Posts = () => {
         try {
             const response = await axios.post(
                 url,
-                {title: title, description: description, organizationId:16, image: image},{
+                {title: title, description: description, image: image},{
                 headers: {
                     Authorization: `Bearer ${authToken}`,
                 }}
@@ -64,6 +64,7 @@ const Posts = () => {
             console.log(error.message);
         }
    };
+   
     return (
         <section className="flex flex-col items-center gap-2 mt-4 mr-6 w-full">            
             <form onSubmit={handlePostSubmission} method="post" encType="" className="flex flex-col gap-4 py-4 w-full max-w-80 md:max-w-96">

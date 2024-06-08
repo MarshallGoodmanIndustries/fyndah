@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import classNames from "classnames";
 import { AuthContext } from "../../context/AuthContext";
@@ -13,6 +14,8 @@ import { SearchBusinessProfile, Loading } from "../../uiComponents";
 
 function HeroSection() {
   const { authToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // form data
   const [businessName, setBusinessName] = useState("");
@@ -23,7 +26,7 @@ function HeroSection() {
 
   const [suggestions, setSuggestions] = useState([]);
   const [previouslySuggestedValue, setPreviouslySuggestedValue] = useState("");
-  const [searchResults, setSearchResults] = useState(false);
+  // const [searchResults, setSearchResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const autocompleteApiKey = "17af202f70b44748976eff28573589db";
 
@@ -69,6 +72,7 @@ function HeroSection() {
 
   const handleOnSubmission = async (e) => {
     e.preventDefault();
+   
     setIsLoading(true);
     setTimeout(() => {
       setBusinesses(searchQueryBusinessProfiles);
@@ -88,6 +92,16 @@ function HeroSection() {
     //   setIsLoading(false);
     // }
   };
+
+  const handleSeeMore = ()=> {
+    if(!authToken){
+      //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+      sessionStorage.setItem("lastRoute", location.pathname)
+        navigate('/login');
+    }else{
+      setCurrentPage(prevPage => prevPage < totalPages ? prevPage + 1 : totalPages)
+    }
+  }
  
   
  
@@ -107,7 +121,7 @@ function HeroSection() {
                 onChange={(e)=> setBusinessName(e.target.value)}
                 type="text" 
                 className="bg-transparent outline-none w-full font-roboto font-light text-textDark placeholder:font-poppins placeholder:text-base placeholder:font-light" 
-                placeholder="Business" 
+                placeholder="Type of business" 
                 name="business_name" 
                 required
               />
@@ -167,7 +181,6 @@ function HeroSection() {
               businessTitle={profile.businessTitle}
               businessLocation={profile.businessLocation}  
               businessRating={profile.businessRating}
-              businessCategory={profile.businessCategory}
               businessTime={profile.businessTime}
             />
         ))}
@@ -179,7 +192,7 @@ function HeroSection() {
                 <p className='text-bGrey text-base font-normal'>
                   {currentPage} of {totalPages} pages
                 </p>
-                <button className='group disabled:cursor-not-allowed disabled:text-gray-400' onClick={() => setCurrentPage(prevPage => prevPage < totalPages ? prevPage + 1 : totalPages)} disabled={currentPage === totalPages}>
+                <button className='group disabled:cursor-not-allowed disabled:text-gray-400' onClick={handleSeeMore} disabled={currentPage === totalPages}>
                   See more
                 </button>
             </div>

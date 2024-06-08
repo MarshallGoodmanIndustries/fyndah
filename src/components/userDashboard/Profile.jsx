@@ -18,18 +18,20 @@ import {
 import { useEffect, useState, useContext } from "react";
 import { RiEdit2Fill } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa6";
-import { Textarea } from "@chakra-ui/react";
+// import { Textarea } from "@chakra-ui/react";
 import { MdLocationPin } from "react-icons/md";
-import { FaMonument } from "react-icons/fa";
+// import { FaMonument } from "react-icons/fa";
 import { PiUserSwitchFill } from "react-icons/pi";
-import { TiUserDelete } from "react-icons/ti";
+// import { TiUserDelete } from "react-icons/ti";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import { ImSpinner9 } from "react-icons/im";
 
 function Profile() {
   const { authToken } = useContext(AuthContext);
-  const [errorMessage, setErrorMessage] = useState("")
+  const [isLoading, setIsloading] = useState(false)
+  // const [errorMessage, setErrorMessage] = useState("")
   const [inputDefaultStates, setInputDefaultStates] = useState({
     firstName: "",
     lastName: "",
@@ -66,6 +68,7 @@ function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsloading(true)
       const response = await axios.post(
         "https://api.fyndah.com/api/v1/users/profile",
         {
@@ -91,6 +94,7 @@ function Profile() {
         });
         // console.log("Form submitted", response.data);
       } else {
+        setIsloading(false)
         throw new Error("Profile Update failed");
       }
     } catch (error) {
@@ -101,6 +105,9 @@ function Profile() {
         footer: `<a href="#">Could not update profile. Please try again later. ${error.message}</a>`,
       });
       console.error(error);
+      setIsloading(false)
+    } finally {
+      setIsloading(false)
     }
   };
 
@@ -182,10 +189,10 @@ function Profile() {
             display="inline-block"
             borderRadius="full"
             overflow="hidden"
-            // boxSize="150px"
+          // boxSize="150px"
           >
             <Image
-            className="w-[80px] lg:w-[150px]"
+              className="w-[80px] lg:w-[150px]"
               // boxSize="150px"
               src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
               alt="Dan Abramov"
@@ -405,9 +412,13 @@ function Profile() {
 
             {/* SAVE BUTTON */}
             <div className="flex justify-center">
-              <Button type="save" colorScheme="blue">
-                Submit
-              </Button>
+              {isLoading ?
+                <p> <ImSpinner9 className="animate-spin text-blue-700 hover:text-blue-500" size={22} /> </p> :
+                <Button type="save" colorScheme="blue">
+                  Submit
+                </Button>
+              }
+
             </div>
 
             <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
