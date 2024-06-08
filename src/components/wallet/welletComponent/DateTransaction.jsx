@@ -51,6 +51,15 @@ const DateTransaction = () => {
             console.log(response.data.message);
             if (response.data.message == "success") {
                 setData(response.data.txns)
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops! Something went wrong",
+                    text: "Seems your token has expired or network issues, try to login again.",
+                    timer: 4000,
+                    timerProgressBar: true,
+                });
+                throw new Error('Failed to fetch transactions');
             }
         } catch (error) {
             console.log(error);
@@ -114,6 +123,7 @@ const DateTransaction = () => {
                                 selected={startDate}
                                 onChange={(date) => setStartDate(date)}
                                 dateFormat="YYYY-MM-d"
+                                maxDate={new Date()}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             />
                         </div>
@@ -125,6 +135,7 @@ const DateTransaction = () => {
                                 selected={endDate}
                                 onChange={(date) => setEndDate(date)}
                                 dateFormat="YYYY-MM-d"
+                                maxDate={new Date()}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             />
                         </div>

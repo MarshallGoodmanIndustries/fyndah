@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../context/AuthContext"
 import { useParams } from "react-router-dom"
 import Swal from "sweetalert2"
+// import { FaDownload } from "react-icons/fa"
 
 function AllTransaction() {
     const { authToken } = useContext(AuthContext)
@@ -59,8 +60,11 @@ function AllTransaction() {
                                     Amount
                                 </th>
                                 <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black-500 uppercase tracking-wider">
-                                    Transaction Date
+                                    Date
                                 </th>
+                                {/* <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black-500 uppercase tracking-wider">
+                                    Export
+                                </th> */}
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
@@ -69,8 +73,9 @@ function AllTransaction() {
                                     <tr key={transaction.id || 'default-key'}>
                                         <td className="px-6 py-4 whitespace-nowrap">{transaction.uuid || 'N/A'}</td>
                                         <td className="px-6 py-4 whitespace-nowrap">{transaction.type || 'Unknown Type'}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">{transaction.amount || '0'}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap"><span className="text-xs">USD</span> {transaction.amount || '0'}</td>
                                         <td className="px-6 py-4 whitespace-nowrap">{transaction.created_at || 'Not Available'}</td>
+                                        {/* <td className="px-6 py-4 whitespace-nowrap">{<FaDownload /> || 'Not Available'}</td> */}
                                     </tr>
                                 ))
                             ) : (
