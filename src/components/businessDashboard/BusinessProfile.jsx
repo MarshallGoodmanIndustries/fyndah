@@ -90,7 +90,7 @@ function BusinessProfile() {
   const handleSubmit = (e) => {
     try {
       e.preventDefault();
-      console.log(inputDefaultStates);
+      // console.log(inputDefaultStates);
       Swal.fire({
         icon: "success",
         title: "Successful...",
@@ -139,7 +139,7 @@ function BusinessProfile() {
           subdomain: businessData.subdomain || "",
         });
 
-        console.log(businessData);
+        // console.log(businessData);
       } catch (error) {
         console.error(error.message);
       }
@@ -149,7 +149,7 @@ function BusinessProfile() {
   }, [authToken, id]);
 
   const location = `${inputDefaultStates.address}  ${inputDefaultStates.city}`
-  console.log("my id:", id)
+  // console.log("my id:", id)
 
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">

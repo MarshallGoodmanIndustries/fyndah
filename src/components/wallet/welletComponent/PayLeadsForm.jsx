@@ -10,10 +10,10 @@ function PayLeadsForm({ payLeadsForm, setPayLeadsForm, isOpened, onClosed, onRed
         e.preventDefault();
         if (payLeadsForm) {
             onRedirected();
-            console.log(payLeadsForm, "from modal")
+            // console.log(payLeadsForm, "from modal")
             setError(true)
         } else {
-            console.log('please enter amount')
+            // console.log('please enter amount')
             setError(false)
         }
     }

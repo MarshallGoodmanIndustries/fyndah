@@ -127,7 +127,7 @@ function SignUp() {
               title: "Successful...",
               text: "Successfully signed-up in check you email for verification link",
             });
-            console.log("Form submitted", signupFormData);
+            // console.log("Form submitted", signupFormData);
 
             navigate("/dashboard/profile");
       try {
@@ -161,7 +161,7 @@ function SignUp() {
             // timer: 2000,
             // timerProgressBar: true,
           });
-          console.log("Form submitted", signupFormData);
+          // console.log("Form submitted", signupFormData);
           // Swal.fire({
           //   icon: "success",
           //   title: "Successful...",
@@ -172,7 +172,7 @@ function SignUp() {
           setLoading(false);
           setShowForm(false);
 
-          console.log("Form submitted", signupFormData);
+          // console.log("Form submitted", signupFormData);
           // navigate("/");
         } else {
           throw new Error("Registration failed");

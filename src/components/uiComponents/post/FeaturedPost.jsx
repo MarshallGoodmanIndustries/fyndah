@@ -52,9 +52,9 @@ const FeaturedPost = ({postId, organizationId, profileImg, username, timePosted,
             sessionStorage.setItem("lastRoute", location.pathname)
             navigate('/login');
         }else{
-            console.log("You are logged in");
+            // console.log("You are logged in");
             console.log(authToken);
-            console.log(localStorage.getItem('authToken'));
+            // console.log(localStorage.getItem('authToken'));
              if(!like){
                 const url = `https://axelonepostfeature.onrender.com/api/post/${postId}/like`;
      
@@ -64,7 +64,7 @@ const FeaturedPost = ({postId, organizationId, profileImg, username, timePosted,
                              Authorization: `Bearer ${authToken}`,
                          }
                      });
-                     console.log(response.data);
+                    //  console.log(response.data);
                      if(response.status === 200){
                          setLike(true);
                          setLikeCount(prevLikeCount => prevLikeCount + 1);

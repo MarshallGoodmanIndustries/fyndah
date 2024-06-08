@@ -26,7 +26,7 @@ const GetLocation = () => {
           const response = await fetch(url);
           const data = await response.json();
           setUserCountry(data.countryName);
-          console.log(data, data.countryName); // Logs the city, state, and country
+          // console.log(data, data.countryName); // Logs the city, state, and country
         } catch (error) {
           console.error("Failed to retrieve location data:", error);
         }

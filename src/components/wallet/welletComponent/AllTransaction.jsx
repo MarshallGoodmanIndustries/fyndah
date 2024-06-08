@@ -21,7 +21,7 @@ function AllTransaction() {
                     Authorization: `Bearer ${authToken}`
                 }
             });
-            console.log(response.data)
+            // console.log(response.data)
             setAllTransaction(response.data)
         } catch (error) {
             console.log(error.response ? error.response.data : error.message)

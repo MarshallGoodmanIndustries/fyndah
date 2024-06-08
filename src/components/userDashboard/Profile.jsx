@@ -89,7 +89,7 @@ function Profile() {
           timer: 2000,
           timerProgressBar: true,
         });
-        console.log("Form submitted", response.data);
+        // console.log("Form submitted", response.data);
       } else {
         throw new Error("Profile Update failed");
       }
@@ -125,7 +125,7 @@ function Profile() {
           businessRegNumber: "", // Add the respective data field if available in the response
         });
 
-        console.log(profileResponse.data);
+        // console.log(profileResponse.data);
       } catch (error) {
         console.error(error.message);
       }
