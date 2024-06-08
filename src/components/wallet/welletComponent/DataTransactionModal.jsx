@@ -3,7 +3,7 @@
 
 import './modal.css'; // Added custom CSS
 
-const BalanceToDateModal = ({ isOpenModal, handleCloseModal, data, startDate }) => {
+const DateTransactionModal = ({ isOpenModal, handleCloseModal, data, startDate }) => {
     // const [isLoading, setIsLoading] = useState(false);
     // if (!data) {
     //     return <div>Loading...</div>
@@ -66,4 +66,4 @@ const BalanceToDateModal = ({ isOpenModal, handleCloseModal, data, startDate }) 
     );
 };
 
-export default BalanceToDateModal;
+export default DateTransactionModal;

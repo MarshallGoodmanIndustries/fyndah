@@ -1,12 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import classNames from "classnames";
+import { AuthContext } from "../../context/AuthContext";
+
+// 
 import { searchQueryCategories, searchQueryRatings, searchQueryBusinessProfiles } from "../../../routes/Navigations";
+
+// icons
 import { FaBuilding } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { SearchBusinessProfile, Loading } from "../../uiComponents";
-import classNames from "classnames";
 
 function HeroSection() {
+  const { authToken } = useContext(AuthContext);
+
   // form data
   const [businessName, setBusinessName] = useState("");
   const [businessLocation, setBusinessLocation] = useState("");
@@ -20,59 +27,64 @@ function HeroSection() {
   const [isLoading, setIsLoading] = useState(false);
   const autocompleteApiKey = "17af202f70b44748976eff28573589db";
 
-// pagination
-const [businesses, setBusinesses] = useState([]);
-const [currentPage, setCurrentPage] = useState(1);
+  // pagination
+  const [businesses, setBusinesses] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const containsBusinesses = businesses.length > 0;
+  const totalPages = Math.ceil(businesses.length / 3);
+  const businessesForCurrentPage = businesses.slice((currentPage - 1) * 3, currentPage * 3);
 
-  
-const containsBusinesses = businesses.length > 0;
-const totalPages = Math.ceil(businesses.length / 3);
-const businessesForCurrentPage = businesses.slice((currentPage - 1) * 3, currentPage * 3);
-
-useEffect(() => {
-  if (businessesForCurrentPage.length === 0 && currentPage > 1) {
-    setCurrentPage(prevPage => prevPage - 1)
-  }
-}, [businesses, currentPage, businessesForCurrentPage]);
-
-
-
-// autocomplete useEffect
-useEffect(() => {
-  const fetchData = async () => {
-    if(businessLocation !== "" && previouslySuggestedValue !== businessLocation){
-      
-      try {
-        const response = await axios.get(`https://api.geoapify.com/v1/geocode/autocomplete?text=${businessLocation}&apiKey=${autocompleteApiKey}`);
-        setSuggestions(response.data.features);
-      } catch (err) {
-        console.log(err.message || 'An error occurred');
-      } finally {
-        // setLoading(false);
-      }
+  useEffect(() => {
+    if (businessesForCurrentPage.length === 0 && currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1)
     }
+  }, [businesses, currentPage, businessesForCurrentPage]);
+
+
+  // autocomplete useEffect
+  useEffect(() => {
+    const fetchData = async () => {
+      if(businessLocation !== "" && previouslySuggestedValue !== businessLocation){
+        
+        try {
+          const response = await axios.get(`https://api.geoapify.com/v1/geocode/autocomplete?text=${businessLocation}&apiKey=${autocompleteApiKey}`);
+          setSuggestions(response.data.features);
+        } catch (err) {
+          console.log(err.message || 'An error occurred');
+        } finally {
+          // setLoading(false);
+        }
+      }
+    };
+    
+    const timerId = setTimeout(fetchData, 300); // Adjust debounce time as needed
+    return () => clearTimeout(timerId); // Cleanup timeout on unmount
+  },[businessLocation, previouslySuggestedValue])
+
+  const handleSuggestionClick = (selectedSuggestion)=> {
+    setBusinessLocation(selectedSuggestion.properties.formatted);
+    setPreviouslySuggestedValue(selectedSuggestion.properties.formatted);
+    setSuggestions([]);
+  }
+
+  const handleOnSubmission = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await axios.get(`https://api.fyndah.com/api/v1/search?query=${businessName}&fields=${businessLocation},${businessCategory},${businessRating}`, {
+        headers: {
+          'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5kYWguY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzE3Nzg1NzEzLCJleHAiOjE3MTc3ODkzMTMsIm5iZiI6MTcxNzc4NTcxMywianRpIjoiaGxxS1dpMGF0QkxSMGpzZSIsInN1YiI6IjU1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.XugWeJHgNaYKzCe8gPQ9RLgDcxYhB4Aka2h5BDb8P_M`,
+        }
+      });
+      console.log(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error.message);
+      setIsLoading(false);
+    }
+    // setBusinesses(searchQueryBusinessProfiles);
   };
-  
-  const timerId = setTimeout(fetchData, 300); // Adjust debounce time as needed
-  return () => clearTimeout(timerId); // Cleanup timeout on unmount
-},[businessLocation, previouslySuggestedValue])
-
-const handleSuggestionClick = (selectedSuggestion)=> {
-  setBusinessLocation(selectedSuggestion.properties.formatted);
-  setPreviouslySuggestedValue(selectedSuggestion.properties.formatted);
-  setSuggestions([]);
-}
-
-const handleOnSubmission = (e) => {
-  e.preventDefault();
-  setIsLoading(true);
-
-  setTimeout(() => {
-    setBusinesses(searchQueryBusinessProfiles);
-    setIsLoading(false);
-  }, 3000);
-};
-
  
   
  
