@@ -10,10 +10,10 @@ function Modal({ addAmountWallet, setAddAmountWallet, isOpen, onClose, onRedirec
         e.preventDefault();
         if (addAmountWallet) {
             onRedirect();
-            console.log(addAmountWallet)
+            // console.log(addAmountWallet)
             setError(true)
         } else {
-            console.log('please enter amount')
+            // console.log('please enter amount')
             setError(false)
         }
     }

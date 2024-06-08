@@ -48,7 +48,7 @@ const DateRangePicker = () => {
                 }
             })
             setData(response.data.balance)
-            console.log(response.data.balance);
+            // console.log(response.data.balance);
         } catch (error) {
             if (error.response ? error.response.data : error.message) {
                 Swal.fire({
@@ -71,7 +71,7 @@ const DateRangePicker = () => {
             setIsOpen(false);
         }
         // Handle date range confirmation (e.g., send data to backend)
-        console.log(`Start Date: ${startDate}`);
+        // console.log(`Start Date: ${startDate}`);
         handleBalanceToDate();
         if (handleBalanceToDate()) {
             handleOpenModal()

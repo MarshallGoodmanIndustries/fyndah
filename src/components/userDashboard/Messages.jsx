@@ -30,7 +30,7 @@ function Messages() {
     }
   }, [authToken]);
   const [id, setId] = useState("6662213209694e310e5825a9");
-  console.log(id);
+  // console.log(id);
 
   const [prevMessages, setPrevMessages] = useState([]);
   console.log(prevMessages);
@@ -63,7 +63,7 @@ function Messages() {
     const foundConversation = conversationInChat.find(
       (item) => item.conversationId === userId._id
     );
-    console.log(allConversations);
+    // console.log(allConversations);
     setHideUsers(false);
     if (foundConversation) {
       setId(foundConversation.conversationId);
@@ -94,7 +94,7 @@ function Messages() {
         );
         setPrevMessages((prev) => [...prev, value]);
         if (response.status === 200) {
-          console.log("Successfully sent");
+          // console.log("Successfully sent");
           setValue("");
         }
       } catch (error) {
@@ -122,8 +122,8 @@ function Messages() {
           <div className="py-10 p-5 border w-full">
             <div className="bg-white rounded-lg shadow-md">
               <div className="items-center justify-between p-5">
-                {prevMessages.map((item) => (
-                  <div>
+                {prevMessages.map((item, index) => (
+                  <div key={index}>
                     <h4> {item} </h4>
                   </div>
                 ))}

@@ -63,7 +63,7 @@ function WalletIndex() {
                     'Authorization': `Bearer ${authToken}`,
                 }
             })
-            console.log(payment.data);
+            // console.log(payment.data);
         } catch (error) {
             console.log(error.message);
         }
