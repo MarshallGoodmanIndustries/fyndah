@@ -8,7 +8,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { ImSpinner9 } from 'react-icons/im';
-import BalanceToDateModal from './BalanceToDateModal';
+import DateTransactionModal from './DataTransactionModal';
 
 const DateTransaction = () => {
 
@@ -37,9 +37,10 @@ const DateTransaction = () => {
     const url = "https://api.fyndah.com/api/v1/organization/wallet/transactions"
     const body = {
         org_id: id,
-        date: startDate
+        start_date: startDate,
+        end_date: endDate,
     };
-    const handleBalanceToDate = async () => {
+    const handleTransactionToDate = async () => {
         try {
             setIsLoading(true);
             const response = await axios.post(url, body, {
@@ -47,9 +48,12 @@ const DateTransaction = () => {
                     'Authorization': `Bearer ${authToken}`
                 }
             })
-            setData(response.data.balance)
-            console.log(response.data.balance);
+            console.log(response.data.message);
+            if (response.data.message == "success") {
+                setData(response.data.txns)
+            }
         } catch (error) {
+            console.log(error);
             if (error.response ? error.response.data : error.message) {
                 Swal.fire({
                     icon: "error",
@@ -67,14 +71,17 @@ const DateTransaction = () => {
         }
     }
     const handleConfirm = () => {
-        if (!handleOpenModal()) {
-            setIsOpen(false);
-        }
+
+        setIsOpen(true);
+
         // Handle date range confirmation (e.g., send data to backend)
-        console.log(`Start Date: ${startDate}`);
-        handleBalanceToDate();
-        if (handleBalanceToDate()) {
-            handleOpenModal()
+        console.log(`Start Date: ${startDate} end Date: ${endDate}`);
+        handleTransactionToDate();
+        if (handleTransactionToDate()) {
+            setTimeout(() => {
+                handleOpenModal()
+                setIsOpen(false)
+            }, 2000);
         }
     };
 
@@ -140,7 +147,7 @@ const DateTransaction = () => {
                 </div>
             )}
             <div className=" flex items-center justify-center ">
-                <BalanceToDateModal isOpenModal={isOpenModal} startDate={startDate} data={data} isLoading={isLoading} handleCloseModal={handleCloseModal} />
+                <DateTransactionModal isOpenModal={isOpenModal} startDate={startDate} endDate={endDate} data={data} handleCloseModal={handleCloseModal} />
             </div>
         </div>
     );

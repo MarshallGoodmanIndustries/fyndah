@@ -3,12 +3,18 @@
 
 import './modal.css'; // Added custom CSS
 
-const DateTransactionModal = ({ isOpenModal, handleCloseModal, data, startDate }) => {
+const DateTransactionModal = ({ isOpenModal, handleCloseModal, startDate, endDate, data }) => {
     // const [isLoading, setIsLoading] = useState(false);
     // if (!data) {
     //     return <div>Loading...</div>
     // }
-    const dateConvert = startDate.toLocaleDateString('en-US', {
+    const startConvert = startDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+
+    const endConvert = endDate.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -22,7 +28,7 @@ const DateTransactionModal = ({ isOpenModal, handleCloseModal, data, startDate }
             <div className="fixed animate-zoomIn inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white rounded-lg shadow-lg overflow-y-auto max-h-full w-11/12 md:w-2/3 lg:w-1/2">
                     <div className="flex justify-between items-center p-4 border-b">
-                        <h2 className="text-lg text-center font-medium">Your balance on {dateConvert}</h2>
+                        <h2 className="text-lg text-center font-medium">{`Your transactions from ${startConvert} to ${endConvert}`}</h2>
                         <button onClick={handleCloseModal} className="text-gray-400 hover:text-gray-600">
                             X
                         </button>
@@ -32,7 +38,10 @@ const DateTransactionModal = ({ isOpenModal, handleCloseModal, data, startDate }
                             <thead>
                                 <tr>
                                     <th className="px-6 py-3 bg-blue-500 text-left text-xs font-medium text-black-500 uppercase tracking-wider">
-                                        S/N
+                                        Transaction ID
+                                    </th>
+                                    <th className="px-6 py-3 bg-blue-500 text-left text-xs font-medium text-black-500 uppercase tracking-wider">
+                                        Payment Type
                                     </th>
                                     <th className="px-6 py-3 bg-blue-500 text-left text-xs font-medium text-black-500 uppercase tracking-wider">
                                         Amount
@@ -43,17 +52,20 @@ const DateTransactionModal = ({ isOpenModal, handleCloseModal, data, startDate }
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        1
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        NGN {data}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        {dateConvert}
-                                    </td>
-                                </tr>
+                                {data?.length > 0 ? (
+                                    data.map(transaction => (
+                                        <tr key={transaction.id || 'default-key'}>
+                                            <td className="px-6 py-4 whitespace-nowrap">{transaction.uuid || 'N/A'}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{transaction.type || 'Unknown Type'}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{transaction.amount || '0'}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{transaction.created_at || 'Not Available'}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={4} className="text-center p-10 text-black">No transactions found.</td>
+                                    </tr>
+                                )}
 
                                 {/* More rows... */}
                             </tbody>
