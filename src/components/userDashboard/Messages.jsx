@@ -3,11 +3,11 @@ import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 
 function Messages() {
-  const { authToken } = useContext(AuthContext);
+  const { authToken, userData } = useContext(AuthContext);
   const [message, setMessage] = useState([]);
   const [message1, setMessage1] = useState([]);
   
-
+console.log("userDat: ", userData);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,6 +43,7 @@ function Messages() {
           },
         }
       );
+      
       setMessage1(conversation.data);
     } catch (error) {
       console.error("Error fetching data", error);
