@@ -64,7 +64,7 @@ function MyBusiness() {
 
 
 
-    const handlePathChange = async (id) => {
+    const handlePathChange = async (id, org_name) => {
         const url = `https://api.fyndah.com/api/v1/users/organizations/${id}/switch`
         const body = { id: id }
 
@@ -85,7 +85,7 @@ function MyBusiness() {
                     timerProgressBar: true,
                 });
             }
-            navigate(`/businessDashboard/${id}/business-profile`)
+            navigate(`/businessDashboard/${id}/${org_name}/business-profile`)
         } catch (error) {
 
             if (error.response ? error.response.data : error.message) {
@@ -127,7 +127,7 @@ function MyBusiness() {
                         <span>
                             < TbPointFilled className="text-accentDark" />
                         </span>
-                        <li onClick={() => handlePathChange(business.id)} className="cursor-pointer hover:text-accentDark" > {business.org_name} </li>
+                        <li onClick={() => handlePathChange(business.id, business.org_name)} className="cursor-pointer hover:text-accentDark" > {business.org_name} </li>
 
                     </div>
                 ))}

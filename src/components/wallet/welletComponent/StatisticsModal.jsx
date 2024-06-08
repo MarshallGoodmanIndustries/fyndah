@@ -1,31 +1,23 @@
-// AnimatedModal.js
-// import { useState } from 'react';
 
-// import { FaDollarSign } from 'react-icons/fa';
 import './modal.css'; // Added custom CSS
 
-const BalanceToDateModal = ({ isOpenModal, handleCloseModal, data, startDate }) => {
+const StatisticsModal = ({ isOpen, onClose }) => {
     // const [isLoading, setIsLoading] = useState(false);
     // if (!data) {
     //     return <div>Loading...</div>
     // }
 
-    const dateConvert = startDate.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
 
 
-    if (!isOpenModal) return null;
+    if (!isOpen) return null;
     return (
         <div className="relative">
 
             <div className="fixed animate-zoomIn inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white rounded-lg shadow-lg overflow-y-auto max-h-full w-11/12 md:w-2/3 lg:w-1/2">
                     <div className="flex justify-between items-center p-4 border-b">
-                        <h2 className="text-lg text-center font-medium">Your balance on {dateConvert}</h2>
-                        <button onClick={handleCloseModal} className="text-gray-400 hover:text-gray-600">
+                        <h2 className="text-lg text-center font-medium">Your balance Transactions</h2>
+                        <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
                             X
                         </button>
                     </div>
@@ -34,27 +26,18 @@ const BalanceToDateModal = ({ isOpenModal, handleCloseModal, data, startDate }) 
                             <thead>
                                 <tr>
                                     <th className="px-6 py-3 bg-blue-500 text-left text-xs font-medium text-black-500 uppercase tracking-wider">
-                                        S/N
+                                        Expenses
                                     </th>
                                     <th className="px-6 py-3 bg-blue-500 text-left text-xs font-medium text-black-500 uppercase tracking-wider">
-                                        Amount
+                                        Income
                                     </th>
-                                    <th className="px-6 py-3 bg-blue-500 text-left text-xs font-medium text-black-500 uppercase tracking-wider">
-                                        Date
-                                    </th>
+
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                                 <tr>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        1
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="text-xs">USD</span> {data}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        {dateConvert}
-                                    </td>
+                                    <td colSpan={4} className="text-center p-10 text-black">No transactions record found.</td>
+
                                 </tr>
 
                                 {/* More rows... */}
@@ -68,4 +51,4 @@ const BalanceToDateModal = ({ isOpenModal, handleCloseModal, data, startDate }) 
     );
 };
 
-export default BalanceToDateModal;
+export default StatisticsModal;

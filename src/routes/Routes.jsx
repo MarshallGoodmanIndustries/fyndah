@@ -83,7 +83,7 @@ function Routes() {
 
     //business dashboard layout
     {
-      path: '/businessDashboard/:id',
+      path: '/businessDashboard/:id/:name',
       element: <BusinessDashboardLayout />,
       errorElement: <PageNotFound />,
       children: [
