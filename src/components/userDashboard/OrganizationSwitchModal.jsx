@@ -19,7 +19,7 @@ function OrganizationSwitchModal({ isOpen, onClose, orgList }) {
                     'Authorization': `Bearer ${authToken}`,
                 }
             })
-            console.log(response.data)
+            // console.log(response.data)
 
 
         } catch (error) {
@@ -45,7 +45,7 @@ function OrganizationSwitchModal({ isOpen, onClose, orgList }) {
         e.preventDefault();
         switchedOrganizations();
         // Handle form submission logic here
-        console.log(orgList);
+        // console.log(orgList);
 
     };
 

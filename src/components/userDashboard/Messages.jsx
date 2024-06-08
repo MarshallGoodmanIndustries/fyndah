@@ -5,8 +5,8 @@ import { FiArrowLeft } from "react-icons/fi";
 
 function Messages() {
   const { authToken } = useContext(AuthContext);
-  const [message, setMessage] = useState([]);
-  const [message1, setMessage1] = useState([]);
+  const [allConversations, setAllConversations] = useState([]);
+  const [conversationInChat, setConversationInChat] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,7 +19,7 @@ function Messages() {
             },
           }
         );
-        setMessage(conversation.data);
+        setAllConversations(conversation.data);
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -30,6 +30,10 @@ function Messages() {
     }
   }, [authToken]);
   const [id, setId] = useState("6662213209694e310e5825a9");
+  // console.log(id);
+
+  const [prevMessages, setPrevMessages] = useState([]);
+  console.log(prevMessages);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,8 +46,9 @@ function Messages() {
             },
           }
         );
-        setMessage1(conversation.data);
-        console.log(conversation.data);
+        setConversationInChat(conversation.data);
+        const gottenMessage = conversation.data.map((item) => item.message);
+        setPrevMessages(gottenMessage);
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -55,29 +60,59 @@ function Messages() {
   const [showMessage, setShowMessage] = useState(false);
   const handleSHowMessageBox = (userId) => {
     // Find the conversation in message1 that matches the clicked conversation
-    const foundConversation = message1.find(
+    const foundConversation = conversationInChat.find(
       (item) => item.conversationId === userId._id
     );
+    // console.log(allConversations);
     setHideUsers(false);
-    // If a matching conversation is found or not, update the id state
     if (foundConversation) {
       setId(foundConversation.conversationId);
       setShowMessage(true);
-      console.log("found");
     } else {
       setShowMessage(true);
       setId(userId._id);
     }
   };
+  const [value, setValue] = useState("");
+  const handleMessageChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (value.trim() !== "") {
+      try {
+        const response = await axios.post(
+          `https://axelonepostfeature.onrender.com/api/messages/send-message/${id}`,
+          { message: value },
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              Accept: "application/json",
+            },
+          }
+        );
+        setPrevMessages((prev) => [...prev, value]);
+        if (response.status === 200) {
+          // console.log("Successfully sent");
+          setValue("");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   return (
-    <div className="py-10  flex items-top justify-between grid px-5">
+    <div className="py-10 items-top justify-between px-5">
       <div className="col-span-5 relative">
         {showMessage ? (
           <h1
             className="absolute t-0 pl-2 pt-2"
             onClick={() => {
               setShowMessage(false);
+
+             
             }}>
             {" "}
             <FiArrowLeft />{" "}
@@ -86,26 +121,35 @@ function Messages() {
         {showMessage ? (
           <div className="py-10 p-5 border w-full">
             <div className="bg-white rounded-lg shadow-md">
-              <div className="items-center justify-between">
-                {message1?.map((item) => (
-                  <div
-                    key={item._id}
-                    className="flex justify-end flex-auto min-h-[50px]">
-                    {item.message}
+              <div className="items-center justify-between p-5">
+                {prevMessages.map((item, index) => (
+                  <div key={index}>
+                    <h4> {item} </h4>
                   </div>
                 ))}
+                {/* {Message.map((text) => {
+                  return <p> {text} </p>;
+                })} */}
               </div>
-              <div className="mt-5 overflow-y-auto ">
-                <textarea
-                  rows="1"
-                  className="w-full border-b outline-none resize-none p-2"
-                  placeholder="Type a message..."></textarea>
-              </div>
-              <div className="flex justify-end space-x-2">
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg m-2">
-                  Send
-                </button>
-              </div>
+
+              <form onSubmit={handleSubmit}>
+                <div className="mt-5 overflow-y-auto ">
+                  <textarea
+                    type="text"
+                    value={value}
+                    onChange={handleMessageChange}
+                    rows="1"
+                    className="w-full border-b outline-none resize-none p-2"
+                    placeholder="Type a message..."></textarea>
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <button
+                    type="submit"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg m-2">
+                    Send
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         ) : (
@@ -114,19 +158,19 @@ function Messages() {
           </h1>
         )}
       </div>
-      <div className="grid gap-4 col-span-2">
+      <div className="grid gap-4">
         {hideUsers
-          ? message.map((item) => (
+          ? allConversations.map((item) => (
               <div
                 key={item._id}
-                className="gap-8 px-10 flex flex-auto min-h-[50px]">
+                className="gap-8 px-10 flex flex-auto min-h-[50px] rounded-lg border w-full border-2">
                 <div className="flex-shrink-0">
                   <h1
-                    className=" cursor-pointer"
+                    className=" cursor-pointer p-5 "
                     onClick={() => {
                       handleSHowMessageBox(item);
                     }}>
-                    {item._id}
+                    {item.members[1].name}
                   </h1>
                 </div>
               </div>
@@ -135,56 +179,11 @@ function Messages() {
       </div>
     </div>
 
-    // <div className="py-10  px-5 flex items-top justify-between grid grid-cols-5">
-    //   <div className="grid gap-4 col-span-2">
-    //     {message?.map((item) => {
-    //       return (
-    //         <div
-    //           key={item._id}
-    //           className="gap-8 px-10 cursor-pointer"
-    //           onClick={() => {
-    //             handleSHowMessageBox(item);
-    //           }}>
-    //           <div className="">
-    //             <h1>{item._id}</h1>
-    //           </div>
-    //         </div>
-    //       );
-    //     })}
-    //   </div>
+    
 
-    //   <div className="p-5 m-5 border w-full col-span-3">
-    //     {showMessage ? (
-    //       <div className="col-span-3 px-4 py-10 border w-full">
-    //         <div className="bg-white p-6 rounded-lg shadow-md">
+ 
 
-    //          <div className="items-center justify-between"> {message1?.map((item) => {
-    //             return (
-    //               <div key={item._id} className="flex justify-end">
-    //                 {item.message}
-    //               </div>
-    //             );
-    //           })}</div>
-
-    //           <div className="mt-5">
-    //             <textarea
-    //               rows="2"
-    //               className="w-full border-b border-gray-300 outline-none resize-none p-2"
-    //               placeholder="Type a message..."></textarea>
-    //           </div>
-    //           <div className="flex justify-end space-x-2">
-    //             <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">
-    //               Send
-    //             </button>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     ) : (
-    //       <h1>click on a message to start a conversation</h1>
-    //     )}
-    //   </div>
-
-    // </div>
+   
   );
 }
 

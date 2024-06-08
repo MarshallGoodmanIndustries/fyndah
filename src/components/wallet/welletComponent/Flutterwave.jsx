@@ -25,7 +25,7 @@ function Flutterwave() {
         try {
             setPaymentData(paymentData)
             const result = await initiatePayment(paymentData);
-            console.log('Payment initiated successfully:', result);
+            // console.log('Payment initiated successfully:', result);
             // Handle the successful payment initiation
         } catch (error) {
             console.error('Error initiating payment:', error);

@@ -159,7 +159,7 @@ const UserProfileSetup = () => {
             },
           }
         );
-        console.log(countryResponse.data.countries);
+        // console.log(countryResponse.data.countries);
         const countryArray = Object.values(countryResponse.data.countries);
         setCountries(countryArray);
 
@@ -171,7 +171,7 @@ const UserProfileSetup = () => {
             },
           }
         );
-        console.log(stateResponse.data.states);
+        // console.log(stateResponse.data.states);
         setStates(stateResponse.data.states);
 
         const citiesResponse = await axios.get(
@@ -182,7 +182,7 @@ const UserProfileSetup = () => {
             },
           }
         );
-        console.log(citiesResponse.data.states);
+        // console.log(citiesResponse.data.states);
         setCities(citiesResponse.data.states);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -203,7 +203,7 @@ const UserProfileSetup = () => {
     city.city_name.toLowerCase().includes(citiesInput.toLowerCase())
   );
 
-  console.log(interests);
+  // console.log(interests);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -229,9 +229,9 @@ const UserProfileSetup = () => {
           timer: 2000,
           timerProgressBar: true,
         });
-        console.log("country, state, city", countryInput, stateInput, citiesInput)
-        console.log("My interests: ", interests);
-        console.log("Form submitted", response.data);
+        // console.log("country, state, city", countryInput, stateInput, citiesInput)
+        // console.log("My interests: ", interests);
+        // console.log("Form submitted", response.data);
         navigate("/dashboard/profile");
       } else {
         throw new Error("Registration failed");

@@ -23,27 +23,34 @@ const FeaturedPosts = () => {
     }
     getPosts();
   }, []);
- 
+  
 
   return (
-    <div className="grid grid-cols-1 items-center sm:grid-cols-2 md:grid-cols-3 gap-8 py-16 px-4 sm:px-5 md:px-6 lg:px-8">
-      {!posts.length > 0 ? 
-        (featuredPostsLoadingDummy.map((dummy, index)=> (
-          <FeaturedPostLoading key={index} />
-        ))) : 
-        (posts.map(post => (
-          <FeaturedPost 
-            key={post._id}
-            postId={post._id}
-            profileImg={businesslogo}
-            username={post.authorUsername} 
-            timePosted={post.createdAt}
-            textContent={post.description} 
-            imgContent="https://i.pinimg.com/564x/4a/db/d0/4adbd0e50629b5c0b8acb8b6267ed47a.jpg" 
-            noOflikes={post.likesCount}
-          />
-      )))}
-    </div>
+    <section className="py-16 px-4 sm:px-5 md:px-6 lg:px-8 flex flex-col gap-16">
+       <div className="text-center flex flex-col gap-4 items-center">
+            <h5 className="font-poppins text-xs md:text-sm font-medium text-accent bg-accent bg-opacity-15 w-fit rounded-2xl p-2">Fyndah</h5>
+            <h3 className="font-poppins text-xl md:text-2xl lg:text-3xl font-medium">Featured Posts</h3>
+        </div>
+      <div className="grid grid-cols-1 items-center sm:grid-cols-2 md:grid-cols-3 gap-8">
+        {!posts.length > 0 ? 
+          (featuredPostsLoadingDummy.map((dummy, index)=> (
+            <FeaturedPostLoading key={index} />
+          ))) : 
+          (posts.map(post => (
+            <FeaturedPost 
+              key={post._id}
+              postId={post._id}
+              organizationId={post.organization}
+              profileImg={businesslogo}
+              username={post.authorUsername} 
+              timePosted={post.createdAt}
+              textContent={post.description} 
+              imgContent="https://i.pinimg.com/564x/4a/db/d0/4adbd0e50629b5c0b8acb8b6267ed47a.jpg" 
+              noOflikes={post.likesCount}
+            />
+        )))}
+      </div>
+    </section>
   )
 }
 

@@ -161,13 +161,13 @@ const BusinessProfileSetup = () => {
           }
         );
 
-        console.log("Response:", response.data);
+        // console.log("Response:", response.data);
 
-        console.log("Form data submitted: ", inputValues);
+        // console.log("Form data submitted: ", inputValues);
 
         if (response.status == 201) {
           const businesssId = response.data.data.organization.id;
-          console.log("Business Id", businesssId);
+          // console.log("Business Id", businesssId);
           setBusinessId(businesssId);
           Swal.fire({
             icon: "success",

@@ -78,11 +78,11 @@ function Login() {
         );
   
         if (response.status === 200) {
-          console.log("API Response:", response.data);
+          // console.log("API Response:", response.data);
           const token = response.data.token.original.access_token;
           const userData = response.data.data;  // Directly access the data object
-          console.log("User Data: ", userData);
-          console.log("User Token: ", token);
+          // console.log("User Data: ", userData);
+          // console.log("User Token: ", token);
   
           if (userData) {
             setUserData(userData);  // Set the user data in the auth context

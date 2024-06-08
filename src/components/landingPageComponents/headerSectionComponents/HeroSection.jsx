@@ -70,20 +70,23 @@ function HeroSection() {
   const handleOnSubmission = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setTimeout(() => {
+      setBusinesses(searchQueryBusinessProfiles);
+      setIsLoading(false);
+    }, 3000)
 
-    try {
-      const response = await axios.get(`https://api.fyndah.com/api/v1/search?query=${businessName}&fields=${businessLocation},${businessCategory},${businessRating}`, {
-        headers: {
-          'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5kYWguY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzE3Nzg1NzEzLCJleHAiOjE3MTc3ODkzMTMsIm5iZiI6MTcxNzc4NTcxMywianRpIjoiaGxxS1dpMGF0QkxSMGpzZSIsInN1YiI6IjU1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.XugWeJHgNaYKzCe8gPQ9RLgDcxYhB4Aka2h5BDb8P_M`,
-        }
-      });
-      console.log(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error.message);
-      setIsLoading(false);
-    }
-    // setBusinesses(searchQueryBusinessProfiles);
+    // try {
+    //   const response = await axios.get(`https://api.fyndah.com/api/v1/search?query=${businessName, businessLocation, businessCategory, businessRating}&fields=country,state,org_name`, {
+    //     headers: {
+    //       'Authorization': `Bearer ${authToken}`,
+    //     }
+    //   });
+    //   console.log(response.data);
+    //   setIsLoading(false);
+    // } catch (error) {
+    //   console.log(error.message);
+    //   setIsLoading(false);
+    // }
   };
  
   
