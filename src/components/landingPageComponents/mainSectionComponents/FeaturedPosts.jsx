@@ -17,6 +17,7 @@ const FeaturedPosts = () => {
       try {
         const response = await axios.get(url);
         setPosts(response.data.data.posts);
+        console.log("posts: ", response.data.data.posts);
       } catch (error) {
         console.log(error.message);
       }
@@ -45,7 +46,7 @@ const FeaturedPosts = () => {
               username={post.authorUsername} 
               timePosted={post.createdAt}
               textContent={post.description} 
-              imgContent="https://i.pinimg.com/564x/4a/db/d0/4adbd0e50629b5c0b8acb8b6267ed47a.jpg" 
+              imgContent={post.image} 
               noOflikes={post.likesCount}
             />
         )))}
