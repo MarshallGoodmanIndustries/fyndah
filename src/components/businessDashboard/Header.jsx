@@ -9,9 +9,9 @@ import { AuthContext } from '../context/AuthContext';
 const Header = ({handleToggle, toggle}) => {
   const {userData} = useContext(AuthContext)
 
-  const user = userData.username
-  const userInitials = user.slice(0, 1)
-  const notificationNumber = 3
+  const user = userData?.username || ''; // Use optional chaining and provide a default empty string
+  const userInitials = user ? user.slice(0, 1) : ''; // Handle empty user gracefully
+  const notificationNumber = 1;
 
 
   
@@ -41,7 +41,7 @@ const Header = ({handleToggle, toggle}) => {
           </p>
         </span>
         <div className='flex gap-3 items-center'>
-        <Avatar size='sm' name='Dan Abrahmov' src='https://cdn-icons-png.freepik.com/512/3177/3177440.png' />
+        <Avatar size='sm' name= {user} src='https://cdn-icons-png.freepik.com/512/3177/3177440.png' />
           {/* <Avatar size='default' className='bg-[#f56a00] align-middle md:text-[1rem] text-[0.85rem] font-semibold text-white'> {userInitials} </Avatar> */}
           <h2 className='font-bold lg:block hidden text-[1rem]'> {user} </h2>
         </div>
