@@ -14,7 +14,7 @@
     grid-area: admin-sidebar;
     position: fixed;
     top: 10vh;
-    background-color: #EC1908;
+      background-color: #00024c;
     height: 90vh;
 }
 .admin-header {
@@ -22,8 +22,9 @@
     position: sticky;
     top: 0;
     height: 10vh;
-    background-color: #EC1908;
     z-index: 1; /* Ensure the header stays on top */
+    background-color: #00024c;
+
 }
 .admin-outlet {
     grid-area: admin-outlet;
