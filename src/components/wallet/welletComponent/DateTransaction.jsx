@@ -84,7 +84,7 @@ const DateTransaction = () => {
         setIsOpen(true);
 
         // Handle date range confirmation (e.g., send data to backend)
-        console.log(`Start Date: ${startDate} end Date: ${endDate}`);
+        // console.log(`Start Date: ${startDate} end Date: ${endDate}`);
         handleTransactionToDate();
         if (handleTransactionToDate()) {
             setTimeout(() => {

@@ -45,7 +45,7 @@ const Test = () => {
           },
         }
       );
-      console.log("success");
+      // console.log("success");
 
       if (response.data.status == "success") {
         Swal.fire({
@@ -55,7 +55,7 @@ const Test = () => {
           timer: 2000,
           timerProgressBar: true,
         });
-        console.log("Form submitted", sendProfile);
+        // console.log("Form submitted", sendProfile);
         //   navigate("/dashboard");
       } else {
         throw new Error("unable to submit your business profile");

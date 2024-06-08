@@ -52,7 +52,7 @@ const FeaturedPost_inner = (
                         Authorization: `Bearer ${authToken}`,
                     }
                 })
-                console.log(response.status);
+                // console.log(response.status);
                 setCommentsData(response.data)
                 refreshComment();
                 setCommentInput("");

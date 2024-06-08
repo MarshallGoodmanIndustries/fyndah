@@ -20,9 +20,9 @@ function MyBusiness() {
         setIsLoading(true);
 
         if (!authToken) {
-            console.log("Token not provided");
+            // console.log("Token not provided");
         } else {
-            console.log("token provided"); // Logging the token to verify it's present
+            // console.log("token provided"); // Logging the token to verify it's present
         }
 
         const API = 'https://api.fyndah.com/api/v1/users/organizations/connected';

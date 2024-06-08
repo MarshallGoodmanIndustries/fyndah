@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { useState, useEffect,useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { FaPlus, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { BsBoxArrowLeft } from "react-icons/bs";
@@ -82,10 +82,11 @@ function SignUp() {
     // }
     if (
       !/^[a-zA-Z0-9_]+$/i.test(signupFormData.username) ||
-      signupFormData.username.trim() === ""
+      signupFormData.username.trim() === "" ||
+      signupFormData.username.length< 5
     ) {
       newErrors.username =
-        "Input a username and Username must not contain spaces or special characters e.g (@,#.%)!";
+        "Input a username, username must not be less than 5 in characters, Username must not contain spaces or special characters e.g (@,#.%)!";
     }
 
     // if (!/^[\w]+$/.test(signupFormData.username)||signupFormData.username.trim() === "") {
@@ -122,14 +123,6 @@ function SignUp() {
 
       window.scrollTo(0, 0);
     } else {
-      Swal.fire({
-              icon: "success",
-              title: "Successful...",
-              text: "Successfully signed-up in check you email for verification link",
-            });
-            console.log("Form submitted", signupFormData);
-
-            navigate("/dashboard/profile");
       try {
         const response = await axios.post(
           "https://api.fyndah.com/api/v1/auth/users",
@@ -153,27 +146,16 @@ function SignUp() {
           Swal.fire({
             icon: "success",
             title: "Registration completed...",
-            // text: "Successfully signed-up in check you email for verification link",
             text:
               "Yay 🎉 You're all set Please check your email inbox for the verification link. Welcome aboard! " +
               signupFormData.username,
-
-            // timer: 2000,
-            // timerProgressBar: true,
           });
           console.log("Form submitted", signupFormData);
-          // Swal.fire({
-          //   icon: "success",
-          //   title: "Successful...",
-          //   text: "Account created successfully. Use the Email token for email verification.",
-          //
-          //
-          // });
+         
           setLoading(false);
           setShowForm(false);
 
           console.log("Form submitted", signupFormData);
-          // navigate("/");
         } else {
           throw new Error("Registration failed");
         }
@@ -362,8 +344,6 @@ function SignUp() {
                 )}
               </div>
 
-              
-
               <div className="flex flex-col gap-1 md:col-span-2">
                 <label htmlFor="password">
                   Password<span className="text-red-500 ml-2">*</span>
@@ -427,7 +407,6 @@ function SignUp() {
                   </p>
                 )}
               </div>
-
 
               <button
                 className="bg-accentDark text-white p-2 hover:text-[#fdba74] transition-all duration-300 rounded-lg font-lato text-lg md:col-span-2"
