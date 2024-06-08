@@ -122,8 +122,8 @@ function Messages() {
           <div className="py-10 p-5 border w-full">
             <div className="bg-white rounded-lg shadow-md">
               <div className="items-center justify-between p-5">
-                {prevMessages.map((item) => (
-                  <div>
+                {prevMessages.map((item, index) => (
+                  <div key={index}>
                     <h4> {item} </h4>
                   </div>
                 ))}
