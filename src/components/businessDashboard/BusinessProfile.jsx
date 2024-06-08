@@ -158,7 +158,7 @@ function BusinessProfile() {
         <Box className="w-full absolute rounded-t-3xl h-[160px]">
           <Image
             className="w-full h-[130px] lg:h-[160px] rounded-t-3xl object-cover "
-            src="https://bit.ly/dan-abramov"
+            src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
             alt="Dan Abramov"
           />
           <Box
@@ -190,7 +190,7 @@ function BusinessProfile() {
           >
             <Image
               className="w-[80px]  lg:w-[150px]"
-              src="https://bit.ly/dan-abramov"
+              src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
               alt="Dan Abramov"
             />
             <Box

@@ -187,7 +187,7 @@ function Profile() {
             <Image
             className="w-[80px] lg:w-[150px]"
               // boxSize="150px"
-              src="https://bit.ly/dan-abramov"
+              src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
               alt="Dan Abramov"
             />
             <Box
