@@ -166,22 +166,51 @@ const landingPageFooterMenu = [
         anchor:"/"
     },
     {
-        title:"About Us",
-        anchor:"#about"
+        title:"Terms of service",
+        anchor:"/policies/tos"
     },
     {
-        title:"Services",
-        anchor:"#services"
+        title:"Privacy policy",
+        anchor:"/policies/privacy"
     },
     {
-        title:"Portfolio",
-        anchor:"#portfolio"
+        title:"Refund policy",
+        anchor:"/policies/refund"
+    },
+];
+
+const sideBarLinks = [
+    {
+        title: "TOS",
+        link: "/policies/tos"
     },
     {
-        title:"Contact Us",
-        anchor:"#contact"
+        title: "Privacy policy",
+        link: "/policies/privacy"
     },
-]
+    {
+        title: "Refund policy",
+        link: "/policies/refund"
+    },
+];
+
+const sideBarBotttomLinks = [
+    {
+        title: "Home",
+        link: "/"
+    }
+];
 
 
-export {landingPageNavMenu, landingPageFooterMenu,  searchQueryCategories, searchQueryRatings, searchQueryBusinessProfiles, timelineDummyData, featuredPostsLoadingDummy};
+
+export {
+    landingPageNavMenu, 
+    landingPageFooterMenu, 
+    sideBarLinks, 
+    sideBarBotttomLinks,  
+    searchQueryCategories, 
+    searchQueryRatings, 
+    searchQueryBusinessProfiles, 
+    timelineDummyData, 
+    featuredPostsLoadingDummy
+};
