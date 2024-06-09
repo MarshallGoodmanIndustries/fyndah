@@ -1,23 +1,25 @@
-import { logo, logo_white } from "../../../assets/images";
+
 
 
 
 const AdBanner = () => {
   return (
-    <section className="relative flex justify-between w-full h-40  overflow-hidden rounded-lg">
-       <div className="relative z-20 bg-black bg-opacity-80 flex items-center">
-            <div className="">
-                <img src={logo} className="w-24 h-full" alt="" />
-            </div>
-       </div>
-        <img className="w-full h-full object-cover absolute top-0 left-0" src="https://img.freepik.com/free-photo/front-view-people-posing-work_23-2150697603.jpg?t=st=1717439954~exp=1717443554~hmac=93439b620d66521fafbcb8e99a640bdd1eb5c99f5b323a39f7f7abf6bde3051d&w=826" alt="" />
-       <div className="relative z-20 bg-black bg-opacity-80">
-            <h2>Digital Market & Promotion</h2>
-            <p>www.yourwebsitehere.com</p>
-            <button>Learn More</button>
-       </div>
+    <section className="relative flex flex-col md:flex-row md:justify-evenly items-end md:items-center gap-4  w-full md:h-40 overflow-hidden mb-8 p-4">
+      <div className="absolute top-0 left-0 w-full h-full">
+        <img src="https://i.pinimg.com/474x/3a/e0/c5/3ae0c5187d409bd67c915f71dbe32d65.jpg" className="w-full h-full object-cover" alt="background image of a business building" />
+      </div> 
+      <div className="bg-[#023047] bg-opacity-90 w-full h-full absolute top-0 left-0"></div>
+
+      <div>
+      <h4 className="text-primary relative z-10 font-poppins font-medium text-lg">Your <span className="text-accentDark">Logo</span></h4>
+      {/* <img src="" alt="" /> */}
+      </div>
+      <h3 className="text-primary relative z-10 font-poppins font-normal text-base">Your Business Name</h3>
+      <p className="text-primary relative z-10 font-poppins font-normal text-base">Your Business description</p>
+      <button disabled className="bg-accent hover:bg-accentDark transition-all duration-300 relative z-10 text-primary font-poppins font-light text-base py-1 px-3 rounded-lg w-full md:w-fit">CTA button</button>
     </section>
   )
 }
 
 export default AdBanner;
+
