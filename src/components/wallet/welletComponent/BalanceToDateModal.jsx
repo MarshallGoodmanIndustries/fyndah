@@ -2,7 +2,7 @@
 // import { useState } from 'react';
 
 // import { FaDollarSign } from 'react-icons/fa';
-import { ImSpinner9 } from 'react-icons/im';
+// import { ImSpinner9 } from 'react-icons/im';
 import './modal.css'; // Added custom CSS
 
 const BalanceToDateModal = ({ isOpenModal, handleCloseModal, isLoading, data, startDate }) => {
