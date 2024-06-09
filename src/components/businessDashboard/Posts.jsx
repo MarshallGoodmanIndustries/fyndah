@@ -27,7 +27,6 @@ const Posts = () => {
         setPreviewSrc("");
         setImage(null);
    }
-   
  
 
    const handlePostSubmission = async (e) => {
@@ -41,6 +40,7 @@ const Posts = () => {
                 {title: title, description: description, image: image},{
                 headers: {
                     Authorization: `Bearer ${authToken}`,
+                    'Content-Type': 'multipart/form-data'
                 }}
             )
             if (response.data.status == "success") {
@@ -90,7 +90,7 @@ const Posts = () => {
                 </div>
                 <div className="relative border-2 border-dashed border-gray-300 w-full h-32 rounded-lg overflow-hidden">
                     <label htmlFor="image" className=" cursor-pointer">
-                        <input type="file" name="image" id="image" accept="image/*" onChange={handleImageChange} />
+                        <input type="file" name="image" id="image" accept=".jpg,.jpeg,.png" onChange={handleImageChange} />
                         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100 ">
                             <IoIosAdd className="w-6 h-6 text-gray-300" />
                         </div>

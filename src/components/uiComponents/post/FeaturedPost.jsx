@@ -108,24 +108,31 @@ const FeaturedPost = ({postId, organizationId, profileImg, username, timePosted,
     },[timePosted])
     
   return (
-    <section className="relative flex w-full max-w-[300px] gap-2 rounded-lg justify-self-center">
-        {/* user profile image container */}
-        <div className="w-full max-w-12 h-full rounded-full overflow-hidden">
-            <img src={profileImg} alt="business profile display" />
-        </div>
+    <section className="relative w-full max-w-[300px] gap-2 rounded-lg justify-self-center self-start">
 
         {/* post content container */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4 w-full">
             <div className="flex items-center gap-2">
+                {/* user profile image container */}
+                <div className="w-full max-w-12 h-full rounded-full overflow-hidden">
+                    <img src={profileImg} alt="business profile display" />
+                </div>
                 <h2 className="text-base text-textDark font-poppins font-semibold">{username}</h2>
+                {/* verified */}
                 <RiVerifiedBadgeFill className="w-4 h-4 text-accent" />
                 <p className="text-sm text-textDark font-roboto font-light ml-auto">{timeAgo}</p>
             </div>
-            <div className="flex flex-col gap-2">
-                <p className="text-base text-textDark font-roboto font-normal">{textContent}</p>
-                <div className="w-full h-auto rounded-lg overflow-hidden">
-                    <img src={imgContent} className="w-full h-full object-cover" alt="image describing post" />
-                </div>
+            <div className="flex flex-col gap-2 w-full">
+                {textContent && (
+                    <p className="text-base text-textDark font-roboto font-normal">{textContent}</p>
+                )}
+                {
+                    imgContent && (
+                        <div className="w-full h-auto rounded-lg overflow-hidden">
+                            <img src={imgContent} className="w-full h-full object-cover" alt="image describing post" />
+                        </div>
+                    )
+                }
             </div>
             <div className="">
                 {/* no of reactions container*/}
