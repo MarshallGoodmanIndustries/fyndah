@@ -7,6 +7,7 @@ function Messages() {
   const { authToken } = useContext(AuthContext);
   const [allConversations, setAllConversations] = useState([]);
   const [conversationInChat, setConversationInChat] = useState([]);
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,6 +20,7 @@ function Messages() {
             },
           }
         );
+      
         setAllConversations(conversation.data);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -59,11 +61,9 @@ function Messages() {
   const [hideUsers, setHideUsers] = useState(true);
   const [showMessage, setShowMessage] = useState(false);
   const handleSHowMessageBox = (userId) => {
-    // Find the conversation in message1 that matches the clicked conversation
     const foundConversation = conversationInChat.find(
       (item) => item.conversationId === userId._id
     );
-    // console.log(allConversations);
     setHideUsers(false);
     if (foundConversation) {
       setId(foundConversation.conversationId);
@@ -111,8 +111,8 @@ function Messages() {
             className="absolute t-0 pl-2 pt-2"
             onClick={() => {
               setShowMessage(false);
-
-             
+              //   setId(id)
+              // handleSHowMessageBox(id)
             }}>
             {" "}
             <FiArrowLeft />{" "}
@@ -124,7 +124,7 @@ function Messages() {
               <div className="items-center justify-between p-5">
                 {prevMessages.map((item, index) => (
                   <div key={index}>
-                    <h4> {item} </h4>
+                    <h4 className="mb-2 font-semibold"> {item} </h4>
                   </div>
                 ))}
                 {/* {Message.map((text) => {
@@ -169,21 +169,18 @@ function Messages() {
                     className=" cursor-pointer p-5 "
                     onClick={() => {
                       handleSHowMessageBox(item);
+                      console.log(item);
                     }}>
-                    {item.members[1].name}
+                    {item.members[0].name}
                   </h1>
+                 
                 </div>
               </div>
             ))
           : null}
+
       </div>
     </div>
-
-    
-
- 
-
-   
   );
 }
 

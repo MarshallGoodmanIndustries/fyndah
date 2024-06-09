@@ -64,7 +64,7 @@ const SideBar = ({handleToggle }) => {
       </Link>
 
       {/* business messages */}
-      <Link to='businessmessages'>
+      <Link to='/dashboard/messages'>
       <div onClick={() => {
         handleToggle,
         handleItemClick(3)
