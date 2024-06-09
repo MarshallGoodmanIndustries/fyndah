@@ -1,12 +1,17 @@
+
+
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
 
 function Messages() {
+  const { userData } = useContext(AuthContext);
   const { authToken } = useContext(AuthContext);
+console.log(userData);
   const [allConversations, setAllConversations] = useState([]);
   const [conversationInChat, setConversationInChat] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,6 +24,7 @@ function Messages() {
             },
           }
         );
+
         setAllConversations(conversation.data);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -29,13 +35,17 @@ function Messages() {
       fetchData();
     }
   }, [authToken]);
-  const [id, setId] = useState("6662213209694e310e5825a9");
-  // console.log(id);
 
+  const [id, setId] = useState("6662213209694e310e5825a9");
   const [prevMessages, setPrevMessages] = useState([]);
-  console.log(prevMessages);
+  const [loading, setLoading] = useState(false);
+  const [hideUsers, setHideUsers] = useState(true);
+  const [showMessage, setShowMessage] = useState(false);
+  const [value, setValue] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const conversation = await axios.get(
           `https://axelonepostfeature.onrender.com/api/messages/${id}`,
@@ -49,23 +59,25 @@ function Messages() {
         setConversationInChat(conversation.data);
         const gottenMessage = conversation.data.map((item) => item.message);
         setPrevMessages(gottenMessage);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
+        setLoading(false);
       }
     };
 
     fetchData();
   }, [authToken, id]);
-  const [hideUsers, setHideUsers] = useState(true);
-  const [showMessage, setShowMessage] = useState(false);
-  const handleSHowMessageBox = (userId) => {
-    // Find the conversation in message1 that matches the clicked conversation
+
+  const handleShowMessageBox = (userId) => {
+  
+    // console.log(userData)
     const foundConversation = conversationInChat.find(
       (item) => item.conversationId === userId._id
     );
-    // console.log(allConversations);
     setHideUsers(false);
     if (foundConversation) {
+        console.log(foundConversation.conversationId);
       setId(foundConversation.conversationId);
       setShowMessage(true);
     } else {
@@ -73,7 +85,7 @@ function Messages() {
       setId(userId._id);
     }
   };
-  const [value, setValue] = useState("");
+
   const handleMessageChange = (e) => {
     setValue(e.target.value);
   };
@@ -94,7 +106,6 @@ function Messages() {
         );
         setPrevMessages((prev) => [...prev, value]);
         if (response.status === 200) {
-          // console.log("Successfully sent");
           setValue("");
         }
       } catch (error) {
@@ -108,30 +119,24 @@ function Messages() {
       <div className="col-span-5 relative">
         {showMessage ? (
           <h1
-            className="absolute t-0 pl-2 pt-2"
+            className="absolute t-0 pl-2 pt-2 cursor-pointer"
             onClick={() => {
               setShowMessage(false);
-
-             
+              setHideUsers(true);
             }}>
-            {" "}
-            <FiArrowLeft />{" "}
+            <FiArrowLeft />
           </h1>
         ) : null}
         {showMessage ? (
           <div className="py-10 p-5 border w-full">
             <div className="bg-white rounded-lg shadow-md">
               <div className="items-center justify-between p-5">
-                {prevMessages.map((item, index) => (
-                  <div key={index}>
-                    <h4> {item} </h4>
-                  </div>
-                ))}
-                {/* {Message.map((text) => {
-                  return <p> {text} </p>;
-                })} */}
-              </div>
+                
 
+                {prevMessages.length>0? prevMessages.map((item,index)=> {
+                    return <h4 className="mb-2 font-semibold" key={index}>  {item} </h4>
+                }): <b> no message yet start writing a message </b> }
+              </div>
               <form onSubmit={handleSubmit}>
                 <div className="mt-5 overflow-y-auto ">
                   <textarea
@@ -153,37 +158,34 @@ function Messages() {
             </div>
           </div>
         ) : (
-          <h1 className="mb-4 text-2xl font-bold">
-            Click on a message to start a conversation
-          </h1>
+          <center>
+            <h1 className="mb-4 text-2xl font-bold">
+              Click on a message to start a conversation
+            </h1>
+            {loading && <h3> Please wait while we populate your chats </h3>}
+          </center>
         )}
       </div>
       <div className="grid gap-4">
-        {hideUsers
-          ? allConversations.map((item) => (
-              <div
-                key={item._id}
-                className="gap-8 px-10 flex flex-auto min-h-[50px] rounded-lg border w-full border-2">
-                <div className="flex-shrink-0">
-                  <h1
-                    className=" cursor-pointer p-5 "
-                    onClick={() => {
-                      handleSHowMessageBox(item);
-                    }}>
-                    {item.members[1].name}
-                  </h1>
-                </div>
+        {hideUsers &&
+          allConversations.map((item) => (
+            <div
+              key={item._id}
+              className="gap-8 px-10 flex flex-auto min-h-[50px] rounded-lg border w-full border-2">
+              <div className="flex-shrink-0">
+                <h1
+                  className="cursor-pointer p-5"
+                  onClick={() => {
+                    handleShowMessageBox(item);
+                    console.log(item);
+                  }}>
+                  {item.members[0].name}
+                </h1>
               </div>
-            ))
-          : null}
+            </div>
+          ))}
       </div>
     </div>
-
-    
-
- 
-
-   
   );
 }
 

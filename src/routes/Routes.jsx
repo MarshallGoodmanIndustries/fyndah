@@ -6,7 +6,7 @@ import {
 } from "../components/pages";
 import {
   BusinessDashboardLayout, Leads, BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
-  Reviews, Wallet
+   Wallet
 } from '../components/businessDashboard/index';
 import Policies, {Tos, Privacy, Refund} from "../components/policy";
 import { PageNotFound } from "../components/errorPages";
@@ -118,11 +118,11 @@ function Routes() {
           element: <Timeline />,
           errorElement: <PageNotFound />
         },
-        {
-          path: 'reviews',
-          element: <Reviews />,
-          errorElement: <PageNotFound />
-        },
+        // {
+        //   path: 'reviews',
+        //   element: <Reviews />,
+        //   errorElement: <PageNotFound />
+        // },
         {
           path: 'wallet',
           element: <Wallet />,

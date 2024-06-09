@@ -34,7 +34,7 @@ const SideBar = ({handleToggle }) => {
       </Link>
 
       {/* favorite business */}
-      <Link to='favoritebusiness'>
+      {/* <Link to='favoritebusiness'>
       <div onClick={() => {
         handleToggle,
         handleItemClick(2)
@@ -45,7 +45,7 @@ const SideBar = ({handleToggle }) => {
         </span>
         <h2 className='text-[1.1rem] mt-0 font-normal'>Favorite Businesses</h2>
       </div>
-      </Link>
+      </Link> */}
 
       {/* messages */}
       <Link to='messages'>
