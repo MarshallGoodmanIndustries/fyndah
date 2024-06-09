@@ -48,14 +48,14 @@ const DateTransaction = () => {
                     'Authorization': `Bearer ${authToken}`
                 }
             })
-            console.log(response.data.message);
-            if (response.data.message == "success") {
+            console.log(response.data);
+            if (response.data.message == "succcess") {
                 setData(response.data.txns)
             } else {
                 Swal.fire({
                     icon: "error",
-                    title: "Oops! Something went wrong",
-                    text: "Seems your token has expired or network issues, try to login again.",
+                    title: "Oops! 404 ",
+                    text: "Something went wrong..!!",
                     timer: 4000,
                     timerProgressBar: true,
                 });
@@ -158,7 +158,7 @@ const DateTransaction = () => {
                 </div>
             )}
             <div className=" flex items-center justify-center ">
-                <DateTransactionModal isOpenModal={isOpenModal} startDate={startDate} endDate={endDate} data={data} handleCloseModal={handleCloseModal} />
+                <DateTransactionModal isOpenModal={isOpenModal} isLoading={isLoading} startDate={startDate} endDate={endDate} data={data} handleCloseModal={handleCloseModal} />
             </div>
         </div>
     );
