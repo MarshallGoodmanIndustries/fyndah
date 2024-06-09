@@ -2,9 +2,10 @@
 // import { useState } from 'react';
 
 // import { FaDollarSign } from 'react-icons/fa';
+import { ImSpinner9 } from 'react-icons/im';
 import './modal.css'; // Added custom CSS
 
-const BalanceToDateModal = ({ isOpenModal, handleCloseModal, data, startDate }) => {
+const BalanceToDateModal = ({ isOpenModal, handleCloseModal, isLoading, data, startDate }) => {
     // const [isLoading, setIsLoading] = useState(false);
     // if (!data) {
     //     return <div>Loading...</div>
@@ -45,13 +46,20 @@ const BalanceToDateModal = ({ isOpenModal, handleCloseModal, data, startDate }) 
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
+
                                 <tr>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         1
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="text-xs">USD</span> {data}
-                                    </td>
+                                    {isLoading ? (<div className="flex justify-center items-center">
+                                        <p className='p-5 text-sm text-gray-500'> Loading... </p>
+                                    </div>
+                                    ) : (
+
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <span className="text-xs">USD</span> {data}
+                                        </td>
+                                    )}
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         {dateConvert}
                                     </td>

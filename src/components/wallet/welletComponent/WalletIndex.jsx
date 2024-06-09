@@ -181,9 +181,6 @@ function WalletIndex() {
                         </button>
                     </div>
                     <div className="mt-6">
-                        <div className="flex sm:flex-row  sm:space-y-0">
-                            <h3 className="text-lg font-bold">Transactions history </h3>
-                        </div>
                         <hr className="p-2" />
                         <div className="mt-4 flex sm:flex-row justify-between sm:space-y-0 ">
                             <div className=" mr-4">
@@ -192,6 +189,9 @@ function WalletIndex() {
                             <div className="mr-4">
                                 <DateTransaction />
                             </div>
+                        </div>
+                        <div className="flex sm:flex-row  sm:space-y-0 mt-11">
+                            <h3 className="text-lg font-bold">Transactions history </h3>
                         </div>
                         <AllTransaction />
 
