@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TbPointFilled } from "react-icons/tb";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
@@ -14,7 +14,7 @@ function MyBusiness() {
     const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [createdBusiness, setCreatedBusiness] = useState("")
-
+    const location = useLocation()
 
     async function ConnectedBusinesses() {
 
@@ -46,6 +46,8 @@ function MyBusiness() {
 
         } catch (error) {
             console.error('There was an error:', error.response ? error.response.data : error.message);
+            sessionStorage.removeItem('authToken');
+            sessionStorage.setItem("lastRoute", location.pathname)
             if (error.response ? error.response.data : error.message) {
                 Swal.fire({
                     icon: "error",
@@ -54,6 +56,8 @@ function MyBusiness() {
                     timer: 4000,
                     timerProgressBar: true,
                 });
+                navigate('/login')
+
 
                 setIsLoading(false);
             }
