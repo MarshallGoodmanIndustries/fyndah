@@ -6,6 +6,8 @@ import { AiFillMessage } from "react-icons/ai";
 import { BiSolidBusiness } from "react-icons/bi";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { TbBusinessplan } from "react-icons/tb";
+import { FaHome } from 'react-icons/fa';
+
 // import { IoMdArrowDropright } from "react-icons/io";
 
 const SideBar = ({handleToggle }) => {
@@ -96,6 +98,18 @@ const SideBar = ({handleToggle }) => {
       <div className='h-[15rem] lg:h-[20rem]' ></div>
 
       {/* logout */}
+      <Link to='/'>
+      <div onClick={() => {
+        handleToggle,
+        handleItemClick(7)
+      }} 
+      className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(6) ? "bg-white text-textDark" : "text-white"} `}>
+        <span>
+        <FaHome  className='size-[1rem] lg:size-[1.25rem]' />
+        </span>
+        <h2 className='text-[1.1rem] mt-0 font-normal '>Back to home</h2>
+      </div>
+      </Link>
       <Link to='logout'>
       <div onClick={() => {
         handleToggle,
@@ -108,6 +122,8 @@ const SideBar = ({handleToggle }) => {
         <h2 className='text-[1.1rem] mt-0 font-normal '>Log out</h2>
       </div>
       </Link>
+
+      
 
       {/* <div style={{height: "4rem"}}></div> */}
     </div>

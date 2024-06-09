@@ -4,11 +4,11 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
-
+import {ImSpinner9} from "react-icons/im"
 function Messages() {
   const { userData } = useContext(AuthContext);
   const { authToken } = useContext(AuthContext);
-console.log(userData);
+// console.log(userData);
   const [allConversations, setAllConversations] = useState([]);
   const [conversationInChat, setConversationInChat] = useState([]);
 
@@ -57,6 +57,7 @@ console.log(userData);
           }
         );
         setConversationInChat(conversation.data);
+        console.log(conversation);
         const gottenMessage = conversation.data.map((item) => item.message);
         setPrevMessages(gottenMessage);
         setLoading(false);
@@ -104,6 +105,7 @@ console.log(userData);
             },
           }
         );
+        // i dey hear una , i dun turn ghost god punish u
         setPrevMessages((prev) => [...prev, value]);
         if (response.status === 200) {
           setValue("");
@@ -162,7 +164,7 @@ console.log(userData);
             <h1 className="mb-4 text-2xl font-bold">
               Click on a message to start a conversation
             </h1>
-            {loading && <h3> Please wait while we populate your chats </h3>}
+            {loading &&  <ImSpinner9 className="h-10 w-10 text-gray-500 animate-spin text-center"/>}
           </center>
         )}
       </div>
@@ -177,10 +179,11 @@ console.log(userData);
                   className="cursor-pointer p-5"
                   onClick={() => {
                     handleShowMessageBox(item);
-                    console.log(item);
-                  }}>
+                    console.log(item)
+                  }}> 
                   {item.members[0].name}
                 </h1>
+                {item._id}
               </div>
             </div>
           ))}

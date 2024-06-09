@@ -8,6 +8,8 @@ import { FaUserCircle } from "react-icons/fa";
 import { CiViewTimeline } from "react-icons/ci";
 import { MdOutlineRateReview } from "react-icons/md";
 import { GiWallet } from "react-icons/gi";
+import { FaHome } from 'react-icons/fa';
+
 // import { IoMdArrowDropright } from "react-icons/io";
 
 const SideBar = ({handleToggle }) => {
@@ -136,6 +138,20 @@ const SideBar = ({handleToggle }) => {
         <h2 className='text-[1.1rem] mt-0 font-normal '>Log out</h2>
       </div>
       </Link>
+
+      <Link to='/'>
+      <div onClick={() => {
+        handleToggle,
+        handleItemClick(7)
+      }} 
+      className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(6) ? "bg-white text-textDark" : "text-white"} `}>
+        <span>
+        <FaHome  className='size-[1rem] lg:size-[1.25rem]' />
+        </span>
+        <h2 className='text-[1.1rem] mt-0 font-normal '>Back to home</h2>
+      </div>
+      </Link>
+      
 
       {/* <div style={{height: "4rem"}}></div> */}
     </div>

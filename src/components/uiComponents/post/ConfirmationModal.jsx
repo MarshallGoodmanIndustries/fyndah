@@ -23,6 +23,7 @@ const ConfirmationModal = ({setConfirmationModal, org_id}) => {
                 setConfirmationModal(false);
                 navigate("/dashboard/messages");
             }
+            console.log(response.data);
         } catch (error) {
             setIsLoading(false);
             console.log(error.message)
