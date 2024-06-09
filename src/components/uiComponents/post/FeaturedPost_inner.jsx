@@ -14,7 +14,7 @@ import axios from "axios";
 
 
 const FeaturedPost_inner = (
-    { postId,
+    {   postId,
         userImg,
         userUsername,
         activeUserImg,
@@ -34,6 +34,7 @@ const FeaturedPost_inner = (
     const navigate = useNavigate();
     const location = useLocation();
     const [commentInput, setCommentInput] = useState("", []);
+    const [isloading, setIsLoading] = useState(false)
 
 
 
@@ -45,6 +46,7 @@ const FeaturedPost_inner = (
             sessionStorage.setItem("lastRoute", location.pathname)
             navigate('/login');
         } else {
+            setIsLoading(true);
             const url = `https://axelonepostfeature.onrender.com/api/comment/${postId}`;
             try {
                 const response = await axios.post(url, { comment: commentInput }, {
@@ -53,6 +55,7 @@ const FeaturedPost_inner = (
                     }
                 })
                 // console.log(response.status);
+                setIsLoading(false);
                 setCommentsData(response.data)
                 refreshComment();
                 setCommentInput("");
@@ -152,7 +155,11 @@ const FeaturedPost_inner = (
                                     rows="1"
                                     className="w-full outline-none px-2 py-4 bg-transparent resize-none text-textDark text-base"
                                 ></textarea>
-                                <button onClick={handleAddComment} disabled={!commentInput} className="disabled:cursor-not-allowed group">
+                                <button 
+                                    onClick={handleAddComment} 
+                                    disabled={!commentInput} 
+                                    className={classNames(isloading && "animate-spin","disabled:cursor-not-allowed group")}
+                                >
                                     <IoSendSharp className="w-4 h-4 text-textDark group-disabled:text-opacity-70" />
                                 </button>
                             </div>

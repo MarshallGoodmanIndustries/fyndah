@@ -15,7 +15,7 @@ const DateRangePicker = () => {
     const [startDate, setStartDate] = useState(new Date());
     // const [endDate, setEndDate] = useState(new Date());
     const [isOpen, setIsOpen] = useState(false);
-    const [data, setData] = useState(false);
+    const [data, setData] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { authToken } = useContext(AuthContext);
     const { id } = useParams()
@@ -48,6 +48,7 @@ const DateRangePicker = () => {
                 }
             })
             setData(response.data.balance)
+
             // console.log(response.data.balance);
         } catch (error) {
             if (error.response ? error.response.data : error.message) {

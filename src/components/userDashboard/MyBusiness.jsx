@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TbPointFilled } from "react-icons/tb";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
@@ -13,6 +13,7 @@ function MyBusiness() {
     const [orgList, setOrgList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [createdBusiness, setCreatedBusiness] = useState("")
 
 
     async function ConnectedBusinesses() {
@@ -33,8 +34,15 @@ function MyBusiness() {
                     'Authorization': `Bearer ${authToken}`, // Correctly placing the headers inside the config object
                 },
             });
-            setOrgList(response.data)
-            console.log(response.data); // Assuming response.data contains the expected data
+            if (response.data.length > 0) {
+                setOrgList(response.data)
+                console.log(response.data);
+                setCreatedBusiness("") // Assuming response.data contains the expected data
+            } else {
+                setIsLoading(false)
+                setCreatedBusiness("No business has been created yet...")
+            }
+            // setCreatedBusiness(response.data);
 
         } catch (error) {
             console.error('There was an error:', error.response ? error.response.data : error.message);
@@ -102,6 +110,7 @@ function MyBusiness() {
             }
         } finally {
             setLoading(false)
+            setCreatedBusiness(false)
         }
 
     }
@@ -119,21 +128,34 @@ function MyBusiness() {
     }
 
     return (
-        <div className="flex m-[2rem] flex-col gap-3">
-            <h2 className="mb-[2rem]">My Buisness</h2>
-            <ul className="font-roboto flex flex-col gap-5">
-                {orgList.map((business) => (
-                    <div className="flex gap-1 items-center" key={business.id}>
-                        <span>
-                            < TbPointFilled className="text-accentDark" />
-                        </span>
-                        <li onClick={() => handlePathChange(business.id, business.org_name)} className="cursor-pointer hover:text-accentDark" > {business.org_name} </li>
+        <>
 
-                    </div>
-                ))}
-            </ul>
+            {!createdBusiness ? (
+                <div className="flex m-[2rem] flex-col gap-3">
+                    <h2 className="mb-[2rem]">My Buisness</h2>
+                    <ul className="font-roboto flex flex-col gap-5">
+                        {orgList.map((business) => (
+                            <div className="flex gap-1 items-center" key={business.id}>
+                                <span>
+                                    < TbPointFilled className="text-accentDark" />
+                                </span>
+                                <li onClick={() => handlePathChange(business.id, business.org_name)} className="cursor-pointer hover:text-accentDark" > {business.org_name} </li>
 
-        </div>
+                            </div>
+                        ))}
+                    </ul>
+
+                </div>
+            ) : (
+
+                <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
+                    <p className="mb-4 text-lg font-bold">{createdBusiness}</p>
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <Link to='/dashboard/createbuisness'> Create A Business Now</Link>
+                    </button>
+                </div>
+            )}
+        </>
     )
 }
 
