@@ -64,7 +64,7 @@ const SideBar = ({handleToggle }) => {
       </Link>
 
       {/* business messages */}
-      <Link to='businessmessages'>
+      <Link to='/dashboard/messages'>
       <div onClick={() => {
         handleToggle,
         handleItemClick(3)
@@ -80,7 +80,7 @@ const SideBar = ({handleToggle }) => {
       
 
       {/* timeline */}
-      <Link to='timeline'>
+      {/* <Link to='timeline'>
       <div onClick={() => {
         handleToggle,
         handleItemClick(5)
@@ -91,10 +91,10 @@ const SideBar = ({handleToggle }) => {
         </span>
         <h2 className='text-[1.1rem] mt-0 font-normal'>Timeline</h2>
       </div>
-      </Link>
+      </Link> */}
 
       {/* reviews */}
-      <Link to='reviews'>
+      {/* <Link to='reviews'>
       <div onClick={() => {
         handleToggle,
         handleItemClick(6)
@@ -105,7 +105,7 @@ const SideBar = ({handleToggle }) => {
         </span>
         <h2 className='text-[1.1rem] mt-0 font-normal'>Reviews</h2>
       </div>
-      </Link>
+      </Link> */}
 
       {/* wallet */}
       <Link to='wallet'>

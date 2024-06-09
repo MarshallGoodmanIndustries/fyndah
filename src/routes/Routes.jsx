@@ -6,8 +6,9 @@ import {
 } from "../components/pages";
 import {
   BusinessDashboardLayout, Leads, BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
-  Reviews, Wallet
-} from '../components/businessDashboard/index'
+   Wallet
+} from '../components/businessDashboard/index';
+import Policies, {Tos, Privacy, Refund} from "../components/policy";
 import { PageNotFound } from "../components/errorPages";
 function Routes() {
   const router = createBrowserRouter([
@@ -117,11 +118,11 @@ function Routes() {
           element: <Timeline />,
           errorElement: <PageNotFound />
         },
-        {
-          path: 'reviews',
-          element: <Reviews />,
-          errorElement: <PageNotFound />
-        },
+        // {
+        //   path: 'reviews',
+        //   element: <Reviews />,
+        //   errorElement: <PageNotFound />
+        // },
         {
           path: 'wallet',
           element: <Wallet />,
@@ -130,6 +131,35 @@ function Routes() {
 
       ]
     },
+
+    //fyndahs policy
+    {
+      path: "/policies",
+      element: <Policies />,
+      children: [
+          {
+              path: "/policies/tos",
+              element: <Tos />,
+              errorElement: <PageNotFound />
+          },
+          {
+              path: "/policies/privacy",
+              element: <Privacy />,
+              errorElement: <PageNotFound />
+          },
+          {
+              path: "/policies/refund",
+              element: <Refund />,
+              errorElement: <PageNotFound />
+          },
+          {
+              path: "/policies/*",
+              element: <Tos />,
+              errorElement: <PageNotFound />
+          },
+      ],
+      errorElement: <PageNotFound />
+  }
   ]);
 
   return (

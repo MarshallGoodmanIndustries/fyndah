@@ -32,15 +32,11 @@ const Footer = () => {
           <h3 className="text-primary text-lg font-semibold">Get In Touch</h3>
           <div className="flex items-center gap-2">
             <div className="text-primary"><FaLocationDot size={16}/></div>
-            <p className="text-base w-full text-primary">Road 1 house 18, federal housing Egbu, Owerri, Imo, Nigeria </p>
+            <p className="text-base w-full text-primary">40 Bank Street, London E14 5AB, United Kingdom.</p>
           </div>
           <div className="flex items-center gap-2">
             <div className="text-primary"><MdEmail size={16}/></div>
-            <p className="text-base w-full text-primary">info@fyndah.com</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="text-primary"><FaPhoneAlt size={16}/></div>
-            <p className="text-base w-full text-primary">+234 813 958 9815</p>
+            <p className="text-base w-full text-primary">hello@fyndah.com</p>
           </div>
         </div>
         
@@ -49,16 +45,16 @@ const Footer = () => {
         <div className="flex-[1] flex flex-col gap-4">
           <h3 className="text-primary text-lg font-semibold">Company</h3>
           {landingPageFooterMenu.map(link => (
-            <a 
+            <Link
               key={link.title} 
-              href={link.anchor}
+              to={link.anchor}
               className="text-primary text-base flex items-center gap-1 group"
             >
               {link.title}
               <div className="group-hover:translate-x-1 group-hover:-translate-y-1  transform transition-all duration-300">
                 <MdOutlineArrowOutward size={12} />
               </div>
-            </a>
+            </Link>
           ))}
         </div>
 
