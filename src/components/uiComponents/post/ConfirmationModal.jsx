@@ -21,8 +21,9 @@ const ConfirmationModal = ({setConfirmationModal, org_id}) => {
             if(response.status === 200){
                 setIsLoading(false);
                 setConfirmationModal(false);
-                navigate("/dashboard/messages");
+                // navigate("/dashboard/messages");
             }
+            console.log(response.data);
         } catch (error) {
             setIsLoading(false);
             console.log(error.message)

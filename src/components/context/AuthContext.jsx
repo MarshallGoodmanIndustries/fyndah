@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')) : null
   );
   const [businessId, setBusinessId] = useState(sessionStorage.getItem('businessId') || null);
+  // const navigate = useNavigate();
 
   useEffect(() => {
     if (authToken) {
@@ -33,8 +34,12 @@ export const AuthProvider = ({ children }) => {
     }
   }, [businessId]);
 
+
+
+
+
   return (
-    <AuthContext.Provider value={{ authToken, setAuthToken, userData, setUserData, businessId, setBusinessId }}>
+    <AuthContext.Provider value={{ authToken, setAuthToken, userData, setUserData, businessId, setBusinessId}}>
       {children}
     </AuthContext.Provider>
   );

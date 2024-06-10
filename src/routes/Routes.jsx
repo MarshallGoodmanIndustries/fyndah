@@ -10,6 +10,12 @@ import {
 } from '../components/businessDashboard/index';
 import Policies, {Tos, Privacy, Refund} from "../components/policy";
 import { PageNotFound } from "../components/errorPages";
+
+import CurrentSearchRequest from "../components/businessDashboard/leadsGeneration/CurrentSearchRequest";
+import Payment from "../components/businessDashboard/leadsGeneration/Payment";
+import BidPage from "../components/businessDashboard/leadsGeneration/BidPage";
+import PotentialCustomerData from "../components/businessDashboard/leadsGeneration/PotentialCustomerData";
+
 function Routes() {
   const router = createBrowserRouter([
     {
@@ -93,11 +99,35 @@ function Routes() {
           element: <Posts />,
           errorElement: <PageNotFound />
         },
-        {
-          path: 'leads',
-          element: <Leads />,
-          errorElement: <PageNotFound />
-        },
+            // //////////////////////////////////////////////////////////
+        
+            {
+              path: 'leads',
+              element: <Leads />,
+              errorElement: <PageNotFound />
+            },
+            {
+              path: 'payment',
+              element: <Payment />,
+              errorElement: <PageNotFound />
+            },
+            {
+              path: 'potential-customer-data',
+              element: <PotentialCustomerData
+               />,
+              errorElement: <PageNotFound />
+            },
+            {
+              path: 'search-request',
+              element: <CurrentSearchRequest />,
+              errorElement: <PageNotFound />
+            },
+            {
+              path: 'bid-page',
+              element: <BidPage />,
+              errorElement: <PageNotFound />
+            },
+            ////////////////////////////////////////////////////////
         {
           path: 'businessmessages',
           element: <BusinessMessages />,
