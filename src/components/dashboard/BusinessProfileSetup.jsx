@@ -198,7 +198,7 @@ const BusinessProfileSetup = () => {
     <div className="md:grid items-center bg-secondary p-0 xl:p-10">
       <div className="grid items-center justify-center xl:px-20 bg-gradient-to-r">
         <div className="p-5 rounded-lg shadow-lg border">
-          <h1 className="text-2xl text-accent mb-4">
+          <h1 className="text-center text-red-500 text-sm mb-4">
             Set up your business profile input marked with asterisks* are
             mandatory
           </h1>
