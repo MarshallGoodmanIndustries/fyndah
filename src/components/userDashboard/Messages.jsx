@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
 import {ImSpinner9} from "react-icons/im"
+import Swal from "sweetalert2";
 function Messages() {
   const { userData } = useContext(AuthContext);
   const { authToken } = useContext(AuthContext);
@@ -15,17 +16,32 @@ function Messages() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const conversation = await axios.get(
+        const response = await axios.get(
           "https://axelonepostfeature.onrender.com/api/conversations/myconversations",
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
-              Accept: "application/json",
             },
           }
         );
+  
+        if (response.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Successful...",
+            text: "Profile updated successfully",
+            timer: 2000,
+            timerProgressBar: true,
+          });
 
-        console.log(conversation.data);
+          const messageresponse = response.data
+          setAllConversations(messageresponse)
+
+          console.log(messageresponse)
+          // console.log("Form submitted", response.data);
+        } else {
+          throw new Error("Getting all messages failed");
+        }
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -36,59 +52,93 @@ function Messages() {
     }
   }, [authToken]);
 
-  const [id, setId] = useState("6662213209694e310e5825a9");
-  const [prevMessages, setPrevMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [hideUsers, setHideUsers] = useState(true);
-  const [showMessage, setShowMessage] = useState(false);
-  const [value, setValue] = useState("");
+  const getMessagesInConversation = async (conversationId) => {
+    try {
+      const response = await axios.get(
+        `https://axelonepostfeature.onrender.com/api/messages/${conversationId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
 
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       setLoading(true);
-//       try {
-//         const conversation = await axios.get(
-//           `https://axelonepostfeature.onrender.com/api/messages/${id}`,
-//           {
-//             headers: {
-//               Authorization: `Bearer ${authToken}`,
-//               Accept: "application/json",
-//             },
-//           }
-//         );
-//         setConversationInChat(conversation.data);
-//         // console.log(conversation);
-//         const gottenMessage = conversation.data.map((item) => item.message);
-//         setPrevMessages(gottenMessage);
-//         setLoading(false);
-//       } catch (error) {
-//         console.error("Error fetching data", error);
-//         setLoading(false);
-//       }
-//     };
+      if (response.status === 200) {
+        // Swal.fire({
+        //   icon: "success",
+        //   title: "Successful...",
+        //   text: "Profile updated successfully",
+        //   timer: 2000,
+        //   timerProgressBar: true,
+        // });
 
-//     fetchData();
-//   }, [authToken, id]);
+        const messageresponse = response.data
+        setConversationInChat(messageresponse)
 
-//   const handleShowMessageBox = (userId) => {
+        console.log(messageresponse)
+        // console.log("Form submitted", response.data);
+      } else {
+        throw new Error("Getting messages in a converstaion failed");
+      }
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+
+  }
+
+  // const [id, setId] = useState("");
+  // const [prevMessages, setPrevMessages] = useState([]);
+  // const [loading, setLoading] = useState(false);
+  // const [hideUsers, setHideUsers] = useState(true);
+  // const [showMessage, setShowMessage] = useState(false);
+  // const [value, setValue] = useState("");
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const conversation = await axios.get(
+  //         `https://axelonepostfeature.onrender.com/api/messages/${id}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${authToken}`,
+  //             Accept: "application/json",
+  //           },
+  //         }
+  //       );
+  //       setConversationInChat(conversation.data);
+  //       // console.log(conversation);
+  //       const gottenMessage = conversation.data.map((item) => item.message);
+  //       setPrevMessages(gottenMessage);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Error fetching data", error);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [authToken, id]);
+
+  // const handleShowMessageBox = (userId) => {
   
-//     console.log(userId)
+  //   console.log(conversationId)
 
-//     const foundConversation = conversationInChat.find(
-//       (item) => item.conversationId === userId._id
-//     );
-//     setHideUsers(false);
-//     if (foundConversation) {
-//         console.log(foundConversation.conversationId);
-//       setId(foundConversation.conversationId);
-//       setShowMessage(true);
-//       console.log("new message is found");
+  //   const foundConversation = conversationInChat.find(
+  //     (item) => item.conversationId === userId._id
+  //   );
+  //   setHideUsers(false);
+  //   if (foundConversation) {
+  //       console.log(foundConversation.conversationId);
+  //     setId(foundConversation.conversationId);
+  //     setShowMessage(true);
+  //     console.log("new message is found");
 
-//     } else {
-//       setShowMessage(true);
-//       setId(userId._id);
-//     }
-//   };
+  //   } else {
+  //     setShowMessage(true);
+  //     setId(userId._id);
+  //   }
+  // };
 
 //   const handleMessageChange = (e) => {
 //     setValue(e.target.value);
@@ -121,6 +171,11 @@ function Messages() {
 
   return (
     <div className="py-10 items-top justify-between px-5">
+      <div>
+        {allConversations.map((conversation, index) => (
+          <div onClick={() => getMessagesInConversation(conversation._id)} key={index}> {conversation.members[1].name} </div>
+        ))}
+      </div>
       {/* <div className="col-span-5 relative">
         {showMessage ? (
           <h1
