@@ -1,4 +1,4 @@
-function BusinessLogOut () {
+function BusinessLogOut() {
     return (
         <div>
             Log Out
