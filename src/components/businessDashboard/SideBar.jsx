@@ -78,6 +78,19 @@ const SideBar = ({handleToggle }) => {
       </Link>
 
       
+     {/* Business Search Request */}
+     <Link to='/search-request'>
+      <div onClick={() => {
+        handleToggle,
+        handleItemClick(9)
+      }} 
+      className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isItemActive(3) ? "bg-white text-textDark" : "text-white"} `}>
+        <span>
+        <AiFillMessage className='size-[1rem] lg:size-[1.25rem]' />
+        </span>
+        <h2 className='text-[1.1rem] mt-0 font-normal'>Search Requests</h2>
+      </div>
+      </Link>
 
       {/* timeline */}
       {/* <Link to='timeline'>
