@@ -93,24 +93,17 @@ function WalletIndex() {
                     },
                 }
             );
-            if (response.data.message == "Token has expired. Please log in again") {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops! Something went wrong",
-                    text: "Seems you are  having network issues or your token has expired. please login again.",
-                    timer: 4000,
-                    timerProgressBar: true,
-                });
+            if (response.data.balance) {
+                sessionStorage.removeItem("lastRoute")
                 // navigate("/login")
             }
 
             setTransactions(response.data.balance);
             setLowBal(response.data.balance);
-            console.log(response.data)// Assuming the balance is available under `response.data.balance`
+            console.log(response.data)
         } catch (error) {
             console.error("Error fetching wallet balance:", error);
             if (error.response ? error.response.data : error.message) {
-                sessionStorage.removeItem('authToken');
                 sessionStorage.setItem("lastRoute", location.pathname)
                 Swal.fire({
                     icon: "error",
@@ -132,7 +125,7 @@ function WalletIndex() {
 
     useEffect(() => {
         fetchWalletBalance();
-        if (lowBal !== null && lowBal <= 10) {
+        if (lowBal !== null && lowBal <= 50) {
             Swal.fire({
                 icon: "warning",
                 title: "Warning message!!",

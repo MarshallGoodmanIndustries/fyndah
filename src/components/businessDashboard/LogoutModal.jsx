@@ -5,11 +5,12 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { TiWarning } from 'react-icons/ti';
 import { ImSpinner9 } from 'react-icons/im';
+// import { useState } from 'react';
 
 function LogoutModal({ isOpen, onClose }) {
 
     const navigate = useNavigate();
-    const { authToken, setAuthToken, setUserData, setBusinessId } = useContext(AuthContext);
+    const { authToken } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleLogOut = async () => {
@@ -17,7 +18,7 @@ function LogoutModal({ isOpen, onClose }) {
         try {
             setIsLoading(true)
             const response = await axios.post(
-                "https://api.fyndah.com/api/v1/auth/logout",
+                "https://api.fyndah.com/api/v1/users/organizations/logout",
                 {},
                 {
                     headers: {
@@ -27,25 +28,18 @@ function LogoutModal({ isOpen, onClose }) {
                 }
             );
 
-            if (response.status === 200) {
-                setAuthToken(null);
-                setUserData(null);
-                setBusinessId(null);
-                sessionStorage.removeItem("lastRoute")
-                sessionStorage.removeItem("authToken");
-                sessionStorage.removeItem("userData");
-                sessionStorage.removeItem("businessId");
+            if (response.data.message == "Successfully logged out of every business") {
                 console.log("Logged out successfully");
 
                 Swal.fire({
                     icon: "success",
                     title: "Successful...",
-                    text: "Successfully logged out",
+                    text: "You have successfully logged out of your business account",
                     timer: 2000,
                     timerProgressBar: true,
                 });
                 setIsLoading(false)
-                navigate("/login"); // Redirect to login page
+                navigate("/dashboard/mybusiness"); // Redirect to login page
             }
         } catch (error) {
             Swal.fire({
