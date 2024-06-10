@@ -4,11 +4,11 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
-
+import {ImSpinner9} from "react-icons/im"
 function Messages() {
   const { userData } = useContext(AuthContext);
   const { authToken } = useContext(AuthContext);
-console.log(userData);
+// console.log(userData);
   const [allConversations, setAllConversations] = useState([]);
   const [conversationInChat, setConversationInChat] = useState([]);
 
@@ -25,7 +25,7 @@ console.log(userData);
           }
         );
 
-        setAllConversations(conversation.data);
+        console.log(conversation.data);
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -43,80 +43,85 @@ console.log(userData);
   const [showMessage, setShowMessage] = useState(false);
   const [value, setValue] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const conversation = await axios.get(
-          `https://axelonepostfeature.onrender.com/api/messages/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              Accept: "application/json",
-            },
-          }
-        );
-        setConversationInChat(conversation.data);
-        const gottenMessage = conversation.data.map((item) => item.message);
-        setPrevMessages(gottenMessage);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data", error);
-        setLoading(false);
-      }
-    };
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       setLoading(true);
+//       try {
+//         const conversation = await axios.get(
+//           `https://axelonepostfeature.onrender.com/api/messages/${id}`,
+//           {
+//             headers: {
+//               Authorization: `Bearer ${authToken}`,
+//               Accept: "application/json",
+//             },
+//           }
+//         );
+//         setConversationInChat(conversation.data);
+//         // console.log(conversation);
+//         const gottenMessage = conversation.data.map((item) => item.message);
+//         setPrevMessages(gottenMessage);
+//         setLoading(false);
+//       } catch (error) {
+//         console.error("Error fetching data", error);
+//         setLoading(false);
+//       }
+//     };
 
-    fetchData();
-  }, [authToken, id]);
+//     fetchData();
+//   }, [authToken, id]);
 
-  const handleShowMessageBox = (userId) => {
+//   const handleShowMessageBox = (userId) => {
   
-    // console.log(userData)
-    const foundConversation = conversationInChat.find(
-      (item) => item.conversationId === userId._id
-    );
-    setHideUsers(false);
-    if (foundConversation) {
-        console.log(foundConversation.conversationId);
-      setId(foundConversation.conversationId);
-      setShowMessage(true);
-    } else {
-      setShowMessage(true);
-      setId(userId._id);
-    }
-  };
+//     console.log(userId)
 
-  const handleMessageChange = (e) => {
-    setValue(e.target.value);
-  };
+//     const foundConversation = conversationInChat.find(
+//       (item) => item.conversationId === userId._id
+//     );
+//     setHideUsers(false);
+//     if (foundConversation) {
+//         console.log(foundConversation.conversationId);
+//       setId(foundConversation.conversationId);
+//       setShowMessage(true);
+//       console.log("new message is found");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (value.trim() !== "") {
-      try {
-        const response = await axios.post(
-          `https://axelonepostfeature.onrender.com/api/messages/send-message/${id}`,
-          { message: value },
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              Accept: "application/json",
-            },
-          }
-        );
-        setPrevMessages((prev) => [...prev, value]);
-        if (response.status === 200) {
-          setValue("");
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
+//     } else {
+//       setShowMessage(true);
+//       setId(userId._id);
+//     }
+//   };
+
+//   const handleMessageChange = (e) => {
+//     setValue(e.target.value);
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     if (value.trim() !== "") {
+//       try {
+//         const response = await axios.post(
+//           `https://axelonepostfeature.onrender.com/api/messages/send-message/${id}`,
+//           { message: value },
+//           {
+//             headers: {
+//               Authorization: `Bearer ${authToken}`,
+//               Accept: "application/json",
+//             },
+//           }
+//         );
+//         // i dey hear una , i dun turn ghost god punish u
+//         setPrevMessages((prev) => [...prev, value]);
+//         if (response.status === 200) {
+//           setValue("");
+//         }
+//       } catch (error) {
+//         console.error(error);
+//       }
+//     }
+//   };
 
   return (
     <div className="py-10 items-top justify-between px-5">
-      <div className="col-span-5 relative">
+      {/* <div className="col-span-5 relative">
         {showMessage ? (
           <h1
             className="absolute t-0 pl-2 pt-2 cursor-pointer"
@@ -162,11 +167,11 @@ console.log(userData);
             <h1 className="mb-4 text-2xl font-bold">
               Click on a message to start a conversation
             </h1>
-            {loading && <h3> Please wait while we populate your chats </h3>}
+            {loading &&  <ImSpinner9 className="h-10 w-10 text-gray-500 animate-spin text-center"/>}
           </center>
         )}
-      </div>
-      <div className="grid gap-4">
+      </div> */}
+      {/* <div className="grid gap-4">
         {hideUsers &&
           allConversations.map((item) => (
             <div
@@ -177,14 +182,14 @@ console.log(userData);
                   className="cursor-pointer p-5"
                   onClick={() => {
                     handleShowMessageBox(item);
-                    console.log(item);
-                  }}>
+                  }}> 
                   {item.members[0].name}
                 </h1>
+                {item._id}
               </div>
             </div>
           ))}
-      </div>
+      </div> */}
     </div>
   );
 }
