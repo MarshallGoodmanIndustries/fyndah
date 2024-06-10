@@ -68,7 +68,7 @@ function CurrentSearchRequest() {
   const { id } = useParams();
 
   const { authToken } = useContext(AuthContext);
-  
+
   // const navigate = useNavigate();
 
   const BASE_URL = "https://api.fyndah.com/api/v1/search/requests/active";
@@ -82,7 +82,7 @@ function CurrentSearchRequest() {
             headers: {
               "Content-Type": "application/json",
               // Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5kYWguY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzE3ODYxNjU0LCJleHAiOjE3MTc4NjUyNTQsIm5iZiI6MTcxNzg2MTY1NCwianRpIjoiUkpVbW1oNU5yV0RSd0E1RSIsInN1YiI6IjM1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.daoxUtxs8V5-KWmNFprFm1jLhOYKOdZBQo-9hFiSzBE`,
-              Authorization:` ${authToken}`
+              Authorization: ` ${authToken}`
             },
           });
           const data = await res.json();
@@ -105,7 +105,7 @@ function CurrentSearchRequest() {
 
 
   if (!request?.length) return <EmptyLeads posts={po} />;
-    return (
+  return (
     <div className="flex flex-col items-center justify-center mt-5">
       <h1 className="mb-10 text-xl font-black">
         Current Available Search Request Related to your Business
