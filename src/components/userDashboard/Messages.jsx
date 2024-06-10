@@ -37,24 +37,11 @@ function Messages() {
           const messageresponse = response.data
           setAllConversations(messageresponse)
 
-          console.log(allConversations)
+          console.log(messageresponse)
           // console.log("Form submitted", response.data);
         } else {
           throw new Error("Getting all messages failed");
         }
-
-
-        // const conversation = await axios.get(
-        //   "https://axelonepostfeature.onrender.com/api/conversations/myconversations",
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer ${authToken}`,
-        //       Accept: "application/json",
-        //     },
-        //   }
-        // );
-
-        // console.log(conversation.data);
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -65,59 +52,93 @@ function Messages() {
     }
   }, [authToken]);
 
-  const [id, setId] = useState("");
-  const [prevMessages, setPrevMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [hideUsers, setHideUsers] = useState(true);
-  const [showMessage, setShowMessage] = useState(false);
-  const [value, setValue] = useState("");
+  const getMessagesInConversation = async (conversationId) => {
+    try {
+      const response = await axios.get(
+        `https://axelonepostfeature.onrender.com/api/messages/${conversationId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const conversation = await axios.get(
-          `https://axelonepostfeature.onrender.com/api/messages/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              Accept: "application/json",
-            },
-          }
-        );
-        setConversationInChat(conversation.data);
-        // console.log(conversation);
-        const gottenMessage = conversation.data.map((item) => item.message);
-        setPrevMessages(gottenMessage);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data", error);
-        setLoading(false);
+      if (response.status === 200) {
+        // Swal.fire({
+        //   icon: "success",
+        //   title: "Successful...",
+        //   text: "Profile updated successfully",
+        //   timer: 2000,
+        //   timerProgressBar: true,
+        // });
+
+        const messageresponse = response.data
+        setConversationInChat(messageresponse)
+
+        console.log(messageresponse)
+        // console.log("Form submitted", response.data);
+      } else {
+        throw new Error("Getting messages in a converstaion failed");
       }
-    };
-
-    fetchData();
-  }, [authToken, id]);
-
-  const handleShowMessageBox = (userId) => {
-  
-    console.log(conversationId)
-
-    const foundConversation = conversationInChat.find(
-      (item) => item.conversationId === userId._id
-    );
-    setHideUsers(false);
-    if (foundConversation) {
-        console.log(foundConversation.conversationId);
-      setId(foundConversation.conversationId);
-      setShowMessage(true);
-      console.log("new message is found");
-
-    } else {
-      setShowMessage(true);
-      setId(userId._id);
+    } catch (error) {
+      console.error("Error fetching data", error);
     }
-  };
+
+  }
+
+  // const [id, setId] = useState("");
+  // const [prevMessages, setPrevMessages] = useState([]);
+  // const [loading, setLoading] = useState(false);
+  // const [hideUsers, setHideUsers] = useState(true);
+  // const [showMessage, setShowMessage] = useState(false);
+  // const [value, setValue] = useState("");
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const conversation = await axios.get(
+  //         `https://axelonepostfeature.onrender.com/api/messages/${id}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${authToken}`,
+  //             Accept: "application/json",
+  //           },
+  //         }
+  //       );
+  //       setConversationInChat(conversation.data);
+  //       // console.log(conversation);
+  //       const gottenMessage = conversation.data.map((item) => item.message);
+  //       setPrevMessages(gottenMessage);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Error fetching data", error);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [authToken, id]);
+
+  // const handleShowMessageBox = (userId) => {
+  
+  //   console.log(conversationId)
+
+  //   const foundConversation = conversationInChat.find(
+  //     (item) => item.conversationId === userId._id
+  //   );
+  //   setHideUsers(false);
+  //   if (foundConversation) {
+  //       console.log(foundConversation.conversationId);
+  //     setId(foundConversation.conversationId);
+  //     setShowMessage(true);
+  //     console.log("new message is found");
+
+  //   } else {
+  //     setShowMessage(true);
+  //     setId(userId._id);
+  //   }
+  // };
 
 //   const handleMessageChange = (e) => {
 //     setValue(e.target.value);
@@ -152,7 +173,7 @@ function Messages() {
     <div className="py-10 items-top justify-between px-5">
       <div>
         {allConversations.map((conversation, index) => (
-          <div onClick={() => handleShowMessageBox(conversation._id)} key={index}> {conversation.members[1].name} </div>
+          <div onClick={() => getMessagesInConversation(conversation._id)} key={index}> {conversation.members[1].name} </div>
         ))}
       </div>
       {/* <div className="col-span-5 relative">
