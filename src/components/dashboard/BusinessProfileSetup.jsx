@@ -167,7 +167,7 @@ const BusinessProfileSetup = () => {
 
         if (response.status == 201) {
           const businesssId = response.data.data.organization.id;
-          // console.log("Business Id", businesssId);
+          console.log("Business Id", businesssId);
           setBusinessId(businesssId);
           Swal.fire({
             icon: "success",
@@ -176,7 +176,7 @@ const BusinessProfileSetup = () => {
             timer: 2000,
             timerProgressBar: true,
           });
-          navigate(`/businessDashboard/${businesssId}/business-profile`);
+          navigate('/dashboard/mybusiness');
         } else {
           throw new Error("Unable to submit your business profile");
         }
@@ -537,9 +537,8 @@ const BusinessProfileSetup = () => {
 
             <div className="md:col-span-2 lg:col-span-3">
               <button
-                className={`h-12 bg-accent text-white rounded-md w-full ${
-                  loading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`h-12 bg-accent text-white rounded-md w-full ${loading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 type="submit"
                 disabled={loading}
               >
