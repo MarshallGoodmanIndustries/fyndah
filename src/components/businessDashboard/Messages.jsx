@@ -4,7 +4,7 @@ import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
 
 function Messages() {
-  // this is the initial conversation that would be showing for b users page
+  // this is the initial conversation that would be showing for business owner page
   const myConversation = [
     {
       members: [
@@ -54,6 +54,7 @@ function Messages() {
   };
   return (
     <div className="py-10 items-top grid gap-4 justify-between px-5 md:grid md:grid-cols-5">
+        <h1> Business messages  </h1>
       {/* so i want to map through the conversation array now and i am going to be rendering the members[1].name because this is a users page and users are supposed to be seeing the name of the people business they sent a connection request to */}
       <div className="md:col-span-3 md:order-2">
         {showMessageBox ? (
@@ -107,8 +108,8 @@ function Messages() {
                   hideTheListOnMobile();
                 }}
                 className="border-2 border-blue-500 rounded-lg cursor-pointer p-4 shadow-md hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300 ease-in-out" style={{ boxShadow: '0 14px 16px rgba(05, 0, 255, 0.1), 0 10px 15px rgba(255, 255, 255, 0.2), 0 20px 25px rgba(255, 255, 255, 0.1)' }}>
-                  {/* in the business message page it should be {item.members[0].name so the business owner can get the name of the person that sends the request} */}
-                <h1 className="text-black hover:text-white"> {item.members[1].name} </h1>
+                  {/* in the business message page it should be {item.members[1].name so the business owner can get the name of the person that sends the request} */}
+                <h1 className="text-black hover:text-white"> {item.members[0].name} </h1>
               </div>
             );
           })}
