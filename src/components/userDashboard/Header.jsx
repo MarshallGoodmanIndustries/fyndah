@@ -11,7 +11,7 @@ const Header = ({ handleToggle, toggle }) => {
 
   const user = userData?.username || ''; // Use optional chaining and provide a default empty string
   const userInitials = user ? user.slice(0, 1) : ''; // Handle empty user gracefully
-  const notificationNumber = 1;
+  const notificationNumber = 0;
 
   return (
     <div className='text-white relative sm:px-[2rem] px-[1rem] items-center h-full flex justify-between z-20 font-inter'>
@@ -31,7 +31,7 @@ const Header = ({ handleToggle, toggle }) => {
       <div className='flex items-center justify-end md:gap-[1.8rem] gap-[1rem] lg:col-span-3 xl:col-span-2 col-span-2'>
         <span className='relative cursor-pointer'>
           <FaBell className=' size-[18px] md:size-[22px]' />
-          <p className='absolute top-[-5px] left-2 text-white rounded-full bg-navyBlue px-1 text-[11px]'>
+          <p className='absolute top-[-5px] left-2 text-white rounded-full bg-red-500 px-1 text-[11px]'>
             {notificationNumber}
           </p>
         </span>
