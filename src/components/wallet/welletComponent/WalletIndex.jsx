@@ -93,29 +93,26 @@ function WalletIndex() {
                     },
                 }
             );
-            if (response.data.message == "Token has expired. Please log in again") {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops! Something went wrong",
-                    text: "Seems you having network issues, please try again later.",
-                    timer: 4000,
-                    timerProgressBar: true,
-                });
-
+            if (response.data.balance) {
+                sessionStorage.removeItem("lastRoute")
+                // navigate("/login")
             }
 
             setTransactions(response.data.balance);
             setLowBal(response.data.balance);
-            console.log(response.data)// Assuming the balance is available under `response.data.balance`
+            console.log(response.data)
         } catch (error) {
             console.error("Error fetching wallet balance:", error);
             if (error.response ? error.response.data : error.message) {
+                sessionStorage.setItem("lastRoute", location.pathname)
                 Swal.fire({
                     icon: "error",
                     title: "Oops! Something went wrong",
                     text: "Seems you having network issues, please try again later.",
                     timer: 4000,
                     timerProgressBar: true,
+                    footer: `<a href="#">Could not set up your business profile. Please try again later. ${error.message}</a>`,
+
                 });
                 navigate("/login")
             }
@@ -128,13 +125,12 @@ function WalletIndex() {
 
     useEffect(() => {
         fetchWalletBalance();
-        if (lowBal !== null && lowBal <= 4999) {
+        if (lowBal !== null && lowBal <= 50) {
             Swal.fire({
                 icon: "warning",
-                title: "Warning Message!!!",
-                text: "Your balance is below 5000 make a quick topup.",
-                timer: 2000,
-                timerProgressBar: true,
+                title: "Warning message!!",
+                text: "Your balance is low make a quick topup to stay active.",
+                timerProgressBar: false
             });
         }
     }, [])
@@ -161,7 +157,7 @@ function WalletIndex() {
                             </div>
                         ) : (
                             <div>
-                                <p className="text-2xl font-bold"><span className="text-sm md:text-base text-center lg:text-lg">USD</span> {transactions}</p>
+                                <p className="text-2xl font-bold"><span className="text-sm md:text-base text-center lg:text-lg">$</span> {transactions}</p>
 
                             </div>
                         )}

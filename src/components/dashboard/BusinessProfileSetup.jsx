@@ -167,7 +167,7 @@ const BusinessProfileSetup = () => {
 
         if (response.status == 201) {
           const businesssId = response.data.data.organization.id;
-          // console.log("Business Id", businesssId);
+          console.log("Business Id", businesssId);
           setBusinessId(businesssId);
           Swal.fire({
             icon: "success",
@@ -176,7 +176,7 @@ const BusinessProfileSetup = () => {
             timer: 2000,
             timerProgressBar: true,
           });
-          navigate(`/businessDashboard/${businesssId}/business-profile`);
+          navigate('/dashboard/mybusiness');
         } else {
           throw new Error("Unable to submit your business profile");
         }
@@ -198,7 +198,7 @@ const BusinessProfileSetup = () => {
     <div className="md:grid items-center bg-secondary p-0 xl:p-10">
       <div className="grid items-center justify-center xl:px-20 bg-gradient-to-r">
         <div className="p-5 rounded-lg shadow-lg border">
-          <h1 className="text-2xl text-accent mb-4">
+          <h1 className="text-center text-red-500 text-sm mb-4">
             Set up your business profile input marked with asterisks* are
             mandatory
           </h1>
@@ -537,9 +537,8 @@ const BusinessProfileSetup = () => {
 
             <div className="md:col-span-2 lg:col-span-3">
               <button
-                className={`h-12 bg-accent text-white rounded-md w-full ${
-                  loading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`h-12 bg-accent text-white rounded-md w-full ${loading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 type="submit"
                 disabled={loading}
               >

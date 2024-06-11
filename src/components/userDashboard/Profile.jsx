@@ -27,10 +27,12 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { ImSpinner9 } from "react-icons/im";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const { authToken } = useContext(AuthContext);
   const [isLoading, setIsloading] = useState(false)
+  const navigate = useNavigate()
   // const [errorMessage, setErrorMessage] = useState("")
   const [inputDefaultStates, setInputDefaultStates] = useState({
     firstName: "",
@@ -177,6 +179,10 @@ function Profile() {
   //     console.error(error);
   //   }
   // }
+
+  const handleSwitchAccount = () => {
+    navigate("/dashboard/mybusiness")
+  }
 
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
@@ -425,7 +431,7 @@ function Profile() {
               ACCOUNT MANAGEMENT
             </div>
             <div className="flex mb-[1rem] lg:mb-0 items-center gap-[1rem]">
-              <h2 className="font-normal  cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
+              <h2 onClick={handleSwitchAccount} className="font-normal  cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                 Switch Account
               </h2>
               <PiUserSwitchFill className=" size-4 lg:size-5" />
