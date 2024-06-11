@@ -1,4 +1,4 @@
-import { NavBar, HeroSection, FeaturedPosts, Footer, FeaturedListings } from "../landingPageComponents";
+import { NavBar, HeroSection, FeaturedPosts, Footer, FeaturedListings, WhatWeOffer, WhyChooseUs } from "../landingPageComponents";
 
 
 
@@ -12,6 +12,8 @@ function LandingPage() {
       <main>
         <FeaturedListings />
         <FeaturedPosts />
+        <WhatWeOffer />
+        <WhyChooseUs />
       </main>
       <Footer />
     </>
