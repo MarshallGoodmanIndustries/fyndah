@@ -33,12 +33,16 @@ import { FaCaretDown } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { ImSpinner9 } from "react-icons/im";
 
 function BusinessProfile() {
-  const { authToken} = useContext(AuthContext);
+  const { authToken } = useContext(AuthContext);
   const { id } = useParams(); // Extract the 'id' parameter from the URL
-  
+  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate();
+  const routeLocation = useLocation()
+
   const [inputDefaultStates, setInputDefaultStates] = useState({
     businessName: "",
     email: "",
@@ -150,6 +154,51 @@ function BusinessProfile() {
 
   const location = `${inputDefaultStates.address}  ${inputDefaultStates.city}`
   // console.log("my id:", id)
+  const API = "https://api.fyndah.com/api/v1/users/organizations/logout";
+  const body = {};
+  const handleSwitching = async () => {
+    setIsLoading(true)
+    try {
+      const responseSwitch = await axios.post(API, body, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      })
+      console.log(responseSwitch.data)
+      if (responseSwitch.data.status == "success") {
+        Swal.fire({
+          icon: "success",
+          title: "successful",
+          text: "You have sucessfully switched account.",
+          timer: 2000,
+          timerProgressBar: true,
+        });
+        sessionStorage.removeItem("lastRoute");
+        navigate('/dashboard/mybusiness');
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong..",
+        text: "Unexpected error could be your network connection is bad or your session is over try to login again.",
+        footer: `<a href="#">Could not switch. Please try again later. ${error.response?.data?.message || error.message
+          }</a>`,
+      });
+      sessionStorage.setItem("lastRoute", routeLocation.pathname)
+      navigate("/login");
+      console.log(error.response ? error.response.data : error.message)
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-screen">
+      <p> <ImSpinner9 className="animate-spin text-blue-500 hover:text-blue-800" size={50} /> </p>
+      <span>Please wait...</span>
+    </div>
+  }
 
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
@@ -186,7 +235,7 @@ function BusinessProfile() {
             display="inline-block"
             borderRadius="full"
             overflow="hidden"
-            // boxSize="150px"
+          // boxSize="150px"
           >
             <Image
               className="w-[80px]  lg:w-[150px]"
@@ -632,7 +681,7 @@ function BusinessProfile() {
             </div>
             <div className="col-span-2 gap-x-[0.5rem] md:justify-between gap-y-[1rem] grid grid-cols-2 items-center xl:grid-cols-4">
               <div className="flex lg:mb-0 items-center lg:gap-[1rem] gap-[0.5rem]">
-                <h2 className="font-normal  cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
+                <h2 onClick={handleSwitching} className="font-normal  cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Switch Account
                 </h2>
                 <PiUserSwitchFill className=" size-4 lg:size-5" />
@@ -767,8 +816,8 @@ function BusinessProfile() {
             </h2> */}
 
             {/* <div className="col-span-2 flex flex-col gap-[1rem]"> */}
-              {/* ADD CATEGORY */}
-              {/* <div className="flex mb-[0.5rem] lg:mb-0 w-full  lg:w-1/2 flex-col gap-2 lg:gap-2">
+            {/* ADD CATEGORY */}
+            {/* <div className="flex mb-[0.5rem] lg:mb-0 w-full  lg:w-1/2 flex-col gap-2 lg:gap-2">
                 <label
                   className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
                   htmlFor="category"
@@ -787,8 +836,8 @@ function BusinessProfile() {
                 />
               </div> */}
 
-              {/* edit CATEGORY */}
-              {/* <div className="lg:flex block mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
+            {/* edit CATEGORY */}
+            {/* <div className="lg:flex block mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
                 <h2
                   className="font-normal text-lightRed mb-[0.5rem] lg:mb-0 text-[0.9rem] lg:text-[1.1rem]"
                 >
@@ -814,7 +863,7 @@ function BusinessProfile() {
                     />
                   </div> */}
 
-                  {/* <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
+            {/* <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
                     <h2 className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]">
                       Remove Product
                     </h2>
@@ -846,7 +895,7 @@ function BusinessProfile() {
                     </Menu>
                   </div> */}
 
-                  {/* <div className="flex mb-[1rem]  lg:mb-0 flex-col gap-2 lg:gap-2">
+            {/* <div className="flex mb-[1rem]  lg:mb-0 flex-col gap-2 lg:gap-2">
                     <h2 className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]">
                       Move Product
                     </h2>
@@ -877,8 +926,8 @@ function BusinessProfile() {
                       )}
                     </Menu>
                   </div> */}
-                {/* </div> */}
-              {/* </div> */}
+            {/* </div> */}
+            {/* </div> */}
             {/* </div> */}
 
             {/* STOCKS */}

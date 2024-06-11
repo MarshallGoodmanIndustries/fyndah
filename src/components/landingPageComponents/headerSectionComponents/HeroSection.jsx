@@ -4,13 +4,13 @@ import axios from "axios";
 import classNames from "classnames";
 import { AuthContext } from "../../context/AuthContext";
 
-// 
-import { searchQueryCategories, searchQueryRatings, searchQueryBusinessProfiles } from "../../../routes/Navigations";
-
 // icons
 import { FaBuilding } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { SearchBusinessProfile, Loading } from "../../uiComponents";
+
+//image
+import { businesslogo } from "../../../assets/images";
 
 function HeroSection() {
   const { authToken } = useContext(AuthContext);
@@ -21,28 +21,24 @@ function HeroSection() {
   const [businessName, setBusinessName] = useState("");
   const [businessLocation, setBusinessLocation] = useState("");
   const [businessCategory, setBusinessCategory] = useState("");
-  const [businessRating, setBusinessRating] = useState("");
   const [recommendValue, SetRecommendValue] = useState(true);
 
+  //location suggestion helper states
   const [suggestions, setSuggestions] = useState([]);
   const [previouslySuggestedValue, setPreviouslySuggestedValue] = useState("");
-  // const [searchResults, setSearchResults] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
+
+  const [businessCategories, setBusinessCategories] = useState([]);
+  const [searchQueryIsLoading, setSearchQueryIsLoading] = useState(false);
   const autocompleteApiKey = "17af202f70b44748976eff28573589db";
 
   // pagination
+  const [revealSearchQuery, setRevealSearchQuery] = useState(false);
   const [businesses, setBusinesses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const containsBusinesses = businesses.length > 0;
   const totalPages = Math.ceil(businesses.length / 3);
   const businessesForCurrentPage = businesses.slice((currentPage - 1) * 3, currentPage * 3);
-
-  useEffect(() => {
-    if (businessesForCurrentPage.length === 0 && currentPage > 1) {
-      setCurrentPage(prevPage => prevPage - 1)
-    }
-  }, [businesses, currentPage, businessesForCurrentPage]);
-
 
   // autocomplete useEffect
   useEffect(() => {
@@ -64,34 +60,42 @@ function HeroSection() {
     return () => clearTimeout(timerId); // Cleanup timeout on unmount
   },[businessLocation, previouslySuggestedValue])
 
+  // set current page for search results
+  useEffect(() => {
+    if (businessesForCurrentPage.length === 0 && currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1)
+    }
+  }, [businesses, currentPage, businessesForCurrentPage]);
+
+  // set current page for search results
+  useEffect(() => {
+    if (businessesForCurrentPage.length === 0 && currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1)
+    }
+  }, [businesses, currentPage, businessesForCurrentPage]);
+
+  //get business categories
+  useEffect(() => {
+    axios
+      .get("https://api.fyndah.com/api/v1/organization/categories", {
+        headers: {
+          Accept: "application/json",
+        },
+      })
+      .then((response) => {
+        setBusinessCategories(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+
   const handleSuggestionClick = (selectedSuggestion)=> {
     setBusinessLocation(selectedSuggestion.properties.formatted);
     setPreviouslySuggestedValue(selectedSuggestion.properties.formatted);
     setSuggestions([]);
   }
-
-  const handleOnSubmission = async (e) => {
-    e.preventDefault();
-   
-    setIsLoading(true);
-    setTimeout(() => {
-      setBusinesses(searchQueryBusinessProfiles);
-      setIsLoading(false);
-    }, 3000)
-
-    // try {
-    //   const response = await axios.get(`https://api.fyndah.com/api/v1/search?query=${businessName, businessLocation, businessCategory, businessRating}&fields=country,state,org_name`, {
-    //     headers: {
-    //       'Authorization': `Bearer ${authToken}`,
-    //     }
-    //   });
-    //   console.log(response.data);
-    //   setIsLoading(false);
-    // } catch (error) {
-    //   console.log(error.message);
-    //   setIsLoading(false);
-    // }
-  };
 
   const handleSeeMore = ()=> {
     if(!authToken){
@@ -102,8 +106,48 @@ function HeroSection() {
       setCurrentPage(prevPage => prevPage < totalPages ? prevPage + 1 : totalPages)
     }
   }
- 
+
+  const handleOnSubmission = async (e) => {
+    e.preventDefault();
+    const url = "https://api.fyndah.com/api/v1/search/business"
+    const data = {
+      "searchTerms": [businessName, businessLocation, +businessCategory]
+    };
+    setSearchQueryIsLoading(true);
+    setSuggestions([]);
+
+    try {
+      const response = await axios.post(url,data, {
+        headers: {
+          "Content-Type": "application/json" ,
+          'Authorization': `Bearer ${authToken}`,
+        }
+      });
+      setSearchQueryIsLoading(false);
+      if(response.status === 200)
+        setBusinesses(response.data);
+        setRevealSearchQuery(true);
+        console.log(response);
+    } catch (error) {
+      setSearchQueryIsLoading(false);
+      console.log(error.message);
+    }
+  };
+
   
+
+ 
+
+  //hide search query div after 30 seconds of non interactivity
+  useEffect(()=>{
+    if(revealSearchQuery && containsBusinesses == false){
+      setTimeout(()=>{
+        setRevealSearchQuery(false);
+      }, 90000)
+    }
+  }, [revealSearchQuery, containsBusinesses])
+ 
+ 
  
   return (
     <section className="bg-secondary w-full h-full flex flex-col justify-center py-8 px-4 sm:px-5 md:px-6 lg:px-8">
@@ -111,7 +155,7 @@ function HeroSection() {
         <h1 className="text-xl md:text-4xl text-textDark font-poppins font-bold tracking-wide text-center uppercase">Discover local businesses</h1>
         <p className="text-sm md:text-lg text-textDark font-roboto font-light text-center">Search, connect and thrive.</p>
       </div>
-      <form method="post" onSubmit={handleOnSubmission} className="searchBox flex flex-col items-center md:flex-row md:items-start w-full md:max-w-[80%] lg:max-w-[85%] md:mx-auto gap-4 rounded-sm md:rounded-md px-4 md:px-8 py-6 md:py-24 mt-4">
+      <form method="post" onSubmit={handleOnSubmission} id="formbg" className="searchBox flex flex-col items-center md:flex-row md:items-start w-full md:max-w-[80%] lg:max-w-[85%] md:mx-auto gap-4 rounded-sm md:rounded-md px-4 md:px-8 py-6 md:py-24 mt-4">
         <div className="flex flex-col items-center gap-4 w-full">
           <div className="flex flex-col items-center md:flex-row gap-4 w-full">
             <div className="flex items-center gap-2 bg-primary bg-opacity-90 backdrop-blur-sm border-b-4  transition-all duration-300 border-accent focus-within:border-accentDark p-2 md:p-4 w-full rounded-sm">
@@ -121,7 +165,7 @@ function HeroSection() {
                 onChange={(e)=> setBusinessName(e.target.value)}
                 type="text" 
                 className="bg-transparent outline-none w-full font-roboto font-light text-textDark placeholder:font-poppins placeholder:text-base placeholder:font-light" 
-                placeholder="Type of business" 
+                placeholder="Service name" 
                 name="business_name" 
                 required
               />
@@ -135,7 +179,7 @@ function HeroSection() {
                 className="bg-transparent outline-none w-full font-roboto font-light text-textDark placeholder:font-poppins placeholder:text-base placeholder:font-light" 
                 placeholder="Country, state/city" 
                 name="location" 
-                required 
+                
               />
               <ul className="absolute left-0 bottom-0 flex flex-col gap-1 w-full border transform translate-y-[105%] bg-inherit">
                 {suggestions.map((suggestion,index)=>(
@@ -147,16 +191,10 @@ function HeroSection() {
             </div>
           </div>
           <div className="flex  justify-center items-center flex-wrap md:flex-nowrap md:items-start gap-2 w-full">
-            <select value={businessCategory} onChange={(e)=> setBusinessCategory(e.target.value)} name="category" className="cursor-pointer w-full md:max-w-[24%] outline-none font-poppins font-light text-base p-1 rounded-md bg-primary bg-opacity-90">
+            <select value={businessCategory} onChange={(e)=> setBusinessCategory(e.target.value)} name="category" className="cursor-pointer w-full md:max-w-[49%] outline-none font-poppins font-light text-base p-1 md:p-2 rounded-md bg-primary bg-opacity-90">
               <option value="" defaultValue="null">Category</option>
-              {searchQueryCategories.map((category,index)=>(
-                <option key={index} value={category} className="font-poppins font-light text-sm">{category}</option>
-              ))}
-            </select>
-            <select value={businessRating} onChange={(e)=> setBusinessRating(e.target.value)} name="rating" className="cursor-pointer w-full md:max-w-[24%] outline-none font-poppins font-light text-base p-1 rounded-md bg-primary bg-opacity-90">
-              <option value="" defaultValue="null">Rating</option>
-              {searchQueryRatings.map((rate,index)=>(
-                <option key={index} value={rate} className="font-poppins font-light text-sm">{rate}</option>
+              {businessCategories.map((category)=>(
+                <option key={category.id} value={category.id} className="font-poppins font-light text-sm">{category.name}</option>
               ))}
             </select>
             <div className="flex items-center gap-1 md:flex-1 md:justify-end">
@@ -170,34 +208,36 @@ function HeroSection() {
         </div>
       </form>
       <div className="w-fit mx-auto my-4">
-        {isLoading && <Loading />}
+        {searchQueryIsLoading && <Loading />}
       </div>
-      <div className={classNames(containsBusinesses ? "h-full" : "h-0" , "flex flex-col items-center gap-6 mt-4")}>
-        {containsBusinesses && businessesForCurrentPage.map((profile,index) => (
-            <SearchBusinessProfile 
-              key={index}
-              businessProfileImg={profile.businessProfileImg}
-              businessName={profile.businessName}
-              businessTitle={profile.businessTitle}
-              businessLocation={profile.businessLocation}  
-              businessRating={profile.businessRating}
-              businessTime={profile.businessTime}
-            />
-        ))}
-          { totalPages > 0 && (
-            <div className="flex items-center justify-between gap-4 w-full max-w-[300px] md:max-w-[80%] lg:max-w-[70%]">
-                <button className='group disabled:cursor-not-allowed disabled:text-gray-400' onClick={() => setCurrentPage(prevPage => (prevPage > 1 ? prevPage - 1 : 1))} disabled={currentPage === 1}>
+      <div className={classNames(revealSearchQuery ? "h-full" : "h-0 overflow-hidden" , "flex flex-col items-center gap-6 mt-4")}>
+        {!containsBusinesses && searchQueryIsLoading == false ? (
+          <div className="bg-navyBlue bg-opacity-90 rounded-lg p-4">
+            <p className="text-primary font-poppins text-sm md:text-base font-light text-center"><span className="text-accentDark">No businesses found.</span> Try tweaking your search terms and give it another go!</p>
+          </div>
+        ) : businessesForCurrentPage.map((profile) => (
+          <SearchBusinessProfile 
+            key={profile.id}
+            id={profile.id}
+            businessProfileImg={businesslogo}
+            businessName={profile.org_name}
+            businessTitle={profile.org_bio}
+            businessLocation={profile.city}  
+          />
+      ))}
+        { totalPages > 3 && (
+          <div className="flex items-center justify-between gap-4 w-full max-w-[300px] md:max-w-[80%] lg:max-w-[70%]">
+              <button className='group disabled:cursor-not-allowed disabled:text-gray-400' onClick={() => setCurrentPage(prevPage => (prevPage > 1 ? prevPage - 1 : 1))} disabled={currentPage === 1}>
                 See less
-                </button>
-                <p className='text-bGrey text-base font-normal'>
-                  {currentPage} of {totalPages} pages
-                </p>
-                <button className='group disabled:cursor-not-allowed disabled:text-gray-400' onClick={handleSeeMore} disabled={currentPage === totalPages}>
-                  See more
-                </button>
-            </div>
-          )}
-          
+              </button>
+              <p className='text-bGrey text-base font-normal'>
+                {currentPage} of {totalPages} pages
+              </p>
+              <button className='group disabled:cursor-not-allowed disabled:text-gray-400' onClick={handleSeeMore} disabled={currentPage === totalPages}>
+                See more
+              </button>
+          </div>
+        )}
       </div>
     </section>
   )

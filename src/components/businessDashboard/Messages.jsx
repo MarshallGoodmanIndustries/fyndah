@@ -3,9 +3,8 @@ import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
 
-
 function Messages() {
-  // this is the initial conversation that would be showing for b users page
+  // this is the initial conversation that would be showing for business owner page
   const myConversation = [
     {
       members: [
@@ -53,121 +52,9 @@ function Messages() {
       setShowListOfBusiness(false);
     }
   };
-  const { userData } = useContext(AuthContext);
-  const { authToken } = useContext(AuthContext);
-  const [allConversations, setAllConversations] = useState([]);
-  const [conversationInChat, setConversationInChat] = useState([]);
-  const [id, setId] = useState("");
-  const [prevMessages, setPrevMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [hideUsers, setHideUsers] = useState(true);
-  const [showMessage, setShowMessage] = useState(false);
-  const [value, setValue] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://axelonepostfeature.onrender.com/api/conversations/myconversations",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-  
-        if (response.status === 200) {
-          Swal.fire({
-            icon: "success",
-            title: "Successful...",
-            text: "Profile updated successfully",
-            timer: 2000,
-            timerProgressBar: true,
-          });
-
-          const messageresponse = response.data
-          setAllConversations(messageresponse)
-
-          console.log(messageresponse)
-          // console.log("Form submitted", response.data);
-        } else {
-          throw new Error("Getting all messages failed");
-        }
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
-    };
-
-    if (authToken) {
-      fetchData();
-    }
-  }, [authToken]);
-
-  const getMessagesInConversation = async (conversationId) => {
-    try {
-      const response = await axios.get(
-        `https://axelonepostfeature.onrender.com/api/messages/${conversationId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-
-        const messageresponse = response.data
-        setConversationInChat(messageresponse)
-        setId(conversationId)
-
-        console.log(messageresponse)
-        setHideUsers(false)
-        setShowMessage(true);
-        // console.log("Form submitted", response.data);
-      } else {
-        throw new Error("Getting messages in a converstaion failed");
-      }
-    } catch (error) {
-      console.error("Error fetching data", error);
-    }
-
-  }
-
-  const handleMessageChange = (e) => {
-    setValue(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (value.trim() !== "") {
-      try {
-        const response = await axios.post(
-          `https://axelonepostfeature.onrender.com/api/messages/send-message/${id}`,
-          {
-            message: value,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-  
-        if (response.status === 200) {
-          console.log("message sent", response.data)
-          setValue("");
-        setPrevMessages((prev) => [...prev, value]);
-      }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  console.log("the id", id)
-
   return (
     <div className="py-10 items-top grid gap-4 justify-between px-5 md:grid md:grid-cols-5">
+        <h1> Business messages  </h1>
       {/* so i want to map through the conversation array now and i am going to be rendering the members[1].name because this is a users page and users are supposed to be seeing the name of the people business they sent a connection request to */}
       <div className="md:col-span-3 md:order-2">
         {showMessageBox ? (
@@ -221,12 +108,18 @@ function Messages() {
                   hideTheListOnMobile();
                 }}
                 className="border-2 border-blue-500 rounded-lg cursor-pointer p-4 shadow-md hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300 ease-in-out" style={{ boxShadow: '0 14px 16px rgba(05, 0, 255, 0.1), 0 10px 15px rgba(255, 255, 255, 0.2), 0 20px 25px rgba(255, 255, 255, 0.1)' }}>
-                  {/* in the business message page it should be {item.members[0].name so the business owner can get the name of the person that sends the request} */}
-                <h1 className="text-black hover:text-white"> {item.members[1].name} </h1>
+                  {/* in the business message page it should be {item.members[1].name so the business owner can get the name of the person that sends the request} */}
+                <h1 className="text-black hover:text-white"> {item.members[0].name} </h1>
               </div>
-            </div>
-          ))}
-      </div> */}
+            );
+          })}
+        </div>
+      )}
+
+
+      
+
+      {/* conditional operator to show up the conversation box */}
     </div>
   );
 }
