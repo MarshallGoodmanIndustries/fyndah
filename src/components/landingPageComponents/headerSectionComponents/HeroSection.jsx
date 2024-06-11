@@ -29,7 +29,7 @@ function HeroSection() {
 
 
   const [businessCategories, setBusinessCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [searchQueryIsLoading, setSearchQueryIsLoading] = useState(false);
   const autocompleteApiKey = "17af202f70b44748976eff28573589db";
 
   // pagination
@@ -113,7 +113,7 @@ function HeroSection() {
     const data = {
       "searchTerms": [businessName, businessLocation, +businessCategory]
     };
-    setIsLoading(true);
+    setSearchQueryIsLoading(true);
     setSuggestions([]);
 
     try {
@@ -123,25 +123,29 @@ function HeroSection() {
           'Authorization': `Bearer ${authToken}`,
         }
       });
-      setIsLoading(false);
+      setSearchQueryIsLoading(false);
       if(response.status === 200)
         setBusinesses(response.data);
         setRevealSearchQuery(true);
         console.log(response);
     } catch (error) {
-      setIsLoading(false);
+      setSearchQueryIsLoading(false);
       console.log(error.message);
     }
   };
 
+  
+
+ 
+
   //hide search query div after 30 seconds of non interactivity
   useEffect(()=>{
-    if(revealSearchQuery){
+    if(revealSearchQuery && containsBusinesses == false){
       setTimeout(()=>{
         setRevealSearchQuery(false);
-      }, 30000)
+      }, 90000)
     }
-  }, [revealSearchQuery])
+  }, [revealSearchQuery, containsBusinesses])
  
  
  
@@ -204,24 +208,24 @@ function HeroSection() {
         </div>
       </form>
       <div className="w-fit mx-auto my-4">
-        {isLoading && <Loading />}
+        {searchQueryIsLoading && <Loading />}
       </div>
       <div className={classNames(revealSearchQuery ? "h-full" : "h-0 overflow-hidden" , "flex flex-col items-center gap-6 mt-4")}>
-        {!containsBusinesses && isLoading == false ? (
+        {!containsBusinesses && searchQueryIsLoading == false ? (
           <div className="bg-navyBlue bg-opacity-90 rounded-lg p-4">
             <p className="text-primary font-poppins text-sm md:text-base font-light text-center"><span className="text-accentDark">No businesses found.</span> Try tweaking your search terms and give it another go!</p>
           </div>
         ) : businessesForCurrentPage.map((profile) => (
           <SearchBusinessProfile 
             key={profile.id}
+            id={profile.id}
             businessProfileImg={businesslogo}
             businessName={profile.org_name}
             businessTitle={profile.org_bio}
-            businessLocation={profile.address}  
-            businessTime="8am-8pm"
+            businessLocation={profile.city}  
           />
       ))}
-        { totalPages > 0 && (
+        { totalPages > 3 && (
           <div className="flex items-center justify-between gap-4 w-full max-w-[300px] md:max-w-[80%] lg:max-w-[70%]">
               <button className='group disabled:cursor-not-allowed disabled:text-gray-400' onClick={() => setCurrentPage(prevPage => (prevPage > 1 ? prevPage - 1 : 1))} disabled={currentPage === 1}>
                 See less
