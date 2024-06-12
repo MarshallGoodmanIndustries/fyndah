@@ -116,7 +116,7 @@ function HistorySearchRequest() {
     return (
       <EmptyLeads
         data="To get access to search requests, fund your wallet."
-        // data="There are Currently no Available History for Search Request Related to your Business. When they are, you would see them here."
+        // data="There are Currently no Search Request Related to your Business. When they are, you would see them here."
         posts={po}
       />
     );

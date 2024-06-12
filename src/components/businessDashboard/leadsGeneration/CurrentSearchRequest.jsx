@@ -142,7 +142,7 @@ function CurrentSearchRequest() {
   if (!request?.length)
     return (
       <EmptyLeads
-        data="There are Currently no Available Search Request Related to your Business. When they are, you would see them here."
+        data="There are currently no search requests available for you. Fund your wallet to get access."
         posts={po}
       />
     );
