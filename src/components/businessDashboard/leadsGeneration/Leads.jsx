@@ -33,8 +33,8 @@ function Leads() {
           console.log(data.data);
           console.log(data);
 
-          if (data.status === "success") {
-            setEmpty("Search in our system was sucessful no leads yet");
+          if (data.status === "success" && !data.length) {
+            setEmpty("Search in our system was sucessful, no leads yet");
             console.log("Request was sucessful no leads yet");
           }
           setRequest(data.data);

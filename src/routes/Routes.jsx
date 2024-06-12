@@ -8,7 +8,7 @@ import {
   BusinessDashboardLayout,  BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
    Wallet
 } from '../components/businessDashboard/index';
-import Policies, {Tos, Privacy, Refund} from "../components/policy";
+import Policies, { Tos, Privacy, Refund } from "../components/policy";
 import { PageNotFound } from "../components/errorPages";
 
 import Leads from "../components/businessDashboard/leadsGeneration/Leads";
@@ -16,6 +16,7 @@ import CurrentSearchRequest from "../components/businessDashboard/leadsGeneratio
 import HistorySearchRequest from "../components/businessDashboard/leadsGeneration/HistorySearchRequest";
 import BidPage from "../components/businessDashboard/leadsGeneration/BidPage";
 import PotentialCustomerData from "../components/businessDashboard/leadsGeneration/PotentialCustomerData";
+// import CountryStateCitySelector from "../components/test/test";
 
 function Routes() {
   const router = createBrowserRouter([
@@ -49,7 +50,11 @@ function Routes() {
       element: <UserProfileSetup />,
       errorElement: <PageNotFound />
     },
-
+    // {
+    //   path: "/testing",
+    //   element: <CountryStateCitySelector />,
+    //   errorElement: <PageNotFound />
+    // },
     {
       path: '/dashboard',
       element: <AdminLayout />,
@@ -168,29 +173,29 @@ function Routes() {
       path: "/policies",
       element: <Policies />,
       children: [
-          {
-              path: "/policies/tos",
-              element: <Tos />,
-              errorElement: <PageNotFound />
-          },
-          {
-              path: "/policies/privacy",
-              element: <Privacy />,
-              errorElement: <PageNotFound />
-          },
-          {
-              path: "/policies/refund",
-              element: <Refund />,
-              errorElement: <PageNotFound />
-          },
-          {
-              path: "/policies/*",
-              element: <Tos />,
-              errorElement: <PageNotFound />
-          },
+        {
+          path: "/policies/tos",
+          element: <Tos />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: "/policies/privacy",
+          element: <Privacy />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: "/policies/refund",
+          element: <Refund />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: "/policies/*",
+          element: <Tos />,
+          errorElement: <PageNotFound />
+        },
       ],
       errorElement: <PageNotFound />
-  }
+    }
   ]);
 
   return (
