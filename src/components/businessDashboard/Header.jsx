@@ -11,7 +11,7 @@ const Header = ({handleToggle, toggle}) => {
 
   const user = userData?.username || ''; // Use optional chaining and provide a default empty string
   const userInitials = user ? user.slice(0, 1) : ''; // Handle empty user gracefully
-  const notificationNumber = 1;
+  const notificationNumber = 0;
 
 
   

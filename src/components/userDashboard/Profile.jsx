@@ -131,7 +131,7 @@ function Profile() {
           firstName: userData.firstname || "",
           lastName: userData.lastname || "",
           location: userData.address || "",
-          businessRegNumber: "", // Add the respective data field if available in the response
+          businessRegNumber: "", 
         });
 
         // console.log(profileResponse.data);
@@ -143,42 +143,6 @@ function Profile() {
     fetchProfileData();
   }, [authToken]);
 
-  // const switchAccount = async () => {
-  //   try {
-  //     const 
-
-  //     const response = await axios.post(
-  //       "https://api.fyndah.com/api/v1/users/organizations/1/switch",
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${authToken}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       Swal.fire({
-  //         icon: "success",
-  //         title: `${response.data.status}........`,
-  //         text: `${response.data.message}`,
-  //         timer: 2000,
-  //         timerProgressBar: true,
-  //       });
-  //       console.log("Form submitted", response.data);
-  //     } else {
-  //       setErrorMessage(response.data.message)
-  //       throw new Error("Profile Update failed");
-  //     }
-  //   } catch (error) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Oops...",
-  //       text: `${errorMessage}`,
-  //       footer: `<a href="#">Could not update profile. Please try again later. ${error.message}</a>`,
-  //     });
-  //     console.error(error);
-  //   }
-  // }
 
   const handleSwitchAccount = () => {
     navigate("/dashboard/mybusiness")

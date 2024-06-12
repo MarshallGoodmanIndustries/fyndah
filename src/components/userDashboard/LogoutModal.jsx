@@ -65,9 +65,8 @@ function LogoutModalUser({ isOpen, onClose }) {
 
     if (!isOpen) return null;
     return (
-        <div>
+        <div className='absolute top-0 left-0'>
             <div className="relative">
-
                 <div className="fixed animate-zoomIn inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-auto">
                         <div className="flex justify-center mb-4">
@@ -84,7 +83,6 @@ function LogoutModalUser({ isOpen, onClose }) {
                         </div>
                     </div>
                 </div>
-
             </div>
 
 
