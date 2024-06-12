@@ -1,7 +1,7 @@
 import { businesslogo } from "../assets/images";
 
 
-const landingPageNavMenu = [
+const landingPageNavMenuOffline = [
     {
         title: "Home",
         url: "/",
@@ -9,6 +9,15 @@ const landingPageNavMenu = [
     {
         title: "Login",
         url: "/login",
+    },
+];
+const landingPageNavMenuOnline = [
+    {
+        title: "Home",
+        url: "/",
+    },
+    {
+        title: "Logout",
     },
 ];
 
@@ -204,7 +213,8 @@ const sideBarBotttomLinks = [
 
 
 export {
-    landingPageNavMenu, 
+    landingPageNavMenuOffline,
+    landingPageNavMenuOnline, 
     landingPageFooterMenu, 
     sideBarLinks, 
     sideBarBotttomLinks,  

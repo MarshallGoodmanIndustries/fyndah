@@ -25,10 +25,10 @@ function WhyChooseUs() {
 
     ];
   return (
-    <section className="bg-primary flex flex-col items-center md:items-start gap-16 py-24 px-4 sm:px-5 md:px-6 lg:px-16">
-        <div className="w-fit mx-auto">
-            <h2 className="text-black font-poppins text-2xl md:text-3xl font-bold uppercase">Why Choose Us?</h2>
-            <hr className="w-20 md:w-24 h-[2px] md:mx-auto md:mt-1 bg-orange-500 rounded-lg" />
+    <section className="bg-primary flex flex-col items-center  gap-16 py-24 px-4 sm:px-5 md:px-6 lg:px-16">
+        <div className="text-center flex flex-col gap-4 items-center">
+            <h5 className="font-poppins text-xs md:text-sm font-medium text-accent bg-accent bg-opacity-15 w-fit rounded-2xl p-2">Fyndah</h5>
+            <h3 className="font-poppins text-xl md:text-2xl lg:text-3xl font-medium">Why choose us</h3>
         </div>
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 justify-center gap-10 lg:gap-16 ">
             {reasons.map(({index,title,description})=>(
