@@ -5,14 +5,15 @@ import {
   MyBusiness,
 } from "../components/pages";
 import {
-  BusinessDashboardLayout, Leads, BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
+  BusinessDashboardLayout,  BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
    Wallet
 } from '../components/businessDashboard/index';
 import Policies, {Tos, Privacy, Refund} from "../components/policy";
 import { PageNotFound } from "../components/errorPages";
 
+import Leads from "../components/businessDashboard/leadsGeneration/Leads";
 import CurrentSearchRequest from "../components/businessDashboard/leadsGeneration/CurrentSearchRequest";
-import Payment from "../components/businessDashboard/leadsGeneration/Payment";
+import HistorySearchRequest from "../components/businessDashboard/leadsGeneration/HistorySearchRequest";
 import BidPage from "../components/businessDashboard/leadsGeneration/BidPage";
 import PotentialCustomerData from "../components/businessDashboard/leadsGeneration/PotentialCustomerData";
 
@@ -107,8 +108,8 @@ function Routes() {
               errorElement: <PageNotFound />
             },
             {
-              path: 'payment',
-              element: <Payment />,
+              path: 'search-request-history',
+              element: <HistorySearchRequest />,
               errorElement: <PageNotFound />
             },
             {
