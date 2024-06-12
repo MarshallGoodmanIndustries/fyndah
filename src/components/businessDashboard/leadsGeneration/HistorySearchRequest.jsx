@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import SearchRequestDescription from "./SearchRequestDescription";
-import { AuthContext } from "../context/AuthContext";
-
+import SearchRequestDescriptionHistory from "./SearchRequestDescriptionHistory";
+import { AuthContext } from "../../context/AuthContext";
+import EmptyLeads from "./EmptyLeads";
 import SpinnerFullPage from "./SpinnerFullPage";
+import { useParams } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 // const people = [
 //   {
@@ -59,10 +61,25 @@ import SpinnerFullPage from "./SpinnerFullPage";
 //   },
 // ];
 
+// const datar = [
+//   {
+//     id: 4,
+//     search_term: "Slovenia",
+//     search_filters: "country,state,org_name",
+//   },
+//   {
+//     id: 3,
+//     search_term: "North America",
+//     search_filters: "country,state,org_name",
+//   },
+// ];
+
 function HistorySearchRequest() {
   const [open, setOpen] = useState(false);
   const [request, setRequest] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [dal, setDal] = useState({});
+  const { id, name } = useParams();
 
   const { authToken } = useContext(AuthContext);
 
@@ -80,11 +97,12 @@ function HistorySearchRequest() {
             },
           });
           const data = await res.json();
-          setRequest([data]);
+          console.log(data);
+          setRequest(data);
           console.log(request);
           setIsLoading(false);
         } catch {
-          console.log("Breadddddyyyy");
+          console.log("An error occured");
         }
       }
       retrieveSearchRequest();
@@ -92,85 +110,174 @@ function HistorySearchRequest() {
     [authToken]
   );
 
+  const po = `/businessDashboard/${id}/${name}/posts`;
+
+  if (!request?.length)
+    return (
+      <EmptyLeads
+        data="There are Currently no Available History for Search Request Related to your Business. When they are, you would see them here."
+        posts={po}
+      />
+    );
+
+  // if (!request?.length) return <EmptyLeads posts={po} />;
+  // return (
+  //   <div className="flex flex-col items-center justify-center mt-5">
+  //     <h1 className="mb-10 text-xl font-black">
+  //       Current Available Search Request Related to your Business
+  //     </h1>
+  //     {/* Modal to show the Search request description */}
+  //     {/* {open && (
+  //       <SearchRequestDescription
+  //         settOpen={setOpen}
+  //         infoOfSearch="Send search datta to the modal"
+  //         requestValue={request.id}
+  //       />
+  //     )} */}
+
+  //     {/* {isLoading ? (
+  //       <SpinnerFullPage />
+  //     ) : ( */}
+  //       <ul role="list" className="divide-y divide-gray-100">
+  //         {/* {people.map((person) => ( */}
+  //         {datar.map((request) => (
+  //           // open && (
+  //           //   <SearchRequestDescription
+  //           //     settOpen={setOpen}
+  //           //     infoOfSearch="Send search datta to the modal"
+  //           //     requestValue={request.id}
+  //           //   />
+  //           // )
+
+  //           <li key={request.id} className="flex justify-between gap-x-6 py-5">
+  //             {open && (
+  //               <SearchRequestDescriptionHistory
+  //                 settOpen={setOpen}
+  //                 infoOfSearch="Send search datta to the modal"
+  //                 requestData={request}
+  //                 key={request.id}
+  //               />
+  //             )}
+  //             <div className="flex min-w-0 gap-x-4">
+
+  //               <div key={request.id} className="min-w-0 flex-auto">
+  //                 <p className="blur text-sm font-semibold leading-6 text-gray-900">
+  //                   {request.search_term}
+  //                   {/* Kusner Tstero */}
+  //                 </p>
+
+  //               </div>
+  //             </div>
+  //             <div
+  //               key={request.id}
+  //               className="hidden shrink-0 sm:flex sm:flex-col sm:items-end"
+  //             >
+  //               <p className="text-sm leading-6 text-gray-900">person.role</p>
+  //               {/* {person.lastSeen ? ( */}
+  //               <>
+  //                 <p className="mt-1 text-xs leading-5 text-gray-500">
+  //                   Time of search:{" "}
+  //                   {/* <time dateTime={person.lastSeenDateTime}>
+  //                       {person.lastSeen}
+  //                     </time> */}
+  //                 </p>
+  //                 {/* <p className="mt-1 text-xs leading-5 text-gray-500">
+  //                     Time left till search bid expire{" "}
+  //                     <time dateTime={person.lastSeenDateTime}>
+  //                       {person.lastSeen}
+  //                     </time>
+  //                   </p> */}
+  //               </>
+  //               {/* // ) : ( */}
+  //               <div
+  //                 key={request.id}
+  //                 className="mt-1 flex items-center gap-x-1.5"
+  //               >
+  //                 <div className="flex-none rounded-full bg-emerald-500/20 p-1">
+  //                   <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+  //                 </div>
+  //                 <p className="text-xs leading-5 text-gray-500">Online</p>
+  //               </div>
+  //               {/* // )} */}
+  //             </div>
+  //             {/* <button onClick={openModal(true)} className="bg-indigo-500 rounded-md px-1 py-0">View Description</button> */}
+  //             <button
+  //               onClick={() => setOpen(true)}
+  //               className="bg-indigo-500 rounded-full px-2 py-0"
+  //               key={request.id}
+  //             >
+  //               View Description
+  //             </button>
+  //           </li>
+  //         ))}
+  //       </ul>
+  //     {/* )} */}
+  //   </div>
+  // );
+
   return (
-    <div className="flex flex-col items-center justify-center mt-5">
-      <h1 className="mb-10 text-xl font-black">
-      The History of all Search Request ever searched for by users that involves this business would be shown here
-      </h1>
-      {/* Modal to show the Search request description */}
+    <>
       {open && (
-        <SearchRequestDescription
+        <SearchRequestDescriptionHistory
           settOpen={setOpen}
           infoOfSearch="Send search datta to the modal"
-          requestValue={request}
+          requestData={request}
+          dal={dal}
+          key={request.id}
         />
       )}
-
-      {isLoading ? (
-        <SpinnerFullPage />
-      ) : (
-        <ul role="list" className="divide-y divide-gray-100">
-          {/* {people.map((person) => ( */}
-          {request.map((person) => (
-            <li
-              key={person.email}
-              className="flex justify-between gap-x-6 py-5"
-            >
-              <div className="flex min-w-0 gap-x-4">
-                <img
-                  className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                  src={person.imageUrl}
-                  alt=""
-                />
-                <div className="min-w-0 flex-auto">
-                  <p className="text-sm font-semibold leading-6 text-gray-900">
-                    {person.name}
-                  </p>
-                  <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                    {person.email}
-                  </p>
+      <h1 className="flex flex-col items-center justify-center mt-5 mb-10 text-4xl font-black">
+       Search Request History Related to your Business
+      </h1>
+      <ul
+        role="list"
+        className="flex flex-col items-center justify-center mt-5 divide-y divide-gray-100"
+      >
+        {request?.map((person) => (
+          <li key={person.id} className="flex justify-between gap-x-6 py-5">
+            <div className="flex min-w-0 gap-x-4">
+              <div className="min-w-0 flex-auto">
+                <p className="text-sm font-semibold leading-6 text-gray-900">
+                  {person.search_term}
+                </p>
+                <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                  {person.search_filters}
+                </p>
+              </div>
+            </div>
+            <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+              <p className="text-sm leading-6 text-gray-900">{person.role}</p>
+              {/* {person.lastSeen ? (
+              <p className="mt-1 text-xs leading-5 text-gray-500">
+                Time of Search <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
+              </p>
+            ) : (
+              <div className="mt-1 flex items-center gap-x-1.5">
+                <div className="flex-none rounded-full bg-emerald-500/20 p-1">
+                  <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                 </div>
+                <p className="text-xs leading-5 text-gray-500">Online</p>
               </div>
-              <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                <p className="text-sm leading-6 text-gray-900">{person.role}</p>
-                {person.lastSeen ? (
-                  <>
-                    <p className="mt-1 text-xs leading-5 text-gray-500">
-                      Time of search:{" "}
-                      <time dateTime={person.lastSeenDateTime}>
-                        {person.lastSeen}
-                      </time>
-                    </p>
-                    <p className="mt-1 text-xs leading-5 text-gray-500">
-                      Time left till search bid expire{" "}
-                      <time dateTime={person.lastSeenDateTime}>
-                        {person.lastSeen}
-                      </time>
-                    </p>
-                  </>
-                ) : (
-                  <div className="mt-1 flex items-center gap-x-1.5">
-                    <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                      <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                    </div>
-                    <p className="text-xs leading-5 text-gray-500">Online</p>
-                  </div>
-                )}
-              </div>
-              {/* <button onClick={openModal(true)} className="bg-indigo-500 rounded-md px-1 py-0">View Description</button> */}
+            )} */}
               <button
-                onClick={() => setOpen(true)}
-                className="bg-indigo-500 rounded-md px-1 py-0"
+                onClick={() => {
+                  setOpen(true);
+                  setDal({
+                    term: person.search_term,
+                    filter: person.search_filters,
+                  });
+                }}
+                className="bg-indigo-500 rounded-full px-2 py-0"
+                key={person.id}
               >
-                View Description of Request
+                View Search Description in depth
               </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+            </div>
+          </li>
+        ))}
+      </ul>{" "}
+    </>
   );
 }
 
-
-export default HistorySearchRequest
+export default HistorySearchRequest;
