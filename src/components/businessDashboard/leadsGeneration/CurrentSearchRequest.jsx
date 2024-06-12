@@ -68,7 +68,7 @@ function CurrentSearchRequest() {
   const [show, setShow] = useState("");
   const [request, setRequest] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { id } = useParams();
+  const { id, name } = useParams();
 
   const { authToken } = useContext(AuthContext);
 

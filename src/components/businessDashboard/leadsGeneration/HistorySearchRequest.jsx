@@ -82,7 +82,7 @@ function HistorySearchRequest() {
   const { id, name } = useParams();
 
   const { authToken } = useContext(AuthContext);
-
+console.log(id, name)
   // const navigate = useNavigate();
 
   const BASE_URL = "https://api.fyndah.com/api/v1/search/requests/history";
