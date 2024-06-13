@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
-
+// import { HashRouter } from "react-router-dom";
 function Messages() {
   // this is the initial conversation that would be showing for b users page
   const myConversation = [
