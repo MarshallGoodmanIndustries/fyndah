@@ -1,6 +1,6 @@
 import BusinessDashboardLayout from "./BusinessDashboardLayout"
 import Dashboard  from "./Dashboard"
-import Leads from "./Leads"
+import Leads from "./leadsGeneration/Leads"
 import BusinessLogOut from "./BusinessLogOut"
 import BusinessMessages from "./BusinessMessages"
 import Posts from "./Posts"

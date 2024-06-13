@@ -81,7 +81,7 @@ function Login() {
           // console.log("API Response:", response.data);
           const token = response.data.token.original.access_token;
           const userData = response.data.data;  // Directly access the data object
-          // console.log("User Data: ", userData);
+          console.log("User Data: ", userData);
           // console.log("User Token: ", token);
   
           if (userData) {

@@ -4,12 +4,6 @@ export default function SearchRequestDescriptionHistory({
   settOpen,
   dal,
 }) {
-
-  const d = new Date(dal.createdAt);
-  
-  const date = d.toDateString() + ' at ' + d.getUTCHours() + ':' + d.getUTCMinutes();
-
-
   return (
     <>
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -40,16 +34,18 @@ export default function SearchRequestDescriptionHistory({
                     <span className="font-black capitalize">  {dal.filter}</span>
                   }
                 </p>
-                <p>
-                  Time when this Lead was obtained request: {
-                    <span className="font-black capitalize">  {date}</span>
-                  }
-                </p>
 
               </p>
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+              {/* <button
+                className=" hover:bg-slate-500text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                type="button"
+                onClick={() => settOpen(false)}
+              >
+                Close
+              </button> */}
               <button
                 className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"

@@ -62,7 +62,7 @@ const SearchBusinessProfile = ({id, businessProfileImg, businessName, businessTi
             </div>
         </div>
         <div className=" flex flex-col items-center md:items-end gap-2">
-            <button onClick={handleCreateConversation} className={classNames( IsLoading && "animate-pulse", "bg-accent py-1 px-2 rounded-lg text-primary font-poppins font-light text-sm md:text-base")}>{IsLoading ? "Connecting.." : "Connect"}</button>
+            <button disabled onClick={handleCreateConversation} className={classNames( IsLoading && "animate-pulse", "bg-accent py-1 px-2 rounded-lg text-primary font-poppins font-light text-sm md:text-base")}>{IsLoading ? "Connecting.." : "Connect"}</button>
             {/* <div className="flex items-center gap-2">
                 <RiTimeLine className="w-4 h-4" />
                 <p className="font-roboto text-gray-600 font-normal text-sm md:text-base">{businessTime}</p>

@@ -5,14 +5,15 @@ import {
   MyBusiness,
 } from "../components/pages";
 import {
-  BusinessDashboardLayout, Leads, BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
-  Wallet
+  BusinessDashboardLayout,  BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
+   Wallet
 } from '../components/businessDashboard/index';
 import Policies, { Tos, Privacy, Refund } from "../components/policy";
 import { PageNotFound } from "../components/errorPages";
 
+import Leads from "../components/businessDashboard/leadsGeneration/Leads";
 import CurrentSearchRequest from "../components/businessDashboard/leadsGeneration/CurrentSearchRequest";
-import Payment from "../components/businessDashboard/leadsGeneration/Payment";
+import HistorySearchRequest from "../components/businessDashboard/leadsGeneration/HistorySearchRequest";
 import BidPage from "../components/businessDashboard/leadsGeneration/BidPage";
 import PotentialCustomerData from "../components/businessDashboard/leadsGeneration/PotentialCustomerData";
 // import CountryStateCitySelector from "../components/test/test";
@@ -104,35 +105,35 @@ function Routes() {
           element: <Posts />,
           errorElement: <PageNotFound />
         },
-        // //////////////////////////////////////////////////////////
-
-        {
-          path: 'leads',
-          element: <Leads />,
-          errorElement: <PageNotFound />
-        },
-        {
-          path: 'payment',
-          element: <Payment />,
-          errorElement: <PageNotFound />
-        },
-        {
-          path: 'potential-customer-data',
-          element: <PotentialCustomerData
-          />,
-          errorElement: <PageNotFound />
-        },
-        {
-          path: 'search-request',
-          element: <CurrentSearchRequest />,
-          errorElement: <PageNotFound />
-        },
-        {
-          path: 'bid-page',
-          element: <BidPage />,
-          errorElement: <PageNotFound />
-        },
-        ////////////////////////////////////////////////////////
+            // //////////////////////////////////////////////////////////
+        
+            {
+              path: 'leads',
+              element: <Leads />,
+              errorElement: <PageNotFound />
+            },
+            {
+              path: 'search-request-history',
+              element: <HistorySearchRequest />,
+              errorElement: <PageNotFound />
+            },
+            {
+              path: 'potential-customer-data',
+              element: <PotentialCustomerData
+               />,
+              errorElement: <PageNotFound />
+            },
+            {
+              path: 'search-request',
+              element: <CurrentSearchRequest />,
+              errorElement: <PageNotFound />
+            },
+            {
+              path: 'bid-page',
+              element: <BidPage />,
+              errorElement: <PageNotFound />
+            },
+            ////////////////////////////////////////////////////////
         {
           path: 'businessmessages',
           element: <BusinessMessages />,
