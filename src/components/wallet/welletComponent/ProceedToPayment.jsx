@@ -1,0 +1,102 @@
+
+
+
+import { GiGlobe } from 'react-icons/gi';
+import Swal from 'sweetalert2';
+
+function ProceedToPayment({ isOpen, onClose, paystack }) {
+
+
+
+    const handleRedirectToPaystack = () => {
+        try {
+            if (paystack) {
+                window.open(paystack, '_blank');
+            }
+        } catch (error) {
+            console.log(error.message)
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Could not initiate connection",
+                footer: `<a href="#">Please try again later. ${error.response?.data?.message || error.message
+                    }</a>`,
+            });
+        }
+    }
+
+    // const handleLogOut = async () => {
+
+    //     try {
+    //         setIsLoading(true)
+    //         const response = await axios.post(
+    //             "https://api.fyndah.com/api/v1/users/organizations/logout",
+    //             {},
+    //             {
+    //                 headers: {
+    //                     Authorization: `Bearer ${authToken}`,
+    //                     Accept: "application/json",
+    //                 },
+    //             }
+    //         );
+
+    //         if (response.data.message == "Successfully logged out of every business") {
+    //             console.log("Logged out successfully");
+
+    //             Swal.fire({
+    //                 icon: "success",
+    //                 title: "Successful...",
+    //                 text: "You have successfully logged out of your business account",
+    //                 timer: 2000,
+    //                 timerProgressBar: true,
+    //             });
+    //             setIsLoading(false)
+    //             navigate("/dashboard/mybusiness"); // Redirect to login page
+    //         }
+    //     } catch (error) {
+    //         Swal.fire({
+    //             icon: "error",
+    //             title: "Oops...",
+    //             text: "Logout Failed!",
+    //             footer: `<a href="#">Could not log out. Please try again later. ${error.response?.data?.message || error.message
+    //                 }</a>`,
+    //         });
+    //         console.error("Logout error", error);
+    //         setIsLoading(false);
+    //     } finally {
+    //         setIsLoading(false)
+    //     }
+    // };
+
+
+    if (!isOpen) return null;
+    return (
+        <div>
+            <div className="relative">
+
+                <div className="fixed animate-zoomIn inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-auto">
+                        <div className="flex justify-center mb-4">
+                            <GiGlobe size={50} color='orange' />
+                        </div>
+                        <div className="text-center mb-6">
+                            <p className="text-lg font-semibold text-black">Please know you will be ridirected to another page, do you want to still continue with the payment?</p>
+                        </div>
+                        <div className="flex justify-center space-x-4">
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={() => handleRedirectToPaystack()}>
+                                Yes
+                            </button>
+                            <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={onClose}>No</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    )
+}
+
+export default ProceedToPayment
