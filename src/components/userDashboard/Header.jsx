@@ -31,7 +31,7 @@ const Header = ({ handleToggle, toggle }) => {
       <div className='flex items-center justify-end md:gap-[1.8rem] gap-[1rem] lg:col-span-3 xl:col-span-2 col-span-2'>
         <span className='relative cursor-pointer'>
           <FaBell className=' size-[18px] md:size-[22px]' />
-          <p className='absolute top-[-5px] left-2 text-white rounded-full bg-red-500 px-1 text-[11px]'>
+          <p className='absolute top-[-5px] left-2 text-white rounded-full bg-navyBlue px-1 text-[11px]'>
             {notificationNumber}
           </p>
         </span>

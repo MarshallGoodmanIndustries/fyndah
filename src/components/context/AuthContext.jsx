@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
 
 export const AuthContext = createContext();
 
@@ -8,7 +9,7 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')) : null
   );
   const [businessId, setBusinessId] = useState(sessionStorage.getItem('businessId') || null);
-  // const navigate = useNavigate();
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
     if (authToken) {
@@ -34,12 +35,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, [businessId]);
 
+  useEffect(() => {
+    const newSocket = io('http://localhost:5173', { query: { authToken } });
+    setSocket(newSocket);
 
-
-
+    return () => newSocket.close();
+  }, [authToken]);
 
   return (
-    <AuthContext.Provider value={{ authToken, setAuthToken, userData, setUserData, businessId, setBusinessId}}>
+    <AuthContext.Provider value={{ authToken, setAuthToken, userData, setUserData, businessId, setBusinessId, socket }}>
       {children}
     </AuthContext.Provider>
   );

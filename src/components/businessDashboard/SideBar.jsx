@@ -88,7 +88,7 @@ const SideBar = ({ handleToggle }) => {
         </Link>
 
         {/* business messages */}
-        {/* <Link to="businessmessages">
+        <Link to="businessmessages">
           <div
             onClick={() => {
               handleToggle, handleItemClick(3);
@@ -101,7 +101,7 @@ const SideBar = ({ handleToggle }) => {
             </span>
             <h2 className="text-[1.1rem] mt-0 font-normal">Messages</h2>
           </div>
-        </Link> */}
+        </Link>
 
         {/* Business Search Request */}
 
@@ -164,7 +164,7 @@ const SideBar = ({ handleToggle }) => {
           </div>
         </Link>
 
-        <div className="h-[9rem] lg:h-[14rem]"></div>
+        <div className="h-[9rem] xl:h-[14rem]"></div>
 
         {/* logout */}
         <button
