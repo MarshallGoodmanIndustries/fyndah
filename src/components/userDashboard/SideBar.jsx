@@ -61,7 +61,7 @@ const SideBar = ({ handleToggle }) => {
       </Link> */}
 
       {/* messages */}
-      <Link to='messages'>
+      {/* <Link to='messages'>
         <div onClick={() => {
           handleToggle,
             handleItemClick(3)
@@ -72,7 +72,7 @@ const SideBar = ({ handleToggle }) => {
           </span>
           <h2 className='text-[1.1rem] mt-0 font-normal'>Messages</h2>
         </div>
-      </Link>
+      </Link> */}
 
       {/* createbuisness */}
       <Link to='createbuisness'>

@@ -185,7 +185,7 @@ const BusinessProfileSetup = () => {
           icon: "error",
           title: "Oops...",
           text: "Business profile setup failed!",
-          footer: `<a href="#">Could not set up your business profile. Please try again later. ${error.response?.data.message}</a>`,
+          footer: `<a href="#">Could not set up your business profile. ${error.response?.data.message}. Please try again.</a>`,
         });
         console.error("Error response:", error.response?.data); // Log the full error response
       } finally {

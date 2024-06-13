@@ -94,15 +94,15 @@ const FeaturedPost = ({postId, organizationId, profileImg, username, timePosted,
         }
     }
 
-    // const handleMessage = ()=> {
-    //     if(!authToken){
-    //         //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-    //         sessionStorage.setItem("lastRoute", location.pathname)
-    //         navigate('/login');
-    //     }else{
-    //         setConfirmationModal(true);
-    //     }
-    // }
+    const handleMessage = ()=> {
+        if(!authToken){
+            //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+            sessionStorage.setItem("lastRoute", location.pathname)
+            navigate('/login');
+        }else{
+            setConfirmationModal(true);
+        }
+    }
     useEffect(() => {
         setTimeAgo(<TimeAgo isoString={timePosted} />);
     },[timePosted])
@@ -148,9 +148,9 @@ const FeaturedPost = ({postId, organizationId, profileImg, username, timePosted,
                         {commentsData.length}
                     </div>
 
-                    <div onClick={handleMessage} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
+                    {/* <div onClick={handleMessage} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
                         <BiSolidMessageDetail className="w-5 h-5 text-gray-600" />
-                    </div>
+                    </div> */}
 
                     {confirmationModal && (<ConfirmationModal setConfirmationModal={setConfirmationModal} org_id={organizationId} />)}
                 </div>
