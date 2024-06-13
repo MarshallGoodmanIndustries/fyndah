@@ -165,7 +165,7 @@ function HeroSection() {
                 onChange={(e)=> setBusinessName(e.target.value)}
                 type="text" 
                 className="bg-transparent outline-none w-full font-roboto font-light text-textDark placeholder:font-poppins placeholder:text-base placeholder:font-light" 
-                placeholder="Service name" 
+                placeholder="Product/services" 
                 name="business_name" 
                 required
               />
@@ -178,7 +178,8 @@ function HeroSection() {
                 type="text" 
                 className="bg-transparent outline-none w-full font-roboto font-light text-textDark placeholder:font-poppins placeholder:text-base placeholder:font-light" 
                 placeholder="Country, state/city" 
-                name="location" 
+                name="location"
+                required 
                 
               />
               <ul className="absolute left-0 bottom-0 flex flex-col gap-1 w-full border transform translate-y-[105%] bg-inherit">

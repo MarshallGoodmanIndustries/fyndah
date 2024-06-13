@@ -26,7 +26,6 @@ const FeaturedPosts = () => {
       try {
         const response = await axios.get(url);
         setPosts(response.data.data.posts);
-        console.log("posts: ", response.data.data.posts);
       } catch (error) {
         console.log(error.message);
       }
@@ -87,7 +86,7 @@ const FeaturedPosts = () => {
             />
         )))}
       </div>
-      { totalPages > 0 && (
+      { totalPages > 9 && (
         <div className="flex items-center justify-between gap-4 w-full max-w-[300px] md:max-w-[80%] lg:max-w-[70%] mx-auto">
             <button className='group disabled:cursor-not-allowed disabled:text-gray-400' onClick={() => setCurrentPage(prevPage => (prevPage > 1 ? prevPage - 1 : 1))} disabled={currentPage === 1}>
               See less
