@@ -30,7 +30,7 @@ const SideBar = ({ handleToggle }) => {
 
   const isItemActive = (index) => index === active;
   return (
-    <div className='px-[1rem] text-white font-inter py-[1rem]'>
+    <div className='px-[1rem] flex flex-col h-full text-white font-inter py-[1rem]'>
 
       {/* PROFILE */}
       <Link to='profile'>
@@ -106,7 +106,7 @@ const SideBar = ({ handleToggle }) => {
         </div>
       </Link>
 
-      <div className='h-[15rem] lg:h-[20rem]' ></div>
+      <div className='flex-1'></div>
 
       {/* logout */}
       <Link to='/'>
