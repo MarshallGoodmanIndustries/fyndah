@@ -18,7 +18,6 @@ const FeaturedListings = () => {
           Authorization: `Bearer ${authToken}`
         }
       }).then(response => {
-        console.log("business: ", response.data.data);
         setFeaturedBusinesses(response.data.data);
       }).catch(error => {
         console.log(error.message);
