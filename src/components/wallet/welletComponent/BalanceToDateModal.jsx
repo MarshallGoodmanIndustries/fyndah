@@ -57,7 +57,7 @@ const BalanceToDateModal = ({ isOpenModal, handleCloseModal, isLoading, data, st
                                     ) : (
 
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="text-xs">$</span> {data}
+                                            <span className="text-xs">NGN</span> {data}
                                         </td>
                                     )}
                                     <td className="px-6 py-4 whitespace-nowrap">
