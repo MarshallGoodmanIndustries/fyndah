@@ -192,7 +192,7 @@ function WalletIndex() {
                             </div>
                         ) : (
                             <div>
-                                <p className="text-2xl font-bold"><span className="text-sm md:text-base text-center lg:text-lg">$</span> {transactions}</p>
+                                <p className="text-2xl font-bold"><span className="text-sm md:text-base text-center lg:text-lg">NGN</span> {transactions}</p>
 
                             </div>
                         )}
