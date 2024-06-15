@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../context/AuthContext"
 import { useParams } from "react-router-dom"
 import Swal from "sweetalert2"
+import { TbCurrencyNaira } from "react-icons/tb"
 // import { FaDownload } from "react-icons/fa"
 
 function AllTransaction() {
@@ -56,7 +57,7 @@ function AllTransaction() {
                                 <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black-500 uppercase tracking-wider">
                                     Payment Type
                                 </th>
-                                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 bg-gray-50 text-left flex justify-center text-xs font-medium text-black-500 uppercase tracking-wider">
                                     Amount
                                 </th>
                                 <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-black-500 uppercase tracking-wider">
@@ -73,7 +74,12 @@ function AllTransaction() {
                                     <tr key={transaction.id || 'default-key'}>
                                         <td className="px-6 py-4 whitespace-nowrap">{transaction.uuid || 'N/A'}</td>
                                         <td className="px-6 py-4 whitespace-nowrap">{transaction.type || 'Unknown Type'}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap"><span className="text-xs">NGN</span> {transaction.amount || '0'}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <p className="flex justify-center">
+                                                <TbCurrencyNaira className="mr-1" size={22} />
+                                                {transaction.amount || '0'}
+                                            </p>
+                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap">{transaction.created_at || 'Not Available'}</td>
                                         {/* <td className="px-6 py-4 whitespace-nowrap">{<FaDownload /> || 'Not Available'}</td> */}
                                     </tr>
