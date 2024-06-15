@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ImSpinner9 } from "react-icons/im";
 
-function Modal({ addAmountWallet, setAddAmountWallet, isOpen, onClose, onRedirect, loading, proceed, }) {
+function Modal({ addAmountWallet, setAddAmountWallet, isOpen, onClose, onRedirect, loading, }) {
 
     const [error, setError] = useState(true)
 
@@ -12,9 +12,9 @@ function Modal({ addAmountWallet, setAddAmountWallet, isOpen, onClose, onRedirec
         e.preventDefault();
         if (addAmountWallet) {
             onRedirect();
-            setTimeout(() => {
-                proceed();
-            }, 5000);
+            // setTimeout(() => {
+            //     proceed();
+            // }, 5000);
             // console.log(addAmountWallet)
             setError(true)
         } else {

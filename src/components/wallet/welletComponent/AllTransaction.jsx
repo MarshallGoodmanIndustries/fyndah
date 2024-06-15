@@ -73,7 +73,7 @@ function AllTransaction() {
                                     <tr key={transaction.id || 'default-key'}>
                                         <td className="px-6 py-4 whitespace-nowrap">{transaction.uuid || 'N/A'}</td>
                                         <td className="px-6 py-4 whitespace-nowrap">{transaction.type || 'Unknown Type'}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap"><span className="text-xs">$</span> {transaction.amount || '0'}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap"><span className="text-xs">NGN</span> {transaction.amount || '0'}</td>
                                         <td className="px-6 py-4 whitespace-nowrap">{transaction.created_at || 'Not Available'}</td>
                                         {/* <td className="px-6 py-4 whitespace-nowrap">{<FaDownload /> || 'Not Available'}</td> */}
                                     </tr>

@@ -25,49 +25,6 @@ function ProceedToPayment({ isOpen, onClose, paystack }) {
         }
     }
 
-    // const handleLogOut = async () => {
-
-    //     try {
-    //         setIsLoading(true)
-    //         const response = await axios.post(
-    //             "https://api.fyndah.com/api/v1/users/organizations/logout",
-    //             {},
-    //             {
-    //                 headers: {
-    //                     Authorization: `Bearer ${authToken}`,
-    //                     Accept: "application/json",
-    //                 },
-    //             }
-    //         );
-
-    //         if (response.data.message == "Successfully logged out of every business") {
-    //             console.log("Logged out successfully");
-
-    //             Swal.fire({
-    //                 icon: "success",
-    //                 title: "Successful...",
-    //                 text: "You have successfully logged out of your business account",
-    //                 timer: 2000,
-    //                 timerProgressBar: true,
-    //             });
-    //             setIsLoading(false)
-    //             navigate("/dashboard/mybusiness"); // Redirect to login page
-    //         }
-    //     } catch (error) {
-    //         Swal.fire({
-    //             icon: "error",
-    //             title: "Oops...",
-    //             text: "Logout Failed!",
-    //             footer: `<a href="#">Could not log out. Please try again later. ${error.response?.data?.message || error.message
-    //                 }</a>`,
-    //         });
-    //         console.error("Logout error", error);
-    //         setIsLoading(false);
-    //     } finally {
-    //         setIsLoading(false)
-    //     }
-    // };
-
 
     if (!isOpen) return null;
     return (

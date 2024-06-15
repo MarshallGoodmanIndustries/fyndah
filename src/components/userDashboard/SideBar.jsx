@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { FaUserLarge } from "react-icons/fa6";
 // import { MdAddBusiness } from "react-icons/md";
-import { AiFillMessage } from "react-icons/ai";
-import { BiSolidBusiness } from "react-icons/bi";
+// import { AiFillMessage } from "react-icons/ai";
+// import { BiSolidBusiness } from "react-icons/bi";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { TbBusinessplan } from "react-icons/tb";
 import { FaHome } from 'react-icons/fa';
@@ -75,7 +75,7 @@ const SideBar = ({ handleToggle }) => {
       </Link> */}
 
       {/* createbuisness */}
-      <Link to='createbuisness'>
+      {/* <Link to='createbuisness'>
         <div onClick={() => {
           handleToggle,
             handleItemClick(4)
@@ -86,7 +86,7 @@ const SideBar = ({ handleToggle }) => {
           </span>
           <h2 className='text-[1.1rem] mt-0 font-normal'>Create a business</h2>
         </div>
-      </Link>
+      </Link> */}
 
       {/* mybusiness */}
       <Link to='mybusiness'>

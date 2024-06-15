@@ -7,7 +7,7 @@ import { FaAngleDown } from "react-icons/fa";
 import { AuthContext } from '../../context/AuthContext';
 import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { ImSpinner9 } from 'react-icons/im';
+// import { ImSpinner9 } from 'react-icons/im';
 import DateTransactionModal from './DataTransactionModal';
 
 const DateTransaction = () => {
@@ -80,18 +80,15 @@ const DateTransaction = () => {
         }
     }
     const handleConfirm = () => {
-
-        setIsOpen(true);
-
         // Handle date range confirmation (e.g., send data to backend)
         // console.log(`Start Date: ${startDate} end Date: ${endDate}`);
         handleTransactionToDate();
-        if (handleTransactionToDate()) {
-            setTimeout(() => {
-                handleOpenModal()
-                setIsOpen(false)
-            }, 2000);
-        }
+        // if (handleTransactionToDate()) {
+        //     setTimeout(() => {
+        handleOpenModal()
+        //         setIsOpen(false)
+        //     }, 2000);
+        // }
     };
 
 
@@ -143,7 +140,7 @@ const DateTransaction = () => {
                             onClick={handleConfirm}
                             className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
                         >
-                            {isLoading ? (
+                            {/* {isLoading ? (
                                 <div className="flex justify-center items-center">
                                     <p> <ImSpinner9 className="animate-spin text-white hover:text-gray-300" size={15} /> </p>
                                 </div>
@@ -151,7 +148,7 @@ const DateTransaction = () => {
                                 <div>
                                     {null}
                                 </div>
-                            )}
+                            )} */}
                             Confirm
                         </button>
                     </div>

@@ -16,6 +16,7 @@ import AllTransaction from "./AllTransaction";
 import DateTransaction from "./DateTransaction";
 import StatisticsModal from "./StatisticsModal";
 import ProceedToPayment from "./ProceedToPayment";
+import { TbCurrencyNaira } from "react-icons/tb";
 
 
 
@@ -72,6 +73,7 @@ function WalletIndex() {
             })
             if (payment.data.status === 'success') {
                 setPaystack(payment.data.data.payment_url.url)
+                isProceedOpenModal()//na here i dey.......
             } else {
                 Swal.fire({
                     icon: "error",
@@ -88,8 +90,7 @@ function WalletIndex() {
                     icon: "error",
                     title: "Oops! An error has occurred",
                     text: "Payment gateway can't initialize right now, try again later.",
-                    timer: 4000,
-                    timerProgressBar: true,
+                    timerProgressBar: false,
                     footer: `<a href="#">You currently can't access the payment gateway rightaway. Please try again later. ${error.message}</a>`,
 
                 });
@@ -191,10 +192,10 @@ function WalletIndex() {
                                 <p> <ImSpinner9 className="animate-spin text-white hover:text-gray-300" size={22} /> </p>
                             </div>
                         ) : (
-                            <div>
-                                <p className="text-2xl font-bold"><span className="text-sm md:text-base text-center lg:text-lg">$</span> {transactions}</p>
-
-                            </div>
+                            <p className="text-2xl font-bold flex items-center justify-center">
+                                <TbCurrencyNaira className="mr-1 text-sm" size={22} />
+                                {transactions}
+                            </p>
                         )}
                     </div>
                     <div className="mt-4 flex sm:flex-row justify-center sm:space-y-0 ">
@@ -226,7 +227,7 @@ function WalletIndex() {
                         </div>
                         <AllTransaction />
 
-                        <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToPayStack} proceed={isProceedOpenModal} loading={isPaystackLoading} />
+                        <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToPayStack} loading={isPaystackLoading} />
                         {/* <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} /> */}
                         <StatisticsModal isOpen={StatsIsModalOpen} onClose={StatsCloseModal} />
                         <ProceedToPayment isOpen={isProceedOpen} onClose={isProceedCloseModal} paystack={paystack} />
