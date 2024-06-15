@@ -58,10 +58,14 @@ const BalanceToDateModal = ({ isOpenModal, handleCloseModal, isLoading, data, st
                                     ) : (
 
                                         <td className="px-6 py-4 whitespace-nowrap">
+<<<<<<< HEAD
                                             <p className='flex justify-center'>
                                                 <TbCurrencyNaira className="mr-1  text-sm" size={22} />
                                                 {data}
                                             </p>
+=======
+                                            <span className="text-xs">NGN</span> {data}
+>>>>>>> 87226cb6099148ae568ed6682e2054e04a68d78d
                                         </td>
                                     )}
                                     <td className="px-6 py-4 whitespace-nowrap">
