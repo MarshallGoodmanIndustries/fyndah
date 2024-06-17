@@ -67,7 +67,7 @@ const Posts = () => {
                 text: "Failed to complete your post. Please try again.",
                 timer: 3000,
                 timerProgressBar: true,
-                footer: <a href="#">Error Details: ${error.response.data.message}</a>,
+                footer: `Error Details: ${error.response.data.message}`,
               });
         }
    };
