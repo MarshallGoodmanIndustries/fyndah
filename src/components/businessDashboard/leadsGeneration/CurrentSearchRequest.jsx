@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/AuthContext";
 import EmptyLeads from "./EmptyLeads";
 import SpinnerFullPage from "./SpinnerFullPage";
 import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 // import { useNavigate } from "react-router-dom";
 
 // const people = [
@@ -63,30 +64,29 @@ import { useParams } from "react-router-dom";
 
 function CurrentSearchRequest() {
   const [open, setOpen] = useState(false);
+  const [dal, setDal] = useState("");
+  const [show, setShow] = useState("");
   const [request, setRequest] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { id } = useParams();
+  const { id, name } = useParams();
 
   const { authToken } = useContext(AuthContext);
 
-  // const navigate = useNavigate();
-
-  const BASE_URL = "https://api.fyndah.com/api/v1/search/requests/active";
+  const SEARCH_URL = "https://api.fyndah.com/api/v1/search/requests/active";
   useEffect(
     function () {
       async function retrieveSearchRequest() {
         try {
           setIsLoading(true);
-          const res = await fetch(`${BASE_URL}`, {
+          const res = await fetch(`${SEARCH_URL}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              // Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5meW5kYWguY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzE3ODYxNjU0LCJleHAiOjE3MTc4NjUyNTQsIm5iZiI6MTcxNzg2MTY1NCwianRpIjoiUkpVbW1oNU5yV0RSd0E1RSIsInN1YiI6IjM1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.daoxUtxs8V5-KWmNFprFm1jLhOYKOdZBQo-9hFiSzBE`,
-              Authorization: ` ${authToken}`
+              Authorization: `Bearer ${authToken}`,
             },
           });
           const data = await res.json();
-          setRequest([data]);
+          setRequest(data);
           console.log(request);
           setIsLoading(false);
         } catch {
@@ -98,113 +98,222 @@ function CurrentSearchRequest() {
     [authToken]
   );
 
-  const po = `/businessDashboard/${id}/posts`;
+  //  Function to place a Bid
+  const BASE_URL = `https://api.fyndah.com/api/v1/search/requests/${id}/bid`;
+  async function bidRequest() {
+    const res = await fetch(`${BASE_URL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        body: JSON.stringify({ bid_amount: 200 }),
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    const data = res.json();
+    console.log(data + "Has come back");
 
+    if (
+      data.status === "error" &&
+      data.message === "You have already placed a bid on this search request."
+    ) {
+      setShow("You already placed a bid");
+    } else if (data.error === "Insufficient funds in the wallet") {
+      setShow(
+        "You have insufficient Funds and Therefore cannot place this bid"
+      );
+    } else if (
+      (data.status === "error",
+      data.message === "This business has no access to this search request")
+    ) {
+      setShow("Your business does not have the right to place this bid");
+    }
+    setOpen(false);
+    Swal.fire({
+      icon: "success",
+      title: "Well.. Error....",
+      text: `${show}`,
+      timer: 2000,
+      timerProgressBar: true,
+    });
+  }
 
-  if (!request?.length) return <EmptyLeads data="There are Currently no Available Search Request Related to your Business. When they are, you would see them here." posts={po} />;
+  const po = `/businessDashboard/${id}/${name}/posts`;
 
+  if (!request?.length)
+    return (
+      <EmptyLeads
+        data="There are currently no search requests available for you. Fund your wallet to get access."
+        posts={po}
+      />
+    );
 
-  if (!request?.length) return <EmptyLeads posts={po} />;
+  // if (!request?.length) return <EmptyLeads posts={po} />;
+  // return (
+
+  //   <div className="flex flex-col items-center justify-center mt-5">
+  //     <h1 className="mb-10 text-xl font-black">
+  //       Current Available Search Request Related to your Business
+  //     </h1>
+  //     {/* Modal to show the Search request description */}
+  //     {/* {open && (
+  //       <SearchRequestDescription
+  //         settOpen={setOpen}
+  //         infoOfSearch="Send search datta to the modal"
+  //         requestValue={request.id}
+  //       />
+  //     )} */}
+
+  //     {isLoading ? (
+  //       <SpinnerFullPage />
+  //     ) : (
+  //       <ul role="list" className="divide-y divide-gray-100">
+  //         {/* {people.map((person) => ( */}
+  //         {request?.map((request) => (
+  //           // open && (
+  //           //   <SearchRequestDescription
+  //           //     settOpen={setOpen}
+  //           //     infoOfSearch="Send search datta to the modal"
+  //           //     requestValue={request.id}
+  //           //   />
+  //           // )
+
+  //           <li key={request.id} className="flex justify-between gap-x-6 py-5">
+  //             {open && (
+  //               <SearchRequestDescription
+  //                 settOpen={setOpen}
+  //                 infoOfSearch="Send search datta to the modal"
+  //                 requestData={request}
+  //                 key={request.id}
+  //               />
+  //             )}
+  //             <div className="flex min-w-0 gap-x-4">
+  //               <img
+  //                 key={request.id}
+  //                 className=" blur h-12 w-12 flex-none rounded-full bg-gray-50"
+  //                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+  //                 alt="avaterrrr"
+  //               />
+  //               <div key={request.id} className="min-w-0 flex-auto">
+  //                 <p className="blur text-sm font-semibold leading-6 text-gray-900">
+  //                   {/* {person.name}  */}
+  //                   Kusner Tstero
+  //                 </p>
+  //                 <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+  //                   {/* {person.email}  */}
+  //                   <span className="blur"> exampleMail </span> @gmail.com
+  //                 </p>
+  //               </div>
+  //             </div>
+  //             <div
+  //               key={request.id}
+  //               className="hidden shrink-0 sm:flex sm:flex-col sm:items-end"
+  //             >
+  //               <p className="text-sm leading-6 text-gray-900">person.role</p>
+  //               {/* {person.lastSeen ? ( */}
+  //               <>
+  //                 <p className="mt-1 text-xs leading-5 text-gray-500">
+  //                   Time of search:{" "}
+  //                   {/* <time dateTime={person.lastSeenDateTime}>
+  //                       {person.lastSeen}
+  //                     </time> */}
+  //                 </p>
+  //                 {/* <p className="mt-1 text-xs leading-5 text-gray-500">
+  //                     Time left till search bid expire{" "}
+  //                     <time dateTime={person.lastSeenDateTime}>
+  //                       {person.lastSeen}
+  //                     </time>
+  //                   </p> */}
+  //               </>
+  //               {/* // ) : ( */}
+  //               <div
+  //                 key={request.id}
+  //                 className="mt-1 flex items-center gap-x-1.5"
+  //               >
+  //                 <div className="flex-none rounded-full bg-emerald-500/20 p-1">
+  //                   <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+  //                 </div>
+  //                 <p className="text-xs leading-5 text-gray-500">Online</p>
+  //               </div>
+  //               {/* // )} */}
+  //             </div>
+  //             {/* <button onClick={openModal(true)} className="bg-indigo-500 rounded-md px-1 py-0">View Description</button> */}
+  //             <button
+  //               onClick={() => setOpen(true)}
+  //               className="bg-indigo-500 rounded-full px-2 py-0"
+  //               key={request.id}
+  //             >
+  //               View Description
+  //             </button>
+  //           </li>
+  //         ))}
+  //       </ul>
+  //     )}
+  //   </div>
+  // );
+
   return (
-    <div className="flex flex-col items-center justify-center mt-5">
-      <h1 className="mb-10 text-xl font-black">
-        Current Available Search Request Related to your Business
-      </h1>
-      {/* Modal to show the Search request description */}
-      {/* {open && (
+    <>
+      {open && (
         <SearchRequestDescription
           settOpen={setOpen}
           infoOfSearch="Send search datta to the modal"
-          requestValue={request.id}
+          requestData={request}
+          dal={dal}
+          bidRequest={bidRequest}
+          key={request.id}
         />
-      )} */}
-
-      {isLoading ? (
-        <SpinnerFullPage />
-      ) : (
-        <ul role="list" className="divide-y divide-gray-100">
-          {/* {people.map((person) => ( */}
-          {request?.map((request) => (
-            // open && (
-            //   <SearchRequestDescription
-            //     settOpen={setOpen}
-            //     infoOfSearch="Send search datta to the modal"
-            //     requestValue={request.id}
-            //   />
-            // )
-
-            <li key={request.id} className="flex justify-between gap-x-6 py-5">
-              {open && (
-                <SearchRequestDescription
-                  settOpen={setOpen}
-                  infoOfSearch="Send search datta to the modal"
-                  requestData={request}
-                  key={request.id}
-                />
-              )}
-              <div className="flex min-w-0 gap-x-4">
-                <img
-                  key={request.id}
-                  className=" blur h-12 w-12 flex-none rounded-full bg-gray-50"
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt="avaterrrr"
-                />
-                <div key={request.id} className="min-w-0 flex-auto">
-                  <p className="blur text-sm font-semibold leading-6 text-gray-900">
-                    {/* {person.name}  */}
-                    Kusner Tstero
-                  </p>
-                  <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                    {/* {person.email}  */}
-                    <span className="blur"> exampleMail </span> @gmail.com
-                  </p>
-                </div>
-              </div>
-              <div
-                key={request.id}
-                className="hidden shrink-0 sm:flex sm:flex-col sm:items-end"
-              >
-                <p className="text-sm leading-6 text-gray-900">person.role</p>
-                {/* {person.lastSeen ? ( */}
-                <>
-                  <p className="mt-1 text-xs leading-5 text-gray-500">
-                    Time of search:{" "}
-                    {/* <time dateTime={person.lastSeenDateTime}>
-                        {person.lastSeen}
-                      </time> */}
-                  </p>
-                  {/* <p className="mt-1 text-xs leading-5 text-gray-500">
-                      Time left till search bid expire{" "}
-                      <time dateTime={person.lastSeenDateTime}>
-                        {person.lastSeen}
-                      </time>
-                    </p> */}
-                </>
-                {/* // ) : ( */}
-                <div
-                  key={request.id}
-                  className="mt-1 flex items-center gap-x-1.5"
-                >
-                  <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  </div>
-                  <p className="text-xs leading-5 text-gray-500">Online</p>
-                </div>
-                {/* // )} */}
-              </div>
-              {/* <button onClick={openModal(true)} className="bg-indigo-500 rounded-md px-1 py-0">View Description</button> */}
-              <button
-                onClick={() => setOpen(true)}
-                className="bg-indigo-500 rounded-full px-2 py-0"
-                key={request.id}
-              >
-                View Description
-              </button>
-            </li>
-          ))}
-        </ul>
       )}
-    </div>
+      <h1 className="flex flex-col items-center justify-center mt-5 mb-10 text-4xl font-black">
+        Search Request Related to your Business
+      </h1>
+      <ul
+        role="list"
+        className="flex flex-col items-center justify-center mt-5 divide-y divide-gray-100"
+      >
+        {request?.map((person) => (
+          <li key={person.id} className="flex justify-between gap-x-6 py-5">
+            <div className="flex min-w-0 gap-x-4">
+              <div className="min-w-0 flex-auto">
+                <p className="text-sm font-semibold leading-6 text-gray-900">
+                  {person.search_term}
+                </p>
+                <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                  {person.search_filters}
+                </p>
+              </div>
+            </div>
+            <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+              <p className="text-sm leading-6 text-gray-900">{person.role}</p>
+              {/* {person.lastSeen ? (
+              <p className="mt-1 text-xs leading-5 text-gray-500">
+                Time of Search <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
+              </p>
+            ) : (
+              <div className="mt-1 flex items-center gap-x-1.5">
+                <div className="flex-none rounded-full bg-emerald-500/20 p-1">
+                  <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                </div>
+                <p className="text-xs leading-5 text-gray-500">Online</p>
+              </div>
+            )} */}
+              <button
+                onClick={() => {
+                  setOpen(true);
+                  setDal({
+                    term: person.search_term,
+                    filter: person.search_filters,
+                  });
+                }}
+                className="bg-indigo-500 rounded-full px-2 py-0"
+                key={person.id}
+              >
+                View Search Description in depth
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>{" "}
+    </>
   );
 }
 

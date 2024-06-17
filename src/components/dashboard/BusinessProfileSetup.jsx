@@ -496,7 +496,7 @@ const BusinessProfileSetup = () => {
             {/* WEBSITE */}
             <div>
               <label htmlFor="website">
-                Website <span className="text-red-500 ml-2">*</span>{" "}
+                Website
               </label>{" "}
               <br />
               <input
@@ -505,7 +505,7 @@ const BusinessProfileSetup = () => {
                 onChange={handleChange}
                 className="border h-10 p-2 rounded-sm w-full mt-1"
                 value={inputValues.website}
-                placeholder="Enter Business Website"
+                placeholder="Business Website e.g (www.example.com)"
               />
             </div>
 
