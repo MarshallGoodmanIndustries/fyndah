@@ -65,7 +65,7 @@ const Posts = () => {
             Swal.fire({
                 icon: "error",
                 title: "Oops! Something went wrong",
-                text: `${error.message}`,
+                text: `${error.response.data.message}`,
                 timer: 3000,
                 timerProgressBar: true,
               });
