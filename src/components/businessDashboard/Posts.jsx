@@ -61,7 +61,6 @@ const Posts = () => {
               }
         } catch (error) {
             setIsLoading(false);
-            console.log(error.message);
             Swal.fire({
                 icon: "error",
                 title: "Oops! Something went wrong",
