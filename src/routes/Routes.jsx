@@ -5,8 +5,8 @@ import {
   MyBusiness,
 } from "../components/pages";
 import {
-  BusinessDashboardLayout,  BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
-   Wallet
+  BusinessDashboardLayout, BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
+  Wallet
 } from '../components/businessDashboard/index';
 import Policies, { Tos, Privacy, Refund } from "../components/policy";
 import { PageNotFound } from "../components/errorPages";
@@ -16,6 +16,7 @@ import CurrentSearchRequest from "../components/businessDashboard/leadsGeneratio
 import HistorySearchRequest from "../components/businessDashboard/leadsGeneration/HistorySearchRequest";
 import BidPage from "../components/businessDashboard/leadsGeneration/BidPage";
 import PotentialCustomerData from "../components/businessDashboard/leadsGeneration/PotentialCustomerData";
+import OnSuccessful from "../components/wallet/welletComponent/OnSuccessful";
 // import CountryStateCitySelector from "../components/test/test";
 
 function Routes() {
@@ -105,35 +106,35 @@ function Routes() {
           element: <Posts />,
           errorElement: <PageNotFound />
         },
-            // //////////////////////////////////////////////////////////
-        
-            {
-              path: 'leads',
-              element: <Leads />,
-              errorElement: <PageNotFound />
-            },
-            {
-              path: 'search-request-history',
-              element: <HistorySearchRequest />,
-              errorElement: <PageNotFound />
-            },
-            {
-              path: 'potential-customer-data',
-              element: <PotentialCustomerData
-               />,
-              errorElement: <PageNotFound />
-            },
-            {
-              path: 'search-request',
-              element: <CurrentSearchRequest />,
-              errorElement: <PageNotFound />
-            },
-            {
-              path: 'bid-page',
-              element: <BidPage />,
-              errorElement: <PageNotFound />
-            },
-            ////////////////////////////////////////////////////////
+        // //////////////////////////////////////////////////////////
+
+        {
+          path: 'leads',
+          element: <Leads />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: 'search-request-history',
+          element: <HistorySearchRequest />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: 'potential-customer-data',
+          element: <PotentialCustomerData
+          />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: 'search-request',
+          element: <CurrentSearchRequest />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: 'bid-page',
+          element: <BidPage />,
+          errorElement: <PageNotFound />
+        },
+        ////////////////////////////////////////////////////////
         {
           path: 'businessmessages',
           element: <BusinessMessages />,
@@ -162,6 +163,12 @@ function Routes() {
         {
           path: 'wallet',
           element: <Wallet />,
+          errorElement: <PageNotFound />
+        },
+
+        {
+          path: 'onsuccess',
+          element: <OnSuccessful />,
           errorElement: <PageNotFound />
         },
 

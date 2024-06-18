@@ -73,7 +73,7 @@ function WalletIndex() {
             })
             if (payment.data.status === 'success') {
                 setPaystack(payment.data.data.payment_url.url)
-                isProceedOpenModal()//na here i dey.......
+                isProceedOpenModal()//na here i dey.....
             } else {
                 Swal.fire({
                     icon: "error",
@@ -144,10 +144,10 @@ function WalletIndex() {
                 Swal.fire({
                     icon: "error",
                     title: "Oops! Something went wrong",
-                    text: "Seems you having network issues, please try again later.",
+                    text: "Having troubles? please try again.",
                     timer: 4000,
                     timerProgressBar: true,
-                    footer: `<a href="#">Could not set up your business profile. Please try again later. ${error.message}</a>`,
+                    footer: `<a href="#"> ${error.response ? error.response.data : error.message} . Please try again later.</a>`,
 
                 });
                 navigate("/login")
