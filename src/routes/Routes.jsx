@@ -17,6 +17,7 @@ import HistorySearchRequest from "../components/businessDashboard/leadsGeneratio
 import BidPage from "../components/businessDashboard/leadsGeneration/BidPage";
 import PotentialCustomerData from "../components/businessDashboard/leadsGeneration/PotentialCustomerData";
 import OnSuccessful from "../components/wallet/welletComponent/OnSuccessful";
+import Onfailed from "../components/wallet/welletComponent/Onfailed";
 // import CountryStateCitySelector from "../components/test/test";
 
 function Routes() {
@@ -169,6 +170,11 @@ function Routes() {
         {
           path: 'onsuccess',
           element: <OnSuccessful />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: 'onfailed',
+          element: <Onfailed />,
           errorElement: <PageNotFound />
         },
 
