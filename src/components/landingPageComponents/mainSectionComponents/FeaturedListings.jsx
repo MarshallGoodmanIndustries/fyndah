@@ -1,14 +1,20 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { ListingComponent } from "../../uiComponents";
 import axios from "axios";
 
 //images
 import { businessFeature } from "../../../assets/images";
 
+// components
+import { featuredListingsLoadingDummy } from "../../../routes/Navigations";
+import { ListingComponent, ListingComponentLoading } from "../../uiComponents";
+
+
 const FeaturedListings = () => {
   const { authToken } = useContext(AuthContext);
   const [featuredBusinesses, setFeaturedBusinesses] = useState();
+  
+  const containsFeaturedBusinesses = featuredBusinesses?.length > 0;
 
   useEffect(() =>{
     const url = "https://api.fyndah.com/api/v1/organization/featured";
@@ -33,8 +39,10 @@ const FeaturedListings = () => {
             <h3 className="font-poppins text-xl md:text-2xl lg:text-3xl font-medium">Featured Listings</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-rows-1 gap-8">
-            {featuredBusinesses?.map(({id, org_bio, org_name, business_categories})=>(
+            {containsFeaturedBusinesses ? featuredBusinesses.map(({id, org_bio, org_name, business_categories})=>(
               <ListingComponent key={id} logo={businessFeature} cover_image={businessFeature} org_bio={org_bio} org_name={org_name} business_categories={business_categories} />
+            )) : featuredListingsLoadingDummy.map((dummy, index)=> (
+              <ListingComponentLoading key={index} />
             ))}
         </div>
     </section>
