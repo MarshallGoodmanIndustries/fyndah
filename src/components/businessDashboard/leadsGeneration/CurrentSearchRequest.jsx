@@ -7,60 +7,60 @@ import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 // import { useNavigate } from "react-router-dom";
 
-// const people = [
-//   {
-//     name: "Leslie Alexander",
-//     email: "leslie.alexander@example.com",
-//     role: "Co-Founder / CEO",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     lastSeen: "3h ago",
-//     lastSeenDateTime: "2023-01-23T13:23Z",
-//   },
-//   {
-//     name: "Michael Foster",
-//     email: "michael.foster@example.com",
-//     role: "Co-Founder / CTO",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     lastSeen: "3h ago",
-//     lastSeenDateTime: "2023-01-23T13:23Z",
-//   },
-//   {
-//     name: "Dries Vincent",
-//     email: "dries.vincent@example.com",
-//     role: "Business Relations",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     lastSeen: null,
-//   },
-//   {
-//     name: "Lindsay Walton",
-//     email: "lindsay.walton@example.com",
-//     role: "Front-end Developer",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     lastSeen: "3h ago",
-//     lastSeenDateTime: "2023-01-23T13:23Z",
-//   },
-//   {
-//     name: "Courtney Henry",
-//     email: "courtney.henry@example.com",
-//     role: "Designer",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     lastSeen: "3h ago",
-//     lastSeenDateTime: "2023-01-23T13:23Z",
-//   },
-//   {
-//     name: "Tom Cook",
-//     email: "tom.cook@example.com",
-//     role: "Director of Product",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     lastSeen: null,
-//   },
-// ];
+const people = [
+  {
+    name: "Leslie Alexander",
+    email: "leslie.alexander@example.com",
+    role: "Co-Founder / CEO",
+    imageUrl:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    lastSeen: "3h ago",
+    lastSeenDateTime: "2023-01-23T13:23Z",
+  },
+  {
+    name: "Michael Foster",
+    email: "michael.foster@example.com",
+    role: "Co-Founder / CTO",
+    imageUrl:
+      "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    lastSeen: "3h ago",
+    lastSeenDateTime: "2023-01-23T13:23Z",
+  },
+  {
+    name: "Dries Vincent",
+    email: "dries.vincent@example.com",
+    role: "Business Relations",
+    imageUrl:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    lastSeen: null,
+  },
+  {
+    name: "Lindsay Walton",
+    email: "lindsay.walton@example.com",
+    role: "Front-end Developer",
+    imageUrl:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    lastSeen: "3h ago",
+    lastSeenDateTime: "2023-01-23T13:23Z",
+  },
+  {
+    name: "Courtney Henry",
+    email: "courtney.henry@example.com",
+    role: "Designer",
+    imageUrl:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    lastSeen: "3h ago",
+    lastSeenDateTime: "2023-01-23T13:23Z",
+  },
+  {
+    name: "Tom Cook",
+    email: "tom.cook@example.com",
+    role: "Director of Product",
+    imageUrl:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    lastSeen: null,
+  },
+];
 
 function CurrentSearchRequest() {
   const [open, setOpen] = useState(false);
@@ -139,13 +139,13 @@ function CurrentSearchRequest() {
 
   const po = `/businessDashboard/${id}/${name}/posts`;
 
-  if (!request?.length)
-    return (
-      <EmptyLeads
-        data="There are Currently no Available Search Request Related to your Business. When they are, you would see them here."
-        posts={po}
-      />
-    );
+  // if (!request?.length)
+  //   return (
+  //     <EmptyLeads
+  //       data="There are Currently no Available Search Request Related to your Business. When they are, you would see them here."
+  //       posts={po}
+  //     />
+  //   );
 
   // if (!request?.length) return <EmptyLeads posts={po} />;
   // return (
@@ -251,42 +251,95 @@ function CurrentSearchRequest() {
   //   </div>
   // );
 
+  // return (
+  //   <>
+  //     {open && (
+  //       <SearchRequestDescription
+  //         settOpen={setOpen}
+  //         infoOfSearch="Send search datta to the modal"
+  //         requestData={request}
+  //         dal={dal}
+  //         bidRequest={bidRequest}
+  //         key={request.id}
+  //       />
+  //     )}
+  //     <h1 className="flex flex-col items-center justify-center mt-5 mb-10 text-4xl font-black">
+  //       Search Request Related to your Business
+  //     </h1>
+  //     <ul
+  //       role="list"
+  //       className="flex flex-col items-center justify-center mt-5 divide-y divide-gray-100"
+  //     >
+  //       {request?.map((person) => (
+  //         <li key={person.id} className="flex justify-between gap-x-6 py-5">
+  //           <div className="flex min-w-0 gap-x-4">
+  //             <div className="min-w-0 flex-auto">
+  //               <p className="text-sm font-semibold leading-6 text-gray-900">
+  //                 {person.search_term}
+  //               </p>
+  //               <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+  //                 {person.search_filters}
+  //               </p>
+  //             </div>
+  //           </div>
+  //           <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+  //             <p className="text-sm leading-6 text-gray-900">{person.role}</p>
+  //             {/* {person.lastSeen ? (
+  //             <p className="mt-1 text-xs leading-5 text-gray-500">
+  //               Time of Search <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
+  //             </p>
+  //           ) : (
+  //             <div className="mt-1 flex items-center gap-x-1.5">
+  //               <div className="flex-none rounded-full bg-emerald-500/20 p-1">
+  //                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+  //               </div>
+  //               <p className="text-xs leading-5 text-gray-500">Online</p>
+  //             </div>
+  //           )} */}
+  //             <button
+  //               onClick={() => {
+  //                 setOpen(true);
+  //                 setDal({
+  //                   term: person.search_term,
+  //                   filter: person.search_filters,
+  //                 });
+  //               }}
+  //               className="bg-indigo-500 rounded-full px-2 py-0"
+  //               key={person.id}
+  //             >
+  //               View Search Description in depth
+  //             </button>
+  //           </div>
+  //         </li>
+  //       ))}
+  //     </ul>{" "}
+  //   </>
+  // );
+
   return (
-    <>
-      {open && (
-        <SearchRequestDescription
-          settOpen={setOpen}
-          infoOfSearch="Send search datta to the modal"
-          requestData={request}
-          dal={dal}
-          bidRequest={bidRequest}
-          key={request.id}
-        />
-      )}
-      <h1 className="flex flex-col items-center justify-center mt-5 mb-10 text-4xl font-black">
-        Search Request Related to your Business
-      </h1>
-      <ul
-        role="list"
-        className="flex flex-col items-center justify-center mt-5 divide-y divide-gray-100"
-      >
-        {request?.map((person) => (
-          <li key={person.id} className="flex justify-between gap-x-6 py-5">
-            <div className="flex min-w-0 gap-x-4">
-              <div className="min-w-0 flex-auto">
-                <p className="text-sm font-semibold leading-6 text-gray-900">
-                  {person.search_term}
-                </p>
-                <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                  {person.search_filters}
-                </p>
-              </div>
+    
+    <ul role="list" className="flex flex-col items-center justify-center mt-5 divide-y divide-gray-100">
+     <button onClick={ Swal.fire({
+      icon: "success",
+      title: "Well.. Error....",
+      text: `${show}`,
+      timer: 2000,
+      timerProgressBar: true,
+    })} className="bg-red-300">DRAGOOO</button>
+      {people.map((person) => (
+        <li key={person.email} className="flex justify-between gap-x-6 py-5">
+          <div className="flex min-w-0 gap-x-4">
+            <img className="blur h-12 w-12 flex-none rounded-full bg-gray-50" src={person.imageUrl} alt="" />
+            <div className="min-w-0 flex-auto">
+              <p className=" blur text-sm font-semibold leading-6 text-gray-900">{person.name}</p>
+              <p className="mt-1 truncate text-xs leading-5 text-gray-500"> <span className="blur">jjdfhvfueiief3344</span> gmail.com</p>
             </div>
-            <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-              <p className="text-sm leading-6 text-gray-900">{person.role}</p>
-              {/* {person.lastSeen ? (
+          </div>
+          <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+            <p className="text-sm leading-6 text-gray-900">Search Term</p>
+            {person.lastSeen ? (
               <p className="mt-1 text-xs leading-5 text-gray-500">
-                Time of Search <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
+                Time of search: <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
               </p>
             ) : (
               <div className="mt-1 flex items-center gap-x-1.5">
@@ -295,26 +348,12 @@ function CurrentSearchRequest() {
                 </div>
                 <p className="text-xs leading-5 text-gray-500">Online</p>
               </div>
-            )} */}
-              <button
-                onClick={() => {
-                  setOpen(true);
-                  setDal({
-                    term: person.search_term,
-                    filter: person.search_filters,
-                  });
-                }}
-                className="bg-indigo-500 rounded-full px-2 py-0"
-                key={person.id}
-              >
-                View Search Description in depth
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>{" "}
-    </>
-  );
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
 }
 
 export default CurrentSearchRequest;
