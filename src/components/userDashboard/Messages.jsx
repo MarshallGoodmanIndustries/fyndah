@@ -72,12 +72,7 @@ function Messages() {
       if (response.status === 200) {
         setConversationInChat(response.data);
         setId(conversationId);
-<<<<<<< HEAD
-        setSenderId(response.data[0].senderId);
-        console.log("converstaions: ", response.data);
-=======
         console.log("conversations: ", response.data);
->>>>>>> 0aa91d1a091063adb3000cacb2babadd109e6f9a
       } else {
         throw new Error("Getting messages in a conversation failed");
       }
@@ -122,17 +117,9 @@ function Messages() {
         if (response.status === 200) {
           const message = response.data;
           setValue("");
-<<<<<<< HEAD
-          setPrevMessages((prev) => [...prev, value]);
-          socket.emit("sendMessage", message); // Emit message to socket server
-          console.log("Message sent", response.data);
-          setMessageLoading(false);
-          getMessagesInConversation();
-=======
           socket.emit("sendMessage", message);  // Emit message to socket server
           console.log("Message sent", response.data);
           setMessageLoading(false);
->>>>>>> 0aa91d1a091063adb3000cacb2babadd109e6f9a
         }
       } catch (error) {
         console.error(error);
@@ -163,12 +150,8 @@ function Messages() {
                         ? "message sent"
                         : "message received"
                     }
-<<<<<<< HEAD
-                    key={index}>
-=======
                     key={index}
                   >
->>>>>>> 0aa91d1a091063adb3000cacb2babadd109e6f9a
                     {convo.message}
                   </div>
                 ))}
@@ -193,20 +176,10 @@ function Messages() {
                 onChange={handleMessageChange}
               />
               <button
-<<<<<<< HEAD
-                className=" px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition"
-                onClick={handleSubmit}>
-                {messageLoading ? (
-                  <Spinner color="red.500" size="xs" />
-                ) : (
-                  "Send"
-                )}
-=======
                 className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition"
                 onClick={handleSubmit}
               >
                 {messageLoading ? <Spinner color="red.500" size="xs" /> : "Send"}
->>>>>>> 0aa91d1a091063adb3000cacb2babadd109e6f9a
               </button>
             </div>
           </div>
@@ -214,15 +187,8 @@ function Messages() {
       </div>
 
       {showListOfBusiness && (
-<<<<<<< HEAD
-        <div className=" flex flex-col border h-full col-span-2 md:order-1">
-          <p className=" text-lightRed mb-[1rem] font-medium text-[1.3rem] font-roboto">
-            Chats
-          </p>
-=======
         <div className="flex flex-col border h-full col-span-2 md:order-1">
           <p className="text-lightRed mb-[1rem] font-medium text-[1.3rem] font-roboto">Chats</p>
->>>>>>> 0aa91d1a091063adb3000cacb2babadd109e6f9a
           {conversationOnPage.map((item, index) => (
             <div
               key={index}
@@ -235,18 +201,9 @@ function Messages() {
               style={{
                 boxShadow:
                   "0 14px 16px rgba(05, 0, 255, 0.1), 0 10px 15px rgba(255, 255, 255, 0.1), 0 20px 25px rgba(255, 255, 255, 0.1)",
-<<<<<<< HEAD
-              }}>
-              <Avatar
-                size="sm"
-                name={item.members[1].name}
-                src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
-              />
-=======
               }}
             >
               <Avatar size="sm" name={item.members[1].name} src="https://cdn-icons-png.freepik.com/512/3177/3177440.png" />
->>>>>>> 0aa91d1a091063adb3000cacb2babadd109e6f9a
               <h1 className="text-black capitalize hover:text-white">
                 {item.members[1].name}
               </h1>
