@@ -73,7 +73,7 @@ function WalletIndex() {
             })
             if (payment.data.status === 'success') {
                 setPaystack(payment.data.data.payment_url.url)
-                isProceedOpenModal()//na here i dey.......
+                isProceedOpenModal()//na here i dey.....
             } else {
                 Swal.fire({
                     icon: "error",
@@ -144,10 +144,10 @@ function WalletIndex() {
                 Swal.fire({
                     icon: "error",
                     title: "Oops! Something went wrong",
-                    text: "Seems you having network issues, please try again later.",
+                    text: "Having troubles? please try again.",
                     timer: 4000,
                     timerProgressBar: true,
-                    footer: `<a href="#">Could not set up your business profile. Please try again later. ${error.message}</a>`,
+                    footer: `<a href="#"> ${error.response ? error.response.data : error.message} . Please try again later.</a>`,
 
                 });
                 navigate("/login")
@@ -179,7 +179,7 @@ function WalletIndex() {
     return (
         <div>
             <div className="flex-1 flex flex-col items-center p-4 sm:p-6 md:p-10">
-                <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl mt-5 p-4 bg-white rounded-lg shadow-md">
+                <div className="w-full max-w-5xl mt-5 p-4 bg-white rounded-xl shadow-lg">
                     <div className="flex flex-col sm:flex-row items-center justify-between">
                         <h2 className="text-gray-600">Hello,</h2>
 

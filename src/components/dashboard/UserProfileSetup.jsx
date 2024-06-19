@@ -103,105 +103,105 @@ const UserProfileSetup = () => {
       })),
   });
 
-  const handleCountryFocus = () => {
-    setIsDropdownVisible((prevState) => ({
-      ...prevState,
-      country: true,
-    }));
-  };
+  // const handleCountryFocus = () => {
+  //   setIsDropdownVisible((prevState) => ({
+  //     ...prevState,
+  //     country: true,
+  //   }));
+  // };
 
-  const handleCountryChange = (e) => {
-    setCountryInput(e.target.value);
-    setIsDropdownVisible((prevState) => ({
-      ...prevState,
-      country: true,
-    }));
-  };
+  // const handleCountryChange = (e) => {
+  //   setCountryInput(e.target.value);
+  //   setIsDropdownVisible((prevState) => ({
+  //     ...prevState,
+  //     country: true,
+  //   }));
+  // };
 
-  const handleStateFocus = () => {
-    setIsDropdownVisible((prevState) => ({
-      ...prevState,
-      state: true,
-    }));
-  };
+  // const handleStateFocus = () => {
+  //   setIsDropdownVisible((prevState) => ({
+  //     ...prevState,
+  //     state: true,
+  //   }));
+  // };
 
-  const handleStateChange = (e) => {
-    setStateInput(e.target.value);
-    setIsDropdownVisible((prevState) => ({
-      ...prevState,
-      state: true,
-    }));
-  };
+  // const handleStateChange = (e) => {
+  //   setStateInput(e.target.value);
+  //   setIsDropdownVisible((prevState) => ({
+  //     ...prevState,
+  //     state: true,
+  //   }));
+  // };
 
-  const handleCitiesFocus = () => {
-    setIsDropdownVisible((prevState) => ({
-      ...prevState,
-      cities: true,
-    }));
-  };
+  // const handleCitiesFocus = () => {
+  //   setIsDropdownVisible((prevState) => ({
+  //     ...prevState,
+  //     cities: true,
+  //   }));
+  // };
 
-  const handleCitiesChange = (e) => {
-    setCitiesInput(e.target.value);
-    setIsDropdownVisible((prevState) => ({
-      ...prevState,
-      cities: true,
-    }));
-  };
+  // const handleCitiesChange = (e) => {
+  //   setCitiesInput(e.target.value);
+  //   setIsDropdownVisible((prevState) => ({
+  //     ...prevState,
+  //     cities: true,
+  //   }));
+  // };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const countryResponse = await axios.get(
-          "https://api.fyndah.com/api/v1/locations/countries",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-        // console.log(countryResponse.data.countries);
-        const countryArray = Object.values(countryResponse.data.countries);
-        setCountries(countryArray);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const countryResponse = await axios.get(
+  //         "https://api.fyndah.com/api/v1/locations/countries",
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${authToken}`,
+  //           },
+  //         }
+  //       );
+  //       // console.log(countryResponse.data.countries);
+  //       const countryArray = Object.values(countryResponse.data.countries);
+  //       setCountries(countryArray);
 
-        const stateResponse = await axios.get(
-          `https://api.fyndah.com/api/v1/locations/states/${countryInput}`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-        // console.log(stateResponse.data.states);
-        setStates(stateResponse.data.states);
+  //       const stateResponse = await axios.get(
+  //         `https://api.fyndah.com/api/v1/locations/states/${countryInput}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${authToken}`,
+  //           },
+  //         }
+  //       );
+  //       // console.log(stateResponse.data.states);
+  //       setStates(stateResponse.data.states);
 
-        const citiesResponse = await axios.get(
-          `https://api.fyndah.com/api/v1/locations/cities/${countryInput}/${stateInput}`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-        // console.log(citiesResponse.data.states);
-        setCities(citiesResponse.data.states);
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
-    };
+  //       const citiesResponse = await axios.get(
+  //         `https://api.fyndah.com/api/v1/locations/cities/${countryInput}/${stateInput}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${authToken}`,
+  //           },
+  //         }
+  //       );
+  //       // console.log(citiesResponse.data.states);
+  //       setCities(citiesResponse.data.states);
+  //     } catch (error) {
+  //       console.error("Error fetching data", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, [authToken, countryInput, stateInput]);
-  
+  //   fetchData();
+  // }, [authToken, countryInput, stateInput]);
 
-  const filteredCountries = countries.filter((country) =>
-    country.toLowerCase().includes(countryInput.toLowerCase())
-  );
-  const filteredStates = states.filter((state) =>
-    state.state_name.toLowerCase().includes(stateInput.toLowerCase())
-  );
-  const filteredCities = cities.filter((city) =>
-    city.city_name.toLowerCase().includes(citiesInput.toLowerCase())
-  );
+
+  // const filteredCountries = countries.filter((country) =>
+  //   country.toLowerCase().includes(countryInput.toLowerCase())
+  // );
+  // const filteredStates = states.filter((state) =>
+  //   state.state_name.toLowerCase().includes(stateInput.toLowerCase())
+  // );
+  // const filteredCities = cities.filter((city) =>
+  //   city.city_name.toLowerCase().includes(citiesInput.toLowerCase())
+  // );
 
   // console.log(interests);
 
@@ -247,7 +247,7 @@ const UserProfileSetup = () => {
     }
   }
 
-  
+
 
   return (
     <div className="relative ">
@@ -260,13 +260,13 @@ const UserProfileSetup = () => {
         <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-80 filter blur-md"></div>
       </div>
 
-      <div className="relative h-full z-10 mx-[1rem] xl:mx-[6rem] lg:mx-[3rem] my-[2rem] lg:mt-[4rem] ">
+      <div className="relative h-full z-3 mx-[1rem] xl:mx-[6rem] lg:mx-[3rem] my-[2rem] lg:mt-[4rem] ">
         <h1 className="text-black font-bold lg:mb-[4rem] mb-[1rem] text-center font-roboto text-[1.1rem] lg:text-[1.5rem]">
           USER ACCOUNT PROFILE SETUP
         </h1>
 
         <form
-        onSubmit={handleSubmit}
+          onSubmit={handleSubmit}
           className="grid grid-cols-1 font-roboto lg:grid-cols-2 gap-[2rem] lg:gap-[2rem] xl:gap-[4rem]"
           action=""
         >
@@ -297,11 +297,11 @@ const UserProfileSetup = () => {
                     variant="flushed"
                     className="md:text-[1rem] text-[0.8rem] user-profile-input md:placeholder:text-[1rem] placeholder:text-[0.8rem]"
                     placeholder="Enter the name of your Country"
-                    onFocus={handleCountryFocus}
-                    onChange={handleCountryChange}
+                    // onFocus={handleCountryFocus}
+                    onChange={(e) => setCountryInput(e.target.value)}
                     value={countryInput}
                   />
-                  {isDropdownVisible.country && (
+                  {/* {isDropdownVisible.country && (
                     <Box
                       position="absolute"
                       width="100%"
@@ -336,7 +336,7 @@ const UserProfileSetup = () => {
                         ))}
                       </List>
                     </Box>
-                  )}
+                  )} */}
                 </Box>
               </div>
 
@@ -357,11 +357,11 @@ const UserProfileSetup = () => {
                     variant="flushed"
                     className="md:text-[1rem] text-[0.8rem] user-profile-input md:placeholder:text-[1rem] placeholder:text-[0.8rem]"
                     placeholder="Enter the name of your State"
-                    onFocus={handleStateFocus}
-                    onChange={handleStateChange}
+                    // onFocus={handleStateFocus}
+                    onChange={(e) => setStateInput(e.target.value)}
                     value={stateInput}
                   />
-                  {isDropdownVisible.state && (
+                  {/* {isDropdownVisible.state && (
                     <Box
                       position="absolute"
                       width="100%"
@@ -396,7 +396,7 @@ const UserProfileSetup = () => {
                         ))}
                       </List>
                     </Box>
-                  )}
+                  )} */}
                 </Box>
               </div>
 
@@ -417,11 +417,11 @@ const UserProfileSetup = () => {
                     className="md:text-[1rem] text-[0.8rem] user-profile-input md:placeholder:text-[1rem] placeholder:text-[0.8rem]"
                     variant="flushed"
                     placeholder="Enter the name of your city"
-                    onFocus={handleCitiesFocus}
-                    onChange={handleCitiesChange}
+                    // onFocus={handleCitiesFocus}
+                    onChange={(e) => setCitiesInput(e.target.value)}
                     value={citiesInput}
                   />
-                  {isDropdownVisible.cities && (
+                  {/* {isDropdownVisible.cities && (
                     <Box
                       position="absolute"
                       width="100%"
@@ -456,7 +456,7 @@ const UserProfileSetup = () => {
                         ))}
                       </List>
                     </Box>
-                  )}
+                  )} */}
                 </Box>
               </div>
             </div>
@@ -484,7 +484,6 @@ const UserProfileSetup = () => {
                 </Checkbox>
               ))}
             </div>
-
             <Button type="submit">Submit</Button>
           </div>
         </form>

@@ -5,13 +5,14 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaAngleDown } from "react-icons/fa";
 import { AuthContext } from '../../context/AuthContext';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 // import { ImSpinner9 } from 'react-icons/im';
 import DateTransactionModal from './DataTransactionModal';
 
 const DateTransaction = () => {
-
+    const navigate = useNavigate()
+    const location = useLocation()
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [isOpen, setIsOpen] = useState(false);
@@ -51,6 +52,7 @@ const DateTransaction = () => {
             console.log(response.data);
             if (response.data.message == "succcess") {
                 setData(response.data.txns)
+                sessionStorage.removeItem("lastRoute")
             } else {
                 Swal.fire({
                     icon: "error",
@@ -71,6 +73,8 @@ const DateTransaction = () => {
                     timer: 4000,
                     timerProgressBar: true,
                 });
+                sessionStorage.setItem("lastRoute", location.pathname)
+                navigate("/login")
 
                 setIsLoading(false);
 

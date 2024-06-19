@@ -4,20 +4,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Table,
   Button,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { RiEdit2Fill } from "react-icons/ri";
@@ -29,7 +16,6 @@ import { PiUserSwitchFill } from "react-icons/pi";
 import { TiUserDelete } from "react-icons/ti";
 import { FaPeopleRobbery } from "react-icons/fa6";
 import { RiMailSettingsFill } from "react-icons/ri";
-import { FaCaretDown } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
@@ -57,23 +43,10 @@ function BusinessProfile() {
     size: "",
     industry: "",
     subdomain: "",
+    locationName: ""
   });
 
-  const [isEditable, setIsEditable] = useState({
-    businessName: false,
-    email: false,
-    phone: false,
-    bio: false,
-    address: false,
-    city: false,
-    state: false,
-    country: false,
-    zip_code: false,
-    website: false,
-    size: false,
-    industry: false,
-    subdomain: false,
-  });
+  const [isEditable, setIsEditable] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,17 +57,15 @@ function BusinessProfile() {
     });
   };
 
-  const toggleEdit = (field) => {
-    setIsEditable({
-      ...isEditable,
-      [field]: !isEditable[field],
-    });
-  };
-
   const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!isEditable) {
+      setIsEditable(true);
+      return;
+    }
+
+    setIsEditable(false);
     try {
-      e.preventDefault();
-      // console.log(inputDefaultStates);
       Swal.fire({
         icon: "success",
         title: "Successful...",
@@ -116,6 +87,7 @@ function BusinessProfile() {
   useEffect(() => {
     const fetchBusinessProfileData = async () => {
       try {
+        setIsLoading(true);
         const businessProfileResponse = await axios.get(
           `https://api.fyndah.com/api/v1/organization/${id}`,
           {
@@ -132,20 +104,30 @@ function BusinessProfile() {
           email: businessData.email || "",
           phone: businessData.phone || "",
           bio: businessData.org_bio || "",
-          address: businessData.address || "",
-          city: businessData.city || "",
-          state: businessData.state || "",
-          country: businessData.country || "",
-          zip_code: businessData.zip_code || "",
+          address: businessData.locations[0].address || "",
+          city: businessData.locations[0].city || "",
+          state: businessData.locations[0].state || "",
+          country: businessData.locations[0].country || "",
+          zip_code: businessData.locations[0].zip_code || "",
+          locationName: businessData.locations[0].locationName || "",
           website: businessData.website || "",
           size: businessData.size || "",
           industry: businessData.industry || "",
           subdomain: businessData.subdomain || "",
         });
 
-        // console.log(businessData);
+
+        if (businessProfileResponse.status === 200) {
+          console.log(businessProfileResponse.data)
+        } else {
+          setIsLoading(false);
+          throw new Error("Profile Details failed");
+        }
       } catch (error) {
-        console.error(error.message);
+        console.error(error);
+        setIsLoading(false);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -201,7 +183,7 @@ function BusinessProfile() {
   }
 
   return (
-    <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
+    <div className="md:m-[2rem] mr-[1rem] my-[1rem] p-5 sm:p-5  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
       <div className="block relative items-center gap-[6rem]">
         {/* PROFILE IMAGE DISPLAY */}
         <Box className="w-full absolute rounded-t-3xl h-[160px]">
@@ -295,13 +277,6 @@ function BusinessProfile() {
                 >
                   Business Name
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("businessName")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
               </div>
 
               <InputGroup>
@@ -309,7 +284,7 @@ function BusinessProfile() {
                   <FaRegUser color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.businessName}
+                  disabled={!isEditable}
                   name="businessName"
                   border="2px solid #d1d5db"
                   className="border"
@@ -330,13 +305,6 @@ function BusinessProfile() {
                 >
                   Email
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("email")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
               </div>
 
               <InputGroup>
@@ -344,7 +312,7 @@ function BusinessProfile() {
                   <FaRegUser color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.email}
+                  disabled={!isEditable}
                   name="email"
                   type="email"
                   border="2px solid #d1d5db"
@@ -366,17 +334,11 @@ function BusinessProfile() {
                 >
                   Bio
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("bio")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
+
               </div>
 
               <Textarea
-                disabled={!isEditable.bio}
+                disabled={!isEditable}
                 name="bio"
                 border="2px solid #d1d5db"
                 rows="4"
@@ -396,13 +358,6 @@ function BusinessProfile() {
                 >
                   Business Phone
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("phone")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
               </div>
 
               <InputGroup>
@@ -410,7 +365,7 @@ function BusinessProfile() {
                   <MdLocationPin color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.phone}
+                  disabled={!isEditable}
                   name="phone"
                   border="2px solid #d1d5db"
                   className="border"
@@ -431,13 +386,7 @@ function BusinessProfile() {
                 >
                   Business Address
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("address")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
+
               </div>
 
               <InputGroup>
@@ -445,7 +394,7 @@ function BusinessProfile() {
                   <FaMonument color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.address}
+                  disabled={!isEditable}
                   name="address"
                   border="2px solid #d1d5db"
                   className="border"
@@ -466,13 +415,7 @@ function BusinessProfile() {
                 >
                   Business City
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("city")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
+
               </div>
 
               <InputGroup>
@@ -480,7 +423,7 @@ function BusinessProfile() {
                   <FaMonument color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.city}
+                  disabled={!isEditable}
                   name="city"
                   border="2px solid #d1d5db"
                   className="border"
@@ -501,13 +444,7 @@ function BusinessProfile() {
                 >
                   Business State
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("state")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
+
               </div>
 
               <InputGroup>
@@ -515,7 +452,7 @@ function BusinessProfile() {
                   <FaMonument color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.state}
+                  disabled={!isEditable}
                   name="state"
                   border="2px solid #d1d5db"
                   className="border"
@@ -536,13 +473,7 @@ function BusinessProfile() {
                 >
                   Business Country
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("country")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
+
               </div>
 
               <InputGroup>
@@ -550,7 +481,7 @@ function BusinessProfile() {
                   <FaMonument color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.country}
+                  disabled={!isEditable}
                   name="country"
                   border="2px solid #d1d5db"
                   className="border"
@@ -571,13 +502,7 @@ function BusinessProfile() {
                 >
                   Zip Code
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("zip_code")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
+
               </div>
 
               <InputGroup>
@@ -585,7 +510,7 @@ function BusinessProfile() {
                   <FaMonument color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.zip_code}
+                  disabled={!isEditable}
                   name="zip_code"
                   border="2px solid #d1d5db"
                   className="border"
@@ -606,13 +531,6 @@ function BusinessProfile() {
                 >
                   Website
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("website")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
               </div>
 
               <InputGroup>
@@ -620,7 +538,7 @@ function BusinessProfile() {
                   <FaMonument color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.website}
+                  disabled={!isEditable}
                   name="website"
                   border="2px solid #d1d5db"
                   className="border"
@@ -641,13 +559,7 @@ function BusinessProfile() {
                 >
                   Industry
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("industry")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
+
               </div>
 
               <InputGroup>
@@ -655,7 +567,7 @@ function BusinessProfile() {
                   <FaMonument color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.industry}
+                  disabled={!isEditable}
                   name="industry"
                   border="2px solid #d1d5db"
                   className="border"
@@ -668,355 +580,61 @@ function BusinessProfile() {
             </div>
 
             {/* SAVE BUTTON */}
-            <div className="flex justify-center">
-              <Button type="save" colorScheme="blue">
-                Submit
+            <div className="flex flex-col lg:flex-row items-center justify-end mt-[1rem] mr-[1.5rem] w-full gap-[1rem]">
+              <Button
+                leftIcon={isLoading ? <ImSpinner9 className="animate-spin" /> : <RiEdit2Fill size="23px" />}
+                className="py-[1.5rem] rounded-[10px] text-[0.7rem] w-[100%] lg:w-auto lg:text-[1rem]"
+                type="submit"
+                colorScheme="blue"
+                variant="solid"
+                disabled={isLoading}
+              >
+                {isEditable ? "Save" : "Edit"}
               </Button>
             </div>
-
             {/* ACCOUNT MANAGEMENT */}
 
             <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
               ACCOUNT MANAGEMENT
             </div>
-            <div className="col-span-2 gap-x-[0.5rem] md:justify-between gap-y-[1rem] grid grid-cols-2 items-center xl:grid-cols-4">
-              <div className="flex lg:mb-0 items-center lg:gap-[1rem] gap-[0.5rem]">
+            <div className="col-span-2 gap-y-[1rem] grid grid-cols-2 xl:grid-cols-4">
+              <div className="flex items-center justify-center gap-[0.5rem]">
+                <h2
+                  onClick={handleSwitching}
+                  className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]"
+                >
+                  Switch Businesses
+                </h2>
+                <PiUserSwitchFill className="size-4 lg:size-5" />
+              </div>
+              {/* <div className="flex lg:mb-0 items-center lg:gap-[1rem] gap-[0.5rem]">
                 <h2 onClick={handleSwitching} className="font-normal  cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Switch Account
                 </h2>
                 <PiUserSwitchFill className=" size-4 lg:size-5" />
-              </div>
+              </div> */}
 
-              <div className="flex items-center lg:gap-[1rem] gap-[0.5rem]">
+              <div className="flex items-center justify-center gap-[0.5rem]">
                 <h2 className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Delete Account
                 </h2>
                 <TiUserDelete className="size-4 lg:size-5" />
               </div>
 
-              <div className="flex items-center lg:gap-[1rem] gap-[0.5rem]">
+              <div className="flex items-center justify-center gap-[0.5rem]">
                 <h2 className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Invite Member
                 </h2>
                 <FaPeopleRobbery className="size-4 lg:size-5" />
               </div>
 
-              <div className="flex items-center lg:gap-[1rem] gap-[0.5rem]">
+              <div className="flex items-center justify-center gap-[0.5rem]">
                 <h2 className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Change email
                 </h2>
                 <RiMailSettingsFill className="size-4 lg:size-5" />
               </div>
             </div>
-
-            {/* INVENTORY MANAGEMENT */}
-
-            {/* <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-0 text-[0.8rem] lg:text-[1.1rem] font-semibold">
-              INVENTORY MANAGEMENT
-            </div>
-
-            <h2 className="text-navyBlue mt-[1rem] lg:mt-0 font-medium text-[0.8rem] lg:text-[1.1rem]">
-              PRODUCT
-            </h2>
-
-            <TableContainer
-            whiteSpace="wrap"
-              className="col-span-2 flex-wrap  text-[0.8rem] lg:text-[1rem]"
-              width="100%"
-            >
-              <Table variant="striped">
-                <TableCaption>All Products marketed by user</TableCaption>
-                <Thead>
-                  <Tr>
-                    <Th>Item Name</Th>
-                    <Th>Item Description</Th>
-                    <Th isNumeric>Total Units Sold</Th>
-                    <Th isNumeric>Unit Price</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td>Eco-Friendly Water Bottle</Td>
-                    <Td>
-                      A reusable water bottle made from sustainable materials,
-                      designed to keep drinks cold for up to 24 hours
-                    </Td>
-                    <Td isNumeric>$19.99</Td>
-                    <Td isNumeric>5,200</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Wireless Noise-Canceling Headphones</Td>
-                    <Td>
-                      High-quality wireless headphones with active noise
-                      cancellation, offering superior sound and comfort for long
-                      listening sessions.
-                    </Td>
-                    <Td isNumeric>$149.99</Td>
-                    <Td isNumeric>3,800</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Smart Home Hub</Td>
-                    <Td>
-                      A central device that connects and controls various smart
-                      home products, offering seamless automation and voice
-                      control features.
-                    </Td>
-                    <Td isNumeric>$99.99</Td>
-                    <Td isNumeric>2,500</Td>
-                  </Tr>
-                </Tbody>
-                <Tfoot></Tfoot>
-              </Table>
-            </TableContainer> */}
-
-            {/* STOCKS */}
-            {/* <h2 className="text-navyBlue font-medium text-[0.8rem] lg:text-[1.1rem]">
-              STOCK
-            </h2>
-
-            <TableContainer
-              whiteSpace="wrap"
-              className="col-span-2 text-[0.8rem] lg:text-[1rem]"
-              width="100%"
-            >
-              <Table variant="striped">
-                <TableCaption>All Products in stock</TableCaption>
-                <Thead>
-                  <Tr>
-                    <Th>In Stock</Th>
-                    <Th>Low in Stock</Th>
-                    <Th>Out of Stock</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td>Solar-Powered Phone Charger</Td>
-                    <Td>Bluetooth Smartwatch</Td>
-                    <Td>Portable Air Purifier</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Smart Thermostat</Td>
-                    <Td>Wireless Charging Pad</Td>
-                    <Td>Noise-Canceling Earbuds</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Fitness Tracker Band</Td>
-                    <Td>4K Ultra HD Action Camera</Td>
-                    <Td>Smart LED Light Bulbs</Td>
-                  </Tr>
-                </Tbody>
-                <Tfoot></Tfoot>
-              </Table>
-            </TableContainer> */}
-
-            {/* CATEGORIES */}
-
-            {/* <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
-              CATEGORIES
-            </h2> */}
-
-            {/* <div className="col-span-2 flex flex-col gap-[1rem]"> */}
-            {/* ADD CATEGORY */}
-            {/* <div className="flex mb-[0.5rem] lg:mb-0 w-full  lg:w-1/2 flex-col gap-2 lg:gap-2">
-                <label
-                  className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
-                  htmlFor="category"
-                >
-                  Add a Category
-                </label>
-
-                <Input
-                  name="category"
-                  border="2px solid #d1d5db"
-                  className="border"
-                  variant="outline"
-                  value={inputDefaultStates.category}
-                  onChange={handleChange}
-                  placeholder="Add Category"
-                />
-              </div> */}
-
-            {/* edit CATEGORY */}
-            {/* <div className="lg:flex block mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
-                <h2
-                  className="font-normal text-lightRed mb-[0.5rem] lg:mb-0 text-[0.9rem] lg:text-[1.1rem]"
-                >
-                  Edit Category
-                </h2>
-                <div className="grid lg:gap-[2rem] md:gap-[1.5rem] grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                  <div className="flex md:col-span-2 lg:col-span-1 mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
-                    <label
-                      className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
-                      htmlFor="category"
-                    >
-                      Add Product
-                    </label>
-
-                    <Input
-                      name="addProduct"
-                      border="2px solid #d1d5db"
-                      className="border"
-                      variant="outline"
-                      value={inputDefaultStates.addProduct}
-                      onChange={handleChange}
-                      placeholder="Add a product"
-                    />
-                  </div> */}
-
-            {/* <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-2">
-                    <h2 className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]">
-                      Remove Product
-                    </h2>
-
-                    <Menu>
-                      {({ isOpen }) => (
-                        <>
-                          <MenuButton
-                            isActive={isOpen}
-                            as={Button}
-                            rightIcon={<FaCaretDown />}
-                          >
-                            Select Product
-                          </MenuButton>
-                          <MenuList>
-                            <MenuItem>Fitness Tracker Band</MenuItem>
-                            <MenuItem onClick={() => alert("gotten")}>
-                              Smart LED Light Bulbs
-                            </MenuItem>
-                            <MenuItem onClick={() => alert("gotten")}>
-                              Wireless Charging Pad
-                            </MenuItem>
-                            <MenuItem onClick={() => alert("gotten")}>
-                              Electric Standing Desk
-                            </MenuItem>
-                          </MenuList>
-                        </>
-                      )}
-                    </Menu>
-                  </div> */}
-
-            {/* <div className="flex mb-[1rem]  lg:mb-0 flex-col gap-2 lg:gap-2">
-                    <h2 className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]">
-                      Move Product
-                    </h2>
-
-                    <Menu>
-                      {({ isOpen }) => (
-                        <>
-                          <MenuButton
-                            isActive={isOpen}
-                            as={Button}
-                            rightIcon={<FaCaretDown />}
-                          >
-                            Select Product
-                          </MenuButton>
-                          <MenuList>
-                            <MenuItem>Fitness Tracker Band</MenuItem>
-                            <MenuItem onClick={() => alert("gotten")}>
-                              Smart LED Light Bulbs
-                            </MenuItem>
-                            <MenuItem onClick={() => alert("gotten")}>
-                              Wireless Charging Pad
-                            </MenuItem>
-                            <MenuItem onClick={() => alert("gotten")}>
-                              Electric Standing Desk
-                            </MenuItem>
-                          </MenuList>
-                        </>
-                      )}
-                    </Menu>
-                  </div> */}
-            {/* </div> */}
-            {/* </div> */}
-            {/* </div> */}
-
-            {/* STOCKS */}
-            {/* <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
-              ORDERS
-            </h2>
-
-            <TableContainer
-              whiteSpace="wrap"
-              className="col-span-2 text-[0.8rem] lg:text-[1rem]"
-              width="100%"
-            >
-              <Table variant="striped">
-                <TableCaption>All orders made</TableCaption>
-                <Thead>
-                  <Tr>
-                    <Th color="blue">Pending </Th>
-                    <Th color="green">Delivered</Th>
-                    <Th color="red">Cancelled</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td>Solar-Powered Phone Charger</Td>
-                    <Td>Bluetooth Smartwatch</Td>
-                    <Td>Portable Air Purifier</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Smart Thermostat</Td>
-                    <Td>Wireless Charging Pad</Td>
-                    <Td>Noise-Canceling Earbuds</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Fitness Tracker Band</Td>
-                    <Td>4K Ultra HD Action Camera</Td>
-                    <Td>Smart LED Light Bulbs</Td>
-                  </Tr>
-                </Tbody>
-                <Tfoot></Tfoot>
-              </Table>
-            </TableContainer> */}
-
-            {/* SALES */}
-            {/* <h2 className="text-navyBlue mt-[1rem] font-medium text-[0.8rem] lg:text-[1.1rem]">
-              SALES
-            </h2>
-
-            <TableContainer
-              whiteSpace="wrap"
-              className="col-span-2 text-[0.8rem] lg:text-[1rem]"
-              width="100%"
-            >
-              <Table variant="striped">
-                <TableCaption>Total sales made</TableCaption>
-                <Thead>
-                  <Tr>
-                    <Th>Sale </Th>
-                    <Th>Today </Th>
-                    <Th>Weekly</Th>
-                    <Th>Monthly</Th>
-                    <Th>Custom</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td>Total Sales</Td>
-                    <Td>35</Td>
-                    <Td>45</Td>
-                    <Td>20</Td>
-                    <Td>30</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Best Seller</Td>
-                    <Td>Daisy Dawn</Td>
-                    <Td>Sleek Eenju</Td>
-                    <Td>Hack Harick</Td>
-                    <Td>Quwam Ade</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Low Sales</Td>
-                    <Td>Solar-Powered Phone Charger</Td>
-                    <Td>Bluetooth Smartwatch</Td>
-                    <Td>Portable Air Purifier</Td>
-                    <Td>Portable Air Purifier</Td>
-                  </Tr>
-                </Tbody>
-                <Tfoot></Tfoot>
-              </Table>
-            </TableContainer> */}
           </div>
         </form>
       </div>

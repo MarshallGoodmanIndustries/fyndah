@@ -15,7 +15,7 @@ import { BiSolidMessageDetail } from "react-icons/bi";
 import ConfirmationModal from "./ConfirmationModal";
 
 
-const FeaturedPost = ({postId, organizationId, profileImg, username, timePosted, textContent, imgContent, noOflikes}) => {
+const FeaturedPost = ({postId, organizationId, msgId , profileImg, username, timePosted, textContent, imgContent, noOflikes}) => {
     const { authToken } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
@@ -148,11 +148,11 @@ const FeaturedPost = ({postId, organizationId, profileImg, username, timePosted,
                         {commentsData.length}
                     </div>
 
-                    {/* <div onClick={handleMessage} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
+                    <div onClick={handleMessage} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
                         <BiSolidMessageDetail className="w-5 h-5 text-gray-600" />
-                    </div> */}
+                    </div>
 
-                    {confirmationModal && (<ConfirmationModal setConfirmationModal={setConfirmationModal} org_id={organizationId} />)}
+                    {confirmationModal && (<ConfirmationModal setConfirmationModal={setConfirmationModal} msgId={msgId} org_id={organizationId} />)}
                 </div>
                     
                 {comment && <FeaturedPost_inner 
