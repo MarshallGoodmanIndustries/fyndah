@@ -94,15 +94,15 @@ const FeaturedPost = ({postId, organizationId, profileImg, username, timePosted,
         }
     }
 
-    // const handleMessage = ()=> {
-    //     if(!authToken){
-    //         //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-    //         sessionStorage.setItem("lastRoute", location.pathname)
-    //         navigate('/login');
-    //     }else{
-    //         setConfirmationModal(true);
-    //     }
-    // }
+    const handleMessage = ()=> {
+        if(!authToken){
+            //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+            sessionStorage.setItem("lastRoute", location.pathname)
+            navigate('/login');
+        }else{
+            setConfirmationModal(true);
+        }
+    }
     useEffect(() => {
         setTimeAgo(<TimeAgo isoString={timePosted} />);
     },[timePosted])

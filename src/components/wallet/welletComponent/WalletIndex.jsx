@@ -2,7 +2,7 @@
 
 import { FaRegChartBar, } from "react-icons/fa"
 import { MdPayment } from "react-icons/md"
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Modal from "./Modal";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -15,6 +15,8 @@ import DateRangePicker from "./BalanceDateRangePicker";
 import AllTransaction from "./AllTransaction";
 import DateTransaction from "./DateTransaction";
 import StatisticsModal from "./StatisticsModal";
+import ProceedToPayment from "./ProceedToPayment";
+import { TbCurrencyNaira } from "react-icons/tb";
 
 
 
@@ -26,6 +28,7 @@ function WalletIndex() {
     const { id, name } = useParams();
     const orgId = { id: id };
     const organization_name = { name: name }
+    const location = useLocation();
 
     // const [isLoading, setIsLoading] = useState(true)
 
@@ -43,33 +46,66 @@ function WalletIndex() {
     // const openModal2 = () => setIsModalOpen2(true);
     // const closeModal2 = () => setIsModalOpen2(false);
     const [addAmountWallet, setAddAmountWallet] = useState('')
+    const [paystack, setPaystack] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     // const [payLeadsForm, setPayLeadsForm] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
+    const [isPaystackLoading, setIsPaystackLoading] = useState(false)
     const { authToken } = useContext(AuthContext)
-    // for the first modal to flutterwave
-    const redirectToFlutterwave = async () => {
+
+
+    // for the modal to paystack
+    const [isProceedOpen, setIsProceedOpen] = useState(false);
+    const isProceedOpenModal = () => setIsProceedOpen(true);
+    const isProceedCloseModal = () => setIsProceedOpen(false);
+    const redirectToPayStack = async () => {
         setIsModalOpen(true);
         navigate('');
         // for the payment
         try {
-            const details = {
-                amount: addAmountWallet,
-
-            }
-            const API = 'https://api.fyndah.com/api/v1/organization/flutterwave/pay'// still have error here
+            setIsPaystackLoading(true)
+            const details = { amount: addAmountWallet }
+            const API = 'https://api.fyndah.com/api/v1/organization/paystack/pay'// still have error here
             const payment = await axios.post(API, details, {
                 headers: {
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${authToken}`,
                 }
             })
-            console.log(payment.data);
+            if (payment.data.status === 'success') {
+                setPaystack(payment.data.data.payment_url.url)
+                isProceedOpenModal()//na here i dey.......
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops! Something went wrong",
+                    text: "Payment is currently not available, try again later",
+                    timerProgressBar: false,
+                });
+            }
         } catch (error) {
-            console.log(error.message);
+            setIsPaystackLoading(false)
+            console.error("Error fetching wallet balance:", error);
+            if (error.response ? error.response.data : error.message) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops! An error has occurred",
+                    text: "Payment gateway can't initialize right now, try again later.",
+                    timerProgressBar: false,
+                    footer: `<a href="#">You currently can't access the payment gateway rightaway. Please try again later. ${error.message}</a>`,
+
+                });
+            }
+        } finally {
+            setIsPaystackLoading(false)
         }
-        // console.log(addAmountWallet, "from walletindex")
-        // <Flutterwave />
     };
+
+
+
+
+
+
+
     // this for the second modal to pay for leads
     // const redirectToPayLeadsForm = async () => { //purchase for lead function
     //     setIsModalOpen2(false);
@@ -156,10 +192,10 @@ function WalletIndex() {
                                 <p> <ImSpinner9 className="animate-spin text-white hover:text-gray-300" size={22} /> </p>
                             </div>
                         ) : (
-                            <div>
-                                <p className="text-2xl font-bold"><span className="text-sm md:text-base text-center lg:text-lg">$</span> {transactions}</p>
-
-                            </div>
+                            <p className="text-2xl font-bold flex items-center justify-center">
+                                <TbCurrencyNaira className="mr-1 text-sm" size={22} />
+                                {transactions}
+                            </p>
                         )}
                     </div>
                     <div className="mt-4 flex sm:flex-row justify-center sm:space-y-0 ">
@@ -191,9 +227,10 @@ function WalletIndex() {
                         </div>
                         <AllTransaction />
 
-                        <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToFlutterwave} />
+                        <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToPayStack} loading={isPaystackLoading} />
                         {/* <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} /> */}
                         <StatisticsModal isOpen={StatsIsModalOpen} onClose={StatsCloseModal} />
+                        <ProceedToPayment isOpen={isProceedOpen} onClose={isProceedCloseModal} paystack={paystack} />
                     </div>
                 </div>
             </div>

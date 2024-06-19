@@ -2,9 +2,11 @@
 // import { useState } from 'react';
 
 // import { FaDollarSign } from 'react-icons/fa';
+import { TbCurrencyNaira } from 'react-icons/tb';
 import './modal.css'; // Added custom CSS
+// import { ImSpinner9 } from 'react-icons/im';
 
-const DateTransactionModal = ({ isOpenModal, handleCloseModal, startDate, endDate, data }) => {
+const DateTransactionModal = ({ isOpenModal, handleCloseModal, isLoading, startDate, endDate, data }) => {
     // const [isLoading, setIsLoading] = useState(false);
     // if (!data) {
     //     return <div>Loading...</div>
@@ -52,23 +54,35 @@ const DateTransactionModal = ({ isOpenModal, handleCloseModal, startDate, endDat
                                     </th>
                                 </tr>
                             </thead>
+
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {data?.length > 0 ? (
-                                    data.map(transaction => (
+                                {isLoading ? (
+                                    <tr>
+                                        <td colSpan={4} className="text-center p-10 text-black">
+                                            <div className="flex justify-center items-center">
+                                                Loading...
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ) : data?.length > 0 ? (
+                                    data.map((transaction) => (
                                         <tr key={transaction.id || 'default-key'}>
                                             <td className="px-6 py-4 whitespace-nowrap">{transaction.uuid || 'N/A'}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">{transaction.type || 'Unknown Type'}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap"><span className="text-xs">$</span>  {transaction.amount || '0'}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <p className="text-2xl font-bold flex items-center justify-center">
+                                                    <TbCurrencyNaira className="mr-1 text-sm" size={22} />
+                                                    {transaction.amount || '0'}
+                                                </p>
+                                            </td>
                                             <td className="px-6 py-4 whitespace-nowrap">{transaction.created_at || 'Not Available'}</td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={4} className="text-center p-10 text-black">No transactions found.</td>
+                                        <td colSpan={4} className="text-center p-10 text-black">No transaction records found.</td>
                                     </tr>
                                 )}
-
-                                {/* More rows... */}
                             </tbody>
                         </table>
                     </div>

@@ -161,9 +161,9 @@ const BusinessProfileSetup = () => {
           }
         );
 
-        // console.log("Response:", response.data);
+        console.log("Response:", response.data);
 
-        // console.log("Form data submitted: ", inputValues);
+        console.log("Form data submitted: ", inputValues);
 
         if (response.status == 201) {
           const businesssId = response.data.data.organization.id;
@@ -185,7 +185,7 @@ const BusinessProfileSetup = () => {
           icon: "error",
           title: "Oops...",
           text: "Business profile setup failed!",
-          footer: `<a href="#">Could not set up your business profile. Please try again later. ${error.message}</a>`,
+          footer: `<a href="#">Could not set up your business profile. ${error.response?.data.message}. Please try again.</a>`,
         });
         console.error("Error response:", error.response?.data); // Log the full error response
       } finally {
