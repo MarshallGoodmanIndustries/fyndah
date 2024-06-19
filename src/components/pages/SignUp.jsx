@@ -143,6 +143,7 @@ function SignUp() {
         );
 
         if (response.data.status == "success") {
+          localStorage.setItem("isFirstTimeUser", "true");
           Swal.fire({
             icon: "success",
             title: "Registration completed...",

@@ -13,6 +13,7 @@ const FeaturedPosts = () => {
   const { authToken } = useContext(AuthContext);
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
+  const [getOrgDetails, setGetOrgDetails] = useState([])
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,6 +33,22 @@ const FeaturedPosts = () => {
     }
     getPosts();
   }, []);
+
+  useEffect(() => {
+    const url = "https://api.fyndah.com/api/v1/organization";
+    const getOrgMessageId = async () => {
+      try {
+        const response = await axios.get(url);
+        setGetOrgDetails(response.data.data)
+        
+
+      } catch(error) {
+        console.error(error)
+      }
+    }
+    getOrgMessageId();
+  }, [])
+  console.log(getOrgDetails)
 
   const handleSeeMore = ()=> {
     if(!authToken){
@@ -59,6 +76,11 @@ const FeaturedPosts = () => {
       setCurrentPage(prevPage => prevPage - 1)
     }
   }, [posts, currentPage, postsForCurrentPage]);
+
+  const findOrganizationMsgId = (organizationId) => {
+    const organization = getOrgDetails.find(org => org.id.toString() === organizationId.toString());
+    return organization ? organization.msg_id : null;
+  };
   
 
   return (
@@ -68,7 +90,28 @@ const FeaturedPosts = () => {
             <h3 className="font-poppins text-xl md:text-2xl lg:text-3xl font-medium">Featured Posts</h3>
         </div>
       <div className="grid grid-cols-1 items-center sm:grid-cols-2 md:grid-cols-3 gap-16 md:gap-8">
-        {!containsPosts ? 
+      {!containsPosts ? 
+        (featuredPostsLoadingDummy.map((dummy, index) => (
+          <FeaturedPostLoading key={index} />
+        ))) : 
+        (posts.map(post => {
+          const msgId = findOrganizationMsgId(post.organization);
+          return (
+            <FeaturedPost 
+              key={post._id}
+              postId={post._id}
+              organizationId={post.organization}
+              profileImg={businesslogo}
+              username={post.authorUsername} 
+              timePosted={post.createdAt}
+              textContent={post.description} 
+              imgContent={post.image} 
+              noOflikes={post.likesCount}
+              msgId={msgId}
+            />
+          );
+        }))}
+        {/* {!containsPosts ? 
           (featuredPostsLoadingDummy.map((dummy, index)=> (
             <FeaturedPostLoading key={index} />
           ))) : 
@@ -84,7 +127,7 @@ const FeaturedPosts = () => {
               imgContent={post.image} 
               noOflikes={post.likesCount}
             />
-        )))}
+        )))} */}
       </div>
       { totalPages > 9 && (
         <div className="flex items-center justify-between gap-4 w-full max-w-[300px] md:max-w-[80%] lg:max-w-[70%] mx-auto">

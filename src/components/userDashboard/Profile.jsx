@@ -4,84 +4,84 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Table,
   Button,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
 } from "@chakra-ui/react";
 import { useEffect, useState, useContext } from "react";
 import { RiEdit2Fill } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa6";
-// import { Textarea } from "@chakra-ui/react";
 import { MdLocationPin } from "react-icons/md";
-// import { FaMonument } from "react-icons/fa";
 import { PiUserSwitchFill } from "react-icons/pi";
-// import { TiUserDelete } from "react-icons/ti";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { ImSpinner9 } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
+import ModalComponent from "../uiComponents/ModalComponet";
 
 function Profile() {
   const { authToken } = useContext(AuthContext);
-  const [isLoading, setIsloading] = useState(false)
-  const navigate = useNavigate()
-  // const [errorMessage, setErrorMessage] = useState("")
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [showButton, setShowButton] = useState(false)
+
+  const navigate = useNavigate();
   const [inputDefaultStates, setInputDefaultStates] = useState({
     firstName: "",
     lastName: "",
-    bio: "",
+    phone_number: "",
     location: "",
     businessRegNumber: "",
   });
 
-  const fullName = `${inputDefaultStates.firstName}  ${inputDefaultStates.lastName}`
+  const fullName = `${inputDefaultStates.firstName} ${inputDefaultStates.lastName}`;
+  const [isEditable, setIsEditable] = useState(false);
 
-  const [isEditable, setIsEditable] = useState({
-    firstName: false,
-    lastName: false,
-    bio: false,
-    location: false,
-  });
+  useEffect(() => {
+    const firstTimeUser = localStorage.getItem("isFirstTimeUser");
+    if (firstTimeUser === "true") {
+      setIsFirstTimeUser(true);
+      setOpenModal(true);
+      localStorage.removeItem("isFirstTimeUser");
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setInputDefaultStates({
       ...inputDefaultStates,
       [name]: value,
     });
   };
 
-  const toggleEdit = (field) => {
-    setIsEditable({
-      ...isEditable,
-      [field]: !isEditable[field],
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isEditable) {
+      setIsEditable(true);
+      return;
+    }
+
+    setIsEditable(false);
     try {
-      setIsloading(true)
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append("firstname", inputDefaultStates.firstName);
+      formData.append("lastname", inputDefaultStates.lastName);
+      formData.append("address", inputDefaultStates.location);
+      formData.append("phone_number", inputDefaultStates.phone_number);
+      if (selectedFile) {
+        formData.append("profile_photo_path", selectedFile);
+      }
+
       const response = await axios.post(
         "https://api.fyndah.com/api/v1/users/profile",
-        {
-          firstname: inputDefaultStates.firstName,
-          lastname: inputDefaultStates.lastName,
-          address: inputDefaultStates.location,
-
-        },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -94,9 +94,13 @@ function Profile() {
           timer: 2000,
           timerProgressBar: true,
         });
-        // console.log("Form submitted", response.data);
+        console.log(response.data);
+        console.log(formData)
+        if (selectedFile) {
+          setProfilePhoto(URL.createObjectURL(selectedFile));
+        }
       } else {
-        setIsloading(false)
+        setIsLoading(false);
         throw new Error("Profile Update failed");
       }
     } catch (error) {
@@ -104,18 +108,29 @@ function Profile() {
         icon: "error",
         title: "Oops...",
         text: "Update Failed!",
-        footer: `<a href="#">Could not update profile. Please try again later. ${error.message}</a>`,
+        footer: `<a href="#">Could not update profile. Please try again later. ${error.response.data.message}</a>`,
       });
       console.error(error);
-      setIsloading(false)
+      setIsLoading(false);
     } finally {
-      setIsloading(false)
+      setIsLoading(false);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setShowButton(true)
+      setProfilePhoto(URL.createObjectURL(file)); // Set the profile photo immediately
     }
   };
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
+        setIsLoading(true);
+
         const profileResponse = await axios.get(
           "https://api.fyndah.com/api/v1/users/profile",
           {
@@ -131,39 +146,143 @@ function Profile() {
           firstName: userData.firstname || "",
           lastName: userData.lastname || "",
           location: userData.address || "",
-          businessRegNumber: "", 
+          phone_number: userData.phone_number || "",
         });
-
-        // console.log(profileResponse.data);
+        setProfilePhoto(userData.profile_photo_path)
+        if (profileResponse.status === 200) {
+          console.log(profileResponse.data);
+          setProfilePhoto(userData.profile_photo_path);
+        } else {
+          setIsLoading(false);
+          throw new Error("Profile Details failed");
+        }
       } catch (error) {
-        console.error(error.message);
+        console.error(error);
+        setIsLoading(false);
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
 
     fetchProfileData();
   }, [authToken]);
 
-
   const handleSwitchAccount = () => {
-    navigate("/dashboard/mybusiness")
+    navigate("/dashboard/mybusiness");
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>
+          <ImSpinner9 className="animate-spin text-blue-500 hover:text-blue-800" size={50} />
+        </p>
+        <span>Please wait...</span>
+      </div>
+    );
+  }
+
+  const handleSubmitPhoto = async () => {
+    try {
+      setIsLoading(true);
+      setShowButton(false)
+      const response = await axios.post(
+        "https://api.fyndah.com/api/v1/users/profile",
+        {
+          profile_photo_path: profilePhoto
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Successful...",
+          text: "Profile photo updated successfully",
+          timer: 2000,
+          timerProgressBar: true,
+        });
+        console.log(response.data);
+      } else {
+        setIsLoading(false);
+        throw new Error("Profile photo Update failed");
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Update Failed!",
+        footer: `<a href="#">Could not update profile photo. Please try again later. ${error.response.data.message}</a>`,
+      });
+      console.error(error);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  
   }
 
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
+      {openModal && <ModalComponent />}
       <div className="md:flex block items-center gap-[6rem]">
-        {/* PROFILE IMAGE DISPLAY */}
         <div>
-          <Box
+        <Box
+            className="w-[80px] rounded-full lg:w-[100px] h-[100px]"
+            position="relative"
+            display="inline-block"
+            borderRadius="full"
+            overflow="hidden"
+          >
+            <Image
+  className="w-[80px] lg:w-[100px] h-[100px] object-cover rounded-full"
+  src={profilePhoto || "https://cdn-icons-png.freepik.com/512/3177/3177440.png"}
+  alt="Profile"
+/>
+            <Box
+              position="absolute"
+              top="0"
+              left="0"
+              width="100%"
+              height="100%"
+              backgroundColor="rgba(0, 0, 0, 0.4)"
+              opacity="0"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              transition="opacity 0.3s"
+              _hover={{ opacity: 1 }}
+            >
+              <RiEdit2Fill color="white" size="23px" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  opacity: 0,
+                  cursor: "pointer",
+                }}
+              />
+            </Box>
+          </Box>
+          {/* <Box
             className="w-[80px] lg:w-[150px]"
             position="relative"
             display="inline-block"
             borderRadius="full"
             overflow="hidden"
-          // boxSize="150px"
           >
             <Image
               className="w-[80px] lg:w-[150px]"
-              // boxSize="150px"
               src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
               alt="Dan Abramov"
             />
@@ -183,7 +302,14 @@ function Profile() {
             >
               <RiEdit2Fill color="white" size="23px" />
             </Box>
-          </Box>
+          </Box> */}
+
+{showButton && <Button
+    onClick={handleSubmitPhoto}
+    className="my-2 py-2 px-4 bg-blue-500 text-white rounded"
+  >
+    Upload Profile Photo
+  </Button>}
 
           <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
             {fullName}
@@ -198,7 +324,6 @@ function Profile() {
         </h2>
       </div>
 
-      {/* ACCOUNT SETTING */}
       <div className="">
         <h2 className="text-lightRed mb-[1rem] text-center text-[0.8rem] lg:text-[1.1rem] font-semibold">
           ACCOUNT SETTING
@@ -207,10 +332,8 @@ function Profile() {
           EDIT PROFILE
         </h2>
 
-        {/* FORM */}
         <form onSubmit={handleSubmit} action="">
           <div className="lg:grid block grid-cols-2 gap-x-[4rem] gap-y-[2rem]">
-            {/* FIRST NAME */}
             <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
                 <label
@@ -219,13 +342,6 @@ function Profile() {
                 >
                   First Name
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("firstName")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
               </div>
 
               <InputGroup>
@@ -233,7 +349,7 @@ function Profile() {
                   <FaRegUser color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.firstName}
+                  disabled={!isEditable}
                   name="firstName"
                   border="2px solid #d1d5db"
                   className="border"
@@ -245,7 +361,6 @@ function Profile() {
               </InputGroup>
             </div>
 
-            {/* LAST NAME */}
             <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
                 <label
@@ -254,13 +369,6 @@ function Profile() {
                 >
                   Last Name
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("lastName")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
               </div>
 
               <InputGroup>
@@ -268,7 +376,7 @@ function Profile() {
                   <FaRegUser color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.lastName}
+                  disabled={!isEditable}
                   name="lastName"
                   border="2px solid #d1d5db"
                   className="border"
@@ -280,37 +388,6 @@ function Profile() {
               </InputGroup>
             </div>
 
-            {/* BIO */}
-            {/* <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
-              <div className="flex items-center justify-between">
-                <label
-                  className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
-                  htmlFor="bio"
-                >
-                  Bio
-                </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("bio")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
-              </div>
-
-              <Textarea
-                disabled={!isEditable.bio}
-                name="bio"
-                border="2px solid #d1d5db"
-                rows="4"
-                value={inputDefaultStates.bio}
-                onChange={handleChange}
-                placeholder="Input bio text here"
-                size="sm"
-              />
-            </div> */}
-
-            {/* LOCATION */}
             <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
                 <label
@@ -319,13 +396,6 @@ function Profile() {
                 >
                   Location
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("location")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
               </div>
 
               <InputGroup>
@@ -333,7 +403,7 @@ function Profile() {
                   <MdLocationPin color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.location}
+                  disabled={!isEditable}
                   name="location"
                   border="2px solid #d1d5db"
                   className="border"
@@ -345,110 +415,72 @@ function Profile() {
               </InputGroup>
             </div>
 
-            {/* BSUINESS REG NO */}
-            {/* <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
+            <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
                 <label
                   className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
-                  htmlFor="businessregnumber"
+                  htmlFor="Phone Number"
                 >
-                  Add Business Registration Number
+                  Phone Number
                 </label>
-                <span
-                  className="flex font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem] gap-2 cursor-pointer hover:text-neutral-400  items-center"
-                  onClick={() => toggleEdit("businessRegNumber")}
-                >
-                  {" "}
-                  <RiEdit2Fill /> Edit
-                </span>
               </div>
 
               <InputGroup>
                 <InputRightElement pointerEvents="none">
-                  <FaMonument color="text-[#d1d5db]" />
+                  <PiUserSwitchFill color="text-[#d1d5db]" />
                 </InputRightElement>
                 <Input
-                  disabled={!isEditable.businessRegNumber}
-                  name="businessRegNumber"
+                  disabled={!isEditable}
+                  name="phone_number"
                   border="2px solid #d1d5db"
                   className="border"
                   variant="outline"
-                  value={inputDefaultStates.businessRegNumber}
+                  value={inputDefaultStates.phone_number}
                   onChange={handleChange}
-                  placeholder="Add a business registration number"
+                  placeholder="Phone Number"
                 />
               </InputGroup>
-            </div> */}
+            </div>
+          </div>
 
-            {/* SAVE BUTTON */}
-            <div className="flex justify-center">
-              {isLoading ?
-                <p> <ImSpinner9 className="animate-spin text-blue-700 hover:text-blue-500" size={22} /> </p> :
-                <Button type="save" colorScheme="blue">
-                  Submit
-                </Button>
-              }
-
+          {/* <div className="lg:flex items-center  mt-[2rem] justify-end"> */}
+            <div className="flex flex-col lg:flex-row items-center justify-end mt-[3rem] mr-[1.5rem] w-full gap-[1rem]">
+              {/* <Button
+                onClick={handleSwitchAccount}
+                leftIcon={<PiUserSwitchFill size="23px" />}
+                className="py-[1.5rem] rounded-[10px] text-[0.7rem] w-[100%] order-2 lg:order-1 lg:w-auto lg:text-[1rem]"
+                colorScheme="red"
+                variant="solid"
+              >
+                Switch to Business Account
+              </Button> */}
+              <Button
+                leftIcon={isLoading ? <ImSpinner9 className="animate-spin" /> : <RiEdit2Fill size="23px" />}
+                className="py-[1.5rem] rounded-[10px] text-[0.7rem] w-[100%] lg:w-auto lg:text-[1rem]"
+                type="submit"
+                colorScheme="blue"
+                variant="solid"
+                disabled={isLoading}
+              >
+                {isEditable ? "Save" : "Edit"}
+              </Button>
             </div>
 
-            <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
+             <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
               ACCOUNT MANAGEMENT
             </div>
             <div className="flex mb-[1rem] lg:mb-0 items-center gap-[1rem]">
-              <h2 onClick={handleSwitchAccount} className="font-normal  cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
-                Switch Account
-              </h2>
-              <PiUserSwitchFill className=" size-4 lg:size-5" />
+              <Button
+                onClick={handleSwitchAccount}
+                leftIcon={<PiUserSwitchFill size="23px" />}
+                className="py-[1.5rem] rounded-[10px] text-[0.7rem] w-[100%] order-2 lg:order-1 lg:w-auto lg:text-[1rem]"
+                colorScheme="red"
+                variant="solid"
+              >
+                Switch to Business Account
+              </Button>
             </div>
-
-            {/* <div className="flex items-center gap-[1rem]">
-              <h2 className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
-                Delete Account
-              </h2>
-              <TiUserDelete className="size-4 lg:size-5" />
-            </div> */}
-
-            {/* <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
-              WISHLIST
-            </div> */}
-
-            {/* <ul className="">
-              <li className="text-[0.9rem]">Marshall Associates</li>
-              <li className="text-[0.9rem]">Daisy Dawn</li>
-            </ul> */}
-
-            {/* <div className="col-span-2 my-[2rem] uppercase flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
-              Purchasing History
-            </div> */}
-
-            {/* <TableContainer whiteSpace="wrap" className="col-span-2 text-[0.8rem] lg:text-[1rem]" width="100%">
-              <Table variant="simple">
-                <TableCaption>
-                  All Transactions made within the app
-                </TableCaption>
-                <Thead>
-                  <Tr>
-                    <Th>Date</Th>
-                    <Th>Purchase</Th>
-                    <Th isNumeric>Amount</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td>24/04/2025</Td>
-                    <Td>Two minimal sweaters</Td>
-                    <Td isNumeric>$200</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>25/04/2025</Td>
-                    <Td>Five sweat shirts</Td>
-                    <Td isNumeric>$120</Td>
-                  </Tr>
-                </Tbody>
-                <Tfoot></Tfoot>
-              </Table>
-            </TableContainer> */}
-          </div>
+          {/* </div> */}
         </form>
       </div>
     </div>
