@@ -43,7 +43,7 @@ const SideBar = ({ handleToggle }) => {
       </Link>
 
       {/* createbuisness */}
-      <Link to='createbuisness'>
+      {/* <Link to='createbuisness'>
         <div onClick={handleToggle}
           className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${getLinkClass('createbuisness')}`}>
           <span>
@@ -51,7 +51,7 @@ const SideBar = ({ handleToggle }) => {
           </span>
           <h2 className='text-[1.1rem] mt-0 font-normal'>Create a business</h2>
         </div>
-      </Link> 
+      </Link>  */}
 
       {/* mybusiness */}
       <Link to='mybusiness'>
