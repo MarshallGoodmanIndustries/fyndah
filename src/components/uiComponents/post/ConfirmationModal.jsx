@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 
 
-const ConfirmationModal = ({setConfirmationModal, org_id}) => {
+const ConfirmationModal = ({setConfirmationModal, org_id, msgId}) => {
     const {authToken} = useContext(AuthContext);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +13,7 @@ const ConfirmationModal = ({setConfirmationModal, org_id}) => {
     const handleCreateConversation = async ()=> {
         setIsLoading(true);
         try {
-            const response = await axios.post(`https://axelonepostfeature.onrender.com/api/conversations/newconversation/${org_id}`, {}, {
+            const response = await axios.post(`https://axelonepostfeature.onrender.com/api/conversations/newconversation/${msgId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 }

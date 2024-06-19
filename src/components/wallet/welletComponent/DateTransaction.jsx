@@ -5,13 +5,14 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaAngleDown } from "react-icons/fa";
 import { AuthContext } from '../../context/AuthContext';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { ImSpinner9 } from 'react-icons/im';
+// import { ImSpinner9 } from 'react-icons/im';
 import DateTransactionModal from './DataTransactionModal';
 
 const DateTransaction = () => {
-
+    const navigate = useNavigate()
+    const location = useLocation()
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [isOpen, setIsOpen] = useState(false);
@@ -51,6 +52,7 @@ const DateTransaction = () => {
             console.log(response.data);
             if (response.data.message == "succcess") {
                 setData(response.data.txns)
+                sessionStorage.removeItem("lastRoute")
             } else {
                 Swal.fire({
                     icon: "error",
@@ -71,6 +73,8 @@ const DateTransaction = () => {
                     timer: 4000,
                     timerProgressBar: true,
                 });
+                sessionStorage.setItem("lastRoute", location.pathname)
+                navigate("/login")
 
                 setIsLoading(false);
 
@@ -80,18 +84,15 @@ const DateTransaction = () => {
         }
     }
     const handleConfirm = () => {
-
-        setIsOpen(true);
-
         // Handle date range confirmation (e.g., send data to backend)
         // console.log(`Start Date: ${startDate} end Date: ${endDate}`);
         handleTransactionToDate();
-        if (handleTransactionToDate()) {
-            setTimeout(() => {
-                handleOpenModal()
-                setIsOpen(false)
-            }, 2000);
-        }
+        // if (handleTransactionToDate()) {
+        //     setTimeout(() => {
+        handleOpenModal()
+        //         setIsOpen(false)
+        //     }, 2000);
+        // }
     };
 
 
@@ -143,7 +144,7 @@ const DateTransaction = () => {
                             onClick={handleConfirm}
                             className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
                         >
-                            {isLoading ? (
+                            {/* {isLoading ? (
                                 <div className="flex justify-center items-center">
                                     <p> <ImSpinner9 className="animate-spin text-white hover:text-gray-300" size={15} /> </p>
                                 </div>
@@ -151,7 +152,7 @@ const DateTransaction = () => {
                                 <div>
                                     {null}
                                 </div>
-                            )}
+                            )} */}
                             Confirm
                         </button>
                     </div>

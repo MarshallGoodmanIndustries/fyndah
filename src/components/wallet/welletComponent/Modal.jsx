@@ -1,19 +1,19 @@
 // import React from 'react'
 
 import { useState } from "react";
+import { ImSpinner9 } from "react-icons/im";
 
-function Modal({ addAmountWallet, setAddAmountWallet, isOpen, onClose, onRedirect, }) {
+function Modal({ addAmountWallet, setAddAmountWallet, isOpen, onClose, onRedirect, loading, }) {
 
     const [error, setError] = useState(true)
+
     if (!isOpen) return null;
     const handleSubmit = (e) => {
         e.preventDefault();
         if (addAmountWallet) {
             onRedirect();
-            // console.log(addAmountWallet)
             setError(true)
         } else {
-            // console.log('please enter amount')
             setError(false)
         }
     }
@@ -52,9 +52,8 @@ function Modal({ addAmountWallet, setAddAmountWallet, isOpen, onClose, onRedirec
                             <button
                                 className="bg-blue-500 mr-4 text-white px-4 py-2 rounded hover:bg-blue-700"
                                 onClick={handleSubmit}
-
                             >
-                                Continue
+                                {loading ? <p><ImSpinner9 className="animate-spin text-white hover:text-gray-300" size={22} /></p> : "Continue"}
                             </button>
                             <button
                                 className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"

@@ -139,13 +139,13 @@ function CurrentSearchRequest() {
 
   const po = `/businessDashboard/${id}/${name}/posts`;
 
-  // if (!request?.length)
-  //   return (
-  //     <EmptyLeads
-  //       data="There are Currently no Available Search Request Related to your Business. When they are, you would see them here."
-  //       posts={po}
-  //     />
-  //   );
+  if (!request?.length)
+    return (
+      <EmptyLeads
+        data="There are Currently no Available Search Request Related to your Business. When they are, you would see them here."
+        posts={po}
+      />
+    );
 
   // if (!request?.length) return <EmptyLeads posts={po} />;
   // return (

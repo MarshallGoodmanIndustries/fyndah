@@ -1,22 +1,34 @@
-import { AuthContext } from "../context/AuthContext";
 import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
-import {ImSpinner9} from "react-icons/im"
-import Swal from "sweetalert2";
+import { Avatar, Spinner } from '@chakra-ui/react'
 
-function BusinessMessages () {
-    const { userData } = useContext(AuthContext);
-  const { authToken } = useContext(AuthContext);
+function Messages() {
+  // State for conversations and UI control
+  const [conversationOnPage, setConversationOnPage] = useState([]);
+  const [showMessageBox, setShowMessageBox] = useState(false);
+  const [showListOfBusiness, setShowListOfBusiness] = useState(true);
   const [allConversations, setAllConversations] = useState([]);
   const [conversationInChat, setConversationInChat] = useState([]);
   const [id, setId] = useState("");
-  const [prevMessages, setPrevMessages] = useState([]);
+  const [senderId, setSenderId] = useState("");
+  const [messageLoading, setMessageLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hideUsers, setHideUsers] = useState(true);
   const [showMessage, setShowMessage] = useState(false);
   const [value, setValue] = useState("");
 
+  const { authToken, socket } = useContext(AuthContext);
+
+  // Hide the message list on mobile screens
+  const hideTheListOnMobile = () => {
+    if (window.innerWidth < 768) {
+      setShowListOfBusiness(false);
+    }
+  };
+
+  // Fetch conversations
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -28,21 +40,12 @@ function BusinessMessages () {
             },
           }
         );
-  
+
         if (response.status === 200) {
-          Swal.fire({
-            icon: "success",
-            title: "Successful...",
-            text: "Profile updated successfully",
-            timer: 2000,
-            timerProgressBar: true,
-          });
-
-          const messageresponse = response.data
-          setAllConversations(messageresponse)
-
-          console.log(messageresponse)
-          // console.log("Form submitted", response.data);
+          setConversationOnPage(response.data);
+          const theSenderId = response.data[0].members[0].id;
+          setSenderId(theSenderId);
+          console.log("response: ", response.data);
         } else {
           throw new Error("Getting all messages failed");
         }
@@ -51,11 +54,10 @@ function BusinessMessages () {
       }
     };
 
-    if (authToken) {
-      fetchData();
-    }
+    fetchData();
   }, [authToken]);
 
+  // Fetch messages in a conversation
   const getMessagesInConversation = async (conversationId) => {
     try {
       const response = await axios.get(
@@ -68,23 +70,30 @@ function BusinessMessages () {
       );
 
       if (response.status === 200) {
-
-        const messageresponse = response.data
-        setConversationInChat(messageresponse)
-        setId(conversationId)
-
-        console.log(messageresponse)
-        setHideUsers(false)
-        setShowMessage(true);
-        // console.log("Form submitted", response.data);
+        setConversationInChat(response.data);
+        setId(conversationId);
+        console.log("conversations: ", response.data);
       } else {
-        throw new Error("Getting messages in a converstaion failed");
+        throw new Error("Getting messages in a conversation failed");
       }
     } catch (error) {
       console.error("Error fetching data", error);
     }
+  };
 
-  }
+  useEffect(() => {
+    if (!socket) return;
+
+    // Listen for incoming messages
+    socket.on("receiveMessage", (message) => {
+      setConversationInChat((prev) => [...prev, message]);
+    });
+
+    // Cleanup on unmount
+    return () => {
+      socket.off("receiveMessage");
+    };
+  }, [socket]);
 
   const handleMessageChange = (e) => {
     setValue(e.target.value);
@@ -92,103 +101,330 @@ function BusinessMessages () {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessageLoading(true);
     if (value.trim() !== "") {
       try {
         const response = await axios.post(
           `https://axelonepostfeature.onrender.com/api/messages/send-message/${id}`,
-          {
-            message: value,
-          },
+          { message: value },
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
             },
           }
         );
-  
+
         if (response.status === 200) {
-          console.log("message sent", response.data)
+          const message = response.data;
           setValue("");
-        setPrevMessages((prev) => [...prev, value]);
-      }
+          socket.emit("sendMessage", message);  // Emit message to socket server
+          console.log("Message sent", response.data);
+          setMessageLoading(false);
+        }
       } catch (error) {
         console.error(error);
       }
     }
   };
 
-  console.log("the id", id)
+  console.log("The id", id);
+  console.log("sender id: ", senderId);
 
   return (
-    <div className="py-10 items-top justify-between px-5">
-      <div className="col-span-5 relative">
-        {showMessage ? (
-          <h1
-            className="absolute t-0 pl-2 pt-2 cursor-pointer"
-            onClick={() => {
-              setShowMessage(false);
-              setHideUsers(true);
-            }}>
-            <FiArrowLeft />
-          </h1>
-        ) : null}
-        {showMessage ? (
-          <div className="py-10 p-5 border w-full">
-            <div className="bg-white rounded-lg shadow-md">
-              <div className="items-center justify-between p-5">
-                
+    <div className="py-10 items-top grid gap-4 min-h-[93vh] justify-between px-5 md:grid md:grid-cols-5">
+      <div className="md:col-span-3 md:order-2">
+        {!showMessageBox && (
+          <center className="border flex items-center justify-center h-full py-4 px-4 w-full">
+            <h1>Click on a message to start or continue your conversation</h1>
+          </center>
+        )}
 
-                {prevMessages.length>0? prevMessages.map((item,index)=> {
-                    return <h4 className="mb-2 font-semibold" key={index}>  {item} </h4>
-                }): <b> no message yet start writing a message </b> }
+        {showMessageBox && (
+          <div className="bg-white border w-full h-full px-2 py-4 relative">
+            {conversationInChat && conversationInChat.length > 0 ? (
+              <div>
+                {conversationInChat.map((convo, index) => (
+                  <div
+                    className={
+                      convo.senderId === senderId
+                        ? "message sent"
+                        : "message received"
+                    }
+                    key={index}
+                  >
+                    {convo.message}
+                  </div>
+                ))}
               </div>
-              <form onSubmit={handleSubmit}>
-                <div className="mt-5 overflow-y-auto ">
-                  <textarea
-                    type="text"
-                    value={value}
-                    onChange={handleMessageChange}
-                    rows="1"
-                    className="w-full border-b outline-none resize-none p-2"
-                    placeholder="Type a message..."></textarea>
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <button
-                    type="submit"
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg m-2">
-                    Send
-                  </button>
-                </div>
-              </form>
+            ) : (
+              <div>No conversations yet for a user</div>
+            )}
+
+            <FiArrowLeft
+              className="font-bold absolute top-0 left-0 mt-1 ml-1 cursor-pointer"
+              onClick={() => {
+                setShowListOfBusiness(true);
+                setShowMessageBox(false);
+              }}
+            />
+            <div className="flex gap-4 absolute items-center w-[95%] bottom-[1rem] right-3">
+              <textarea
+                className="p-2 border w-full border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows="1"
+                placeholder="Type your message here..."
+                value={value}
+                onChange={handleMessageChange}
+              />
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition"
+                onClick={handleSubmit}
+              >
+                {messageLoading ? <Spinner color="red.500" size="xs" /> : "Send"}
+              </button>
             </div>
           </div>
-        ) : (
-          <center>
-            <h1 className="mb-4 text-2xl font-bold">
-              Click on a message to start a conversation
-            </h1>
-            {loading &&  <ImSpinner9 className="h-10 w-10 text-gray-500 animate-spin text-center"/>}
-          </center>
         )}
       </div>
 
-      <div className="grid gap-4">
-        {allConversations.map((conversation, index) => (
+      {showListOfBusiness && (
+        <div className="flex flex-col border h-full col-span-2 md:order-1">
+          <p className="text-lightRed mb-[1rem] font-medium text-[1.3rem] font-roboto">Chats</p>
+          {conversationOnPage.map((item, index) => (
             <div
               key={index}
-              className="gap-8 px-10 flex flex-auto min-h-[50px] rounded-lg w-full border-2">
-              <div className="flex-shrink-0">
-                <h1
-                  className="cursor-pointer p-5"
-                  onClick={() => getMessagesInConversation(conversation._id)} key={index}> 
-                  {conversation.members[1].name}
-                </h1>
-              </div>
+              onClick={() => {
+                setShowMessageBox(true);
+                getMessagesInConversation(item._id);
+                hideTheListOnMobile();
+              }}
+              className="h-[5rem] gap-5 flex items-center cursor-pointer p-4 shadow-md hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300 ease-in-out"
+              style={{
+                boxShadow:
+                  "0 14px 16px rgba(05, 0, 255, 0.1), 0 10px 15px rgba(255, 255, 255, 0.1), 0 20px 25px rgba(255, 255, 255, 0.1)",
+              }}
+            >
+              <Avatar size="sm" name={item.members[0].name} src="https://cdn-icons-png.freepik.com/512/3177/3177440.png" />
+              <h1 className="text-black capitalize hover:text-white">
+                {item.members[0].name}
+              </h1>
             </div>
           ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
 
-export default BusinessMessages;
+export default Messages;
+
+
+// import { useContext, useEffect, useState } from "react";
+// import { AuthContext } from "../context/AuthContext";
+// import axios from "axios";
+// import { FiArrowLeft } from "react-icons/fi";
+// import { Avatar, Spinner } from '@chakra-ui/react';
+
+// function Messages() {
+//   const [conversationOnPage, setConversationOnPage] = useState([]);
+//   const [showMessageBox, setShowMessageBox] = useState(false);
+//   const [showListOfBusiness, setShowListOfBusiness] = useState(true);
+//   const [allConversations, setAllConversations] = useState([]);
+//   const [conversationInChat, setConversationInChat] = useState([]);
+//   const [id, setId] = useState("");
+//   const [senderId, setSenderId] = useState("");
+//   const [messageLoading, setMessageLoading] = useState(false);
+//   const [loading, setLoading] = useState(false);
+//   const [hideUsers, setHideUsers] = useState(true);
+//   const [showMessage, setShowMessage] = useState(false);
+//   const [value, setValue] = useState("");
+//   const [prevMessages, setPrevMessages] = useState([]);
+
+//   const { authToken, socket } = useContext(AuthContext);
+
+//   const hideTheListOnMobile = () => {
+//     if (window.innerWidth < 768) {
+//       setShowListOfBusiness(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await axios.get(
+//           "https://axelonepostfeature.onrender.com/api/conversations/myconversations",
+//           {
+//             headers: {
+//               Authorization: `Bearer ${authToken}`,
+//             },
+//           }
+//         );
+
+//         if (response.status === 200) {
+//           setConversationOnPage(response.data);
+//           const theSenderId = response.data[0].members[0].id;
+//           setSenderId(theSenderId);
+//           console.log("response: ", response.data);
+//         } else {
+//           throw new Error("Getting all messages failed");
+//         }
+//       } catch (error) {
+//         console.error("Error fetching data", error);
+//       }
+//     };
+
+//     fetchData();
+//   }, [authToken]);
+
+//   const getMessagesInConversation = async (conversationId) => {
+//     try {
+//       const response = await axios.get(
+//         `https://axelonepostfeature.onrender.com/api/messages/${conversationId}`,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${authToken}`,
+//           },
+//         }
+//       );
+
+//       if (response.status === 200) {
+//         setConversationInChat(response.data);
+//         setId(conversationId);
+//         console.log("conversations: ", response.data);
+//       } else {
+//         throw new Error("Getting messages in a conversation failed");
+//       }
+//     } catch (error) {
+//       console.error("Error fetching data", error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (!socket) return;
+
+//     // Listen for incoming messages
+//     socket.on("receiveMessage", (message) => {
+//       setConversationInChat((prev) => [...prev, message]);
+//     });
+
+//     // Cleanup on unmount
+//     return () => {
+//       socket.off("receiveMessage");
+//     };
+//   }, [socket]);
+
+//   const handleMessageChange = (e) => {
+//     setValue(e.target.value);
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setMessageLoading(true);
+//     if (value.trim() !== "") {
+//       try {
+//         const response = await axios.post(
+//           `https://axelonepostfeature.onrender.com/api/messages/send-message/${id}`,
+//           { message: value },
+//           {
+//             headers: {
+//               Authorization: `Bearer ${authToken}`,
+//             },
+//           }
+//         );
+
+//         if (response.status === 200) {
+//           const message = response.data;
+//           setValue("");
+//           socket.emit("sendMessage", message);
+//           console.log("Message sent", response.data);
+//           setMessageLoading(false);
+//         }
+//       } catch (error) {
+//         console.error(error);
+//       }
+//     }
+//   };
+
+//   console.log("The id", id);
+//   console.log("sender id: ", senderId);
+
+//   return (
+//     <div className="py-10 items-top grid gap-4 min-h-[93vh] justify-between px-5 md:grid md:grid-cols-5">
+//       <div className="md:col-span-3 md:order-2">
+//         {!showMessageBox && (
+//           <center className="border flex items-center justify-center h-full py-4 px-4 w-full">
+//             <h1>Click on a message to start or continue your conversation</h1>
+//           </center>
+//         )}
+
+//         {showMessageBox && (
+//           <div className="bg-white border w-full h-full px-2 py-4 relative">
+//             {conversationInChat && conversationInChat.length > 0 ? (
+//               <div>
+//                 {conversationInChat.map((convo, index) => (
+//                   <div
+//                     className={
+//                       convo.senderId === senderId ? "message sent" : "message received"
+//                     }
+//                     key={index}
+//                   >
+//                     {convo.message}
+//                   </div>
+//                 ))}
+//               </div>
+//             ) : (
+//               <div>No conversations yet for a user</div>
+//             )}
+
+//             <FiArrowLeft
+//               className="font-bold absolute top-0 left-0 mt-1 ml-1 cursor-pointer"
+//               onClick={() => {
+//                 setShowListOfBusiness(true);
+//                 setShowMessageBox(false);
+//               }}
+//             />
+//             <div className="flex gap-4 absolute items-center w-[95%] bottom-[1rem] right-3 ">
+//               <textarea
+//                 className="p-2 border w-full border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                 rows="1"
+//                 placeholder="Type your message here..."
+//                 value={value}
+//                 onChange={handleMessageChange}
+//               />
+//               <button
+//                 className=" px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition"
+//                 onClick={handleSubmit}
+//               >
+//                 {messageLoading ? <Spinner color="red.500" size="xs" /> : "Send"}
+//               </button>
+//             </div>
+//           </div>
+//         )}
+//       </div>
+
+//       {showListOfBusiness && (
+//         <div className=" flex flex-col border h-full col-span-2 md:order-1">
+//           <p className=" text-lightRed mb-[1rem] font-medium text-[1.3rem] font-roboto">Chats</p>
+//           {conversationOnPage.map((item, index) => (
+//             <div
+//               key={index}
+//               onClick={() => {
+//                 setShowMessageBox(true);
+//                 getMessagesInConversation(item._id);
+//                 hideTheListOnMobile();
+//               }}
+//               className=" h-[5rem] gap-5 flex items-center cursor-pointer p-3 rounded-lg hover:bg-lightRed transition "
+//             >
+//               <Avatar />
+//               <div>
+//                 <h1 className=" text-[1rem] font-semibold font-roboto">{item.members[1].firstName}</h1>
+//                 <p className=" text-[.9rem] font-medium font-roboto text-gray-500">{item.messages[0]?.message}</p>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default Messages;
