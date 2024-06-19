@@ -37,21 +37,6 @@ function Routes() {
       element: <Login />,
       errorElement: <PageNotFound />
     },
-    {
-      path: "/business-profile-setup",
-      element: <BusinessProfileSetup />,
-      errorElement: <PageNotFound />
-    },
-    {
-      path: "/ad-profile-setup",
-      element: <AdProfileSetup />,
-      errorElement: <PageNotFound />
-    },
-    {
-      path: "/user-profile-setup",
-      element: <UserProfileSetup />,
-      errorElement: <PageNotFound />
-    },
     // {
     //   path: "/testing",
     //   element: <CountryStateCitySelector />,
@@ -67,6 +52,21 @@ function Routes() {
           element: <Profile />,
           errorElement: <PageNotFound />
         },
+        {
+          path: "user-profile-setup",
+          element: <UserProfileSetup />,
+          errorElement: <PageNotFound />
+        },  
+    {
+      path: "business-profile-setup",
+      element: <BusinessProfileSetup />,
+      errorElement: <PageNotFound />
+    },
+    {
+      path: "ad-profile-setup",
+      element: <AdProfileSetup />,
+      errorElement: <PageNotFound />
+    },
         {
           path: 'favoritebusiness',
           element: <FavoriteBusiness />,
