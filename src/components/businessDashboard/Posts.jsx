@@ -61,7 +61,14 @@ const Posts = () => {
               }
         } catch (error) {
             setIsLoading(false);
-            console.log(error.message);
+            Swal.fire({
+                icon: "error",
+                title: "Oops! Something went wrong",
+                text: "Failed to complete your post. Please try again.",
+                timer: 3000,
+                timerProgressBar: true,
+                footer: `Error Details: ${error.response.data.message}`,
+              });
         }
    };
    

@@ -51,7 +51,7 @@ const SideBar = ({ handleToggle }) => {
           </span>
           <h2 className='text-[1.1rem] mt-0 font-normal'>Create a business</h2>
         </div>
-      </Link>
+      </Link> 
 
       {/* mybusiness */}
       <Link to='mybusiness'>
