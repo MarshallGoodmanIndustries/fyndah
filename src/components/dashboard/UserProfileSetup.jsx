@@ -191,7 +191,7 @@ const UserProfileSetup = () => {
 
   //   fetchData();
   // }, [authToken, countryInput, stateInput]);
-  
+
 
   // const filteredCountries = countries.filter((country) =>
   //   country.toLowerCase().includes(countryInput.toLowerCase())
@@ -247,7 +247,7 @@ const UserProfileSetup = () => {
     }
   }
 
-  
+
 
   return (
     <div className="relative ">
@@ -266,7 +266,7 @@ const UserProfileSetup = () => {
         </h1>
 
         <form
-        onSubmit={handleSubmit}
+          onSubmit={handleSubmit}
           className="grid grid-cols-1 font-roboto lg:grid-cols-2 gap-[2rem] lg:gap-[2rem] xl:gap-[4rem]"
           action=""
         >
@@ -484,7 +484,6 @@ const UserProfileSetup = () => {
                 </Checkbox>
               ))}
             </div>
-
             <Button type="submit">Submit</Button>
           </div>
         </form>

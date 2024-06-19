@@ -115,8 +115,8 @@ function BusinessProfile() {
           industry: businessData.industry || "",
           subdomain: businessData.subdomain || "",
         });
-  
-  
+
+
         if (businessProfileResponse.status === 200) {
           console.log(businessProfileResponse.data)
         } else {
@@ -183,7 +183,7 @@ function BusinessProfile() {
   }
 
   return (
-    <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
+    <div className="md:m-[2rem] mr-[1rem] my-[1rem] p-5 sm:p-5  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
       <div className="block relative items-center gap-[6rem]">
         {/* PROFILE IMAGE DISPLAY */}
         <Box className="w-full absolute rounded-t-3xl h-[160px]">
@@ -334,7 +334,7 @@ function BusinessProfile() {
                 >
                   Bio
                 </label>
-                
+
               </div>
 
               <Textarea
@@ -386,7 +386,7 @@ function BusinessProfile() {
                 >
                   Business Address
                 </label>
-               
+
               </div>
 
               <InputGroup>
@@ -415,7 +415,7 @@ function BusinessProfile() {
                 >
                   Business City
                 </label>
-                
+
               </div>
 
               <InputGroup>
@@ -444,7 +444,7 @@ function BusinessProfile() {
                 >
                   Business State
                 </label>
-                
+
               </div>
 
               <InputGroup>
@@ -473,7 +473,7 @@ function BusinessProfile() {
                 >
                   Business Country
                 </label>
-                
+
               </div>
 
               <InputGroup>
@@ -502,7 +502,7 @@ function BusinessProfile() {
                 >
                   Zip Code
                 </label>
-               
+
               </div>
 
               <InputGroup>
@@ -559,7 +559,7 @@ function BusinessProfile() {
                 >
                   Industry
                 </label>
-                
+
               </div>
 
               <InputGroup>
@@ -597,18 +597,16 @@ function BusinessProfile() {
             <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
               ACCOUNT MANAGEMENT
             </div>
-            <div className="col-span-2 gap-x-[0.5rem] md:justify-between gap-y-[1rem] grid grid-cols-2 items-center xl:grid-cols-4">
-            <div className="flex mb-[1rem] lg:mb-0 items-center gap-[1rem]">
-              <Button
-                onClick={handleSwitching}
-                leftIcon={<PiUserSwitchFill size="23px" />}
-                className="py-[1.5rem] rounded-[10px] text-[0.7rem] w-[100%] order-2 lg:order-1 lg:w-auto lg:text-[1rem]"
-                colorScheme="red"
-                variant="solid"
-              >
-                Switch to Business Account
-              </Button>
-            </div>
+            <div className="col-span-2 gap-y-[1rem] grid grid-cols-2 xl:grid-cols-4">
+              <div className="flex items-center justify-center gap-[0.5rem]">
+                <h2
+                  onClick={handleSwitching}
+                  className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]"
+                >
+                  Switch Businesses
+                </h2>
+                <PiUserSwitchFill className="size-4 lg:size-5" />
+              </div>
               {/* <div className="flex lg:mb-0 items-center lg:gap-[1rem] gap-[0.5rem]">
                 <h2 onClick={handleSwitching} className="font-normal  cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Switch Account
@@ -616,21 +614,21 @@ function BusinessProfile() {
                 <PiUserSwitchFill className=" size-4 lg:size-5" />
               </div> */}
 
-              <div className="flex items-center lg:gap-[1rem] gap-[0.5rem]">
+              <div className="flex items-center justify-center gap-[0.5rem]">
                 <h2 className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Delete Account
                 </h2>
                 <TiUserDelete className="size-4 lg:size-5" />
               </div>
 
-              <div className="flex items-center lg:gap-[1rem] gap-[0.5rem]">
+              <div className="flex items-center justify-center gap-[0.5rem]">
                 <h2 className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Invite Member
                 </h2>
                 <FaPeopleRobbery className="size-4 lg:size-5" />
               </div>
 
-              <div className="flex items-center lg:gap-[1rem] gap-[0.5rem]">
+              <div className="flex items-center justify-center gap-[0.5rem]">
                 <h2 className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Change email
                 </h2>
