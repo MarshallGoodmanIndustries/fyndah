@@ -13,9 +13,9 @@ import { Textarea } from "@chakra-ui/react";
 import { MdLocationPin } from "react-icons/md";
 import { FaMonument } from "react-icons/fa";
 import { PiUserSwitchFill } from "react-icons/pi";
-import { TiUserDelete } from "react-icons/ti";
-import { FaPeopleRobbery } from "react-icons/fa6";
-import { RiMailSettingsFill } from "react-icons/ri";
+// import { TiUserDelete } from "react-icons/ti";
+// import { FaPeopleRobbery } from "react-icons/fa6";
+// import { RiMailSettingsFill } from "react-icons/ri";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
@@ -598,7 +598,7 @@ function BusinessProfile() {
               ACCOUNT MANAGEMENT
             </div>
             <div className="col-span-2 gap-y-[1rem] grid grid-cols-2 xl:grid-cols-4">
-              <div className="flex items-center justify-center gap-[0.5rem]">
+              {/* <div className="flex items-center justify-center gap-[0.5rem]">
                 <h2
                   onClick={handleSwitching}
                   className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]"
@@ -606,7 +606,7 @@ function BusinessProfile() {
                   Switch Businesses
                 </h2>
                 <PiUserSwitchFill className="size-4 lg:size-5" />
-              </div>
+              </div> */}
               {/* <div className="flex lg:mb-0 items-center lg:gap-[1rem] gap-[0.5rem]">
                 <h2 onClick={handleSwitching} className="font-normal  cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Switch Account
@@ -614,7 +614,7 @@ function BusinessProfile() {
                 <PiUserSwitchFill className=" size-4 lg:size-5" />
               </div> */}
 
-              <div className="flex items-center justify-center gap-[0.5rem]">
+              {/* <div className="flex items-center justify-center gap-[0.5rem]">
                 <h2 className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Delete Account
                 </h2>
@@ -633,7 +633,7 @@ function BusinessProfile() {
                   Change email
                 </h2>
                 <RiMailSettingsFill className="size-4 lg:size-5" />
-              </div>
+              </div> */}
             </div>
           </div>
         </form>
