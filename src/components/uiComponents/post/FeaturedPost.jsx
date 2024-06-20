@@ -15,7 +15,7 @@ import { BiSolidMessageDetail } from "react-icons/bi";
 import ConfirmationModal from "./ConfirmationModal";
 
 
-const FeaturedPost = ({postId, organizationId, msgId , profileImg, username, timePosted, textContent, imgContent, noOflikes}) => {
+const FeaturedPost = ({postId, organizationId, msgId , orgMsgId, profileImg, username, timePosted, textContent, imgContent, noOflikes}) => {
     const { authToken } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
@@ -152,7 +152,7 @@ const FeaturedPost = ({postId, organizationId, msgId , profileImg, username, tim
                         <BiSolidMessageDetail className="w-5 h-5 text-gray-600" />
                     </div>
 
-                    {confirmationModal && (<ConfirmationModal setConfirmationModal={setConfirmationModal} msgId={msgId} org_id={organizationId} />)}
+                    {confirmationModal && (<ConfirmationModal setConfirmationModal={setConfirmationModal} msgId={msgId} orgMsgId={orgMsgId} org_id={organizationId} />)}
                 </div>
                     
                 {comment && <FeaturedPost_inner 

@@ -20,6 +20,7 @@ import ModalComponent from "../uiComponents/ModalComponet";
 
 function Profile() {
   const { authToken } = useContext(AuthContext);
+  const { setUserMsgId } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -142,16 +143,16 @@ function Profile() {
 
         const userData = profileResponse.data.data.user;
 
-        setInputDefaultStates({
-          firstName: userData.firstname || "",
-          lastName: userData.lastname || "",
-          location: userData.address || "",
-          phone_number: userData.phone_number || "",
-        });
-        setProfilePhoto(userData.profile_photo_path)
-        if (profileResponse.status === 200) {
+                if (profileResponse.status === 200) {
+          setInputDefaultStates({
+            firstName: userData.firstname || "",
+            lastName: userData.lastname || "",
+            location: userData.address || "",
+            phone_number: userData.phone_number || "",
+          });
           console.log(profileResponse.data);
           setProfilePhoto(userData.profile_photo_path);
+          setUserMsgId(userData.msg_id)
         } else {
           setIsLoading(false);
           throw new Error("Profile Details failed");
@@ -189,11 +190,12 @@ function Profile() {
       const response = await axios.post(
         "https://api.fyndah.com/api/v1/users/profile",
         {
-          profile_photo_path: profilePhoto
+          profile_photo_path: selectedFile
         },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'multipart/form-data'
           },
         }
       );
@@ -443,17 +445,7 @@ function Profile() {
             </div>
           </div>
 
-          {/* <div className="lg:flex items-center  mt-[2rem] justify-end"> */}
             <div className="flex flex-col lg:flex-row items-center justify-end mt-[3rem] mr-[1.5rem] w-full gap-[1rem]">
-              {/* <Button
-                onClick={handleSwitchAccount}
-                leftIcon={<PiUserSwitchFill size="23px" />}
-                className="py-[1.5rem] rounded-[10px] text-[0.7rem] w-[100%] order-2 lg:order-1 lg:w-auto lg:text-[1rem]"
-                colorScheme="red"
-                variant="solid"
-              >
-                Switch to Business Account
-              </Button> */}
               <Button
                 leftIcon={isLoading ? <ImSpinner9 className="animate-spin" /> : <RiEdit2Fill size="23px" />}
                 className="py-[1.5rem] rounded-[10px] text-[0.7rem] w-[100%] lg:w-auto lg:text-[1rem]"

@@ -10,6 +10,8 @@ export const AuthProvider = ({ children }) => {
   );
   const [businessId, setBusinessId] = useState(sessionStorage.getItem('businessId') || null);
   const [socket, setSocket] = useState(null);
+  const [userMsgId, setUserMsgId] = useState(sessionStorage.getItem('userMsgId') || null);
+  const [businessMsgId, setBusinessMsgId] = useState(sessionStorage.getItem('businessMsgId') || null);
 
   useEffect(() => {
     if (authToken) {
@@ -18,6 +20,22 @@ export const AuthProvider = ({ children }) => {
       sessionStorage.removeItem('authToken');
     }
   }, [authToken]);
+
+  useEffect(() => {
+    if (userMsgId) {
+      sessionStorage.setItem('userMsgId', userMsgId);
+    } else {
+      sessionStorage.removeItem('userMsgId');
+    }
+  }, [userMsgId]);
+
+  useEffect(() => {
+    if (businessMsgId) {
+      sessionStorage.setItem('businessMsgId', businessMsgId);
+    } else {
+      sessionStorage.removeItem('businessMsgId');
+    }
+  }, [businessMsgId]);
 
   useEffect(() => {
     if (userData) {
@@ -43,11 +61,25 @@ export const AuthProvider = ({ children }) => {
   }, [authToken]);
 
   return (
-    <AuthContext.Provider value={{ authToken, setAuthToken, userData, setUserData, businessId, setBusinessId, socket }}>
+    <AuthContext.Provider value={{
+      authToken,
+      setAuthToken,
+      userData,
+      setUserData,
+      businessId,
+      setBusinessId,
+      socket,
+      userMsgId,
+      setUserMsgId,
+      businessMsgId,
+      setBusinessMsgId
+    }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+
 
 // import { createContext, useEffect, useState } from 'react';
 // import { io } from 'socket.io-client';
@@ -61,6 +93,8 @@ export const AuthProvider = ({ children }) => {
 //   );
 //   const [businessId, setBusinessId] = useState(sessionStorage.getItem('businessId') || null);
 //   const [socket, setSocket] = useState(null);
+//   const [userMsgId, setUserMsgId] = useState(sessionStorage.getItem('userMsgId') || null)
+//   const [businessMsgId, setBusinessMsgId] = useState(sessionStorage.getItem('businessMsgId') || null)
 
 //   useEffect(() => {
 //     if (authToken) {
@@ -69,6 +103,22 @@ export const AuthProvider = ({ children }) => {
 //       sessionStorage.removeItem('authToken');
 //     }
 //   }, [authToken]);
+
+//   useEffect(() => {
+//     if (userMsgId) {
+//       sessionStorage.setItem('userMsgId', userMsgId);
+//     } else {
+//       sessionStorage.removeItem('userMsgId');
+//     }
+//   }, [userMsgId]);
+
+//   useEffect(() => {
+//     if (businessMsgId) {
+//       sessionStorage.setItem('businessMsgId', businessMsgId);
+//     } else {
+//       sessionStorage.removeItem('businessMsgId');
+//     }
+//   }, [businessMsgId]);
 
 //   useEffect(() => {
 //     if (userData) {
@@ -90,26 +140,13 @@ export const AuthProvider = ({ children }) => {
 //     const newSocket = io('http://localhost:5173', { query: { authToken } });
 //     setSocket(newSocket);
 
-//     // Logging socket events
-//     newSocket.on('connect', () => {
-//       console.log('Connected to socket server');
-//       // Emit test event
-//       newSocket.emit('testEvent', { message: 'Hello from client' });
-//     });
-
-//     newSocket.on('testResponse', (data) => {
-//       console.log('Received testResponse:', data);
-//     });
-
-//     newSocket.on('disconnect', () => {
-//       console.log('Disconnected from socket server');
-//     });
-
 //     return () => newSocket.close();
 //   }, [authToken]);
 
 //   return (
-//     <AuthContext.Provider value={{ authToken, setAuthToken, userData, setUserData, businessId, setBusinessId, socket }}>
+//     <AuthContext.Provider value={{ authToken, setAuthToken, userData, setUserData, businessId, setBusinessId, socket, userMsgId, setUserMsgId,
+//       businessMsgId, setBusinessMsgId
+//      }}>
 //       {children}
 //     </AuthContext.Provider>
 //   );

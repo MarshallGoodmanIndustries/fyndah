@@ -11,6 +11,7 @@ import { AiFillPlusCircle } from "react-icons/ai";
 function MyBusiness() {
     const navigate = useNavigate()
     const { authToken } = useContext(AuthContext)
+    const {setBusinessMsgId} = useContext(AuthContext)
     const [orgList, setOrgList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -90,6 +91,8 @@ function MyBusiness() {
             })
 
             if (response.data.message === "Switched to business successfully") {
+                const businessMessageId = response.data.data.org.msg_id
+                setBusinessMsgId(businessMessageId)
                 Swal.fire({
                     icon: "success",
                     title: "Congratulation",
