@@ -1,10 +1,10 @@
-import { NavBar, HeroSection, FeaturedPosts, Footer, FeaturedListings, WhatWeOffer, WhyChooseUs } from "../landingPageComponents";
+import { NavBar, HeroSection, FeaturedPosts, Footer, FeaturedListings, } from "../landingPageComponents";
 
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+// import AOS from 'aos';
+// import 'aos/dist/aos.css';
 
 function LandingPage() {
- 
+
   return (
     <>
       <header className="relative overflow-x-clip bg-secondary w-full h-full">
@@ -14,8 +14,8 @@ function LandingPage() {
       <main>
         <FeaturedListings />
         <FeaturedPosts />
-        <WhatWeOffer />
-        <WhyChooseUs />
+        {/* <WhatWeOffer />
+        <WhyChooseUs /> */}
       </main>
       <Footer />
     </>

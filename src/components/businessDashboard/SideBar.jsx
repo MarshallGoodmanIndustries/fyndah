@@ -194,7 +194,7 @@ const SideBar = ({ handleToggle }) => {
           </div>
         </Link>
 
-        <div className="h-[8.2rem] xl:h-[19rem]"></div>
+        <div className="h-[8.2rem] xl:h-[8.9rem]"></div>
 
         {/* Switch Business */}
         <button
