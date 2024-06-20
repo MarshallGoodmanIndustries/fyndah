@@ -107,6 +107,7 @@ const FeaturedPosts = () => {
               textContent={post.description} 
               imgContent={post.image} 
               noOflikes={post.likesCount}
+              orgMsgId={post.orgmsg_id}
               msgId={msgId}
             />
           );

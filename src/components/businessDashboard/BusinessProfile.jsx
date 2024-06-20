@@ -24,8 +24,13 @@ import { ImSpinner9 } from "react-icons/im";
 
 function BusinessProfile() {
   const { authToken } = useContext(AuthContext);
-  const { id } = useParams(); // Extract the 'id' parameter from the URL
+  const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false)
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [coverPhoto, setCoverPhoto] = useState(null);
+  const [selectedCoverFile, setSelectedCoverFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [showButton, setShowButton] = useState(false)
   const navigate = useNavigate();
   const routeLocation = useLocation()
 
@@ -39,10 +44,7 @@ function BusinessProfile() {
     state: "",
     country: "",
     zip_code: "",
-    website: "",
     size: "",
-    industry: "",
-    subdomain: "",
     locationName: ""
   });
 
@@ -57,7 +59,25 @@ function BusinessProfile() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setShowButton(true)
+      setProfilePhoto(URL.createObjectURL(file)); // Set the profile photo immediately
+    }
+  };
+
+  const handleCoverPhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedCoverFile(file);
+      setShowButton(true)
+      setCoverPhoto(URL.createObjectURL(file)); // Set the cover photo immediately
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isEditable) {
       setIsEditable(true);
@@ -66,21 +86,54 @@ function BusinessProfile() {
 
     setIsEditable(false);
     try {
-      Swal.fire({
-        icon: "success",
-        title: "Successful...",
-        text: "Profile updated successfully",
-        timer: 2000,
-        timerProgressBar: true,
-      });
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append("org_name", inputDefaultStates.businessName);
+      formData.append("org_bio", inputDefaultStates.bio);
+      formData.append("address", inputDefaultStates.address);
+      formData.append("state", inputDefaultStates.state);
+      formData.append("email", inputDefaultStates.email);
+      formData.append("phone", inputDefaultStates.phone);
+      formData.append("city", inputDefaultStates.city);
+      formData.append("country", inputDefaultStates.country);
+      formData.append("zip_code", inputDefaultStates.zip_code);
+      formData.append("location_name", inputDefaultStates.locationName);
+
+      const response = await axios.post(
+        `https://api.fyndah.com/api/v1/organization/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Successful...",
+          text: "Profile updated successfully",
+          timer: 2000,
+          timerProgressBar: true,
+        });
+        console.log(response.data);
+        console.log(formData)
+      } else {
+        setIsLoading(false);
+        throw new Error("Profile Update failed");
+      }
     } catch (error) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Update Failed!",
-        footer: `<a href="#">Could not update profile. Please try again later. ${error.message}</a>`,
+        footer: `<a href="#">Could not update profile. Please try again later. ${error.response.data.message}</a>`,
       });
       console.error(error);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,15 +162,13 @@ function BusinessProfile() {
           state: businessData.locations[0].state || "",
           country: businessData.locations[0].country || "",
           zip_code: businessData.locations[0].zip_code || "",
-          locationName: businessData.locations[0].locationName || "",
-          website: businessData.website || "",
-          size: businessData.size || "",
-          industry: businessData.industry || "",
-          subdomain: businessData.subdomain || "",
+          locationName: businessData.locations[0].location_name || "",
         });
 
 
         if (businessProfileResponse.status === 200) {
+          setProfilePhoto(businessData.logo);
+          setCoverPhoto(businessData.cover_image);
           console.log(businessProfileResponse.data)
         } else {
           setIsLoading(false);
@@ -182,48 +233,62 @@ function BusinessProfile() {
     </div>
   }
 
+  const handleSubmitPhoto = async () => {
+    try {
+      setIsLoading(true);
+      setShowButton(false)
+      const response = await axios.post(
+        "https://api.fyndah.com/api/v1/users/profile",
+        {
+          logo: selectedFile,
+          cover_image: selectedCoverFile
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'multipart/form-data'
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Successful...",
+          text: "Profile photo updated successfully",
+          timer: 2000,
+          timerProgressBar: true,
+        });
+        console.log(response.data);
+      } else {
+        setIsLoading(false);
+        throw new Error("Profile photo Update failed");
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Update Failed!",
+        footer: `<a href="#">Could not update profile photo. Please try again later. ${error.response.data.message}</a>`,
+      });
+      console.error(error);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  
+  }
+
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem] p-5 sm:p-5  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
       <div className="block relative items-center gap-[6rem]">
         {/* PROFILE IMAGE DISPLAY */}
         <Box className="w-full absolute rounded-t-3xl h-[160px]">
-          <Image
-            className="w-full h-[130px] lg:h-[160px] rounded-t-3xl object-cover "
-            src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
-            alt="Dan Abramov"
-          />
-          <Box
-            position="absolute"
-            top="0"
-            left="0"
-            width="100%"
-            height="100%"
-            backgroundColor="rgba(0, 0, 0, 0.4)"
-            opacity="0"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            transition="opacity 0.3s"
-            _hover={{ opacity: 1 }}
-          >
-            <RiEdit2Fill color="white" size="23px" />
-          </Box>
-        </Box>
-
-        <div>
-          <Box
-            className="w-[80px] ml-[2rem] border-white border-4  relative top-[4rem] lg:w-[150px]"
-            position="relative"
-            display="inline-block"
-            borderRadius="full"
-            overflow="hidden"
-          // boxSize="150px"
-          >
-            <Image
-              className="w-[80px]  lg:w-[150px]"
-              src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
-              alt="Dan Abramov"
-            />
+        <Image
+  className="w-full h-[160px] object-cover rounded-full"
+  src={coverPhoto || "https://cdn-icons-png.freepik.com/512/3177/3177440.png"}
+  alt="Profile"
+/>
             <Box
               position="absolute"
               top="0"
@@ -239,10 +304,76 @@ function BusinessProfile() {
               _hover={{ opacity: 1 }}
             >
               <RiEdit2Fill color="white" size="23px" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleCoverPhotoChange}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  opacity: 0,
+                  cursor: "pointer",
+                }}
+              />
+            </Box>
+        </Box>
+
+        <div>
+        <Box
+            className="w-[80px] rounded-full lg:w-[100px] h-[100px]"
+            position="relative"
+            display="inline-block"
+            borderRadius="full"
+            overflow="hidden"
+          >
+            <Image
+  className="w-[80px] lg:w-[100px] h-[100px] object-cover rounded-full"
+  src={profilePhoto || "https://cdn-icons-png.freepik.com/512/3177/3177440.png"}
+  alt="Profile"
+/>
+            <Box
+              position="absolute"
+              top="0"
+              left="0"
+              width="100%"
+              height="100%"
+              backgroundColor="rgba(0, 0, 0, 0.4)"
+              opacity="0"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              transition="opacity 0.3s"
+              _hover={{ opacity: 1 }}
+            >
+              <RiEdit2Fill color="white" size="23px" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  opacity: 0,
+                  cursor: "pointer",
+                }}
+              />
             </Box>
           </Box>
         </div>
       </div>
+
+      {showButton && <Button
+    onClick={handleSubmitPhoto}
+    className="my-2 py-2 px-4 bg-blue-500 text-white rounded"
+  >
+    Upload Profile Photo
+  </Button>}
 
       {/* ACCOUNT DETAILS */}
       <div className="mt-[2.5rem]">
@@ -522,42 +653,14 @@ function BusinessProfile() {
               </InputGroup>
             </div>
 
-            {/* WEBSITE */}
-            <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
-              <div className="flex items-center justify-between">
-                <label
-                  className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
-                  htmlFor="website"
-                >
-                  Website
-                </label>
-              </div>
-
-              <InputGroup>
-                <InputRightElement pointerEvents="none">
-                  <FaMonument color="text-[#d1d5db]" />
-                </InputRightElement>
-                <Input
-                  disabled={!isEditable}
-                  name="website"
-                  border="2px solid #d1d5db"
-                  className="border"
-                  variant="outline"
-                  value={inputDefaultStates.website}
-                  onChange={handleChange}
-                  placeholder="Enter Business Website"
-                />
-              </InputGroup>
-            </div>
-
             {/* INDUSTRY */}
             <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
                 <label
                   className="font-normal text-neutral-500 text-[0.9rem] lg:text-[1.1rem]"
-                  htmlFor="industry"
+                  htmlFor="locationName"
                 >
-                  Industry
+                  Location Name
                 </label>
 
               </div>
@@ -568,13 +671,13 @@ function BusinessProfile() {
                 </InputRightElement>
                 <Input
                   disabled={!isEditable}
-                  name="industry"
+                  name="locationName"
                   border="2px solid #d1d5db"
                   className="border"
                   variant="outline"
-                  value={inputDefaultStates.industry}
+                  value={inputDefaultStates.locationName}
                   onChange={handleChange}
-                  placeholder="Enter Industry"
+                  placeholder="Enter Location Name"
                 />
               </InputGroup>
             </div>

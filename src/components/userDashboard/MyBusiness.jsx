@@ -11,6 +11,7 @@ import { AiFillPlusCircle } from "react-icons/ai";
 function MyBusiness() {
     const navigate = useNavigate()
     const { authToken } = useContext(AuthContext)
+    const {setBusinessMsgId} = useContext(AuthContext)
     const [orgList, setOrgList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -90,6 +91,8 @@ function MyBusiness() {
             })
 
             if (response.data.message === "Switched to business successfully") {
+                const businessMessageId = response.data.data.org.msg_id
+                setBusinessMsgId(businessMessageId)
                 Swal.fire({
                     icon: "success",
                     title: "Congratulation",
@@ -143,6 +146,7 @@ function MyBusiness() {
                             <div className="flex gap-1 items-center" key={business.id}>
                                 <span>
                                     < TbPointFilled className="text-accentDark" />
+                                    
                                 </span>
                                 <li onClick={() => handlePathChange(business.id, business.org_name)} className="cursor-pointer hover:text-accentDark" > {business.org_name} </li>
 
@@ -150,8 +154,9 @@ function MyBusiness() {
 
                         ))}
                         <div className="flex justify-center">
-                            <Link to='/dashboard/createbuisness'>
+                            <Link to='/dashboard/createbuisness' className=" flex items-center gap-2">
                                 <AiFillPlusCircle size={35} color="red" />
+                                <b>Create a business </b>
                             </Link>
                         </div>
                     </ul>
