@@ -7,11 +7,12 @@ import Swal from "sweetalert2";
 import classNames from "classnames";
 // import { RiTimeLine } from "react-icons/ri";
 
-const SearchBusinessProfile = ({id, businessProfileImg, businessName, businessTitle, businessLocation}) => {
-    const { authToken } = useContext(AuthContext);
+const SearchBusinessProfile = ({org_id, msg_id, businessProfileImg, businessName, businessTitle, businessLocation}) => {
+    const { authToken, userData } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
     const [IsLoading, setIsLoading] = useState(false);
+    
 
     const handleCreateConversation = async ()=> {
         if(!authToken){
@@ -21,7 +22,7 @@ const SearchBusinessProfile = ({id, businessProfileImg, businessName, businessTi
           }else{
             setIsLoading(true);
             try {
-                const response = await axios.post(`https://axelonepostfeature.onrender.com/api/conversations/newconversation/${id}`, {}, {
+                const response = await axios.post(`https://axelonepostfeature.onrender.com/api/conversations/newconversation/${msg_id}`, {}, {
                     headers: {
                         Authorization: `Bearer ${authToken}`
                     }
@@ -39,15 +40,16 @@ const SearchBusinessProfile = ({id, businessProfileImg, businessName, businessTi
                         navigate("/dashboard/messages");
                       }, 3001);
                 }
-                console.log(response.data);
             } catch (error) {
                 setIsLoading(false);
                 console.log(error.message)
             }
           }
     };
+
+    console.log("org_Id:", org_id, "user_org_id:", userData?.organization_id);
   return (
-    <div className="bg-primary transition-colors duration-300 rounded-lg w-full max-w-[300px] md:max-w-[80%] lg:max-w-[70%] p-4 flex flex-col md:flex-row md:justify-between gap-4 cursor-pointer">
+    <div className="bg-primary transition-colors duration-300 rounded-lg w-full max-w-[300px] md:max-w-[80%] lg:max-w-[70%] p-4 flex flex-col md:flex-row md:justify-between gap-4">
         <div className="p-1 max-w-24 h-full mx-auto md:mx-0 bg-secondary rounded-lg">
             <img src={businessProfileImg} className="w-full h-full object-cover" alt="profile display" />
         </div>
@@ -62,7 +64,9 @@ const SearchBusinessProfile = ({id, businessProfileImg, businessName, businessTi
             </div>
         </div>
         <div className=" flex flex-col items-center md:items-end gap-2">
-            <button onClick={handleCreateConversation} className={classNames( IsLoading && "animate-pulse", "bg-accent py-1 px-2 rounded-lg text-primary font-poppins font-light text-sm md:text-base")}>{IsLoading ? "Connecting.." : "Connect"}</button>
+            {org_id !== +userData?.organization_id && (
+                <button onClick={handleCreateConversation} className={classNames( IsLoading && "animate-pulse", "bg-accent py-1 px-2 rounded-lg text-primary font-poppins font-light text-sm md:text-base")}>{IsLoading ? "Connecting.." : "Connect"}</button>
+            )}
             {/* <div className="flex items-center gap-2">
                 <RiTimeLine className="w-4 h-4" />
                 <p className="font-roboto text-gray-600 font-normal text-sm md:text-base">{businessTime}</p>
