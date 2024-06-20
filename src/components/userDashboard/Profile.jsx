@@ -20,6 +20,7 @@ import ModalComponent from "../uiComponents/ModalComponet";
 
 function Profile() {
   const { authToken } = useContext(AuthContext);
+  const { setUserMsgId } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -142,6 +143,7 @@ function Profile() {
         );
 
         const userData = profileResponse.data.data.user;
+<<<<<<< HEAD
         console.log(userData, profilePhoto)
         setInputDefaultStates({
           firstName: userData.firstname || "",
@@ -155,6 +157,19 @@ function Profile() {
           console.log(profileResponse.data);
           setProfilePhoto(userData.profile_photo_path);
           console.log(profilePhoto) //console logining the image path
+=======
+
+                if (profileResponse.status === 200) {
+          setInputDefaultStates({
+            firstName: userData.firstname || "",
+            lastName: userData.lastname || "",
+            location: userData.address || "",
+            phone_number: userData.phone_number || "",
+          });
+          console.log(profileResponse.data);
+          setProfilePhoto(userData.profile_photo_path);
+          setUserMsgId(userData.msg_id)
+>>>>>>> 5839ff152d4977cbf402164c23016a02cdacfd1b
         } else {
           setIsLoading(false);
           throw new Error("Profile Details failed");

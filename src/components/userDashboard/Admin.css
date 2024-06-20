@@ -30,7 +30,7 @@
 }
 
 .message {
-  max-width: 70%;
+  width: 70%;
   padding: 15px 10px;
   margin: 20px 0;
   border-radius: 10px;
@@ -38,16 +38,23 @@
 }
 
 .sent {
+  /* justify-self: end; */
+  /* width: 100%; */
   align-self: flex-end;
   background-color: #dcf8c6; /* Light green color for sent messages */
   color: #000;
 }
 
 .received {
+  /* width: 100%; */
   align-self: flex-start;
   background-color: #fff;
   border: 1px solid #ccc; /* Light grey border for received messages */
   color: #000;
+}
+
+.chat-container {
+  /* display: flex; */
 }
 
 .swing-in-top-fwd {
@@ -93,9 +100,15 @@
   .admin-layout {
     grid-template-columns: 250px 1fr; /* Fixed sidebar width and dynamic outlet width */
   }
+  .message {
+    width: 90%;
+  }
 }
 @media screen and (max-width: 700px) {
   .admin-layout {
     grid-template-columns: 25px 1fr; /* Fixed sidebar width and dynamic outlet width */
+  }
+  .message {
+    width: 90%;
   }
 }
