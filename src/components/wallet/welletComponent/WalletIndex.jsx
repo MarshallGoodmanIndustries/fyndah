@@ -179,7 +179,7 @@ function WalletIndex() {
     return (
         <div>
             <div className="flex-1 flex flex-col items-center p-4 sm:p-6 md:p-10">
-                <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl mt-5 p-4 bg-white rounded-lg shadow-md">
+                <div className="w-full max-w-5xl mt-5 p-4 bg-white rounded-xl shadow-lg">
                     <div className="flex flex-col sm:flex-row items-center justify-between">
                         <h2 className="text-gray-600">Hello,</h2>
 

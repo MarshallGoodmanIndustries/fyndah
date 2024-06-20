@@ -134,7 +134,7 @@ const SideBar = ({ handleToggle }) => {
           </div>
         </Link>
 
-        <div className="h-[9rem] xl:h-[14rem]"></div>
+        <div className="mt-10"></div>
 
         {/* logout */}
         <button
@@ -159,7 +159,7 @@ const SideBar = ({ handleToggle }) => {
             <span>
               <FaHome className="size-[1rem] lg:size-[1.25rem]" />
             </span>
-            <h2 className="text-[1.1rem] mt-0 font-normal ">Back to home</h2>
+            <h2 className="text-[1.1rem] mt-0 font-normal ">Feed</h2>
           </div>
         </Link>
       </div>

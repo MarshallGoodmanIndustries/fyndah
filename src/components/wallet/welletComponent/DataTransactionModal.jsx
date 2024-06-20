@@ -65,19 +65,29 @@ const DateTransactionModal = ({ isOpenModal, handleCloseModal, isLoading, startD
                                         </td>
                                     </tr>
                                 ) : data?.length > 0 ? (
-                                    data.map((transaction) => (
-                                        <tr key={transaction.id || 'default-key'}>
-                                            <td className="px-6 py-4 whitespace-nowrap">{transaction.uuid || 'N/A'}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{transaction.type || 'Unknown Type'}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <p className="text-2xl font-bold flex items-center justify-center">
-                                                    <TbCurrencyNaira className="mr-1 text-sm" size={22} />
-                                                    {transaction.amount || '0'}
-                                                </p>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{transaction.created_at || 'Not Available'}</td>
-                                        </tr>
-                                    ))
+                                    data.map((transactions) => {
+                                        const formattedDate = new Date(transactions.created_at).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            hour: 'numeric',
+                                            minute: 'numeric',
+                                            second: 'numeric'
+                                        });
+                                        return (
+                                            <tr key={transactions.uuid || 'default-key'}>
+                                                <td className="px-6 py-4 break-words max-w-xs">{transactions.uuid || 'N/A'}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap">{transactions.type || 'Unknown Type'}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <p className="text-1 font-bold flex items-center justify-center">
+                                                        <TbCurrencyNaira className="mr-1 text-sm" size={22} />
+                                                        {transactions.amount || '0'}
+                                                    </p>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">{formattedDate || 'Not Available'}</td>
+                                            </tr>
+                                        );
+                                    })
                                 ) : (
                                     <tr>
                                         <td colSpan={4} className="text-center p-10 text-black">No transaction records found.</td>
@@ -86,6 +96,7 @@ const DateTransactionModal = ({ isOpenModal, handleCloseModal, isLoading, startD
                             </tbody>
                         </table>
                     </div>
+
                 </div>
             </div>
 
