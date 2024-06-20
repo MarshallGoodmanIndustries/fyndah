@@ -5,6 +5,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import { Avatar, Spinner } from "@chakra-ui/react";
 import { ImSpinner9 } from "react-icons/im";
 import { io } from "socket.io-client";
+import { inView } from "framer-motion";
 // import { AuthContext } from "../context/AuthContext";
 
 function Messages() {
@@ -176,7 +177,7 @@ function Messages() {
   }
 
   let daisyComponent = false;
-
+  // a state that holds the business you're chatting with
   // this is supposed to be a business owner's data that should be rendered on a user's page
   const businessData = [
     { id: 1, name: "John Doe" },
@@ -191,127 +192,64 @@ function Messages() {
     { id: 10, name: "Hannah Lewis" },
   ];
 
-  //
-  const Chats = [
+  //this chat contains a message from the business owner to the user and the message from the user to business owner
+  const chats = [
     {
       id: 1,
-      messages: [
-        { sender: "John Doe", message: "Hello, how are you?" },
-        {
-          sender: "Jane Smith",
-          message: "I am good, thank you! How about you?",
-        },
-        { sender: "John Doe", message: "I am doing well, thanks for asking!" },
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
       ],
     },
-    {
-      id: 2,
-      messages: [
-        { sender: "Jane Smith", message: "Are you coming to the meeting?" },
-        { sender: "Alice Johnson", message: "Yes, I will be there." },
-        { sender: "Jane Smith", message: "Great! See you there." },
-      ],
-    },
-    {
-      id: 3,
-      messages: [
-        { sender: "Alice Johnson", message: "Can you send me the report?" },
-        {
-          sender: "Bob Brown",
-          message: "Sure, I will send it to you by the end of the day.",
-        },
-        { sender: "Alice Johnson", message: "Thanks, Bob!" },
-      ],
-    },
-    {
-      id: 4,
-      messages: [
-        { sender: "Bob Brown", message: "Did you finish the project?" },
-        {
-          sender: "Charlie Davis",
-          message: "Yes, I did. I will send it to you shortly.",
-        },
-        { sender: "Bob Brown", message: "Perfect, thanks!" },
-      ],
-    },
-    {
-      id: 5,
-      messages: [
-        { sender: "Charlie Davis", message: "What time is the meeting?" },
-        { sender: "David Wilson", message: "It is at 3 PM." },
-        { sender: "Charlie Davis", message: "Thanks for letting me know!" },
-      ],
-    },
-    {
-      id: 6,
-      messages: [
-        { sender: "David Wilson", message: "Can we reschedule our call?" },
-        { sender: "Emma Thomas", message: "Sure, what time works for you?" },
-        { sender: "David Wilson", message: "How about tomorrow at 10 AM?" },
-      ],
-    },
-    {
-      id: 7,
-      messages: [
-        { sender: "Emma Thomas", message: "Did you review the document?" },
-        { sender: "Fiona Lee", message: "Yes, I did. It looks good." },
-        { sender: "Emma Thomas", message: "Great, thank you!" },
-      ],
-    },
-    {
-      id: 8,
-      messages: [
-        { sender: "Fiona Lee", message: "Can you help me with this task?" },
-        {
-          sender: "George Clark",
-          message: "Sure, what do you need help with?",
-        },
-        {
-          sender: "Fiona Lee",
-          message: "I am stuck on this part of the code.",
-        },
-      ],
-    },
-    {
-      id: 9,
-      messages: [
-        { sender: "George Clark", message: "Have you seen the latest update?" },
-        {
-          sender: "Hannah Lewis",
-          message: "No, I haven’t. Where can I find it?",
-        },
-        { sender: "George Clark", message: "I will send you the link." },
-      ],
-    },
-    {
-      id: 10,
-      messages: [
-        { sender: "George Clark", message: "Have you seen the latest update?" },
-        {
-          sender: "Hannah Lewis",
-          message: "No, I haven’t. Where can I find it?",
-        },
-        { sender: "George Clark", message: "I will send you the link." },
-      ],
-    },
+  
   ];
+  // so i want to write the click event for all the conversation is their id mathches
 
+  const shoUpMessages = (initialDataOnPage) => {
+    const messageInChat = chats.find((item) => item.id == initialDataOnPage.id);
+    console.log(messageInChat);
+  };
   return (
     <div>
-      <div className="bg-blue-900 text-white p-6 rounded-lg">
-        <h2 className="text-2xl font-bold mb-4">
-          click to chat with business owner's{" "}
-        </h2>
-        <ul className="list-none p-0">
-          {businessData.map((user) => (
-            <li
-              key={user.id}
-              className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
-              {user.name}
-            </li>
-          ))}
-        </ul>
+      {/* my own component starts here */}
+      <div>
+        <div className="bg-blue-900 text-white p-6 ">
+          <h2 className="text-2xl font-bold mb-4">
+            click to chat with business owner's{" "}
+          </h2>
+          <ul className="list-none p-0">
+            {businessData.map((user) => (
+              <li
+                key={user.id}
+                onClick={() => {
+                  shoUpMessages(user);
+                }}
+                className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
+                {user.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* {selectedUser && ( */}
+        <div className="mt-4 p-6 bg-blue-900 text-white mx-auto">
+          <h3 className="text-xl font-bold mb-4">Chat with </h3>
+          <textarea
+            // value={message}
+            // onChange={(e) => setMessage(e.target.value)}
+            className="w-full p-2 mb-4 text-black rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300"
+            rows="2"
+            placeholder="Type your message here..."
+          />
+          <button
+            // onClick={handleSendMessage}
+            className="bg-blue-700 text-white p-2 rounded hover:bg-blue-500 transition duration-300">
+            Send Message
+          </button>
+        </div>
+        {/* )} */}
       </div>
+      {/* ends here  */}
 
       {/* i dun hide your component for here */}
       {daisyComponent && (
