@@ -200,14 +200,132 @@ function Messages() {
         "Hello, how are you?",
         "you made a request to our business, how can we help you?",
       ],
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
     },
-  
+    {
+      id: 2,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 3,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 4,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 5,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 6,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 7,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 8,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 9,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 10,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
   ];
+
+
+// message in the chat box state
+  // const [messageInChatBox, setMessageInChatBox] = useState([]);
   // so i want to write the click event for all the conversation is their id mathches
 
-  const shoUpMessages = (initialDataOnPage) => {
+  // console.log(messageInChatBox);
+  const showUpMessages = (initialDataOnPage) => {
     const messageInChat = chats.find((item) => item.id == initialDataOnPage.id);
     console.log(messageInChat);
+    // i am setting the message in chat box to messageInChat
+    // setMessageInChatBox(messageInChat)
   };
   return (
     <div>
@@ -222,7 +340,7 @@ function Messages() {
               <li
                 key={user.id}
                 onClick={() => {
-                  shoUpMessages(user);
+                  showUpMessages(user);
                 }}
                 className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
                 {user.name}
