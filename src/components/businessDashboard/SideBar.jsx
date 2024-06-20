@@ -10,7 +10,7 @@ import { MdLeaderboard } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import { GiWallet } from "react-icons/gi";
 import { FaHome } from "react-icons/fa";
-import { useParams, useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Select } from "@chakra-ui/react";
 import { TiUserDelete } from "react-icons/ti";
 import { FaPeopleRobbery } from "react-icons/fa6";
@@ -63,11 +63,10 @@ const SideBar = ({ handleToggle }) => {
         icon: "error",
         title: "Something went wrong..",
         text: "Unexpected error could be your network connection is bad or your session is over try to login again.",
-        footer: `<a href="#">Could not switch. Please try again later. ${
-          error.response?.data?.message || error.message
-        }</a>`,
+        footer: `<a href="#">Could not switch. Please try again later. ${error.response?.data?.message || error.message
+          }</a>`,
       });
-      sessionStorage.setItem("lastRoute", routeLocation.pathname);
+      sessionStorage.setItem("lastRoute", location.pathname);
       navigate("/login");
       console.log(error.response ? error.response.data : error.message);
       setIsLoading(false);
@@ -83,11 +82,10 @@ const SideBar = ({ handleToggle }) => {
         <Link to="business-profile">
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${
-              isActive("business-profile")
+            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("business-profile")
                 ? "bg-white text-textDark"
                 : "text-white"
-            } `}
+              } `}
           >
             <span>
               <FaUserCircle className="size-[1rem] lg:size-[1.25rem]" />
@@ -100,9 +98,8 @@ const SideBar = ({ handleToggle }) => {
         <Link to="posts">
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${
-              isActive("posts") ? "bg-white text-textDark" : "text-white"
-            } `}
+            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("posts") ? "bg-white text-textDark" : "text-white"
+              } `}
           >
             <span>
               <BsActivity className="size-[1rem] lg:size-[1.25rem]" />
@@ -115,11 +112,10 @@ const SideBar = ({ handleToggle }) => {
         <Link to="businessmessages">
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${
-              isActive("businessmessages")
+            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("businessmessages")
                 ? "bg-white text-textDark"
                 : "text-white"
-            } `}
+              } `}
           >
             <span>
               <AiFillMessage className="size-[1rem] lg:size-[1.25rem]" />
@@ -132,11 +128,10 @@ const SideBar = ({ handleToggle }) => {
         <Link to={`/businessDashboard/${id}/${name}/search-request`}>
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${
-              isActive("search-request")
+            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("search-request")
                 ? "bg-white text-textDark"
                 : "text-white"
-            } `}
+              } `}
           >
             <span>
               <LuFileSearch2 className="size-[1rem] lg:size-[1.25rem]" />
@@ -149,11 +144,10 @@ const SideBar = ({ handleToggle }) => {
         <Link to={`/businessDashboard/${id}/${name}/search-request-history`}>
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${
-              isActive("search-request-history")
+            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("search-request-history")
                 ? "bg-white text-textDark"
                 : "text-white"
-            } `}
+              } `}
           >
             <span>
               <FaHistory className="size-[1rem] lg:size-[1.25rem]" />
@@ -168,9 +162,8 @@ const SideBar = ({ handleToggle }) => {
         <Link to={`/businessDashboard/${id}/${name}/leads`}>
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${
-              isActive("leads") ? "bg-white text-textDark" : "text-white"
-            } `}
+            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("leads") ? "bg-white text-textDark" : "text-white"
+              } `}
           >
             <span>
               <MdLeaderboard className="size-[1rem] lg:size-[1.25rem]" />
@@ -183,9 +176,8 @@ const SideBar = ({ handleToggle }) => {
         <Link to="wallet">
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] pb-0 items-center justify-start gap-4 ${
-              isActive("wallet") ? "bg-white text-textDark" : "text-white"
-            } `}
+            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] pb-0 items-center justify-start gap-4 ${isActive("wallet") ? "bg-white text-textDark" : "text-white"
+              } `}
           >
             <span>
               <GiWallet className="size-[1rem] lg:size-[1.25rem]" />
@@ -198,10 +190,9 @@ const SideBar = ({ handleToggle }) => {
 
         {/* Switch Business */}
         <button
-           onClick={handleSwitching}
-          className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${
-            isActive("logout") ? "bg-white text-textDark" : "text-white"
-          } `}
+          onClick={handleSwitching}
+          className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("logout") ? "bg-white text-textDark" : "text-white"
+            } `}
         >
           <span>
             <PiUserSwitchFill className="size-[1rem] lg:size-[1.25rem]" />
@@ -211,9 +202,8 @@ const SideBar = ({ handleToggle }) => {
         {/* logout */}
         <button
           onClick={LogoutOpenModal}
-          className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${
-            isActive("logout") ? "bg-white text-textDark" : "text-white"
-          } `}
+          className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("logout") ? "bg-white text-textDark" : "text-white"
+            } `}
         >
           <span>
             <RiLogoutCircleLine className="size-[1rem] lg:size-[1.25rem]" />
@@ -222,14 +212,18 @@ const SideBar = ({ handleToggle }) => {
         </button>
 
         {/* Account Management */}
-       
+
         <Select
           color="white"
-          sx={{ "> option": {fontSize: ['48px', '72px'],
-         fontWeight: '400', fontSize: "1.1rem", background: "#4299E1", color: "white" } }}
+          sx={{
+            "> option": {
+              fontSize: ['48px', '72px'],
+              fontWeight: '400', fontSize: "1.1rem", background: "#4299E1", color: "white"
+            }
+          }}
           variant="flushed"
-         className=" text-[1.1rem] mt-0 font-normal"
-         
+          className=" text-[1.1rem] mt-0 font-normal"
+
           placeholder="Account Management"
         >
           <option value="option1">
@@ -249,9 +243,8 @@ const SideBar = ({ handleToggle }) => {
         <Link to="/">
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${
-              isActive("home") ? "bg-white text-textDark" : "text-white"
-            } `}
+            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("home") ? "bg-white text-textDark" : "text-white"
+              } `}
           >
             <span>
               <FaHome className="size-[1rem] lg:size-[1.25rem]" />
