@@ -16,7 +16,7 @@ import ConfirmationModal from "./ConfirmationModal";
 
 
 const FeaturedPost = ({postId, organizationId, msgId , orgMsgId, profileImg, username, timePosted, textContent, imgContent, noOflikes}) => {
-    const { authToken } = useContext(AuthContext);
+    const { authToken, userData } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
     const [like, setLike] = useState(false);
@@ -148,9 +148,12 @@ const FeaturedPost = ({postId, organizationId, msgId , orgMsgId, profileImg, use
                         {commentsData.length}
                     </div>
 
-                    <div onClick={handleMessage} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
-                        <BiSolidMessageDetail className="w-5 h-5 text-gray-600" />
-                    </div>
+                    {organizationId !== userData.organization_id && (
+                        <div onClick={handleMessage} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
+                            <BiSolidMessageDetail className="w-5 h-5 text-gray-600" />
+                        </div>
+                    )}
+                    
 
                     {confirmationModal && (<ConfirmationModal setConfirmationModal={setConfirmationModal} msgId={msgId} orgMsgId={orgMsgId} org_id={organizationId} />)}
                 </div>

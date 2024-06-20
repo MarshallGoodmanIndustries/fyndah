@@ -33,6 +33,7 @@ const FeaturedPosts = () => {
     }
     getPosts();
   }, []);
+  
 
   useEffect(() => {
     const url = "https://api.fyndah.com/api/v1/organization";
@@ -48,7 +49,6 @@ const FeaturedPosts = () => {
     }
     getOrgMessageId();
   }, [])
-  console.log(getOrgDetails)
 
   const handleSeeMore = ()=> {
     if(!authToken){
