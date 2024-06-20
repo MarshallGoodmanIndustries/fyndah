@@ -11,6 +11,7 @@ import { SearchBusinessProfile, Loading } from "../../uiComponents";
 
 //image
 import { businesslogo } from "../../../assets/images";
+import Swal from "sweetalert2";
 
 function HeroSection() {
   const { authToken } = useContext(AuthContext);
@@ -98,18 +99,34 @@ function HeroSection() {
   // }
 
   const handleSeeMore = () => {
-    if (!authToken) {
+    // if (!authToken) {
       //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-      sessionStorage.setItem("lastRoute", location.pathname)
-      navigate('/login');
-    } else {
+    //   sessionStorage.setItem("lastRoute", location.pathname)
+    //   navigate('/login');
+    // } else {
       setCurrentPage(prevPage => prevPage < totalPages ? prevPage + 1 : totalPages)
-    }
+    // }
   }
 
-  const handleOnSubmission = async (e) => {
-    e.preventDefault();
-    const url = "https://api.fyndah.com/api/v1/search/business"
+  const handleSearchRequest = async () => {
+
+    if (!authToken) {
+      
+    Swal.fire({
+        icon: "warning",
+        title: "Login required",
+        text: "You will be redirected to the login page.",
+        timer: 3000,
+        timerProgressBar: true,
+      });
+      setTimeout(()=>{
+        sessionStorage.setItem("lastRoute", location.pathname)
+        navigate('/login');
+      }, 3001);
+      //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+      
+    } else {
+      const url = "https://api.fyndah.com/api/v1/search/business"
     const data = {
       "searchTerms": [businessName, businessLocation, +businessCategory]
     };
@@ -131,6 +148,7 @@ function HeroSection() {
     } catch (error) {
       setSearchQueryIsLoading(false);
       console.log(error.message);
+    }
     }
   };
   
@@ -154,7 +172,7 @@ function HeroSection() {
         <h1 className="text-xl md:text-4xl text-textDark font-poppins font-bold tracking-wide text-center uppercase">Discover local businesses</h1>
         <p className="text-sm md:text-lg text-textDark font-roboto font-light text-center">Search, Buy, Sell.</p>
       </div>
-      <form method="post" onSubmit={handleOnSubmission} id="formbg" className="searchBox flex flex-col items-center md:flex-row md:items-start w-full md:max-w-[80%] lg:max-w-[85%] md:mx-auto gap-4 rounded-sm md:rounded-md px-4 md:px-8 py-6 md:py-24 mt-4">
+      <div id="formbg" className="searchBox flex flex-col items-center md:flex-row md:items-start w-full md:max-w-[80%] lg:max-w-[85%] md:mx-auto gap-4 rounded-sm md:rounded-md px-4 md:px-8 py-6 md:py-24 mt-4">
         <div className="flex flex-col items-center gap-4 w-full">
           <div className="flex flex-col items-center md:flex-row gap-4 w-full">
             <div className="flex items-center gap-2 bg-primary bg-opacity-90 backdrop-blur-sm border-b-4  transition-all duration-300 border-accent focus-within:border-accentDark p-2 md:p-4 w-full rounded-sm">
@@ -203,10 +221,10 @@ function HeroSection() {
             </div>
           </div>
         </div>
-        <div className="bg-accent hover:bg-accentDark transition-all duration-300 p-2 md:p-4 rounded-lg cursor-pointer">
+        <div onClick={handleSearchRequest} className="bg-accent hover:bg-accentDark transition-all duration-300 p-2 md:p-4 rounded-lg cursor-pointer">
           <button type="submit" className="text-primary font-poppins font-light text-base md:text-lg ">Search</button>
         </div>
-      </form>
+      </div>
       <div className="w-fit mx-auto my-4">
         {searchQueryIsLoading && <Loading />}
       </div>
