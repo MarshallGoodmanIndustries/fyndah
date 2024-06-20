@@ -15,18 +15,18 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { ImSpinner9 } from "react-icons/im";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ModalComponent from "../uiComponents/ModalComponet";
 
 function Profile() {
   const { authToken } = useContext(AuthContext);
-  const { setUserMsgId } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [showButton, setShowButton] = useState(false)
+  const locations = useLocation()
 
   const navigate = useNavigate();
   const [inputDefaultStates, setInputDefaultStates] = useState({
@@ -150,6 +150,7 @@ function Profile() {
           location: userData.address || "",
           phone_number: userData.phone_number || "",
         });
+        sessionStorage.removeItem("lastRoute")
         setProfilePhoto(userData.profile_photo_path)
         console.log(profileResponse.data)
         if (profileResponse.status === 200) {
@@ -163,6 +164,27 @@ function Profile() {
       } catch (error) {
         console.error(error);
         setIsLoading(false);
+        if (axios.isAxiosError(error)) {
+          // Handle AxiosError
+          console.error('Error message:', error.message);
+          if (error.response) {
+            console.error('Status code:', error.response.status);
+            console.error('Response data:', error.response.data);
+            console.error('Response msg:', error.response.data.message);
+            if (error.response.data.status === "error") {
+              sessionStorage.setItem('lastRoute', locations.pathname);
+              navigate("/login")
+            }
+          } else if (error.request) {
+            console.error('No response received:', error.request);
+          } else {
+            console.error('Request setup error:', error.message);
+          }
+        } else {
+          // Handle non-AxiosError
+          console.error('Unexpected error:', error);
+        }
+
       } finally {
         setIsLoading(false);
       }
