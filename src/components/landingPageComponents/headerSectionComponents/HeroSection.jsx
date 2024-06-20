@@ -133,9 +133,7 @@ function HeroSection() {
       console.log(error.message);
     }
   };
-
-
-  console.log(businesses);
+  
 
 
 
