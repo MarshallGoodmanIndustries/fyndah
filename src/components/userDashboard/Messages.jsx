@@ -161,6 +161,8 @@ function Messages() {
       }
     }
   };
+  const [messageInChat, setMessageInChat] = useState([]);
+  const [hideMessageComponent, setMessageComponent] = useState(false);
 
   if (loading) {
     return (
@@ -315,17 +317,14 @@ function Messages() {
     },
   ];
 
-
-// message in the chat box state
-  // const [messageInChatBox, setMessageInChatBox] = useState([]);
-  // so i want to write the click event for all the conversation is their id mathches
-
-  // console.log(messageInChatBox);
+  // the click event for all the conversation if their id matches
   const showUpMessages = (initialDataOnPage) => {
     const messageInChat = chats.find((item) => item.id == initialDataOnPage.id);
-    console.log(messageInChat);
     // i am setting the message in chat box to messageInChat
-    // setMessageInChatBox(messageInChat)
+    setMessageInChat(messageInChat);
+
+    // showing the messageComponent
+    setMessageComponent(true);
   };
   return (
     <div>
@@ -349,23 +348,21 @@ function Messages() {
           </ul>
         </div>
 
-        {/* {selectedUser && ( */}
-        <div className="mt-4 p-6 bg-blue-900 text-white mx-auto">
-          <h3 className="text-xl font-bold mb-4">Chat with </h3>
-          <textarea
-            // value={message}
-            // onChange={(e) => setMessage(e.target.value)}
-            className="w-full p-2 mb-4 text-black rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300"
-            rows="2"
-            placeholder="Type your message here..."
-          />
-          <button
-            // onClick={handleSendMessage}
-            className="bg-blue-700 text-white p-2 rounded hover:bg-blue-500 transition duration-300">
-            Send Message
-          </button>
-        </div>
-        {/* )} */}
+       {/* message component */}
+        {hideMessageComponent && (
+          <div className="mt-4 p-6 bg-blue-900 text-white mx-auto">
+            <h3 className="text-xl font-bold mb-4">Chat with </h3>
+
+            <textarea
+              className="w-full p-2 mb-4 text-black rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300"
+              rows="2"
+              placeholder="Type your message here..."
+            />
+            <button className="bg-blue-700 text-white p-2 rounded hover:bg-blue-500 transition duration-300">
+              Send Message
+            </button>
+          </div>
+        )}
       </div>
       {/* ends here  */}
 
