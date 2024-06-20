@@ -23,7 +23,7 @@ const Posts = () => {
    }
 
    const handleRemovePreview = (e) => {
-        e.stopPropagation(); //prevent the click event on the cross ico to reach the label and trigger the file input
+        e.stopPropagation(); //prevent the click event on the cross icon to reach the label and trigger the file input
         setPreviewSrc("");
         setImage(null);
    }
@@ -56,8 +56,6 @@ const Posts = () => {
                 setDescription("")
                 setPreviewSrc("");
                 setImage(null);
-              } else {
-                throw new Error("Registration failed");
               }
         } catch (error) {
             setIsLoading(false);

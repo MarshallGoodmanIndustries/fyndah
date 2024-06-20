@@ -20,6 +20,7 @@ import ModalComponent from "../uiComponents/ModalComponet";
 
 function Profile() {
   const { authToken } = useContext(AuthContext);
+  const { setUserMsgId } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
   const [openModal, setOpenModal] = useState(false);
