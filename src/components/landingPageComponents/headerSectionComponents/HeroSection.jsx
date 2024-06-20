@@ -174,7 +174,7 @@ function HeroSection() {
       }, 90000)
     }
   }, [revealSearchQuery, containsBusinesses])
-console.log(businesses);
+
 
 
 
