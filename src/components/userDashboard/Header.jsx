@@ -8,13 +8,13 @@ import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
 const Header = ({ handleToggle, toggle }) => {
-  const { userData, image } = useContext(AuthContext);
+  const { userData, } = useContext(AuthContext);
 
   const user = userData?.username || ""; // Use optional chaining and provide a default empty string
   const userInitials = user ? user.slice(0, 1) : ""; // Handle empty user gracefully
   const notificationNumber = 0;
 
-  console.log(userInitials, image)
+
 
   return (
     <div className="text-white relative sm:px-[2rem] px-[1rem] items-center h-full flex justify-between z-20 font-inter">

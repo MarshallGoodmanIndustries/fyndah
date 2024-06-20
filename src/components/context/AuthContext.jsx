@@ -12,15 +12,6 @@ export const AuthProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [userMsgId, setUserMsgId] = useState(sessionStorage.getItem('userMsgId') || null);
   const [businessMsgId, setBusinessMsgId] = useState(sessionStorage.getItem('businessMsgId') || null);
-  const [profilePhoto, setProfilePhoto] = useState(sessionStorage.getItem('profilePhoto') || null);
-
-  useEffect(() => {
-    if (profilePhoto) {
-      sessionStorage.setItem('profilePhoto', profilePhoto);
-    } else {
-      sessionStorage.removeItem('profilePhoto');
-    }
-  }, [profilePhoto]);
 
   useEffect(() => {
     if (authToken) {
@@ -62,7 +53,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, [businessId]);
 
-
   useEffect(() => {
     const newSocket = io('http://localhost:5173', { query: { authToken } });
     setSocket(newSocket);
@@ -82,9 +72,7 @@ export const AuthProvider = ({ children }) => {
       userMsgId,
       setUserMsgId,
       businessMsgId,
-      setBusinessMsgId,
-      setProfilePhoto,
-      profilePhoto
+      setBusinessMsgId
     }}>
       {children}
     </AuthContext.Provider>
