@@ -21,7 +21,7 @@ import ModalComponent from "../uiComponents/ModalComponet";
 function Profile() {
   const { authToken } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
+  // const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -43,7 +43,7 @@ function Profile() {
   useEffect(() => {
     const firstTimeUser = localStorage.getItem("isFirstTimeUser");
     if (firstTimeUser === "true") {
-      setIsFirstTimeUser(true);
+      // setIsFirstTimeUser(true);
       setOpenModal(true);
       localStorage.removeItem("isFirstTimeUser");
     }
@@ -156,7 +156,7 @@ function Profile() {
         if (profileResponse.status === 200) {
           console.log(profileResponse.data);
           setProfilePhoto(userData.profile_photo_path);
-          console.log(profilePhoto) //console logining the image path
+          console.log(profilePhoto, "the returns") //console logining the image path
         } else {
           setIsLoading(false);
           throw new Error("Profile Details failed");
@@ -195,6 +195,8 @@ function Profile() {
   const handleSwitchAccount = () => {
     navigate("/dashboard/mybusiness");
   };
+
+
 
   if (isLoading) {
     return (

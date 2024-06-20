@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { logo_white } from "../../assets/images/index";
 import { FaBell } from "react-icons/fa6";
 import { BsListUl } from "react-icons/bs";
@@ -8,39 +8,43 @@ import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
 const Header = ({ handleToggle, toggle }) => {
-  const { userData } = useContext(AuthContext);
+  const { userData, image } = useContext(AuthContext);
 
   const user = userData?.username || ""; // Use optional chaining and provide a default empty string
   const userInitials = user ? user.slice(0, 1) : ""; // Handle empty user gracefully
   const notificationNumber = 0;
 
+  console.log(userInitials, image)
+
   return (
     <div className="text-white relative sm:px-[2rem] px-[1rem] items-center h-full flex justify-between z-20 font-inter">
       {/* LOGO */}
 
-     
-      
-        <div className="hidden md:block ">
+
+
+      <div className="hidden md:block ">
         <Link to="/">
-          <img className="w-[150px] sm:w-[120px]" src={logo_white} alt="" />
-          </Link>
+          <img
+            className="w-[150px] sm:w-[120px]"
+            src={logo_white}
+            alt="" />
+        </Link>
 
+      </div>
+
+      <div className="md:hidden min-[500px]:gap-8 gap-4 flex items-center col-span-2">
+        <div onClick={handleToggle} className="sm:hidden cursor-pointer">
+          {toggle ? (
+            <AiOutlineClose className="size-[1.2rem]" />
+          ) : (
+            <BsListUl className="size-[1.2rem]" />
+          )}
         </div>
-
-      
-        <div className="md:hidden min-[500px]:gap-8 gap-4 flex items-center col-span-2">
-          <div onClick={handleToggle} className="sm:hidden cursor-pointer">
-            {toggle ? (
-              <AiOutlineClose className="size-[1.2rem]" />
-            ) : (
-              <BsListUl className="size-[1.2rem]" />
-            )}
-          </div>
-          <Link to="/">
+        <Link to="/">
           <img className="w-[70px]" src={logo_white} alt="" />
-          </Link>
-        </div>
-     
+        </Link>
+      </div>
+
 
       {/* USER PROFILES */}
       <div className="flex items-center justify-end md:gap-[1.8rem] gap-[1rem] lg:col-span-3 xl:col-span-2 col-span-2">
