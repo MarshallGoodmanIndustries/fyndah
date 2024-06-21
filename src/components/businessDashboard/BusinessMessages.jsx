@@ -2,8 +2,9 @@ import { useContext, useEffect, useState, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
-import { Avatar, Spinner } from '@chakra-ui/react'
+import { Avatar, Spinner } from "@chakra-ui/react";
 import { io } from "socket.io-client";
+import MessageArea from "./MessageArea";
 
 function BusinessMessages() {
   const [conversationOnPage, setConversationOnPage] = useState([]);
@@ -25,7 +26,8 @@ function BusinessMessages() {
 
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   };
 
@@ -53,7 +55,7 @@ function BusinessMessages() {
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-          }
+          },
         }
       );
 
@@ -93,7 +95,7 @@ function BusinessMessages() {
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-          }
+          },
         }
       );
 
@@ -134,7 +136,7 @@ function BusinessMessages() {
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
-            }
+            },
           }
         );
 
@@ -145,7 +147,6 @@ function BusinessMessages() {
 
         setValue("");
         setMessageLoading(false);
-        
       } catch (error) {
         console.error(error);
         setMessageLoading(false);
@@ -153,88 +154,321 @@ function BusinessMessages() {
     }
   };
 
-  console.log("the id: ", id)
-  console.log("sender id: ", senderId)
+  console.log("the id: ", id);
+  console.log("sender id: ", senderId);
 
+  // Ade's code
+  const businessData = [
+    { id: 1, name: "John Doe" },
+    { id: 2, name: "Jane Smith" },
+    { id: 3, name: "Alice Johnson" },
+    { id: 4, name: "Bob Brown" },
+    { id: 5, name: "Charlie Davis" },
+    { id: 6, name: "David Wilson" },
+    { id: 7, name: "Emma Thomas" },
+    { id: 8, name: "Fiona Lee" },
+    { id: 9, name: "George Clark" },
+    { id: 10, name: "Hannah Lewis" },
+  ];
+
+  //this chat contains a message from the business owner to the user and the message from the user to business owner
+  const chats = [
+    {
+      id: 1,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+        "you made a request to our business, how can we help you?",
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+        "you made a request to our business, how can we help you?",
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+        "you made a request to our business, how can we help you?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 2,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 3,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 4,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 5,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 6,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 7,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 8,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 9,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+    {
+      id: 10,
+      messageABusinessOwnerSent: [
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+      ],
+
+      messageAUserSent: [
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+      ],
+    },
+  ];
+  const [messageInChat, setMessageInChat] = useState(null);
+  const [hideMessageComponent, setMessageComponent] = useState(false);
+  // the click event for all the conversation if their id matches
+  const showUpMessages = (initialDataOnPage) => {
+    const messageInsideTheObject = chats.find(
+      (item) => item.id == initialDataOnPage.id
+    );
+    // i am setting the message in chat box to messageInChat
+    setMessageInChat(messageInsideTheObject);
+    console.log(messageInsideTheObject);
+    // showing the messageComponent
+    setMessageComponent(true);
+  };
+
+  let hideDaisy = false;
   return (
-    <div  className="flex flex-col md:flex-row h-[80vh]">
-      <div className={`md:w-1/3 min-h-screen bg-gray-100 ${!showListOfBusiness && 'hidden md:block'}`}>
-        <p className="text-lightRed mb-4 font-medium text-lg font-roboto p-4">Chats</p>
-        {conversationOnPage.map((item, index) => (
-          <div
-            key={index}
-            onClick={() => {
-              setShowMessageBox(true);
-              getMessagesInConversation(item._id);
-              hideTheListOnMobile();
-            }}
-            className="h-20 flex items-center cursor-pointer p-4 shadow-md hover:bg-gray-300 text-white font-bold py-2 px-4 rounded transition-colors duration-300 ease-in-out"
-            style={{
-              boxShadow:
-                "0 14px 16px rgba(5, 0, 255, 0.1), 0 10px 15px rgba(255, 255, 255, 0.1), 0 20px 25px rgba(255, 255, 255, 0.1)",
-            }}
-          >
-            <Avatar size="sm" name={item.members[0].name} src="https://cdn-icons-png.freepik.com/512/3177/3177440.png" />
-            <h1 className="text-black capitalize hover:text-white ml-4">
-              {item.members[0].name}
-            </h1>
+    <div>
+      <div className="md:grid grid-cols-5">
+        {/* initial lists */}
+        {showListOfBusiness && (
+          <div className="bg-blue-900 text-white p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
+            <h2 className="text-2xl font-bold mb-4">
+              click to chat with your customers{" "}
+            </h2>
+            <ul className="list-none p-0">
+              {businessData.map((user) => (
+                <li
+                  key={user.id}
+                  onClick={() => {
+                    showUpMessages(user);
+                    hideTheListOnMobile();
+                  }}
+                  className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
+                  {user.name}
+                </li>
+              ))}
+            </ul>
           </div>
-        ))}
-      </div>
-      <div className="md:w-2/3 w-full flex-1 bg-white">
-        {!showMessageBox && (
-          <center className="flex items-center justify-center h-full py-4 px-4 w-full">
-            <h1>Click on a message to start or continue your conversation</h1>
-          </center>
         )}
 
-        {showMessageBox && (
-          <div id="chatContainer" ref={chatContainerRef} className="bg-white w-full mb-[3rem]  chat-container h-full  px-2 py-4 relative">
-            {conversationInChat && conversationInChat.length > 0 ? (
-              <div>
-                {conversationInChat.map((convo, index) => (
-                  <div
-                    className={
-                      convo.senderId === senderId
-                        ? "message sent"
-                        : "message received"
-                    }
-                    key={index}
-                  >
-                    {convo.message}
-                  </div>
-                ))}
+        {/* message component */}
+        {!hideMessageComponent && (
+          <div className="hidden md:flex items-center justify-center h-screen col-span-3">
+            <div>Click on any business to start a conversation </div>
+          </div>
+        )}
+        {hideMessageComponent && messageInChat && (
+          <MessageArea
+            businessData={businessData}
+            setMessageComponent={setMessageComponent}
+            setShowListOfBusiness={setShowListOfBusiness}
+            messageInChat={messageInChat}
+          />
+        )}
+      </div>
+
+      {hideDaisy && (
+        <div className="flex flex-col md:flex-row h-[80vh]">
+          <div
+            className={`md:w-1/3 min-h-screen bg-gray-100 ${
+              !showListOfBusiness && "hidden md:block"
+            }`}>
+            <p className="text-lightRed mb-4 font-medium text-lg font-roboto p-4">
+              Chats
+            </p>
+            {conversationOnPage.map((item, index) => (
+              <div
+                key={index}
+                onClick={() => {
+                  setShowMessageBox(true);
+                  getMessagesInConversation(item._id);
+                  hideTheListOnMobile();
+                }}
+                className="h-20 flex items-center cursor-pointer p-4 shadow-md hover:bg-gray-300 text-white font-bold py-2 px-4 rounded transition-colors duration-300 ease-in-out"
+                style={{
+                  boxShadow:
+                    "0 14px 16px rgba(5, 0, 255, 0.1), 0 10px 15px rgba(255, 255, 255, 0.1), 0 20px 25px rgba(255, 255, 255, 0.1)",
+                }}>
+                <Avatar
+                  size="sm"
+                  name={item.members[0].name}
+                  src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
+                />
+                <h1 className="text-black capitalize hover:text-white ml-4">
+                  {item.members[0].name}
+                </h1>
               </div>
-            ) : (
-              <div>No conversations yet for this user</div>
+            ))}
+          </div>
+          <div className="md:w-2/3 w-full flex-1 bg-white">
+            {!showMessageBox && (
+              <center className="flex items-center justify-center h-full py-4 px-4 w-full">
+                <h1>
+                  Click on a message to start or continue your conversation
+                </h1>
+              </center>
             )}
 
-            <FiArrowLeft
-              className="font-bold absolute top-0 left-0 mt-1 ml-1 cursor-pointer md:hidden"
-              onClick={() => {
-                setShowListOfBusiness(true);
-                setShowMessageBox(false);
-              }}
-            />
-            
+            {showMessageBox && (
+              <div
+                id="chatContainer"
+                ref={chatContainerRef}
+                className="bg-white w-full mb-[3rem]  chat-container h-full  px-2 py-4 relative">
+                {conversationInChat && conversationInChat.length > 0 ? (
+                  <div>
+                    {conversationInChat.map((convo, index) => (
+                      <div
+                        className={
+                          convo.senderId === senderId
+                            ? "message sent"
+                            : "message received"
+                        }
+                        key={index}>
+                        {convo.message}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div>No conversations yet for this user</div>
+                )}
+
+                <FiArrowLeft
+                  className="font-bold absolute top-0 left-0 mt-1 ml-1 cursor-pointer md:hidden"
+                  onClick={() => {
+                    setShowListOfBusiness(true);
+                    setShowMessageBox(false);
+                  }}
+                />
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <div className="flex gap-4 fixed bottom-[2px] w-[93%] lg:w-1/2 items-center right-3">
-              <textarea
-                className="p-2 border w-full border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows="1"
-                placeholder="Type your message here..."
-                value={value}
-                onChange={handleMessageChange}
-              />
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition"
-                onClick={handleSubmit}
-              >
-                {messageLoading ? <Spinner color="red.500" size="xs" /> : "Send"}
-              </button>
-            </div>
+          <div className="flex gap-4 fixed bottom-[2px] w-[93%] lg:w-1/2 items-center right-3">
+            <textarea
+              className="p-2 border w-full border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="1"
+              placeholder="Type your message here..."
+              value={value}
+              onChange={handleMessageChange}
+            />
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition"
+              onClick={handleSubmit}>
+              {messageLoading ? <Spinner color="red.500" size="xs" /> : "Send"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
