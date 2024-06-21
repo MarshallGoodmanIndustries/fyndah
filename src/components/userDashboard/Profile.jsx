@@ -21,8 +21,6 @@ import ModalComponent from "../uiComponents/ModalComponet";
 function Profile() {
   const { authToken } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [showButton, setShowButton] = useState(false)
@@ -39,16 +37,6 @@ function Profile() {
 
   const fullName = `${inputDefaultStates.firstName} ${inputDefaultStates.lastName}`;
   const [isEditable, setIsEditable] = useState(false);
-
-  useEffect(() => {
-    const firstTimeUser = localStorage.getItem("isFirstTimeUser");
-    if (firstTimeUser === "true") {
-      setIsFirstTimeUser(true);
-      firstTimeUser()
-      setOpenModal(true);
-      localStorage.removeItem("isFirstTimeUser");
-    }
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -258,7 +246,6 @@ function Profile() {
 
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
-      {openModal && <ModalComponent />}
       <div className="md:flex block items-center gap-[6rem]">
         <div>
           <Box
