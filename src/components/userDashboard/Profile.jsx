@@ -44,6 +44,7 @@ function Profile() {
     const firstTimeUser = localStorage.getItem("isFirstTimeUser");
     if (firstTimeUser === "true") {
       setIsFirstTimeUser(true);
+      firstTimeUser()
       setOpenModal(true);
       localStorage.removeItem("isFirstTimeUser");
     }
@@ -131,7 +132,7 @@ function Profile() {
     const fetchProfileData = async () => {
       try {
         setIsLoading(true);
-
+        sessionStorage.removeItem("lastRoute")
 
         const profileResponse = await axios.get(
           "https://api.fyndah.com/api/v1/users/profile",
@@ -143,20 +144,21 @@ function Profile() {
         );
 
         const userData = profileResponse.data.data.user;
-        console.log(userData, profilePhoto)
+        const alldata = sessionStorage.setItem('data', userData)
+        console.log(alldata)
         setInputDefaultStates({
           firstName: userData.firstname || "",
           lastName: userData.lastname || "",
           location: userData.address || "",
           phone_number: userData.phone_number || "",
         });
-        sessionStorage.removeItem("lastRoute")
         setProfilePhoto(userData.profile_photo_path)
+        console.log(profilePhoto)
         console.log(profileResponse.data)
         if (profileResponse.status === 200) {
           console.log(profileResponse.data);
           setProfilePhoto(userData.profile_photo_path);
-          console.log(profilePhoto) //console logining the image path
+          console.log(profilePhoto, "image") //console logining the image path
         } else {
           setIsLoading(false);
           throw new Error("Profile Details failed");
@@ -223,9 +225,9 @@ function Profile() {
           },
         }
       );
-      console.log(profilePhoto, "this the file uploaded")
       // console.log(response, profilePhoto)
       if (response.status == 200) {
+        console.log(profilePhoto, "this the file uploaded")
         Swal.fire({
           icon: "success",
           title: "Successful...",

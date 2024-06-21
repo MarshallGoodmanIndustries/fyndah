@@ -5,10 +5,11 @@ import { FiArrowLeft } from "react-icons/fi";
 import { Avatar, Spinner } from "@chakra-ui/react";
 import { ImSpinner9 } from "react-icons/im";
 import { io } from "socket.io-client";
-import { inView } from "framer-motion";
-import { FiSend } from 'react-icons/fi';
-import { MdSend } from 'react-icons/md';
-import MessagesArea from "./MessageArea"
+import MessageArea from "./MessageArea";
+// import { inView } from "framer-motion";
+// import { FiSend } from 'react-icons/fi';
+// import { MdSend } from 'react-icons/md';
+// import MessagesArea from "./MessageArea"
 
 function Messages() {
   const [conversationOnPage, setConversationOnPage] = useState([]);
@@ -185,9 +186,36 @@ function Messages() {
       messageABusinessOwnerSent: [
         "Hello, how are you?",
         "you made a request to our business, how can we help you?",
+        "you made a request to our business, how can we help you?",
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+        "you made a request to our business, how can we help you?",
+        "Hello, how are you?",
+        "you made a request to our business, how can we help you?",
+        "you made a request to our business, how can we help you?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?", "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+
       ],
       messageAUserSent: [
         "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?", "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?", "Hello, i am good?",
         "yes i did i want to make some enquires?",
       ],
     },
@@ -332,10 +360,11 @@ function Messages() {
     <div>
       {/* my own component starts here */}
       <div className="md:grid grid-cols-5">
+        {/* initial lists */}
         {showListOfBusiness && (
           <div className="bg-blue-900 text-white p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
             <h2 className="text-2xl font-bold mb-4">
-              click to chat with business owner's{" "}
+              click to chat with business owners{" "}
             </h2>
             <ul className="list-none p-0">
               {businessData.map((user) => (
@@ -360,46 +389,16 @@ function Messages() {
           </div>
         )}
         {hideMessageComponent && messageInChat && (
-          <div className="h-screen overflow-y-scroll md:col-span-3 bg-blue-300 md:overflow-y-hidden ">
-            <div className="p-6 text-white md:fixed top-0">
-              <FiArrowLeft className="text-black mb-6 mt-4 font-bold text-xl" />
-
-              <div className="mb-8 flex justify-end">
-                <div>
-                  {messageInChat.messageABusinessOwnerSent.map((msg, index) => (
-                    <p key={index} className="mb-1">
-                      <strong>Owner:</strong> {msg}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div className="block">
-                {messageInChat.messageAUserSent.map((msg, index) => (
-                  <p
-                    key={index}
-                    className="border mb-3 bg-black p-3 rounded-tr-lg rounded-bl-lg ">
-                    <strong>User:</strong> {msg} <br />
-                  </p>
-                ))}
-              </div>
-
-              <div className=" fixed border bottom-0 md:">
-               <div className=""> <textarea
-                  className=" p-2  text-black border  border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:w-[200px]"
-                  rows="1"
-                  placeholder="Type your message here..."
-                  // value={value}
-                  // onChange={handleMessageChange}
-                /></div>
-                <button className=" px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition">
-                  < MdSend className=""/>
-                </button>
-              </div>
-
-            </div>
-          </div>
+          <MessageArea
+         businessData={businessData}
+         setMessageComponent={setMessageComponent}
+         setShowListOfBusiness={setShowListOfBusiness}
+         messageInChat={messageInChat}
+       />
+    
         )}
+
+       
       </div>
       {/* ends here  */}
 
