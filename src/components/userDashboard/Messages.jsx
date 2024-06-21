@@ -6,7 +6,9 @@ import { Avatar, Spinner } from "@chakra-ui/react";
 import { ImSpinner9 } from "react-icons/im";
 import { io } from "socket.io-client";
 import { inView } from "framer-motion";
-// import { AuthContext } from "../context/AuthContext";
+import { FiSend } from 'react-icons/fi';
+import { MdSend } from 'react-icons/md';
+import MessagesArea from "./MessageArea"
 
 function Messages() {
   const [conversationOnPage, setConversationOnPage] = useState([]);
@@ -21,7 +23,6 @@ function Messages() {
 
   const { authToken, userMsgId } = useContext(AuthContext);
   const socketRef = useRef();
-
   useEffect(() => {
     socketRef.current = io("http://localhost:5173");
 
@@ -161,25 +162,8 @@ function Messages() {
       }
     }
   };
-  const [messageInChat, setMessageInChat] = useState([]);
-  const [hideMessageComponent, setMessageComponent] = useState(false);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p>
-          <ImSpinner9
-            className="animate-spin text-blue-500 hover:text-blue-800"
-            size={50}
-          />
-        </p>
-        <span>Please wait...</span>
-      </div>
-    );
-  }
 
   let daisyComponent = false;
-  // a state that holds the business you're chatting with
   // this is supposed to be a business owner's data that should be rendered on a user's page
   const businessData = [
     { id: 1, name: "John Doe" },
@@ -316,51 +300,104 @@ function Messages() {
       ],
     },
   ];
-
+  const [messageInChat, setMessageInChat] = useState(null);
+  const [hideMessageComponent, setMessageComponent] = useState(false);
   // the click event for all the conversation if their id matches
   const showUpMessages = (initialDataOnPage) => {
-    const messageInChat = chats.find((item) => item.id == initialDataOnPage.id);
+    const messageInsideTheObject = chats.find(
+      (item) => item.id == initialDataOnPage.id
+    );
     // i am setting the message in chat box to messageInChat
-    setMessageInChat(messageInChat);
-
+    setMessageInChat(messageInsideTheObject);
+    console.log(messageInsideTheObject);
     // showing the messageComponent
     setMessageComponent(true);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>
+          <ImSpinner9
+            className="animate-spin text-blue-500 hover:text-blue-800"
+            size={50}
+          />
+        </p>
+        <span>Please wait...</span>
+      </div>
+    );
+  }
+
   return (
     <div>
       {/* my own component starts here */}
-      <div>
-        <div className="bg-blue-900 text-white p-6 ">
-          <h2 className="text-2xl font-bold mb-4">
-            click to chat with business owner's{" "}
-          </h2>
-          <ul className="list-none p-0">
-            {businessData.map((user) => (
-              <li
-                key={user.id}
-                onClick={() => {
-                  showUpMessages(user);
-                }}
-                className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
-                {user.name}
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="md:grid grid-cols-5">
+        {showListOfBusiness && (
+          <div className="bg-blue-900 text-white p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
+            <h2 className="text-2xl font-bold mb-4">
+              click to chat with business owner's{" "}
+            </h2>
+            <ul className="list-none p-0">
+              {businessData.map((user) => (
+                <li
+                  key={user.id}
+                  onClick={() => {
+                    showUpMessages(user);
+                    hideTheListOnMobile();
+                  }}
+                  className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
+                  {user.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-       {/* message component */}
-        {hideMessageComponent && (
-          <div className="mt-4 p-6 bg-blue-900 text-white mx-auto">
-            <h3 className="text-xl font-bold mb-4">Chat with </h3>
+        {/* message component */}
+        {!hideMessageComponent && (
+          <div className="hidden md:flex items-center justify-center h-screen col-span-3">
+            <div>Click on any business to start a conversation </div>
+          </div>
+        )}
+        {hideMessageComponent && messageInChat && (
+          <div className="h-screen overflow-y-scroll md:col-span-3 bg-blue-300 md:overflow-y-hidden ">
+            <div className="p-6 text-white md:fixed top-0">
+              <FiArrowLeft className="text-black mb-6 mt-4 font-bold text-xl" />
 
-            <textarea
-              className="w-full p-2 mb-4 text-black rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300"
-              rows="2"
-              placeholder="Type your message here..."
-            />
-            <button className="bg-blue-700 text-white p-2 rounded hover:bg-blue-500 transition duration-300">
-              Send Message
-            </button>
+              <div className="mb-8 flex justify-end">
+                <div>
+                  {messageInChat.messageABusinessOwnerSent.map((msg, index) => (
+                    <p key={index} className="mb-1">
+                      <strong>Owner:</strong> {msg}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              <div className="block">
+                {messageInChat.messageAUserSent.map((msg, index) => (
+                  <p
+                    key={index}
+                    className="border mb-3 bg-black p-3 rounded-tr-lg rounded-bl-lg ">
+                    <strong>User:</strong> {msg} <br />
+                  </p>
+                ))}
+              </div>
+
+              <div className=" fixed border bottom-0 md:">
+               <div className=""> <textarea
+                  className=" p-2  text-black border  border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:w-[200px]"
+                  rows="1"
+                  placeholder="Type your message here..."
+                  // value={value}
+                  // onChange={handleMessageChange}
+                /></div>
+                <button className=" px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition">
+                  < MdSend className=""/>
+                </button>
+              </div>
+
+            </div>
           </div>
         )}
       </div>

@@ -19,8 +19,8 @@ function HeroSection() {
   const location = useLocation();
 
   // form data
-  const [businessName, setBusinessName] = useState("");
-  const [businessLocation, setBusinessLocation] = useState("");
+  const [businessName, setBusinessName] = useState(sessionStorage.getItem("lastServiceName") || "");
+  const [businessLocation, setBusinessLocation] = useState(sessionStorage.getItem("lastServiceLocation") || "");
   const [businessCategory, setBusinessCategory] = useState("");
   const [recommendValue, SetRecommendValue] = useState(true);
 
@@ -120,35 +120,46 @@ function HeroSection() {
         timerProgressBar: true,
       });
       setTimeout(()=>{
-        sessionStorage.setItem("lastRoute", location.pathname)
+        sessionStorage.setItem("lastRoute", location.pathname);
+        sessionStorage.setItem("lastServiceName", businessName );
+        sessionStorage.setItem("lastServiceLocation", businessLocation );
         navigate('/login');
       }, 3001);
       //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
       
     } else {
+      
       const url = "https://api.fyndah.com/api/v1/search/business"
-    const data = {
-      "searchTerms": [businessName, businessLocation, +businessCategory]
-    };
-    setSearchQueryIsLoading(true);
-    // setSuggestions([]);
+      const data = {
+        "searchTerms": [businessName, businessLocation, +businessCategory]
+      };
+      setSearchQueryIsLoading(true);
+      containsBusinesses && setBusinesses([]);//empty business array to hide previous rendered search results
+      // setSuggestions([]);
 
-    try {
-      const response = await axios.post(url, data, {
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': `Bearer ${authToken}`,
+      try {
+        const response = await axios.post(url, data, {
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${authToken}`,
+          }
+        });
+        setSearchQueryIsLoading(false);
+        if (response.status === 200)
+          setBusinesses(response.data);
+          setRevealSearchQuery(true);
+          if(sessionStorage.getItem("lastServiceName") !== null){
+              sessionStorage.removeItem("lastServiceName");
+              sessionStorage.removeItem("lastServiceLocation");
+          }
+      } catch (error) {
+        setSearchQueryIsLoading(false);
+        if(sessionStorage.getItem("lastServiceName") !== null){
+          sessionStorage.removeItem("lastServiceName");
+          sessionStorage.removeItem("lastServiceLocation");
         }
-      });
-      setSearchQueryIsLoading(false);
-      if (response.status === 200)
-        setBusinesses(response.data);
-        setRevealSearchQuery(true);
-        console.log(response);
-    } catch (error) {
-      setSearchQueryIsLoading(false);
-      console.log(error.message);
-    }
+        console.log(error.message);
+      }
     }
   };
   
@@ -163,6 +174,7 @@ function HeroSection() {
       }, 90000)
     }
   }, [revealSearchQuery, containsBusinesses])
+
 
 
 
@@ -236,7 +248,8 @@ function HeroSection() {
         ) : businessesForCurrentPage.map((profile) => (
           <SearchBusinessProfile
             key={profile.id}
-            id={profile.id}
+            org_id={profile.id}
+            msg_id={profile.msg_id}
             businessProfileImg={businesslogo}
             businessName={profile.org_name}
             businessTitle={profile.org_bio}
