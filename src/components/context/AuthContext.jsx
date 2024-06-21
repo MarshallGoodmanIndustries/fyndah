@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
 
 export const AuthContext = createContext();
 
@@ -9,7 +8,6 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')) : null
   );
   const [businessId, setBusinessId] = useState(sessionStorage.getItem('businessId') || null);
-  const [socket, setSocket] = useState(null);
   const [userMsgId, setUserMsgId] = useState(sessionStorage.getItem('userMsgId') || null);
   const [businessMsgId, setBusinessMsgId] = useState(sessionStorage.getItem('businessMsgId') || null);
 
@@ -53,13 +51,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, [businessId]);
 
-  useEffect(() => {
-    const newSocket = io('http://localhost:5173', { query: { authToken } });
-    setSocket(newSocket);
-
-    return () => newSocket.close();
-  }, [authToken]);
-
   return (
     <AuthContext.Provider value={{
       authToken,
@@ -68,7 +59,6 @@ export const AuthProvider = ({ children }) => {
       setUserData,
       businessId,
       setBusinessId,
-      socket,
       userMsgId,
       setUserMsgId,
       businessMsgId,
@@ -79,10 +69,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-
-
-// import { createContext, useEffect, useState } from 'react';
-// import { io } from 'socket.io-client';
 
 // export const AuthContext = createContext();
 

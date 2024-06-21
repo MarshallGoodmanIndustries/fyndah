@@ -22,7 +22,7 @@ function Messages() {
   const socketRef = useRef();
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:5173");
+    socketRef.current = io("https://axelonepostfeature.onrender.com");
 
     // Cleanup on unmount
     return () => {
