@@ -5,10 +5,10 @@ import { FiArrowLeft } from "react-icons/fi";
 import { Avatar, Spinner } from "@chakra-ui/react";
 import { ImSpinner9 } from "react-icons/im";
 import { io } from "socket.io-client";
-import { inView } from "framer-motion";
-import { FiSend } from 'react-icons/fi';
-import { MdSend } from 'react-icons/md';
-import MessagesArea from "./MessageArea"
+// import { inView } from "framer-motion";
+// import { FiSend } from 'react-icons/fi';
+// import { MdSend } from 'react-icons/md';
+// import MessagesArea from "./MessageArea"
 
 function Messages() {
   const [conversationOnPage, setConversationOnPage] = useState([]);
@@ -335,7 +335,7 @@ function Messages() {
         {showListOfBusiness && (
           <div className="bg-blue-900 text-white p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
             <h2 className="text-2xl font-bold mb-4">
-              click to chat with business owner's{" "}
+              click to chat with business owners{" "}
             </h2>
             <ul className="list-none p-0">
               {businessData.map((user) => (
@@ -384,18 +384,21 @@ function Messages() {
                 ))}
               </div>
 
-              <div className=" fixed border bottom-0 md:">
-               <div className=""> <textarea
-                  className=" p-2  text-black border  border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:w-[200px]"
-                  rows="1"
-                  placeholder="Type your message here..."
-                  // value={value}
-                  // onChange={handleMessageChange}
-                /></div>
-                <button className=" px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition">
-                  < MdSend className=""/>
-                </button>
+              <div className="fixed bottom-0 w-full md:w-2/4 items-center right-0 p-2 shadow-lg bg-white border-t border-gray-300">
+                <div className="flex items-center space-x-2">
+                  <textarea
+                    className="flex-grow p-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    rows="1"
+                    placeholder="Type your message..."
+                  ></textarea>
+                  <button
+                    className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Send
+                  </button>
+                </div>
               </div>
+
 
             </div>
           </div>
@@ -407,9 +410,8 @@ function Messages() {
       {daisyComponent && (
         <div className="flex flex-col mb-[3rem] md:flex-row h-[80vh]">
           <div
-            className={`md:w-1/3 bg-white ${
-              !showListOfBusiness && "hidden md:block"
-            }`}>
+            className={`md:w-1/3 bg-white ${!showListOfBusiness && "hidden md:block"
+              }`}>
             <p className="text-lightRed mb-4 font-medium text-lg font-roboto p-4">
               Chats
             </p>

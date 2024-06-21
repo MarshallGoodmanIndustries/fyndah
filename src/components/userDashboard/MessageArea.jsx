@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { MdSend } from 'react-icons/md';
 import { FiArrowLeft } from 'react-icons/fi';
 
@@ -86,7 +86,7 @@ const ChatComponent = () => {
           <div>Click on any business to start a conversation</div>
         </div>
       )}
-      
+
       {hideMessageComponent && messageInChat && (
         <div className="h-screen overflow-y-scroll md:col-span-3 bg-blue-300 md:overflow-y-hidden relative">
           <div className="p-6 text-white h-full flex flex-col">

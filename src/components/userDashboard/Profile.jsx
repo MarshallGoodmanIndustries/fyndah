@@ -134,7 +134,6 @@ function Profile() {
         setIsLoading(true);
         sessionStorage.removeItem("lastRoute")
 
-
         const profileResponse = await axios.get(
           "https://api.fyndah.com/api/v1/users/profile",
           {
