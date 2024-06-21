@@ -223,7 +223,7 @@ function Profile() {
           },
         }
       );
-      console.log(profilePhoto, "this the file upload")
+      console.log(profilePhoto, "this the file uploaded")
       // console.log(response, profilePhoto)
       if (response.status == 200) {
         Swal.fire({

@@ -11,6 +11,7 @@ import { SearchBusinessProfile, Loading } from "../../uiComponents";
 
 //image
 import { businesslogo } from "../../../assets/images";
+import Swal from "sweetalert2";
 
 function HeroSection() {
   const { authToken } = useContext(AuthContext);
@@ -18,19 +19,19 @@ function HeroSection() {
   const location = useLocation();
 
   // form data
-  const [businessName, setBusinessName] = useState("");
-  const [businessLocation, setBusinessLocation] = useState("");
+  const [businessName, setBusinessName] = useState(sessionStorage.getItem("lastServiceName") || "");
+  const [businessLocation, setBusinessLocation] = useState(sessionStorage.getItem("lastServiceLocation") || "");
   const [businessCategory, setBusinessCategory] = useState("");
   const [recommendValue, SetRecommendValue] = useState(true);
 
   //location suggestion helper states
-  const [suggestions, setSuggestions] = useState([]);
-  const [previouslySuggestedValue, setPreviouslySuggestedValue] = useState("");
+  // const [suggestions, setSuggestions] = useState([]);
+  // const [previouslySuggestedValue, setPreviouslySuggestedValue] = useState("");
 
 
   const [businessCategories, setBusinessCategories] = useState([]);
   const [searchQueryIsLoading, setSearchQueryIsLoading] = useState(false);
-  const autocompleteApiKey = "17af202f70b44748976eff28573589db";
+  // const autocompleteApiKey = "17af202f70b44748976eff28573589db";
 
   // pagination
   const [revealSearchQuery, setRevealSearchQuery] = useState(false);
@@ -41,31 +42,24 @@ function HeroSection() {
   const businessesForCurrentPage = businesses.slice((currentPage - 1) * 3, currentPage * 3);
 
   // autocomplete useEffect
-  useEffect(() => {
-    const fetchData = async () => {
-      if (businessLocation !== "" && previouslySuggestedValue !== businessLocation) {
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (businessLocation !== "" && previouslySuggestedValue !== businessLocation) {
 
-        try {
-          const response = await axios.get(`https://api.geoapify.com/v1/geocode/autocomplete?text=${businessLocation}&apiKey=${autocompleteApiKey}`);
-          setSuggestions(response.data.features);
-        } catch (err) {
-          console.log(err.message || 'An error occurred');
-        } finally {
-          // setLoading(false);
-        }
-      }
-    };
+  //       try {
+  //         const response = await axios.get(`https://api.geoapify.com/v1/geocode/autocomplete?text=${businessLocation}&apiKey=${autocompleteApiKey}`);
+  //         setSuggestions(response.data.features);
+  //       } catch (err) {
+  //         console.log(err.message || 'An error occurred');
+  //       } finally {
+  //         // setLoading(false);
+  //       }
+  //     }
+  //   };
 
-    const timerId = setTimeout(fetchData, 300); // Adjust debounce time as needed
-    return () => clearTimeout(timerId); // Cleanup timeout on unmount
-  }, [businessLocation, previouslySuggestedValue])
-
-  // set current page for search results
-  useEffect(() => {
-    if (businessesForCurrentPage.length === 0 && currentPage > 1) {
-      setCurrentPage(prevPage => prevPage - 1)
-    }
-  }, [businesses, currentPage, businessesForCurrentPage]);
+  //   const timerId = setTimeout(fetchData, 300); // Adjust debounce time as needed
+  //   return () => clearTimeout(timerId); // Cleanup timeout on unmount
+  // }, [businessLocation, previouslySuggestedValue])
 
   // set current page for search results
   useEffect(() => {
@@ -73,6 +67,13 @@ function HeroSection() {
       setCurrentPage(prevPage => prevPage - 1)
     }
   }, [businesses, currentPage, businessesForCurrentPage]);
+
+  // set current page for search results
+  // useEffect(() => {
+  //   if (businessesForCurrentPage.length === 0 && currentPage > 1) {
+  //     setCurrentPage(prevPage => prevPage - 1)
+  //   }
+  // }, [businesses, currentPage, businessesForCurrentPage]);
 
   //get business categories
   useEffect(() => {
@@ -91,50 +92,77 @@ function HeroSection() {
   }, []);
 
 
-  const handleSuggestionClick = (selectedSuggestion) => {
-    setBusinessLocation(selectedSuggestion.properties.formatted);
-    setPreviouslySuggestedValue(selectedSuggestion.properties.formatted);
-    setSuggestions([]);
-  }
+  // const handleSuggestionClick = (selectedSuggestion) => {
+  //   setBusinessLocation(selectedSuggestion.properties.formatted);
+  //   setPreviouslySuggestedValue(selectedSuggestion.properties.formatted);
+  //   setSuggestions([]);
+  // }
 
   const handleSeeMore = () => {
-    if (!authToken) {
+    // if (!authToken) {
       //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-      sessionStorage.setItem("lastRoute", location.pathname)
-      navigate('/login');
-    } else {
+    //   sessionStorage.setItem("lastRoute", location.pathname)
+    //   navigate('/login');
+    // } else {
       setCurrentPage(prevPage => prevPage < totalPages ? prevPage + 1 : totalPages)
-    }
+    // }
   }
 
-  const handleOnSubmission = async (e) => {
-    e.preventDefault();
-    const url = "https://api.fyndah.com/api/v1/search/business"
-    const data = {
-      "searchTerms": [businessName, businessLocation, +businessCategory]
-    };
-    setSearchQueryIsLoading(true);
-    setSuggestions([]);
+  const handleSearchRequest = async () => {
 
-    try {
-      const response = await axios.post(url, data, {
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': `Bearer ${authToken}`,
-        }
+    if (!authToken) {
+      
+    Swal.fire({
+        icon: "warning",
+        title: "Login required",
+        text: "You will be redirected to the login page.",
+        timer: 3000,
+        timerProgressBar: true,
       });
-      setSearchQueryIsLoading(false);
-      if (response.status === 200)
-        setBusinesses(response.data);
-      setRevealSearchQuery(true);
-      console.log(response);
-    } catch (error) {
-      setSearchQueryIsLoading(false);
-      console.log(error.message);
+      setTimeout(()=>{
+        sessionStorage.setItem("lastRoute", location.pathname);
+        sessionStorage.setItem("lastServiceName", businessName );
+        sessionStorage.setItem("lastServiceLocation", businessLocation );
+        navigate('/login');
+      }, 3001);
+      //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+      
+    } else {
+      
+      const url = "https://api.fyndah.com/api/v1/search/business"
+      const data = {
+        "searchTerms": [businessName, businessLocation, +businessCategory]
+      };
+      setSearchQueryIsLoading(true);
+      containsBusinesses && setBusinesses([]);//empty business array to hide previous rendered search results
+      // setSuggestions([]);
+
+      try {
+        const response = await axios.post(url, data, {
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${authToken}`,
+          }
+        });
+        setSearchQueryIsLoading(false);
+        if (response.status === 200)
+          setBusinesses(response.data);
+          setRevealSearchQuery(true);
+          if(sessionStorage.getItem("lastServiceName") !== null){
+              sessionStorage.removeItem("lastServiceName");
+              sessionStorage.removeItem("lastServiceLocation");
+          }
+      } catch (error) {
+        setSearchQueryIsLoading(false);
+        if(sessionStorage.getItem("lastServiceName") !== null){
+          sessionStorage.removeItem("lastServiceName");
+          sessionStorage.removeItem("lastServiceLocation");
+        }
+        console.log(error.message);
+      }
     }
   };
-
-
+  
 
 
 
@@ -149,13 +177,14 @@ function HeroSection() {
 
 
 
+
   return (
     <section className="bg-secondary w-full h-full flex flex-col justify-center py-8 px-4 sm:px-5 md:px-6 lg:px-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-xl md:text-4xl text-textDark font-poppins font-bold tracking-wide text-center uppercase">Discover local businesses</h1>
         <p className="text-sm md:text-lg text-textDark font-roboto font-light text-center">Search, Buy, Sell.</p>
       </div>
-      <form method="post" onSubmit={handleOnSubmission} id="formbg" className="searchBox flex flex-col items-center md:flex-row md:items-start w-full md:max-w-[80%] lg:max-w-[85%] md:mx-auto gap-4 rounded-sm md:rounded-md px-4 md:px-8 py-6 md:py-24 mt-4">
+      <div id="formbg" className="searchBox flex flex-col items-center md:flex-row md:items-start w-full md:max-w-[80%] lg:max-w-[85%] md:mx-auto gap-4 rounded-sm md:rounded-md px-4 md:px-8 py-6 md:py-24 mt-4">
         <div className="flex flex-col items-center gap-4 w-full">
           <div className="flex flex-col items-center md:flex-row gap-4 w-full">
             <div className="flex items-center gap-2 bg-primary bg-opacity-90 backdrop-blur-sm border-b-4  transition-all duration-300 border-accent focus-within:border-accentDark p-2 md:p-4 w-full rounded-sm">
@@ -182,13 +211,13 @@ function HeroSection() {
                 required
 
               />
-              <ul className="absolute left-0 bottom-0 flex flex-col gap-1 w-full border transform translate-y-[105%] bg-inherit">
+              {/* <ul className="absolute left-0 bottom-0 flex flex-col gap-1 w-full border transform translate-y-[105%] bg-inherit">
                 {suggestions.map((suggestion, index) => (
                   <li key={index} onClick={() => handleSuggestionClick(suggestion)} className="p-2 w-full hover:bg-accent hover:bg-opacity-70 cursor-pointer">
                     {suggestion.properties.formatted}
                   </li>
                 ))}
-              </ul>
+              </ul> */}
             </div>
           </div>
           <div className="flex  justify-center items-center flex-wrap md:flex-nowrap md:items-start gap-2 w-full">
@@ -204,10 +233,10 @@ function HeroSection() {
             </div>
           </div>
         </div>
-        <div className="bg-accent hover:bg-accentDark transition-all duration-300 p-2 md:p-4 rounded-lg cursor-pointer">
+        <div onClick={handleSearchRequest} className="bg-accent hover:bg-accentDark transition-all duration-300 p-2 md:p-4 rounded-lg cursor-pointer">
           <button type="submit" className="text-primary font-poppins font-light text-base md:text-lg ">Search</button>
         </div>
-      </form>
+      </div>
       <div className="w-fit mx-auto my-4">
         {searchQueryIsLoading && <Loading />}
       </div>
@@ -219,11 +248,12 @@ function HeroSection() {
         ) : businessesForCurrentPage.map((profile) => (
           <SearchBusinessProfile
             key={profile.id}
-            id={profile.id}
+            org_id={profile.id}
+            msg_id={profile.msg_id}
             businessProfileImg={businesslogo}
             businessName={profile.org_name}
             businessTitle={profile.org_bio}
-            businessLocation={profile.city}
+            businessLocation={profile.locations[0].city}
           />
         ))}
         {totalPages > 3 && (

@@ -148,7 +148,7 @@ const FeaturedPost = ({postId, organizationId, msgId , orgMsgId, profileImg, use
                         {commentsData.length}
                     </div>
 
-                    {organizationId !== userData.organization_id && (
+                    {organizationId !== userData?.organization_id && (
                         <div onClick={handleMessage} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
                             <BiSolidMessageDetail className="w-5 h-5 text-gray-600" />
                         </div>

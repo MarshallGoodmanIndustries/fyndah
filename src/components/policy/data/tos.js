@@ -2,7 +2,7 @@ const tos = [
     {
         numbering: "a",
         title: "Introduction",
-        desc: "Welcome to Fyndah.com, a business listing and management platform owned and operated by Marshall Goodman Industries. By accessing or using Fyndah.com, you agree to comply with and be bound by these Terms of Use. If you do not agree, please do not use our platform."
+        desc: "Welcome to Fyndah.com, a business listing and management platform. By accessing or using Fyndah.com, you agree to comply with and be bound by these Terms of Use. If you do not agree, please do not use our platform."
     },
     {
         numbering: "b",
