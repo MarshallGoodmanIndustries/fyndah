@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
@@ -6,10 +6,6 @@ import { Avatar, Spinner } from "@chakra-ui/react";
 import { ImSpinner9 } from "react-icons/im";
 import { io } from "socket.io-client";
 import MessageArea from "./MessageArea";
-// import { inView } from "framer-motion";
-// import { FiSend } from 'react-icons/fi';
-// import { MdSend } from 'react-icons/md';
-// import MessagesArea from "./MessageArea"
 
 function Messages() {
   const [conversationOnPage, setConversationOnPage] = useState([]);
@@ -18,22 +14,13 @@ function Messages() {
   const [conversationInChat, setConversationInChat] = useState([]);
   const [id, setId] = useState("");
   const [senderId, setSenderId] = useState("");
+  const [receiverId, setReceiverId] = useState("");
   const [messageLoading, setMessageLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
+  const [hideMessageComponent, setMessageComponent] = useState(false);
 
-  const { authToken, userMsgId } = useContext(AuthContext);
-  const socketRef = useRef();
-  useEffect(() => {
-    socketRef.current = io("https://axelonepostfeature.onrender.com");
-
-    // Cleanup on unmount
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-      }
-    };
-  }, []);
+  const { authToken, userMsgId} = useContext(AuthContext);
 
   // Hide the message list on mobile screens
   const hideTheListOnMobile = () => {
@@ -59,7 +46,9 @@ function Messages() {
         if (response.status === 200) {
           setConversationOnPage(response.data);
           const theSenderId = response.data[0].members[0].id;
+          const theReceiverId = response.data[1].members[1].id;
           setSenderId(theSenderId);
+          setReceiverId(theReceiverId)
           console.log("response: ", response.data);
           setLoading(false);
         } else {
@@ -76,19 +65,6 @@ function Messages() {
 
     fetchData();
   }, [authToken, userMsgId]);
-
-  useEffect(() => {
-    if (!socketRef.current) return;
-
-    // Listen for incoming messages
-    socketRef.current.on("receiveMessage", (message) => {
-      setConversationInChat((prev) => [...prev, message]);
-    });
-
-    return () => {
-      socketRef.current.off("receiveMessage");
-    };
-  }, []);
 
   // Fetch messages in a conversation
   const getMessagesInConversation = async (conversationId) => {
@@ -108,6 +84,7 @@ function Messages() {
         setId(conversationId);
         console.log("conversations: ", response.data);
         setLoading(false);
+        setMessageComponent(true);
         window.scroll(100, 100);
       } else {
         setLoading(false);
@@ -128,6 +105,7 @@ function Messages() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessageLoading(true);
+    setValue("");
     if (value.trim() !== "") {
       try {
         const message = {
@@ -151,11 +129,11 @@ function Messages() {
         );
 
         if (response.status === 200) {
-          socketRef.current.emit("sendMessage", message); // Emit message to socket server
           console.log("Message sent", response.data);
+          setValue("");
         }
 
-        setValue("");
+        
         setMessageLoading(false);
       } catch (error) {
         console.error(error);
@@ -164,183 +142,32 @@ function Messages() {
     }
   };
 
+  useEffect(() => {
+    const socket = io("https://axelonepostfeature.onrender.com", {
+      query: {token : authToken}
+    }) ;
+    socket.on("connect", () => {
+      console.log("connected")
+
+      socket.emit("join", id)
+    })
+    socket.on("receiveMessage", (message) => {
+      setConversationInChat((prev) => [...prev, message]);
+      console.log("message received")
+    })
+
+    socket.on("disconnect", () => {
+      console.log("disconnected")
+    })
+
+    // Cleanup on unmount
+    return () => {
+      socket.disconnect()
+    };
+  }, []);
+
   let daisyComponent = false;
-  // this is supposed to be a business owner's data that should be rendered on a user's page
-  const businessData = [
-    { id: 1, name: "John Doe" },
-    { id: 2, name: "Jane Smith" },
-    { id: 3, name: "Alice Johnson" },
-    { id: 4, name: "Bob Brown" },
-    { id: 5, name: "Charlie Davis" },
-    { id: 6, name: "David Wilson" },
-    { id: 7, name: "Emma Thomas" },
-    { id: 8, name: "Fiona Lee" },
-    { id: 9, name: "George Clark" },
-    { id: 10, name: "Hannah Lewis" },
-  ];
-
-  //this chat contains a message from the business owner to the user and the message from the user to business owner
-  const chats = [
-    {
-      id: 1,
-      messageABusinessOwnerSent: [
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-        "you made a request to our business, how can we help you?",
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-        "you made a request to our business, how can we help you?",
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-        "you made a request to our business, how can we help you?",
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?", "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-
-      ],
-      messageAUserSent: [
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?", "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?", "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-      ],
-    },
-    {
-      id: 2,
-      messageABusinessOwnerSent: [
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-      ],
-
-      messageAUserSent: [
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-      ],
-    },
-    {
-      id: 3,
-      messageABusinessOwnerSent: [
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-      ],
-
-      messageAUserSent: [
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-      ],
-    },
-    {
-      id: 4,
-      messageABusinessOwnerSent: [
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-      ],
-
-      messageAUserSent: [
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-      ],
-    },
-    {
-      id: 5,
-      messageABusinessOwnerSent: [
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-      ],
-
-      messageAUserSent: [
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-      ],
-    },
-    {
-      id: 6,
-      messageABusinessOwnerSent: [
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-      ],
-
-      messageAUserSent: [
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-      ],
-    },
-    {
-      id: 7,
-      messageABusinessOwnerSent: [
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-      ],
-
-      messageAUserSent: [
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-      ],
-    },
-    {
-      id: 8,
-      messageABusinessOwnerSent: [
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-      ],
-
-      messageAUserSent: [
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-      ],
-    },
-    {
-      id: 9,
-      messageABusinessOwnerSent: [
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-      ],
-
-      messageAUserSent: [
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-      ],
-    },
-    {
-      id: 10,
-      messageABusinessOwnerSent: [
-        "Hello, how are you?",
-        "you made a request to our business, how can we help you?",
-      ],
-
-      messageAUserSent: [
-        "Hello, i am good?",
-        "yes i did i want to make some enquires?",
-      ],
-    },
-  ];
-  const [messageInChat, setMessageInChat] = useState(null);
-  const [hideMessageComponent, setMessageComponent] = useState(false);
-  // the click event for all the conversation if their id matches
-  const showUpMessages = (initialDataOnPage) => {
-    const messageInsideTheObject = chats.find(
-      (item) => item.id == initialDataOnPage.id
-    );
-    // i am setting the message in chat box to messageInChat
-    setMessageInChat(messageInsideTheObject);
-    console.log(messageInsideTheObject);
-    // showing the messageComponent
-    setMessageComponent(true);
-  };
+ 
 
   if (loading) {
     return (
@@ -367,15 +194,16 @@ function Messages() {
               click to chat with business owners{" "}
             </h2>
             <ul className="list-none p-0">
-              {businessData.map((user) => (
+              {conversationOnPage.map((item, index) => (
                 <li
-                  key={user.id}
-                  onClick={() => {
-                    showUpMessages(user);
-                    hideTheListOnMobile();
-                  }}
+                key={index}
+                onClick={() => {
+                  setShowMessageBox(true);
+                  getMessagesInConversation(item._id);
+                  hideTheListOnMobile();
+                }}
                   className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
-                  {user.name}
+                  {item.members[1].name}
                 </li>
               ))}
             </ul>
@@ -388,12 +216,17 @@ function Messages() {
             <div>Click on any business to start a conversation </div>
           </div>
         )}
-        {hideMessageComponent && messageInChat && (
+        {hideMessageComponent && conversationOnPage && (
           <MessageArea
-         businessData={businessData}
+          handleSubmit={handleSubmit}
+          value={value}
+          handleMessageChange={handleMessageChange}
+          messageLoading={messageLoading}
+          conversationOnPage={conversationOnPage}
          setMessageComponent={setMessageComponent}
          setShowListOfBusiness={setShowListOfBusiness}
-         messageInChat={messageInChat}
+         conversationInChat={conversationInChat}
+         senderId={senderId}
        />
     
         )}
