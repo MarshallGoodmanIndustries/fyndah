@@ -6,7 +6,9 @@ import { Avatar, Spinner } from "@chakra-ui/react";
 import { ImSpinner9 } from "react-icons/im";
 import { io } from "socket.io-client";
 import { inView } from "framer-motion";
-// import { AuthContext } from "../context/AuthContext";
+import { FiSend } from 'react-icons/fi';
+import { MdSend } from 'react-icons/md';
+import MessagesArea from "./MessageArea"
 
 function Messages() {
   const [conversationOnPage, setConversationOnPage] = useState([]);
@@ -21,7 +23,6 @@ function Messages() {
 
   const { authToken, userMsgId } = useContext(AuthContext);
   const socketRef = useRef();
-
   useEffect(() => {
     socketRef.current = io("http://localhost:5173");
 
@@ -332,7 +333,7 @@ function Messages() {
       {/* my own component starts here */}
       <div className="md:grid grid-cols-5">
         {showListOfBusiness && (
-          <div className="bg-blue-900 text-white p-6 md:col-span-2">
+          <div className="bg-blue-900 text-white p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
             <h2 className="text-2xl font-bold mb-4">
               click to chat with business owner's{" "}
             </h2>
@@ -359,11 +360,11 @@ function Messages() {
           </div>
         )}
         {hideMessageComponent && messageInChat && (
-          <div className="md:col-span-3 bg-blue-300 relative">
+          <div className="h-screen overflow-y-scroll md:col-span-3 bg-blue-300 md:overflow-y-hidden ">
             <div className="p-6 text-white md:fixed top-0">
               <FiArrowLeft className="text-black mb-6 mt-4 font-bold text-xl" />
 
-              <div className="mb-4 flex justify-end">
+              <div className="mb-8 flex justify-end">
                 <div>
                   {messageInChat.messageABusinessOwnerSent.map((msg, index) => (
                     <p key={index} className="mb-1">
@@ -377,24 +378,25 @@ function Messages() {
                 {messageInChat.messageAUserSent.map((msg, index) => (
                   <p
                     key={index}
-                    className="inline-block border mb-3 bg-black p-3 rounded-tr-lg rounded-bl-lg ">
+                    className="border mb-3 bg-black p-3 rounded-tr-lg rounded-bl-lg ">
                     <strong>User:</strong> {msg} <br />
                   </p>
                 ))}
               </div>
 
-              <div className="flex gap-4 fixed md:bottom-2 w-[100%] lg:w-1/3 items-center right-3 md:w-[93%]">
-                <textarea
-                  className="p-2 text-black border w-full border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <div className=" fixed border bottom-0 md:">
+               <div className=""> <textarea
+                  className=" p-2  text-black border  border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:w-[200px]"
                   rows="1"
                   placeholder="Type your message here..."
                   // value={value}
                   // onChange={handleMessageChange}
-                />
-                <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition">
-                  send
+                /></div>
+                <button className=" px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition">
+                  < MdSend className=""/>
                 </button>
               </div>
+
             </div>
           </div>
         )}
