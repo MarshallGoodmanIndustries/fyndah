@@ -13,9 +13,9 @@ import { Textarea } from "@chakra-ui/react";
 import { MdLocationPin } from "react-icons/md";
 import { FaMonument } from "react-icons/fa";
 import { PiUserSwitchFill } from "react-icons/pi";
-import { TiUserDelete } from "react-icons/ti";
-import { FaPeopleRobbery } from "react-icons/fa6";
-import { RiMailSettingsFill } from "react-icons/ri";
+// import { TiUserDelete } from "react-icons/ti";
+// import { FaPeopleRobbery } from "react-icons/fa6";
+// import { RiMailSettingsFill } from "react-icons/ri";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
@@ -177,6 +177,26 @@ function BusinessProfile() {
       } catch (error) {
         console.error(error);
         setIsLoading(false);
+        if (axios.isAxiosError(error)) {
+          // Handle AxiosError
+          console.error('Error message:', error.message);
+          if (error.response) {
+            console.error('Status code:', error.response.status);
+            console.error('Response data:', error.response.data);
+            console.error('Response msg:', error.response.data.message);
+            if (error.response.data.status === "error") {
+              sessionStorage.setItem('lastRoute', routeLocation.pathname);
+              navigate("/login")
+            }
+          } else if (error.request) {
+            console.error('No response received:', error.request);
+          } else {
+            console.error('Request setup error:', error.message);
+          }
+        } else {
+          // Handle non-AxiosError
+          console.error('Unexpected error:', error);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -238,7 +258,7 @@ function BusinessProfile() {
       setIsLoading(true);
       setShowButton(false)
       const response = await axios.post(
-        "https://api.fyndah.com/api/v1/users/profile",
+        `https://api.fyndah.com/api/v1/organization/${id}`,
         {
           logo: selectedFile,
           cover_image: selectedCoverFile
@@ -276,7 +296,7 @@ function BusinessProfile() {
     } finally {
       setIsLoading(false);
     }
-  
+
   }
 
   return (
@@ -284,45 +304,45 @@ function BusinessProfile() {
       <div className="block relative items-center gap-[6rem]">
         {/* PROFILE IMAGE DISPLAY */}
         <Box className="w-full absolute rounded-t-3xl h-[160px]">
-        <Image
-  className="w-full h-[160px] object-cover rounded-full"
-  src={coverPhoto || "https://cdn-icons-png.freepik.com/512/3177/3177440.png"}
-  alt="Profile"
-/>
-            <Box
-              position="absolute"
-              top="0"
-              left="0"
-              width="100%"
-              height="100%"
-              backgroundColor="rgba(0, 0, 0, 0.4)"
-              opacity="0"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              transition="opacity 0.3s"
-              _hover={{ opacity: 1 }}
-            >
-              <RiEdit2Fill color="white" size="23px" />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleCoverPhotoChange}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  opacity: 0,
-                  cursor: "pointer",
-                }}
-              />
-            </Box>
+          <Image
+            className="w-full h-[160px] object-cover rounded-full"
+            src={coverPhoto || "https://cdn-icons-png.freepik.com/512/3177/3177440.png"}
+            alt="Profile"
+          />
+          <Box
+            position="absolute"
+            top="0"
+            left="0"
+            width="100%"
+            height="100%"
+            backgroundColor="rgba(0, 0, 0, 0.4)"
+            opacity="0"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            transition="opacity 0.3s"
+            _hover={{ opacity: 1 }}
+          >
+            <RiEdit2Fill color="white" size="23px" />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleCoverPhotoChange}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                opacity: 0,
+                cursor: "pointer",
+              }}
+            />
+          </Box>
         </Box>
 
         <div>
-        <Box
+          <Box
             className="w-[80px] rounded-full lg:w-[100px] h-[100px]"
             position="relative"
             display="inline-block"
@@ -330,10 +350,10 @@ function BusinessProfile() {
             overflow="hidden"
           >
             <Image
-  className="w-[80px] lg:w-[100px] h-[100px] object-cover rounded-full"
-  src={profilePhoto || "https://cdn-icons-png.freepik.com/512/3177/3177440.png"}
-  alt="Profile"
-/>
+              className="w-[80px] lg:w-[100px] h-[100px] object-cover rounded-full"
+              src={profilePhoto || "https://cdn-icons-png.freepik.com/512/3177/3177440.png"}
+              alt="Profile"
+            />
             <Box
               position="absolute"
               top="0"
@@ -369,11 +389,11 @@ function BusinessProfile() {
       </div>
 
       {showButton && <Button
-    onClick={handleSubmitPhoto}
-    className="my-2 py-2 px-4 bg-blue-500 text-white rounded"
-  >
-    Upload Profile Photo
-  </Button>}
+        onClick={handleSubmitPhoto}
+        className="my-2 py-2 px-4 bg-blue-500 text-white rounded"
+      >
+        Upload Profile Photo
+      </Button>}
 
       {/* ACCOUNT DETAILS */}
       <div className="mt-[2.5rem]">
@@ -697,11 +717,11 @@ function BusinessProfile() {
             </div>
             {/* ACCOUNT MANAGEMENT */}
 
-            <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
+            {/* <div className="col-span-2 my-[2rem] flex justify-around text-lightRed mb-[1rem] text-[0.8rem] lg:text-[1.1rem] font-semibold">
               ACCOUNT MANAGEMENT
-            </div>
+            </div> */}
             <div className="col-span-2 gap-y-[1rem] grid grid-cols-2 xl:grid-cols-4">
-              <div className="flex items-center justify-center gap-[0.5rem]">
+              {/* <div className="flex items-center justify-center gap-[0.5rem]">
                 <h2
                   onClick={handleSwitching}
                   className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]"
@@ -709,7 +729,7 @@ function BusinessProfile() {
                   Switch Businesses
                 </h2>
                 <PiUserSwitchFill className="size-4 lg:size-5" />
-              </div>
+              </div> */}
               {/* <div className="flex lg:mb-0 items-center lg:gap-[1rem] gap-[0.5rem]">
                 <h2 onClick={handleSwitching} className="font-normal  cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Switch Account
@@ -717,7 +737,7 @@ function BusinessProfile() {
                 <PiUserSwitchFill className=" size-4 lg:size-5" />
               </div> */}
 
-              <div className="flex items-center justify-center gap-[0.5rem]">
+              {/* <div className="flex items-center justify-center gap-[0.5rem]">
                 <h2 className="font-normal cursor-pointer text-black  text-[0.9rem] lg:text-[1.1rem]">
                   Delete Account
                 </h2>
@@ -736,7 +756,7 @@ function BusinessProfile() {
                   Change email
                 </h2>
                 <RiMailSettingsFill className="size-4 lg:size-5" />
-              </div>
+              </div> */}
             </div>
           </div>
         </form>

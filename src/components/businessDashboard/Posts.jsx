@@ -9,7 +9,6 @@ import Swal from "sweetalert2";
 
 const Posts = () => {
     const { authToken } = useContext(AuthContext);
-   const [title, setTitle] = useState("");
    const [description, setDescription] = useState("");
    const [image, setImage] = useState(null);
    const [previewSrc, setPreviewSrc] = useState("");
@@ -23,7 +22,7 @@ const Posts = () => {
    }
 
    const handleRemovePreview = (e) => {
-        e.stopPropagation(); //prevent the click event on the cross ico to reach the label and trigger the file input
+        e.stopPropagation(); //prevent the click event on the cross icon to reach the label and trigger the file input
         setPreviewSrc("");
         setImage(null);
    }
@@ -37,7 +36,7 @@ const Posts = () => {
         try {
             const response = await axios.post(
                 url,
-                {title: title, description: description, image: image},{
+                {description: description, image: image},{
                 headers: {
                     Authorization: `Bearer ${authToken}`,
                     'Content-Type': 'multipart/form-data'
@@ -52,12 +51,9 @@ const Posts = () => {
                   timer: 3000,
                   timerProgressBar: true,
                 });
-                setTitle("");
                 setDescription("")
                 setPreviewSrc("");
                 setImage(null);
-              } else {
-                throw new Error("Registration failed");
               }
         } catch (error) {
             setIsLoading(false);
@@ -75,16 +71,6 @@ const Posts = () => {
     return (
         <section className="flex flex-col items-center gap-2 mt-4 mr-6 w-full">            
             <form onSubmit={handlePostSubmission} method="post" encType="" className="flex flex-col gap-4 py-4 w-full max-w-80 md:max-w-96">
-                <div className="flex flex-col gap-2">
-                    <label htmlFor="title" className="font-poppins font-normal text-base text-textDark">Caption <span className="text-xs font-light">(optional)</span> </label>
-                    <input 
-                        value={title}
-                        onChange={(e)=> setTitle(e.target.value)}
-                        type="text" 
-                        id="title"  
-                        className=" text-textDark font-roboto text-base font-light border border-gray-300 bg-gray-100 rounded-lg outline-none p-2" 
-                    />
-                </div>
                 <div className="flex flex-col gap-2">
                     <label htmlFor="description" className="font-poppins font-normal text-base text-textDark">Description</label>
                     <textarea 

@@ -105,7 +105,7 @@ function Login() {
                 navigate(lastRoute);
               } else {
                 // Navigate to the dashboard
-                navigate("/dashboard/profile");
+                navigate("/");
               }
             }, 3000);
           } else {
