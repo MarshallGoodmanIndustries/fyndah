@@ -31,16 +31,6 @@ function BusinessMessages() {
     }
   };
 
-  const socketRef = useRef();
-
-  useEffect(() => {
-    socketRef.current = io("http://localhost:5173");
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-      }
-    };
-  }, []);
 
   const hideTheListOnMobile = () => {
     if (window.innerWidth < 768) {
@@ -76,17 +66,6 @@ function BusinessMessages() {
     fetchData();
   }, [authToken, businessMsgId]);
 
-  useEffect(() => {
-    if (!socketRef.current) return;
-
-    socketRef.current.on("receiveMessage", (message) => {
-      setConversationInChat((prev) => [...prev, message]);
-    });
-
-    return () => {
-      socketRef.current.off("receiveMessage");
-    };
-  }, []);
 
   const getMessagesInConversation = async (conversationId) => {
     try {
@@ -141,7 +120,6 @@ function BusinessMessages() {
         );
 
         if (response.status === 200) {
-          socketRef.current.emit("sendMessage", message);
           console.log("Message sent", response.data);
         }
 
@@ -337,6 +315,47 @@ function BusinessMessages() {
   };
 
   let hideDaisy = false;
+
+  useEffect(() => {
+    console.log("Component Mounted");
+    
+
+    console.log("Creating socket with token:", authToken);
+    const socket = io('https://axelonepostfeature.onrender.com', {
+        query: { authToken },
+        transports: ['websocket'], // Ensure we are using websockets
+        reconnectionAttempts: 3, // Retry connecting 3 times
+    });
+
+    console.log("Socket created:", socket);
+
+    socket.on('connect', () => {
+      console.log('Connected to the server');
+      socket.emit('joinRoom', { conversationId: id });
+    });
+
+    socket.on('new_message', (data) => {
+      console.log('New message received:', data);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from the server');
+    });
+
+    socket.on('connect_error', (err) => {
+      console.error('Connection Error:', err);
+    });
+
+    socket.on('error', (err) => {
+      console.error('Error:', err);
+    });
+
+    return () => {
+      console.log("Component Unmounted, disconnecting socket");
+      socket.disconnect();
+    };
+  }, []);
+
   return (
     <div>
       <div className="md:grid grid-cols-5">

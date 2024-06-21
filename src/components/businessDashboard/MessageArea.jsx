@@ -12,7 +12,7 @@ const MessageArea = ({setMessageComponent,setShowListOfBusiness,messageInChat}) 
     <div className="mb-8 flex justify-end">
       <div>
         {messageInChat.messageABusinessOwnerSent.map((msg, index) => (
-          <p key={index} className="mb-1 border mb-3 bg-[#333333] text-black p-3 rounded-tr-lg rounded-bl-lg text-white ">
+          <p key={index} className=" border mb-3 bg-[#333333] p-3 rounded-tr-lg rounded-bl-lg text-white ">
             <strong>Owner:</strong> {msg}
           </p>
         ))}
