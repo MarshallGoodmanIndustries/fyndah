@@ -24,33 +24,28 @@ const MessageArea = ({
           className="text-black mb-6 mt-4 font-bold text-xl"
         />
 
-        <div className="block">
-          {conversationInChat
-            .filter((convo) => convo.senderId !== senderId)
-            .map((convo, index) => (
-              <p
-                key={index}
-                className="border mb-3 bg-black p-3 rounded-tr-lg rounded-bl-lg "
-              >
-                {convo.message} <br />
-              </p>
-            ))}
-        </div>
+<div className="block w-full mx-auto">
 
-        <div className="mb-8 flex justify-end">
-          <div>
-            {conversationInChat
-              .filter((convo) => convo.senderId === senderId)
-              .map((convo, index) => (
-                <p
-                  key={index}
-                  className="border mb-3 bg-white text-black p-3 rounded-tr-lg rounded-bl-lg"
-                >
-                  {convo.message}
-                </p>
-              ))}
-          </div>
-        </div>
+
+{conversationInChat.map((convo, index) => (
+  <div
+    key={index}
+    className={` p-3 rounded-tr-lg rounded-bl-lg flex ${
+      convo.senderId === senderId ? "justify-end" : "justify-start"
+    }`}
+  >
+    <div
+      className={`p-3 rounded-tr-lg rounded-bl-lg ${
+        convo.senderId === senderId
+          ? "bg-white text-black"
+          : "bg-black text-white"
+      }`}
+    >
+      {convo.message}
+    </div>
+  </div>
+))}
+</div>
 
         <div className="fixed bottom-0 w-full md:w-2/4 items-center right-0 p-2 shadow-lg bg-white border-t border-gray-300">
           <div className="flex items-center space-x-2">

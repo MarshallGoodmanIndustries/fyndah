@@ -148,20 +148,23 @@ function Messages() {
 
     console.log("Creating socket with token:", authToken);
     const socket = io('https://axelonepostfeature.onrender.com', {
-        query: { authToken },
+        query: {token: authToken },
         transports: ['websocket'], // Ensure we are using websockets
         reconnectionAttempts: 3, // Retry connecting 3 times
     });
 
     console.log("Socket created:", socket);
 
-    socket.on('connect', () => {
-      console.log('Connected to the server');
-      socket.emit('joinRoom', { conversationId: id });
+    socket.on("connect", () => {
+      console.log("Connected to the server");
+      socket.emit("joinRoom", { conversationId: id });
     });
 
-    socket.on('new_message', (data) => {
-      console.log('New message received:', data);
+    socket.on("new_message", async (data) => {
+      console.log("New message received:", data);
+      if (data.conversationId === id) {
+        await getMessagesInConversation(id); // Fetch new messages on receiving a new message
+      }
     });
 
     socket.on('disconnect', () => {
@@ -180,27 +183,7 @@ function Messages() {
       console.log("Component Unmounted, disconnecting socket");
       socket.disconnect();
     };
-  }, []);
-
-
-  // useEffect(() => {
-  //   const socket = io("https://axelonepostfeature.onrender.com", {
-  //     query: {token : authToken}
-  //   }) ;
-  //   console.log("auth token", authToken)
-  //   socket.on("connect", () => {
-  //     console.log("connected")
-
-  //     socket.emit("join", id)
-  //   })
-  //   socket.on("receiveMessage", (message) => {
-  //     setConversationInChat((prev) => [...prev, message]);
-  //     console.log("message received")
-  //   })
-  //   return () => {
-  //     socket.disconnect()
-  //   };
-  // }, []); 
+  }, [authToken, id]);
 
   if (loading) {
     return (
@@ -218,30 +201,34 @@ function Messages() {
 
   return (
     <div>
-      {/* my own component starts here */}
       <div className="md:grid grid-cols-5">
         {/* initial lists */}
         {showListOfBusiness && (
-          <div className="bg-blue-900 text-white p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
-            <h2 className="text-2xl font-bold mb-4">
-              click to chat with business owners{" "}
-            </h2>
-            <ul className="list-none p-0">
-              {conversationOnPage.map((item, index) => (
-                <li
-                key={index}
-                onClick={() => {
-                  setShowMessageBox(true);
-                  getMessagesInConversation(item._id);
-                  hideTheListOnMobile();
-                }}
-                  className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
-                  {item.members[1].name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+  <div className="bg-blue-900 text-white p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
+      {  conversationOnPage.length >= 1 && <h2 className="text-2xl font-bold mb-4">
+      Click to chat with Proffesionals{" "}
+    </h2>}
+    {conversationOnPage.length === 0 ? (
+      <p className="text-center">No conversations available at the moment. Go to the Feeds and message a business to initiate a conversation.</p>
+    ) : (
+      <ul className="list-none p-0">
+        {conversationOnPage.map((item, index) => (
+          <li
+            key={index}
+            onClick={() => {
+              setShowMessageBox(true);
+              getMessagesInConversation(item._id);
+              hideTheListOnMobile();
+            }}
+            className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5"
+          >
+            {item.members[1].name}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+)}
 
         {/* message component */}
         {!hideMessageComponent && (
@@ -261,7 +248,6 @@ function Messages() {
          conversationInChat={conversationInChat}
          senderId={senderId}
        />
-    
         )}
       </div>
     </div>
