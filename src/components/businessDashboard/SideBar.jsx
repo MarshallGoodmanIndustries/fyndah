@@ -217,7 +217,7 @@ const SideBar = ({ handleToggle }) => {
           color="white"
           sx={{
             "> option": {
-              fontSize: ['48px', '72px'],
+              // fontSize: ['48px', '72px'],
               fontWeight: '400', fontSize: "1.1rem", background: "#4299E1", color: "white"
             }
           }}

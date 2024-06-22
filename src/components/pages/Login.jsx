@@ -18,7 +18,7 @@ function Login() {
   const [revealPassword, setRevealPassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { setAuthToken, setUserData } = useContext(AuthContext);
+  const { setAuthToken, setUserData, setUserMsgId } = useContext(AuthContext);
   const [loading,setLoading]=useState(false)
 
   useEffect(() => {
@@ -87,6 +87,7 @@ function Login() {
           if (userData) {
             setUserData(userData);  // Set the user data in the auth context
             setAuthToken(token);    // Set the auth token in the auth context
+            setUserMsgId(userData.msg_id)
             Swal.fire({
               icon: "success",
               title: "Successful...",

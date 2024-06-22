@@ -1,14 +1,20 @@
-import React from "react";
+import { Spinner } from "@chakra-ui/react";
+import { useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
 
 const MessageArea = ({
   setMessageComponent,
   setShowListOfBusiness,
-  messageInChat,
+  conversationInChat,
+  senderId,
+  messageLoading,
+  handleSubmit,
+  value,
+  handleMessageChange,
 }) => {
+
   return (
     <div className="md:col-span-3 bg-blue-300">
-     
       <div className="p-6 text-white overflow-y-scroll h-screen pb-20 md:fixed top-0">
         <FiArrowLeft
           onClick={() => {
@@ -18,36 +24,43 @@ const MessageArea = ({
           className="text-black mb-6 mt-4 font-bold text-xl"
         />
 
-        <div className="mb-8 flex justify-end">
-          <div>
-            {messageInChat.messageABusinessOwnerSent.map((msg, index) => (
-              <p
-                key={index}
-                className="mb-1 border mb-3 bg-white text-black p-3 rounded-tr-lg rounded-bl-lg ">
-                <strong>Owner:</strong> {msg}
-              </p>
-            ))}
-          </div>
-        </div>
+<div className="block w-full mx-auto">
 
-        <div className="block">
-          {messageInChat.messageAUserSent.map((msg, index) => (
-            <p
-              key={index}
-              className="border mb-3 bg-black p-3 rounded-tr-lg rounded-bl-lg ">
-              <strong>User:</strong> {msg} <br />
-            </p>
-          ))}
-        </div>
+
+{conversationInChat.map((convo, index) => (
+  <div
+    key={index}
+    className={` p-3 rounded-tr-lg rounded-bl-lg flex ${
+      convo.senderId === senderId ? "justify-end" : "justify-start"
+    }`}
+  >
+    <div
+      className={`p-3 rounded-tr-lg rounded-bl-lg ${
+        convo.senderId === senderId
+          ? "bg-white text-black"
+          : "bg-black text-white"
+      }`}
+    >
+      {convo.message}
+    </div>
+  </div>
+))}
+</div>
 
         <div className="fixed bottom-0 w-full md:w-2/4 items-center right-0 p-2 shadow-lg bg-white border-t border-gray-300">
           <div className="flex items-center space-x-2">
-            <textarea
+          <textarea
               className="flex-grow p-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               rows="1"
-              placeholder="Type your message..."></textarea>
-            <button className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              Send
+              placeholder="Type your message..."
+              value={value}
+              onChange={handleMessageChange}
+            ></textarea>
+            <button
+              onClick={handleSubmit}
+              className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {messageLoading ? <Spinner color="red.500" size="xs" /> : "Send"}
             </button>
           </div>
         </div>
