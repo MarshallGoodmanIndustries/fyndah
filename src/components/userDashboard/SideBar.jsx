@@ -7,7 +7,6 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 import { TbBusinessplan } from "react-icons/tb";
 import { FaHome } from 'react-icons/fa';
 import LogoutModalUser from './LogoutModal';
-
 const SideBar = ({ handleToggle }) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const location = useLocation();
@@ -35,7 +34,8 @@ const SideBar = ({ handleToggle }) => {
       <Link to='messages'>
         <div onClick={handleToggle}
           className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${getLinkClass('messages')}`}>
-          <span>
+          <span className='relative'>
+            <b className='text-red-500 absolute top-0 right-0 -mt-3'> 0 </b>
             <AiFillMessage className='size-[1rem] lg:size-[1.25rem]' />
           </span>
           <h2 className='text-[1.1rem] mt-0 font-normal'>Messages</h2>

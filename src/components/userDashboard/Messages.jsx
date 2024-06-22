@@ -6,6 +6,8 @@ import { Avatar, Spinner } from "@chakra-ui/react";
 import { ImSpinner9 } from "react-icons/im";
 import { io } from "socket.io-client";
 import MessageArea from "./MessageArea";
+import { CgSpinner } from "react-icons/cg";
+
 // import { inView } from "framer-motion";
 // import { FiSend } from 'react-icons/fi';
 // import { MdSend } from 'react-icons/md';
@@ -198,9 +200,9 @@ function Messages() {
         "Hello, i am good?",
         "yes i did i want to make some enquires?",
         "Hello, i am good?",
-        "yes i did i want to make some enquires?", "Hello, i am good?",
         "yes i did i want to make some enquires?",
-
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
       ],
       messageAUserSent: [
         "Hello, i am good?",
@@ -208,14 +210,16 @@ function Messages() {
         "Hello, i am good?",
         "yes i did i want to make some enquires?",
         "Hello, i am good?",
-        "yes i did i want to make some enquires?", "Hello, i am good?",
         "yes i did i want to make some enquires?",
         "Hello, i am good?",
         "yes i did i want to make some enquires?",
         "Hello, i am good?",
         "yes i did i want to make some enquires?",
         "Hello, i am good?",
-        "yes i did i want to make some enquires?", "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
+        "yes i did i want to make some enquires?",
+        "Hello, i am good?",
         "yes i did i want to make some enquires?",
       ],
     },
@@ -330,6 +334,10 @@ function Messages() {
   ];
   const [messageInChat, setMessageInChat] = useState(null);
   const [hideMessageComponent, setMessageComponent] = useState(false);
+  // state that holds the message the businessOwnersSent
+  let length = chats.map((item) => item.messageABusinessOwnerSent);
+  console.log(length.map((item) => item.length));
+
   // the click event for all the conversation if their id matches
   const showUpMessages = (initialDataOnPage) => {
     const messageInsideTheObject = chats.find(
@@ -337,10 +345,41 @@ function Messages() {
     );
     // i am setting the message in chat box to messageInChat
     setMessageInChat(messageInsideTheObject);
-    console.log(messageInsideTheObject);
+
     // showing the messageComponent
     setMessageComponent(true);
   };
+
+  const [searchTerm, setSearchTerm] = useState("");
+  // const handleSearchChange = (e) => {
+  //   setSearchTerm(e.target.value);
+
+  //   let matchingItems = [];
+  //   if (e.target.value !== "") {
+  //     matchingItems = ClothesData.filter(
+  //       (item) =>
+  //         item.category.toLowerCase().includes(e.target.value.toLowerCase()) ||
+  //         item.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+  //         String(item.price).includes(e.target.value)
+  //     );
+  //   } else {
+  //     matchingItems = data.slice(0, 12);
+  //   }
+
+  //   if (matchingItems.length === 0 && e.target.value !== "") {
+  //     setMessageIfTheSearchHasNoResult(
+  //       `No results found for "${e.target.value}"`
+  //     );
+  //   } else {
+  //     setMessageIfTheSearchHasNoResult("");
+  //   }
+
+  //   setListItems(matchingItems);
+  //   window.scrollTo(matchingItems);
+  // };
+
+  // message unread state
+  const [messageUnread, setMessageUnread] = useState(true);
 
   if (loading) {
     return (
@@ -363,22 +402,80 @@ function Messages() {
         {/* initial lists */}
         {showListOfBusiness && (
           <div className="bg-blue-900 text-white p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
-            <h2 className="text-2xl font-bold mb-4">
+            <h4 className="text-1xl font-bold mb-4">
               click to chat with business owners{" "}
-            </h2>
-            <ul className="list-none p-0">
+            </h4>
+            <div>
+              {" "}
+              <input
+                type="text"
+                value={searchTerm}
+                className="text-black px-2 w-full border-none py-2 font-bold rounded"
+              />{" "}
+            </div>
+
+            <div className="list-none p-0 bg-blue-700 flex items-center justify-between">
+              <div>
               {businessData.map((user) => (
-                <li
-                  key={user.id}
-                  onClick={() => {
-                    showUpMessages(user);
-                    hideTheListOnMobile();
-                  }}
-                  className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
-                  {user.name}
-                </li>
+                <div className="rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
+                  <li
+                    key={user.id}
+                    onClick={() => {
+                      showUpMessages(user);
+                      hideTheListOnMobile();
+                      setMessageUnread(false);
+                    }}
+                    >
+                    {user.name}
+                  </li>
+                 
+                </div>
               ))}
-            </ul>
+              </div>
+
+
+                    <div>
+                      {length.map((item,index) => {
+                       return <div className="rounded-full bg-white text-red-400 px-3 py-1"   key={index}>
+                          {" "}
+                          {item.length}{" "}
+                        </div>;
+                      })}
+                    </div>
+                
+            </div>
+
+
+
+
+            {/* <div className="list-none p-0">
+              {businessData.map((user) => (
+                <div className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
+                  <li
+                    key={user.id}
+                    onClick={() => {
+                      showUpMessages(user);
+                      hideTheListOnMobile();
+                      setMessageUnread(false);
+                    }}
+                    className="rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5">
+                    {user.name}
+                  </li>
+                 
+                </div>
+              ))}
+
+
+                    <div>
+                      {length.map((item,index) => {
+                       return <button className="rounded-full bg-white text-red-400 px-3 py-1"   key={index}>
+                          {" "}
+                          {item.length}{" "}
+                        </button>;
+                      })}
+                    </div>
+                
+            </div> */}
           </div>
         )}
 
@@ -390,15 +487,13 @@ function Messages() {
         )}
         {hideMessageComponent && messageInChat && (
           <MessageArea
-         businessData={businessData}
-         setMessageComponent={setMessageComponent}
-         setShowListOfBusiness={setShowListOfBusiness}
-         messageInChat={messageInChat}
-       />
-    
+            businessData={businessData}
+            setMessageComponent={setMessageComponent}
+            setShowListOfBusiness={setShowListOfBusiness}
+            messageInChat={messageInChat}
+           
+          />
         )}
-
-       
       </div>
       {/* ends here  */}
 
