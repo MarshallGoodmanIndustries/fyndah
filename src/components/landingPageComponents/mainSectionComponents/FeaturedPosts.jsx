@@ -81,7 +81,6 @@ const FeaturedPosts = () => {
               imgContent={post.image} 
               noOflikes={post.likesCount}
               orgMsgId={post.orgmsg_id}
-              
             />
         )))
       }
