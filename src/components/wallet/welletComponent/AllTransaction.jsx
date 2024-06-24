@@ -79,14 +79,14 @@ function AllTransaction() {
                                     return (
                                         <tr key={transaction.uuid || 'default-key'}>
                                             <td className="px-6 py-4 break-words max-w-xs">{transaction.uuid || 'N/A'}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{transaction.type || 'Unknown Type'}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
+                                            <td className="px-6 py-4 break-words max-w-xs">{transaction.type || 'Unknown Type'}</td>
+                                            <td className="px-6 py-4 break-words max-w-xs">
                                                 <p className="flex justify-center">
                                                     <TbCurrencyNaira className="mr-1" size={22} />
                                                     {transaction.amount || '0'}
                                                 </p>
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{formattedDate || 'Not Available'}</td>
+                                            <td className="px-6 py-4 break-words max-w-xs">{formattedDate || 'Not Available'}</td>
                                         </tr>
                                     );
                                 })
