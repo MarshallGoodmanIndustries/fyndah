@@ -5,6 +5,7 @@ import { FeaturedPost, FeaturedPostLoading } from "../../uiComponents";
 import { featuredPostsLoadingDummy } from "../../../routes/Navigations";
 import { businesslogo } from "../../../assets/images";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 
 
@@ -45,9 +46,18 @@ const FeaturedPosts = () => {
   const handleSeeMore = ()=> {
     // control access to see more posts if user is not logged in
     if(!authToken){
-      //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-      sessionStorage.setItem("lastRoute", location.pathname)
-      navigate('/login');
+        Swal.fire({
+            icon: "warning",
+            title: "Login required",
+            text: "You will be redirected to the login page.",
+            timer: 3000,
+            timerProgressBar: true,
+          });
+          setTimeout(()=>{
+            //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+            sessionStorage.setItem("lastRoute", location.pathname);
+            navigate('/login');
+          }, 3001);
     }else{
       setCurrentPage(prevPage => prevPage < totalPages ? prevPage + 1 : totalPages)
     }

@@ -67,13 +67,7 @@ function HeroSection() {
       setCurrentPage(prevPage => prevPage - 1)
     }
   }, [businesses, currentPage, businessesForCurrentPage]);
-
-  // set current page for search results
-  // useEffect(() => {
-  //   if (businessesForCurrentPage.length === 0 && currentPage > 1) {
-  //     setCurrentPage(prevPage => prevPage - 1)
-  //   }
-  // }, [businesses, currentPage, businessesForCurrentPage]);
+  
 
   //get business categories
   useEffect(() => {
@@ -99,13 +93,7 @@ function HeroSection() {
   }
 
   const handleSeeMore = () => {
-    // if (!authToken) {
-      //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-    //   sessionStorage.setItem("lastRoute", location.pathname)
-    //   navigate('/login');
-    // } else {
-      setCurrentPage(prevPage => prevPage < totalPages ? prevPage + 1 : totalPages)
-    // }
+    setCurrentPage(prevPage => prevPage < totalPages ? prevPage + 1 : totalPages);
   }
 
   const handleSearchRequest = async () => {
