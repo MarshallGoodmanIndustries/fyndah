@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 
 
-const ConfirmationModal = ({setConfirmationModal, org_id, orgMsgId, msgId}) => {
+const ConfirmationModal = ({setConfirmationModal, orgMsgId}) => {
     const {authToken} = useContext(AuthContext);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);

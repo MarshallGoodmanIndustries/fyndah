@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
 // icons
 import { RiVerifiedBadgeFill } from "react-icons/ri";
@@ -9,7 +10,7 @@ import { AiFillLike } from "react-icons/ai";
 import { FaComment } from "react-icons/fa6";
 import { RxCross2 } from "react-icons/rx";
 import { IoSendSharp } from "react-icons/io5";
-import axios from "axios";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 
 
@@ -134,10 +135,16 @@ const FeaturedPost_inner = (
                                     <h4 className="font-poppins font-medium text-base text-textDark">{comment.author}</h4>
                                     <p className="font-roboto font-normal text-base text-textDark">{comment.comment}</p>
                                 </div>
-                                <div className="cursor-pointer p-2 bg-textDark bg-opacity-0 hover:bg-opacity-10 transition-colors duration-300 flex gap-1 rounded-full self-center">
+                                <div className="relative cursor-pointer p-2 bg-textDark bg-opacity-0 hover:bg-opacity-10 transition-colors duration-300 flex gap-1 rounded-full self-center">
                                     <div className="w-1 h-1 bg-textDark bg-opacity-40 rounded-full"></div>
                                     <div className="w-1 h-1 bg-textDark bg-opacity-40 rounded-full"></div>
+
+                                    <div className="">
+                                        <button>Delete</button>
+                                        <button>Edit</button>
+                                    </div>
                                 </div>
+                                
                             </div>
                         ))}
 
@@ -158,9 +165,12 @@ const FeaturedPost_inner = (
                                 <button 
                                     onClick={handleAddComment} 
                                     disabled={!commentInput} 
-                                    className={classNames(isloading && "animate-spin","disabled:cursor-not-allowed group")}
+                                    className={classNames("disabled:cursor-not-allowed group")}
                                 >
-                                    <IoSendSharp className="w-4 h-4 text-textDark group-disabled:text-opacity-70" />
+                                    {
+                                        isloading ? (<AiOutlineLoading3Quarters className="w-4 h-4 text-textDark animate-spin" />) : 
+                                        (<IoSendSharp className="w-4 h-4 text-textDark group-disabled:text-opacity-70" />)
+                                    }
                                 </button>
                             </div>
                         </div>
