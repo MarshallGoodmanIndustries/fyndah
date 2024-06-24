@@ -51,18 +51,32 @@ const DateRangePicker = () => {
 
             // console.log(response.data.balance);
         } catch (error) {
-            if (error.response ? error.response.data : error.message) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops! Something went wrong",
-                    text: "Seems your token has expired or network issues, try to login again.",
-                    timer: 4000,
-                    timerProgressBar: true,
-                });
-
-                setIsLoading(false);
-
+            if (axios.isAxiosError(error)) {
+                // Handle AxiosError
+                console.error('Error message:', error.message);
+                if (error.response) {
+                    console.error('Status code:', error.response.status);
+                    console.error('Response data:', error.response.data);
+                    console.error('Response msg:', error.response.data.message);
+                    if (error.response.data.status === "error") {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops! Something went wrong",
+                            text: "Seems your token has expired or network issues, try to login again.",
+                            timer: 4000,
+                            timerProgressBar: true,
+                        });
+                    }
+                } else if (error.request) {
+                    console.error('No response received:', error.request);
+                } else {
+                    console.error('Request setup error:', error.message);
+                }
+            } else {
+                // Handle non-AxiosError
+                console.error('Unexpected error:', error);
             }
+            setIsLoading(false);
         } finally {
             setIsLoading(false);
         }
@@ -92,7 +106,7 @@ const DateRangePicker = () => {
                 </button>
             </div>
             {isOpen && (
-                <div className="absolute bg-white p-4 shadow-lg rounded mt-2 w-64">
+                <div className="absolute bg-white p-4 shadow-lg rounded mt-2 w-56">
                     <div className="flex justify-between items-center mb-4">
                         <span className="text-lg font-medium">Select Date</span>
                         <button onClick={handleClose} className="text-gray-400 hover:text-gray-600">
@@ -109,7 +123,7 @@ const DateRangePicker = () => {
                                 onChange={(date) => setStartDate(date)}
                                 dateFormat="YYYY-MM-d"
                                 maxDate={new Date()}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                className="mt-1 p-2 rounded-md shadow-sm sm:text-sm"
                             />
                         </div>
                         <button
