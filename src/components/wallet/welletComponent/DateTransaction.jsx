@@ -137,7 +137,7 @@ const DateTransaction = () => {
                                 onChange={(date) => setStartDate(date)}
                                 dateFormat="YYYY-MM-d"
                                 maxDate={new Date()}
-                                className="mt-1 p-1 rounded-md shadow-sm sm:text-sm"
+                                className="mt-1 p-1 rounded-md bg-slate-100 shadow-sm sm:text-sm"
                             />
                         </div>
                         <div>
@@ -149,7 +149,7 @@ const DateTransaction = () => {
                                 onChange={(date) => setEndDate(date)}
                                 dateFormat="YYYY-MM-d"
                                 maxDate={new Date()}
-                                className="mt-1 p-1 rounded-md shadow-sm sm:text-sm"
+                                className="mt-1 p-1 rounded-md bg-slate-100 shadow-sm sm:text-sm"
                             />
                         </div>
                         <button
