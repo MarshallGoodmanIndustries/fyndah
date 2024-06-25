@@ -12,7 +12,7 @@ const ListingComponent = ({logo, cover_image, org_bio, org_name, business_catego
             </div> */}
         </div>
         <div className=" flex flex-col gap-2">
-            <div className="p-4">
+            <div className="p-4 flex-1">
                 <h3 className="font-poppins font-normal text-lg text-textDark">{org_name}</h3>
                 <p className="font-poppins font-light text-sm md:text-base text-textDark">{org_bio}</p>
             </div>
