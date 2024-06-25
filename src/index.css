@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .searchBox{
     background-image: url("./assets/images/hero/searchbg3.jpg");
     background-position: center;
@@ -21,6 +27,17 @@
 #postBox::-webkit-scrollbar {
     width: 20px; /* Adjust the width as needed */
     border-radius: 10px;
+}
+.bg-message-area {
+    background-image: url("./assets/images/climpek.png");
+    background-repeat: repeat;
+    background-color: rgb(243 244 246);
+    /* background-position: ; */
+}
+.bg-conversation-area {
+    background-image: url("./assets/images/cream-dust.png");
+    background-repeat: repeat;
+    background-color: #fff;
 }
 
 @media screen and (max-width: 768px) {
