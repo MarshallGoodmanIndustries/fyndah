@@ -1,21 +1,26 @@
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import FeaturedPost_inner from "./FeaturedPost_inner";
 import classNames from "classnames";
 import axios from "axios";
 
+// Components
+import FeaturedPost_inner from "./FeaturedPost_inner";
+
 // helper function
 import { TimeAgo } from "../../helperComponents";
+
 // icons
-import { RiVerifiedBadgeFill } from "react-icons/ri";
+// import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { AiFillLike } from "react-icons/ai";
 import { FaComment } from "react-icons/fa6";
 import { BiSolidMessageDetail } from "react-icons/bi";
-import ConfirmationModal from "./ConfirmationModal";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import Swal from "sweetalert2";
 
 
-const FeaturedPost = ({postId, organizationId, msgId , orgMsgId, profileImg, username, timePosted, textContent, imgContent, noOflikes}) => {
+
+const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, timePosted, textContent, imgContent, noOflikes}) => {
     const { authToken, userData } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
@@ -24,13 +29,13 @@ const FeaturedPost = ({postId, organizationId, msgId , orgMsgId, profileImg, use
     const [comment, setComment] = useState(false);
     const [commentsData, setCommentsData] = useState([]);
     const [timeAgo, setTimeAgo] = useState();
-    const [confirmationModal, setConfirmationModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     
      
     
     
-     // fetch comments related to postId
-     const getComments = async ()=> {
+    // fetch comments related to postId
+    const getComments = async ()=> {
         const url = `https://axelonepostfeature.onrender.com/api/comments/${postId}`;
         try {
             const response = await axios.get(url);
@@ -52,63 +57,83 @@ const FeaturedPost = ({postId, organizationId, msgId , orgMsgId, profileImg, use
             sessionStorage.setItem("lastRoute", location.pathname)
             navigate('/login');
         }else{
-            // console.log("You are logged in");
-            console.log(authToken);
-            // console.log(localStorage.getItem('authToken'));
-             if(!like){
+            if(!like){
                 const url = `https://axelonepostfeature.onrender.com/api/post/${postId}/like`;
-     
-                 try {
-                     const response = await axios.post(url,{}, {
-                         headers: {
-                             Authorization: `Bearer ${authToken}`,
-                         }
-                     });
-                    //  console.log(response.data);
-                     if(response.status === 200){
-                         setLike(true);
-                         setLikeCount(prevLikeCount => prevLikeCount + 1);
-                     }
-                 } catch (error) {
-                     console.log(error.message);
-                 }
-                 
-             }else{
-                 const url = `https://axelonepostfeature.onrender.com/api/post/${postId}/unlike`;
-                 try {
-                     const response = await axios.post(url, {}, {
-                         headers: {
-                             Authorization: `Bearer ${authToken}`,
-                         }
-                     } );
-                     
-                     if(response.status === 200){
-                         setLike(false);
-                         setLikeCount(prevLikeCount => prevLikeCount - 1);
-                     }
-                 } catch (error) {
-                     console.log(error.message);
-                 }
-                 
-             }
+    
+                try {
+                    const response = await axios.post(url,{}, {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        }
+                    });
+                    if(response.status === 200){
+                        setLike(true);
+                        setLikeCount(prevLikeCount => prevLikeCount + 1);
+                    }
+                } catch (error) {
+                    console.log(error.message);
+                } 
+            }else{
+                const url = `https://axelonepostfeature.onrender.com/api/post/${postId}/unlike`;
+                try {
+                    const response = await axios.post(url, {}, {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        }
+                    } );
+                    
+                    if(response.status === 200){
+                        setLike(false);
+                        setLikeCount(prevLikeCount => prevLikeCount - 1);
+                    }
+                } catch (error) {
+                    console.log(error.message);
+                }
+                
+            }
         }
     }
-
-    const handleMessage = ()=> {
+    
+    const handleCreateConversation = async ()=> {
         if(!authToken){
-            //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-            sessionStorage.setItem("lastRoute", location.pathname)
-            navigate('/login');
+            Swal.fire({
+                icon: "warning",
+                title: "Login required",
+                text: "You will be redirected to the login page.",
+                timer: 3000,
+                timerProgressBar: true,
+              });
+              setTimeout(()=>{
+                //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+                sessionStorage.setItem("lastRoute", location.pathname);
+                navigate('/login');
+              }, 3001);
         }else{
-            setConfirmationModal(true);
+            setIsLoading(true);
+            try {
+                const response = await axios.post(`https://axelonepostfeature.onrender.com/api/conversations/newconversation/${orgMsgId}`, {}, {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`
+                    }
+                });
+                if(response.status === 200){
+                    setIsLoading(false);
+                    navigate("/dashboard/messages");
+                }
+            } catch (error) {
+                setIsLoading(false);
+                console.log(error.message)
+            }
         }
-    }
+    };
+
+
     useEffect(() => {
         setTimeAgo(<TimeAgo isoString={timePosted} />);
     },[timePosted])
     
   return (
-    <section className="relative w-full max-w-[300px] gap-2 rounded-lg justify-self-center self-start">
+    <section className="relative w-full sm:max-w-[20rem] md:max-w-[23rem] gap-2 rounded-lg justify-self-center self-start shadow-sm p-4">
 
         {/* post content container */}
         <div className="flex flex-col gap-4 w-full">
@@ -117,9 +142,9 @@ const FeaturedPost = ({postId, organizationId, msgId , orgMsgId, profileImg, use
                 <div className="w-full max-w-12 h-full rounded-full overflow-hidden">
                     <img src={profileImg} alt="business profile display" />
                 </div>
-                <h2 className="text-base text-textDark font-poppins font-semibold">{username}</h2>
+                <h2 className="text-base text-textDark font-poppins font-semibold flex-1">{username}</h2>
                 {/* verified */}
-                <RiVerifiedBadgeFill className="w-4 h-4 text-accent" />
+                {/* <RiVerifiedBadgeFill className="w-4 h-4 text-accent flex-1" /> */}
                 <p className="text-sm text-textDark font-roboto font-light ml-auto">{timeAgo}</p>
             </div>
             <div className="flex flex-col gap-2 w-full">
@@ -148,14 +173,15 @@ const FeaturedPost = ({postId, organizationId, msgId , orgMsgId, profileImg, use
                         {commentsData.length}
                     </div>
 
+                    {/* Message icon container */}
                     {organizationId !== userData?.organization_id && (
-                        <div onClick={handleMessage} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
-                            <BiSolidMessageDetail className="w-5 h-5 text-gray-600" />
+                        <div onClick={handleCreateConversation} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
+                            {
+                                isLoading ? <AiOutlineLoading3Quarters className="w-5 h-5 text-gray-600 animate-spin" /> :
+                                <BiSolidMessageDetail className="w-5 h-5 text-gray-600" />
+                            }
                         </div>
                     )}
-                    
-
-                    {confirmationModal && (<ConfirmationModal setConfirmationModal={setConfirmationModal} msgId={msgId} orgMsgId={orgMsgId} org_id={organizationId} />)}
                 </div>
                     
                 {comment && <FeaturedPost_inner 

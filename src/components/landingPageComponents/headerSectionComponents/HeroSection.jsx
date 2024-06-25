@@ -25,13 +25,13 @@ function HeroSection() {
   const [recommendValue, SetRecommendValue] = useState(true);
 
   //location suggestion helper states
-  // const [suggestions, setSuggestions] = useState([]);
-  // const [previouslySuggestedValue, setPreviouslySuggestedValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [previouslySuggestedValue, setPreviouslySuggestedValue] = useState("");
 
 
   const [businessCategories, setBusinessCategories] = useState([]);
   const [searchQueryIsLoading, setSearchQueryIsLoading] = useState(false);
-  // const autocompleteApiKey = "17af202f70b44748976eff28573589db";
+  const autocompleteApiKey = "17af202f70b44748976eff28573589db";
 
   // pagination
   const [revealSearchQuery, setRevealSearchQuery] = useState(false);
@@ -42,24 +42,24 @@ function HeroSection() {
   const businessesForCurrentPage = businesses.slice((currentPage - 1) * 3, currentPage * 3);
 
   // autocomplete useEffect
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (businessLocation !== "" && previouslySuggestedValue !== businessLocation) {
+  useEffect(() => {
+    const fetchData = async () => {
+      if (businessLocation !== "" && previouslySuggestedValue !== businessLocation) {
 
-  //       try {
-  //         const response = await axios.get(`https://api.geoapify.com/v1/geocode/autocomplete?text=${businessLocation}&apiKey=${autocompleteApiKey}`);
-  //         setSuggestions(response.data.features);
-  //       } catch (err) {
-  //         console.log(err.message || 'An error occurred');
-  //       } finally {
-  //         // setLoading(false);
-  //       }
-  //     }
-  //   };
+        try {
+          const response = await axios.get(`https://api.geoapify.com/v1/geocode/autocomplete?text=${businessLocation}&apiKey=${autocompleteApiKey}`);
+          setSuggestions(response.data.features);
+        } catch (err) {
+          console.log(err.message || 'An error occurred');
+        } finally {
+          // setLoading(false);
+        }
+      }
+    };
 
-  //   const timerId = setTimeout(fetchData, 300); // Adjust debounce time as needed
-  //   return () => clearTimeout(timerId); // Cleanup timeout on unmount
-  // }, [businessLocation, previouslySuggestedValue])
+    const timerId = setTimeout(fetchData, 300); // Adjust debounce time as needed
+    return () => clearTimeout(timerId); // Cleanup timeout on unmount
+  }, [businessLocation, previouslySuggestedValue])
 
   // set current page for search results
   useEffect(() => {
@@ -67,13 +67,7 @@ function HeroSection() {
       setCurrentPage(prevPage => prevPage - 1)
     }
   }, [businesses, currentPage, businessesForCurrentPage]);
-
-  // set current page for search results
-  // useEffect(() => {
-  //   if (businessesForCurrentPage.length === 0 && currentPage > 1) {
-  //     setCurrentPage(prevPage => prevPage - 1)
-  //   }
-  // }, [businesses, currentPage, businessesForCurrentPage]);
+  
 
   //get business categories
   useEffect(() => {
@@ -92,20 +86,14 @@ function HeroSection() {
   }, []);
 
 
-  // const handleSuggestionClick = (selectedSuggestion) => {
-  //   setBusinessLocation(selectedSuggestion.properties.formatted);
-  //   setPreviouslySuggestedValue(selectedSuggestion.properties.formatted);
-  //   setSuggestions([]);
-  // }
+  const handleSuggestionClick = (selectedSuggestion) => {
+    setBusinessLocation(selectedSuggestion.properties.formatted);
+    setPreviouslySuggestedValue(selectedSuggestion.properties.formatted);
+    setSuggestions([]);
+  }
 
   const handleSeeMore = () => {
-    // if (!authToken) {
-      //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-    //   sessionStorage.setItem("lastRoute", location.pathname)
-    //   navigate('/login');
-    // } else {
-      setCurrentPage(prevPage => prevPage < totalPages ? prevPage + 1 : totalPages)
-    // }
+    setCurrentPage(prevPage => prevPage < totalPages ? prevPage + 1 : totalPages);
   }
 
   const handleSearchRequest = async () => {
@@ -135,7 +123,7 @@ function HeroSection() {
       };
       setSearchQueryIsLoading(true);
       containsBusinesses && setBusinesses([]);//empty business array to hide previous rendered search results
-      // setSuggestions([]);
+      setSuggestions([]);
 
       try {
         const response = await axios.post(url, data, {
@@ -211,13 +199,13 @@ function HeroSection() {
                 required
 
               />
-              {/* <ul className="absolute left-0 bottom-0 flex flex-col gap-1 w-full border transform translate-y-[105%] bg-inherit">
+              <ul className="absolute left-0 bottom-0 flex flex-col gap-1 w-full border transform translate-y-[105%] bg-inherit">
                 {suggestions.map((suggestion, index) => (
                   <li key={index} onClick={() => handleSuggestionClick(suggestion)} className="p-2 w-full hover:bg-accent hover:bg-opacity-70 cursor-pointer">
                     {suggestion.properties.formatted}
                   </li>
                 ))}
-              </ul> */}
+              </ul>
             </div>
           </div>
           <div className="flex  justify-center items-center flex-wrap md:flex-nowrap md:items-start gap-2 w-full">

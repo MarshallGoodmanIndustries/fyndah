@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AiFillMessage } from "react-icons/ai";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { BsActivity } from "react-icons/bs";
-import { AiOutlineStock } from "react-icons/ai";
+// import { AiOutlineStock } from "react-icons/ai";
 import { FaHistory } from "react-icons/fa";
 import { LuFileSearch2 } from "react-icons/lu";
 import { MdLeaderboard } from "react-icons/md";
@@ -83,8 +83,8 @@ const SideBar = ({ handleToggle }) => {
           <div
             onClick={handleToggle}
             className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("business-profile")
-                ? "bg-white text-textDark"
-                : "text-white"
+              ? "bg-white text-textDark"
+              : "text-white"
               } `}
           >
             <span>
@@ -113,8 +113,8 @@ const SideBar = ({ handleToggle }) => {
           <div
             onClick={handleToggle}
             className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("businessmessages")
-                ? "bg-white text-textDark"
-                : "text-white"
+              ? "bg-white text-textDark"
+              : "text-white"
               } `}
           >
             <span>
@@ -129,8 +129,8 @@ const SideBar = ({ handleToggle }) => {
           <div
             onClick={handleToggle}
             className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("search-request")
-                ? "bg-white text-textDark"
-                : "text-white"
+              ? "bg-white text-textDark"
+              : "text-white"
               } `}
           >
             <span>
@@ -145,8 +145,8 @@ const SideBar = ({ handleToggle }) => {
           <div
             onClick={handleToggle}
             className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("search-request-history")
-                ? "bg-white text-textDark"
-                : "text-white"
+              ? "bg-white text-textDark"
+              : "text-white"
               } `}
           >
             <span>
