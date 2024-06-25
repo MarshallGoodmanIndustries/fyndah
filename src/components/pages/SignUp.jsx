@@ -40,6 +40,7 @@ function SignUp() {
     username: "",
     password: "",
     confirmPassword: "",
+    phone:""
   });
   const [loading, setLoading] = useState(false);
 
@@ -50,6 +51,7 @@ function SignUp() {
     username: "",
     password: "",
     confirmPassword: "",
+    phone:""
   });
 
   const handleChange = (e) => {
@@ -109,6 +111,13 @@ function SignUp() {
     if (signupFormData.email.trim() === "") {
       newErrors.email = "Please enter your valid email address!";
     }
+    const phoneRegex = /^\+234[0-9]{10}$/;
+    if (signupFormData.phone.trim()!==""&&!phoneRegex.test(phone)) {
+      newErrors.phone = "'Please enter a valid Nigerian phone number (+234XXXXXXXXXX).'";
+    }
+    if (signupFormData.phone.trim() === "") {
+      newErrors.phone = "Please enter your phone number!";
+    }
     if (signupFormData.confirmPassword !== signupFormData.password) {
       newErrors.confirmPassword =
         "The password field confirmation does not match!";
@@ -133,6 +142,7 @@ function SignUp() {
             username: signupFormData.username,
             password: signupFormData.password,
             password_confirmation: signupFormData.confirmPassword,
+            phone:signupFormData.phone
           },
           {
             headers: {
@@ -344,6 +354,26 @@ function SignUp() {
                 )}
               </div>
 
+              <div className="flex flex-col gap-1 md:col-span-2">
+                <label htmlFor="email">
+                  Phone:<span className="text-red-500 ml-2">*</span>
+                </label>
+                <input
+                  value={signupFormData.phone}
+                  onChange={handleChange}
+                  type="number"
+                  name="phone"
+                  id="phone"
+                  className="outline-none border border-solid border-textGrey text-blackclr text-base rounded-lg p-2"
+                />
+
+                {errors.phone && (
+                  <p className="text-red-600 text-[0.75rem] lg:text-[1rem]">
+                    {" "}
+                    {errors.phone}{" "}
+                  </p>
+                )}
+              </div>
               <div className="flex flex-col gap-1 md:col-span-2">
                 <label htmlFor="password">
                   Password<span className="text-red-500 ml-2">*</span>

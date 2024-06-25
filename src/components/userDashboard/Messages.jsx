@@ -6,15 +6,6 @@ import { Avatar, Spinner } from "@chakra-ui/react";
 import { ImSpinner9 } from "react-icons/im";
 import { io } from "socket.io-client";
 import MessageArea from "./MessageArea";
-<<<<<<< HEAD
-import { CgSpinner } from "react-icons/cg";
-
-// import { inView } from "framer-motion";
-// import { FiSend } from 'react-icons/fi';
-// import { MdSend } from 'react-icons/md';
-// import MessagesArea from "./MessageArea"
-=======
->>>>>>> a7626d5fdd2a2abd48d977d4c927e8b909ceb93e
 
 function Messages() {
   const [conversationOnPage, setConversationOnPage] = useState([]);
@@ -195,34 +186,35 @@ function Messages() {
   }, [authToken, id]);
 
   const [searchTerm, setSearchTerm] = useState("");
-  // const handleSearchChange = (e) => {
-  //   setSearchTerm(e.target.value);
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
 
-  //   let matchingItems = [];
-  //   if (e.target.value !== "") {
-  //     matchingItems = ClothesData.filter(
-  //       (item) =>
-  //         item.category.toLowerCase().includes(e.target.value.toLowerCase()) ||
-  //         item.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-  //         String(item.price).includes(e.target.value)
-  //     );
-  //   } else {
-  //     matchingItems = data.slice(0, 12);
-  //   }
+    let matchingItems = [];
+    if (e.target.value !== "") {
+      matchingItems = conversationOnPage.filter(
+        (item) =>
+          item.members[1].name.toLowerCase().includes(e.target.value.toLowerCase())
+       
+          
+      );
+    } else {
+      matchingItems = conversationOnPage;
+    }
 
-  //   if (matchingItems.length === 0 && e.target.value !== "") {
-  //     setMessageIfTheSearchHasNoResult(
-  //       `No results found for "${e.target.value}"`
-  //     );
-  //   } else {
-  //     setMessageIfTheSearchHasNoResult("");
-  //   }
+    if (matchingItems.length === 0 && e.target.value !== "") {
+      // setMessageIfTheSearchHasNoResult(
+      //   `No results found for "${e.target.value}"`
+      // );
+      console.log("no result for "+ e.target.value);
+    } else {
+      // setMessageIfTheSearchHasNoResult("");
+      
+    }
 
-  //   setListItems(matchingItems);
-  //   window.scrollTo(matchingItems);
-  // };
+    setConversationOnPage(matchingItems);
+    window.scrollTo(matchingItems);
+  };
 
-  // message unread state
   const [messageUnread, setMessageUnread] = useState(true);
 
   if (loading) {
@@ -245,9 +237,17 @@ function Messages() {
         {/* initial lists */}
         {showListOfBusiness && (
   <div className="bg-blue-900 text-white p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
-      {  conversationOnPage.length >= 1 && <h2 className="text-2xl font-bold mb-4">
-      Click to chat with Proffesionals{" "}
-    </h2>}
+      {  conversationOnPage.length >= 1 && <div>
+        <h2 className="text-2xl font-bold mb-4">
+      Click to chat with Professionals{" "}
+    </h2>
+
+    <div>
+      <input type="text" onChange={handleSearchChange} className="w-full text-black p-2" placeholder="search for business" value={searchTerm} />
+    </div>
+      </div>
+    
+    }
     {conversationOnPage.length === 0 ? (
       <p className="text-center">No conversations available at the moment. Go to the Feeds and message a business to initiate a conversation.</p>
     ) : (
