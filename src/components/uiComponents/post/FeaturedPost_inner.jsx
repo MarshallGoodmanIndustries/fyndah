@@ -139,10 +139,10 @@ const FeaturedPost_inner = (
                                     <div className="w-1 h-1 bg-textDark bg-opacity-40 rounded-full"></div>
                                     <div className="w-1 h-1 bg-textDark bg-opacity-40 rounded-full"></div>
 
-                                    <div className="">
+                                    {/* <div className="">
                                         <button>Delete</button>
                                         <button>Edit</button>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 
                             </div>

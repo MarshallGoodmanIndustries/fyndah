@@ -16,6 +16,7 @@ import { AiFillLike } from "react-icons/ai";
 import { FaComment } from "react-icons/fa6";
 import { BiSolidMessageDetail } from "react-icons/bi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import Swal from "sweetalert2";
 
 
 
@@ -95,9 +96,18 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
     
     const handleCreateConversation = async ()=> {
         if(!authToken){
-            //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-            sessionStorage.setItem("lastRoute", location.pathname)
-            navigate('/login');
+            Swal.fire({
+                icon: "warning",
+                title: "Login required",
+                text: "You will be redirected to the login page.",
+                timer: 3000,
+                timerProgressBar: true,
+              });
+              setTimeout(()=>{
+                //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+                sessionStorage.setItem("lastRoute", location.pathname);
+                navigate('/login');
+              }, 3001);
         }else{
             setIsLoading(true);
             try {
