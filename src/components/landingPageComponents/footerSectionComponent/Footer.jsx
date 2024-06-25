@@ -32,11 +32,16 @@ const Footer = () => {
           <h3 className="text-primary text-lg font-semibold">Get In Touch</h3>
           <div className="flex items-center gap-2">
             <div className="text-primary"><FaLocationDot size={16} /></div>
-            <p className="text-base w-full text-primary">40 Bank Street, London E14 5AB, United Kingdom.</p>
+            <p className="text-base w-full text-primary">One World Trade Center. 85th floor, suite 8500, lower Manhattan.
+            New York, NY. 10007 USA</p>
           </div>
           <div className="flex items-center gap-2">
             <div className="text-primary"><MdEmail size={16} /></div>
             <p className="text-base w-full text-primary">hello@fyndah.com</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="text-primary"><FaPhoneAlt size={16} /></div>
+            <p className="text-base w-full text-primary">+13082530802</p>
           </div>
         </div>
 
