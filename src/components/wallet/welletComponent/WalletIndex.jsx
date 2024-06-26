@@ -16,7 +16,7 @@ import AllTransaction from "./AllTransaction";
 import DateTransaction from "./DateTransaction";
 import StatisticsModal from "./StatisticsModal";
 import ProceedToPayment from "./ProceedToPayment";
-import { TbCurrencyNaira } from "react-icons/tb";
+import { TbCurrencyDollar, } from "react-icons/tb";
 
 
 
@@ -64,15 +64,16 @@ function WalletIndex() {
         try {
             setIsPaystackLoading(true)
             const details = { amount: addAmountWallet }
-            const API = 'https://api.fyndah.com/api/v1/organization/paystack/pay'// still have error here
+            const API = 'https://api.fyndah.com/api/v1/organization/flutterwave/pay'// still have error here
             const payment = await axios.post(API, details, {
                 headers: {
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${authToken}`,
                 }
             })
+            console.log(payment.data)
             if (payment.data.status === 'success') {
-                setPaystack(payment.data.data.payment_url.url)
+                setPaystack(payment.data.data.link)
                 isProceedOpenModal()//na here i dey.....
             } else {
                 Swal.fire({
@@ -208,7 +209,8 @@ function WalletIndex() {
                             </div>
                         ) : (
                             <p className="text-2xl font-bold flex items-center justify-center">
-                                <TbCurrencyNaira className="mr-1 text-sm" size={22} />
+                                {/* <TbCurrencyNaira className="mr-1 text-sm" size={22} /> */}
+                                <TbCurrencyDollar className="mr-1 text-sm" size={22} />
                                 {transactions}
                             </p>
                         )}

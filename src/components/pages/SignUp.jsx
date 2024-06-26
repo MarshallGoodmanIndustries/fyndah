@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { useState, useEffect, useContext } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, Link, } from "react-router-dom";
 import { FaPlus, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
@@ -13,19 +13,21 @@ import {
   Ellipse7,
   signup_bg,
 } from "../../assets/images/index";
+
 // import { Radio, RadioGroup, Stack } from '@chakra-ui/react'
 import axios from "axios";
+// import CountriesCode from "./CountriesCode";
 // import codes from "country-calling-code";
 
 function SignUp() {
   const { authToken } = useContext(AuthContext);
-
+  const [selectedCountryCode, setSelectedCountryCode] = useState("")
   const [revealPassword, setRevealPassword] = useState(false);
   const [revealConfirmPassword, setRevealConfirmPassword] = useState(false);
   const [showForm, setShowForm] = useState(true);
   // const [value, setValue] = useState('sms')
   const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -38,6 +40,7 @@ function SignUp() {
     lastName: "",
     email: "",
     username: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -48,6 +51,7 @@ function SignUp() {
     lastName: "",
     email: "",
     username: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -66,6 +70,16 @@ function SignUp() {
     });
   };
 
+  // Update phone number with country code when selectedCountryCode changes
+  useEffect(() => {
+    if (selectedCountryCode) {
+      const phoneNumber = signupFormData.phone.startsWith(selectedCountryCode) ? signupFormData.phone
+        :
+        selectedCountryCode + signupFormData.phone.replace(/^\+?\d*/, '');
+      setSignupFormData({ ...signupFormData, phone: phoneNumber });
+    }
+  }, [selectedCountryCode]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
@@ -83,7 +97,7 @@ function SignUp() {
     if (
       !/^[a-zA-Z0-9_]+$/i.test(signupFormData.username) ||
       signupFormData.username.trim() === "" ||
-      signupFormData.username.length< 5
+      signupFormData.username.length < 5
     ) {
       newErrors.username =
         "Input a username, username must not be less than 5 in characters, Username must not contain spaces or special characters e.g (@,#.%)!";
@@ -92,6 +106,9 @@ function SignUp() {
     // if (!/^[\w]+$/.test(signupFormData.username)||signupFormData.username.trim() === "") {
     //   newErrors.username = "input a username and Username must not contain spaces!";
     // }
+    if (signupFormData.phone.trim() === "") {
+      newErrors.phone = "Please enter a valid phone number e.g. US(+1XXXXXXXXXX)!";
+    }
     if (
       signupFormData.password.trim() === "" ||
       signupFormData.password.length < 8
@@ -131,6 +148,7 @@ function SignUp() {
             lastname: signupFormData.lastName,
             email: signupFormData.email,
             username: signupFormData.username,
+            phone_number: signupFormData.phone,
             password: signupFormData.password,
             password_confirmation: signupFormData.confirmPassword,
           },
@@ -141,7 +159,6 @@ function SignUp() {
             },
           }
         );
-
         if (response.data.status == "success") {
           Swal.fire({
             icon: "success",
@@ -150,8 +167,9 @@ function SignUp() {
               "Yay 🎉 You're all set Please check your email inbox for the verification link. Welcome aboard! " +
               signupFormData.username,
           });
+          console.log('data:', response.data)
           console.log("Form submitted", signupFormData);
-         
+
           setLoading(false);
           setShowForm(false);
 
@@ -173,8 +191,22 @@ function SignUp() {
     }
   };
 
+
+
+  const countries = [
+    { code: '+234', name: 'NG' },
+    { code: '+44', name: 'UK' },
+    { code: '+1', name: 'US' },
+    { code: '+1', name: 'CA' },
+    { code: '+61', name: 'AU' },
+  ];
+  console.log(selectedCountryCode)
+
+
+
   return (
     <div>
+
       {showForm ? (
         <section className="relative w-full h-full bg-white px-3 sm:px-4 md:px-6 lg:px-20 py-16 md:py-8 grid items-center grid-cols-1 md:grid-cols-2 gap-16 md:gap-8">
           {/* background image */}
@@ -342,6 +374,49 @@ function SignUp() {
                     {errors.email}{" "}
                   </p>
                 )}
+              </div>
+
+              <div className="flex flex-col gap-1 md:col-span-2">
+                <label htmlFor="email">
+                  Phone Number<span className="text-red-500 ml-2">*</span>
+                </label>
+                <div className="flex flex-row">
+                  {/* country code input form */}
+                  <div>
+                    <div className="flex">
+                      <select
+                        name="phone_number"
+                        id="phone_number"
+                        value={selectedCountryCode}
+                        onChange={(e) => setSelectedCountryCode(e.target.value)}
+                        className="mr-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      >
+                        <option value="">---</option>
+                        {countries.map((country) => (
+                          <option key={country.name} value={country.code}>
+                            {country.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <input
+                    value={signupFormData.phone}
+                    onChange={handleChange}
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    className="p-2 border border-gray-300 rounded-md shadow-sm w-full focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+
+                {errors.phone && (
+                  <p className="text-red-600 text-[0.75rem] lg:text-[1rem]">
+                    {" "}
+                    {errors.phone}{" "}
+                  </p>
+                )}
+
               </div>
 
               <div className="flex flex-col gap-1 md:col-span-2">

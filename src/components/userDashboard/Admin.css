@@ -1,11 +1,12 @@
 .admin-layout {
   display: grid;
+  position: relative;
   background-color: #fff;
   /* color: #FFFFFF; */
   grid-template-areas:
-    "admin-header admin-header admin-header admin-header admin-header admin-header admin-header admin-header "
-    "admin-sidebar admin-outlet admin-outlet admin-outlet admin-outlet admin-outlet admin-outlet admin-outlet"
-    "admin-sidebar admin-outlet admin-outlet admin-outlet admin-outlet admin-outlet admin-outlet admin-outlet";
+    "admin-header admin-header "
+    "admin-sidebar admin-outlet"
+    "admin-sidebar admin-outlet";
   grid-template-columns: 250px 1fr; /* Fixed sidebar width and dynamic outlet width */
 }
 .admin-sidebar {
@@ -18,6 +19,7 @@
 .admin-header {
   grid-area: admin-header;
   position: sticky;
+  z-index: 50;
   top: 0;
   height: 10vh;
   z-index: 5; /* Ensure the header stays on top */
@@ -26,7 +28,7 @@
 .admin-outlet {
   grid-area: admin-outlet;
   min-height: 100%;
-  /* overflow: auto; */
+  width: 100%;
 }
 
 .message {
@@ -38,8 +40,6 @@
 }
 
 .sent {
-  /* justify-self: end; */
-  /* width: 100%; */
   align-self: flex-end;
   background-color: #dcf8c6; /* Light green color for sent messages */
   color: #000;
@@ -106,7 +106,11 @@
 }
 @media screen and (max-width: 700px) {
   .admin-layout {
-    grid-template-columns: 25px 1fr; /* Fixed sidebar width and dynamic outlet width */
+    grid-template-areas:
+      "admin-header admin-header "
+      "admin-outlet admin-outlet"
+      "admin-outlet admin-outlet";
+    grid-template-columns: 1fr; /* Fixed sidebar width and dynamic outlet width */
   }
   .message {
     width: 90%;
