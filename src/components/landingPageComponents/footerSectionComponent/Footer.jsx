@@ -39,11 +39,9 @@ const Footer = () => {
             <div className="text-primary"><MdEmail size={16} /></div>
             <p className="text-base w-full text-primary">hello@fyndah.com</p>
           </div>
-
           <div className="flex items-center gap-2">
             <div className="text-primary"><FaPhoneAlt size={16} /></div>
-            <p className="text-base w-full text-primary">+13082530802
-            </p>
+            <p className="text-base w-full text-primary">+13082530802</p>
           </div>
         </div>
 

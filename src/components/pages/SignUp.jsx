@@ -40,8 +40,9 @@ function SignUp() {
     username: "",
     password: "",
     confirmPassword: "",
-    phone:""
+    phone: "",
   });
+  // loading state after cliking on register
   const [loading, setLoading] = useState(false);
 
   const [errors, setErrors] = useState({
@@ -51,7 +52,7 @@ function SignUp() {
     username: "",
     password: "",
     confirmPassword: "",
-    phone:""
+    phone: "",
   });
 
   const handleChange = (e) => {
@@ -68,7 +69,113 @@ function SignUp() {
     });
   };
 
+  // handling submit
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = {};
+    setLoading(true);
+
+    if (signupFormData.firstName.trim() === "") {
+      newErrors.firstName = "Please enter a first name!";
+    }
+    if (signupFormData.lastName.trim() === "") {
+      newErrors.lastName = "Please enter a last name!";
+    }
+
+    if (
+      !/^[a-zA-Z0-9_]+$/i.test(signupFormData.username) ||
+      signupFormData.username.trim() === "" ||
+      signupFormData.username.length < 5
+    ) {
+      newErrors.username =
+        "Input a username, username must not be less than 5 in characters, Username must not contain spaces or special characters e.g (@,#.%)!";
+    }
+
+    if (
+      signupFormData.password.trim() === "" ||
+      signupFormData.password.length < 8
+    ) {
+      newErrors.password =
+        "Password is required! and make sure password length is not less than eight characters longs";
+    } else if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%*#?&])[A-Za-z\d@$%*#?&]{8,}$/.test(
+        signupFormData.password
+      )
+    ) {
+      newErrors.password =
+        "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.";
+    }
+    if (signupFormData.email.trim() === "") {
+      newErrors.email = "Please enter your valid email address!";
+    }
+
+    if (signupFormData.confirmPassword !== signupFormData.password) {
+      newErrors.confirmPassword =
+        "The password field confirmation does not match!";
+    } else if (signupFormData.confirmPassword.trim() === "") {
+      newErrors.confirmPassword = "Password should not be empty!";
+    }
+
+    // Check if there are any errors and update the state
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setLoading(false);
+
+      window.scrollTo(0, 0);
+    } else {
+      try {
+        const response = await axios.post(
+          "https://api.fyndah.com/api/v1/auth/users",
+          {
+            firstname: signupFormData.firstName,
+            lastname: signupFormData.lastName,
+            email: signupFormData.email,
+            username: signupFormData.username,
+            password: signupFormData.password,
+            password_confirmation: signupFormData.confirmPassword,
+            phone: signupFormData.phone,
+          },
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.data.status == "success") {
+          Swal.fire({
+            icon: "success",
+            title: "Registration completed...",
+            text:
+              "Yay 🎉 You're all set Please check your email inbox for the verification link. Welcome aboard! " +
+              signupFormData.username,
+          });
+          console.log("Form submitted", signupFormData);
+
+          setLoading(false);
+          setShowForm(false);
+
+          console.log("Form submitted", signupFormData);
+        } else {
+          throw new Error("Registration failed");
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Registration Failed!",
+          footer: `<a href="#">Could not register your account. Please try again later. ${error.response.data.message}</a>`,
+        });
+        console.error(error.response.data.message);
+        setLoading(false);
+        setShowForm(true);
+      }
+    }
+  };
+
+  // handling re-send verification mail
+  const handleResend = async (e) => {
     e.preventDefault();
     const newErrors = {};
     setLoading(true);
@@ -85,7 +192,7 @@ function SignUp() {
     if (
       !/^[a-zA-Z0-9_]+$/i.test(signupFormData.username) ||
       signupFormData.username.trim() === "" ||
-      signupFormData.username.length< 5
+      signupFormData.username.length < 5
     ) {
       newErrors.username =
         "Input a username, username must not be less than 5 in characters, Username must not contain spaces or special characters e.g (@,#.%)!";
@@ -111,13 +218,7 @@ function SignUp() {
     if (signupFormData.email.trim() === "") {
       newErrors.email = "Please enter your valid email address!";
     }
-    const phoneRegex = /^\+234[0-9]{10}$/;
-    if (signupFormData.phone.trim()!==""&&!phoneRegex.test(phone)) {
-      newErrors.phone = "'Please enter a valid Nigerian phone number (+234XXXXXXXXXX).'";
-    }
-    if (signupFormData.phone.trim() === "") {
-      newErrors.phone = "Please enter your phone number!";
-    }
+
     if (signupFormData.confirmPassword !== signupFormData.password) {
       newErrors.confirmPassword =
         "The password field confirmation does not match!";
@@ -142,7 +243,7 @@ function SignUp() {
             username: signupFormData.username,
             password: signupFormData.password,
             password_confirmation: signupFormData.confirmPassword,
-            phone:signupFormData.phone
+            phone: signupFormData.phone,
           },
           {
             headers: {
@@ -155,13 +256,11 @@ function SignUp() {
         if (response.data.status == "success") {
           Swal.fire({
             icon: "success",
-            title: "Registration completed...",
-            text:
-              "Yay 🎉 You're all set Please check your email inbox for the verification link. Welcome aboard! " +
-              signupFormData.username,
+            title: "Email re-sent...",
+            text: "Yay 🎉 You're all set Please check your email inbox for the verification link!",
           });
           console.log("Form submitted", signupFormData);
-         
+
           setLoading(false);
           setShowForm(false);
 
@@ -173,8 +272,8 @@ function SignUp() {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Registration Failed!",
-          footer: `<a href="#">Could not register your account. Please try again later. ${error.response.data.message}</a>`,
+          text: "verification rre-send link failed!",
+          footer: `<a href="#">Could not re-send your verification link. Please try again later. ${error.response.data.message}</a>`,
         });
         console.error(error.response.data.message);
         setLoading(false);
@@ -182,9 +281,30 @@ function SignUp() {
       }
     }
   };
+  // a timer for re-sending of verification
+  const [seconds, setSeconds] = useState(30);
+
+  useEffect(() => {
+    // Function to decrease the seconds
+    const countdown = () => {
+      setSeconds((prevSeconds) => prevSeconds - 1);
+    };
+
+    // Set an interval to run the countdown function every second
+    const timer = setInterval(countdown, 1000);
+
+    // Clear the interval when the countdown is over
+    if (seconds === 0) {
+      clearInterval(timer);
+    }
+
+    // Cleanup function to clear the interval if the component unmounts
+    return () => clearInterval(timer);
+  }, [seconds]);
 
   return (
     <div>
+      {/* using conditional operator to hide the confirmation email then when submitted succesfully the form is going to be hidden and the checking of verification text is going to appear*/}
       {showForm ? (
         <section className="relative w-full h-full bg-white px-3 sm:px-4 md:px-6 lg:px-20 py-16 md:py-8 grid items-center grid-cols-1 md:grid-cols-2 gap-16 md:gap-8">
           {/* background image */}
@@ -354,26 +474,26 @@ function SignUp() {
                 )}
               </div>
 
-              <div className="flex flex-col gap-1 md:col-span-2">
-                <label htmlFor="email">
-                  Phone:<span className="text-red-500 ml-2">*</span>
-                </label>
-                <input
-                  value={signupFormData.phone}
-                  onChange={handleChange}
-                  type="number"
-                  name="phone"
-                  id="phone"
-                  className="outline-none border border-solid border-textGrey text-blackclr text-base rounded-lg p-2"
-                />
+              {/* <div className="flex flex-col gap-1 md:col-span-2">
+              <label htmlFor="email">
+                Phone:<span className="text-red-500 ml-2">*</span>
+              </label>
+              <input
+                value={signupFormData.phone}
+                onChange={handleChange}
+                type="number"
+                name="phone"
+                id="phone"
+                className="outline-none border border-solid border-textGrey text-blackclr text-base rounded-lg p-2"
+              />
 
-                {errors.phone && (
-                  <p className="text-red-600 text-[0.75rem] lg:text-[1rem]">
-                    {" "}
-                    {errors.phone}{" "}
-                  </p>
-                )}
-              </div>
+              {errors.phone && (
+                <p className="text-red-600 text-[0.75rem] lg:text-[1rem]">
+                  {" "}
+                  {errors.phone}{" "}
+                </p>
+              )}
+            </div> */}
               <div className="flex flex-col gap-1 md:col-span-2">
                 <label htmlFor="password">
                   Password<span className="text-red-500 ml-2">*</span>
@@ -458,11 +578,25 @@ function SignUp() {
         </section>
       ) : (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-          <div className="text-center text-green-500">
-            <h1 className="text-10 font-bold">
+          <div>
+            <h1 className="text-10 font-bold text-center text-green-500">
               {" "}
               Welcome aboard Check your email for the verification link !
             </h1>
+            <div className="text-center flex items-center gap-2 items-center justify-center">
+              {" "}
+              didn't received any code?{" "}
+              {seconds < 1 ? (
+                <a
+                  className="text-red font-bold cursor-pointer text-red-400 border-b border-red-500"
+                  onClick={handleResend}>
+                  {" "}
+                  {loading ? "sending..." : "Re-send verification link "}
+                </a>
+              ) : (
+                <p>re-send in {seconds}</p>
+              )}
+            </div>
           </div>
         </div>
       )}

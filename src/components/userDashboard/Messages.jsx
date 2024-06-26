@@ -2,10 +2,19 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
-import { Avatar, Spinner } from "@chakra-ui/react";
+import {
+  Avatar,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Spinner,
+} from "@chakra-ui/react";
 import { ImSpinner9 } from "react-icons/im";
 import { io } from "socket.io-client";
 import MessageArea from "./MessageArea";
+import { FiSearch } from "react-icons/fi";
+import { format, isYesterday, isToday, differenceInHours } from "date-fns";
+import Area2 from "./Area2";
 
 function Messages() {
   const [conversationOnPage, setConversationOnPage] = useState([]);
@@ -19,8 +28,12 @@ function Messages() {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
   const [hideMessageComponent, setMessageComponent] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredConversations, setFilteredConversations] =
+    useState(conversationOnPage);
+  const [rows, setRows] = useState(1);
 
-  const { authToken, userMsgId} = useContext(AuthContext);
+  const { authToken, userMsgId } = useContext(AuthContext);
 
   // Hide the message list on mobile screens
   const hideTheListOnMobile = () => {
@@ -48,7 +61,7 @@ function Messages() {
           const theSenderId = response.data[0].members[0].id;
           const theReceiverId = response.data[1].members[1].id;
           setSenderId(theSenderId);
-          setReceiverId(theReceiverId)
+          setReceiverId(theReceiverId);
           console.log("response: ", response.data);
           setLoading(false);
         } else {
@@ -85,7 +98,6 @@ function Messages() {
         console.log("conversations: ", response.data);
         setLoading(false);
         setMessageComponent(true);
-        window.scroll(100, 100);
       } else {
         setLoading(false);
         throw new Error("Getting messages in a conversation failed");
@@ -100,13 +112,18 @@ function Messages() {
 
   const handleMessageChange = (e) => {
     setValue(e.target.value);
+
+    const lineCount = e.target.value.split("\n").length;
+    setRows(lineCount < 11 ? lineCount : 10);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessageLoading(true);
-    setValue("");
+
     if (value.trim() !== "") {
+      setMessageLoading(true);
+      setValue("");
+
       try {
         const message = {
           senderId: userMsgId,
@@ -133,7 +150,6 @@ function Messages() {
           setValue("");
         }
 
-        
         setMessageLoading(false);
       } catch (error) {
         console.error(error);
@@ -144,13 +160,12 @@ function Messages() {
 
   useEffect(() => {
     console.log("Component Mounted");
-    
 
-    console.log("Creating socket with token:", authToken);
-    const socket = io('https://axelonepostfeature.onrender.com', {
-        query: {token: authToken },
-        transports: ['websocket'], // Ensure we are using websockets
-        reconnectionAttempts: 3, // Retry connecting 3 times
+    console.log("Creating socket with token:");
+    const socket = io("https://axelonepostfeature.onrender.com", {
+      query: { token: authToken },
+      transports: ["websocket"], // Ensure we are using websockets
+      reconnectionAttempts: 3, // Retry connecting 3 times
     });
 
     console.log("Socket created:", socket);
@@ -167,16 +182,16 @@ function Messages() {
       }
     });
 
-    socket.on('disconnect', () => {
-      console.log('Disconnected from the server');
+    socket.on("disconnect", () => {
+      console.log("Disconnected from the server");
     });
 
-    socket.on('connect_error', (err) => {
-      console.error('Connection Error:', err);
+    socket.on("connect_error", (err) => {
+      console.error("Connection Error:", err);
     });
 
-    socket.on('error', (err) => {
-      console.error('Error:', err);
+    socket.on("error", (err) => {
+      console.error("Error:", err);
     });
 
     return () => {
@@ -185,37 +200,55 @@ function Messages() {
     };
   }, [authToken, id]);
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+  console.log("usermgid: ", userMsgId);
 
-    let matchingItems = [];
-    if (e.target.value !== "") {
-      matchingItems = conversationOnPage.filter(
-        (item) =>
-          item.members[1].name.toLowerCase().includes(e.target.value.toLowerCase())
-       
-          
-      );
+  //format timestamp
+  const formatTimestamp = (timestamp) => {
+    const messageTime = new Date(timestamp);
+
+    if (isToday(messageTime)) {
+      return format(messageTime, "p"); // Format as time, e.g., 5:30 PM
+    } else if (isYesterday(messageTime)) {
+      return "Yesterday";
     } else {
-      matchingItems = conversationOnPage;
+      return format(messageTime, "EEEE"); // Format as day of the week, e.g., 'Monday'
     }
-
-    if (matchingItems.length === 0 && e.target.value !== "") {
-      // setMessageIfTheSearchHasNoResult(
-      //   `No results found for "${e.target.value}"`
-      // );
-      console.log("no result for "+ e.target.value);
-    } else {
-      // setMessageIfTheSearchHasNoResult("");
-      
-    }
-
-    setConversationOnPage(matchingItems);
-    window.scrollTo(matchingItems);
   };
 
-  const [messageUnread, setMessageUnread] = useState(true);
+  //truncate message
+  const truncateMessage = (message, maxLength) => {
+    if (message.length <= maxLength) {
+      return message;
+    }
+    return message.substring(0, maxLength) + "...";
+  };
+
+  console.log("id: ", id);
+
+  //search functionality
+  useEffect(() => {
+    // Filter conversations based on the search query
+    setFilteredConversations(
+      conversationOnPage.filter((item) =>
+        item.members[1].name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  }, [searchQuery, conversationOnPage]);
+
+  // Function to highlight search query in the text
+  const highlightText = (text, query) => {
+    if (!query) return text;
+    const parts = text.split(new RegExp(`(${query})`, "gi"));
+    return parts.map((part, index) =>
+      part.toLowerCase() === query.toLowerCase() ? (
+        <span key={index} className="bg-yellow-300">
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
 
   if (loading) {
     return (
@@ -233,61 +266,113 @@ function Messages() {
 
   return (
     <div>
-      <div className="md:grid grid-cols-5">
+      <div className="md:grid font-roboto   grid-cols-5">
         {/* initial lists */}
         {showListOfBusiness && (
-  <div className="bg-blue-900 text-white p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
-      {  conversationOnPage.length >= 1 && <div>
-        <h2 className="text-2xl font-bold mb-4">
-      Click to chat with Professionals{" "}
-    </h2>
+          <div className="bg-conversation-area text-slate-800 p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
+            {filteredConversations.length >= 1 && (
+              <>
+                <h2 className="text-[1.3rem] font-poppins font-bold mb-1">
+                  Chats{" "}
+                </h2>
+                <h2 className="text-[0.9rem] font-poppins font-medium mb-[1rem] text-lightRed">
+                  {" "}
+                  {filteredConversations.length} Messages, 6 Unread{" "}
+                </h2>
+              </>
+            )}
 
-    <div>
-      <input type="text" onChange={handleSearchChange} className="w-full text-black p-2" placeholder="search for business" value={searchTerm} />
-    </div>
-      </div>
-    
-    }
-    {conversationOnPage.length === 0 ? (
-      <p className="text-center">No conversations available at the moment. Go to the Feeds and message a business to initiate a conversation.</p>
-    ) : (
-      <ul className="list-none p-0">
-        {conversationOnPage.map((item, index) => (
-          <li
-            key={index}
-            onClick={() => {
-              setShowMessageBox(true);
-              getMessagesInConversation(item._id);
-              hideTheListOnMobile();
-            }}
-            className="bg-blue-700 p-4 mb-2 rounded cursor-pointer my-2 transform transition duration-300 hover:bg-blue-500 hover:scale-5"
-          >
-            {item.members[1].name}
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-)}
+            <InputGroup className="mb-[1rem]">
+              <InputLeftElement pointerEvents="none">
+                <FiSearch color="gray.300" />
+              </InputLeftElement>
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                background="gray.200"
+                variant="filled"
+                type="text"
+                placeholder="Search conversations"
+              />
+            </InputGroup>
+
+            {filteredConversations.length === 0 ? (
+              <p className="text-center">
+                No conversations available at the moment. Go to the Feeds and
+                message a business to initiate a conversation. or refresh the
+                page if you have conversations but can't find any
+              </p>
+            ) : (
+              <ul className="list-none p-0">
+                {filteredConversations.map((item, index) => (
+                  <li
+                    key={index}
+                    onClick={() => {
+                      setShowMessageBox(true);
+                      getMessagesInConversation(item._id);
+                      hideTheListOnMobile();
+                    }}
+                    className={`bg-white shadow-xl border-2 w-full flex gap-3 items-center p-4 rounded cursor-pointer transform transition duration-300 hover:bg-gray-300 ${
+                      id === item._id ? "bg-gray-300" : ""
+                    }`}>
+                    <Avatar src={item.members[1].logo} size="sm" />
+                    <div className="flex w-full flex-col gap-1">
+                      <div className="flex w-full justify-between">
+                        <p className="font-medium text-[1rem]">
+                          {" "}
+                          {highlightText(
+                            item.members[1].name,
+                            searchQuery
+                          )}{" "}
+                        </p>
+                        <span className="text-[10px]">
+                          {formatTimestamp(item.lastMessage.createdAt)}
+                        </span>
+                      </div>
+                      <p className="text-[15px]">
+                        {truncateMessage(item.lastMessage.message, 50)}{" "}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
 
         {/* message component */}
         {!hideMessageComponent && (
-          <div className="hidden md:flex items-center justify-center h-screen col-span-3">
-            <div>Click on any business to start a conversation </div>
+          <div className="hidden bg-message-area md:flex items-center justify-center h-screen col-span-3 border">
+            <div>Click on any chat to start a Conversation </div>
           </div>
         )}
+        {/* {hideMessageComponent && conversationOnPage && (
+          <Area2
+            rows={rows}
+            handleSubmit={handleSubmit}
+            value={value}
+            handleMessageChange={handleMessageChange}
+            messageLoading={messageLoading}
+            conversationOnPage={conversationInChat}
+            setMessageComponent={setMessageComponent}
+            setShowListOfBusiness={setShowListOfBusiness}
+            conversationInChat={conversationInChat}
+            senderId={senderId}
+          />
+        )} */}
         {hideMessageComponent && conversationOnPage && (
           <MessageArea
+          rows={rows}
           handleSubmit={handleSubmit}
           value={value}
           handleMessageChange={handleMessageChange}
           messageLoading={messageLoading}
-          conversationOnPage={conversationOnPage}
-         setMessageComponent={setMessageComponent}
-         setShowListOfBusiness={setShowListOfBusiness}
-         conversationInChat={conversationInChat}
-         senderId={senderId}
-       />
+          conversationOnPage={conversationInChat}
+          setMessageComponent={setMessageComponent}
+          setShowListOfBusiness={setShowListOfBusiness}
+          conversationInChat={conversationInChat}
+          senderId={senderId}
+        />
         )}
       </div>
     </div>

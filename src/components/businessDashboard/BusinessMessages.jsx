@@ -221,10 +221,10 @@ function BusinessMessages() {
         {showListOfBusiness && (
   <div className="bg-blue-900 text-white p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
     {  conversationOnPage.length >= 1 && <h2 className="text-2xl font-bold mb-4">
-      Click to chat with your Customers{" "}
+      Click on any chat to start a Conversation{" "}
     </h2>}
     {conversationOnPage.length === 0 ? (
-      <p>No conversations available. Start a new conversation to chat with your customers.</p>
+      <p>You havent started a conversation yet.</p>
     ) : (
       <ul className="list-none p-0">
         {conversationOnPage.map((item, index) => (
@@ -248,7 +248,7 @@ function BusinessMessages() {
         {/* message component */}
         {!hideMessageComponent && (
           <div className="hidden md:flex items-center justify-center h-screen col-span-3">
-            <div>Click on any business to start a conversation </div>
+            <div>Click on any chat to start a Conversation </div>
           </div>
         )}
         {hideMessageComponent && conversationOnPage  && (

@@ -56,17 +56,17 @@ function Routes() {
           path: "user-profile-setup",
           element: <UserProfileSetup />,
           errorElement: <PageNotFound />
-        },  
-    {
-      path: "business-profile-setup",
-      element: <BusinessProfileSetup />,
-      errorElement: <PageNotFound />
-    },
-    {
-      path: "ad-profile-setup",
-      element: <AdProfileSetup />,
-      errorElement: <PageNotFound />
-    },
+        },
+        {
+          path: "business-profile-setup",
+          element: <BusinessProfileSetup />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: "ad-profile-setup",
+          element: <AdProfileSetup />,
+          errorElement: <PageNotFound />
+        },
         {
           path: 'favoritebusiness',
           element: <FavoriteBusiness />,

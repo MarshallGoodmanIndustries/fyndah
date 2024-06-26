@@ -139,19 +139,34 @@ function WalletIndex() {
             console.log(response.data)
         } catch (error) {
             console.error("Error fetching wallet balance:", error);
-            if (error.response ? error.response.data : error.message) {
-                sessionStorage.setItem("lastRoute", location.pathname)
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops! Something went wrong",
-                    text: "Having troubles? please try again.",
-                    timer: 4000,
-                    timerProgressBar: true,
-                    footer: `<a href="#"> ${error.response ? error.response.data : error.message} . Please try again later.</a>`,
-
-                });
-                navigate("/login")
+            if (axios.isAxiosError(error)) {
+                // Handle AxiosError
+                console.error('Error message:', error.message);
+                if (error.response) {
+                    console.error('Status code:', error.response.status);
+                    console.error('Response data:', error.response.data);
+                    console.error('Response msg:', error.response.data.message);
+                    if (error.response.data.status === "error") {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops! Something went wrong",
+                            text: "Seems your token has expired or network issues, try to login again.",
+                            timer: 4000,
+                            timerProgressBar: true,
+                            footer: `<a href="#"> ${error.response.data.message}. Please try again</a>`,
+                        });
+                    }
+                } else if (error.request) {
+                    console.error('No response received:', error.request);
+                } else {
+                    console.error('Request setup error:', error.message);
+                }
+            } else {
+                // Handle non-AxiosError
+                console.error('Unexpected error:', error);
             }
+            sessionStorage.setItem("lastRoute", location.pathname)
+            navigate("/login")
             setIsLoading(false);
         } finally {
             setIsLoading(false);
@@ -209,16 +224,16 @@ function WalletIndex() {
                         </button> */}
                         <button className="flex flex-col items-center" onClick={StatsOpenModal}>
                             <FaRegChartBar className="p-2 bg-green-200 hover:text-green-800 text-green-500 rounded-full text-4xl" />
-                            <span className="text-sm mt-1">Statistics</span>
+                            <span className="text-sm mt-1">Analytics</span>
                         </button>
                     </div>
                     <div className="mt-6">
                         <hr className="p-2" />
-                        <div className="mt-4 flex sm:flex-row justify-between sm:space-y-0 ">
-                            <div className=" mr-4">
+                        <div className="mt-4 flex sm:flex-row justify-center sm:space-y-0 lg:gap-[450px]">
+                            <div className="">
                                 <DateRangePicker />
                             </div>
-                            <div className="mr-4">
+                            <div className="">
                                 <DateTransaction />
                             </div>
                         </div>
