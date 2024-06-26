@@ -15,6 +15,7 @@ import {
 } from "../../assets/images/index";
 // import { Radio, RadioGroup, Stack } from '@chakra-ui/react'
 import axios from "axios";
+// import CountriesCode from "./CountriesCode";
 // import codes from "country-calling-code";
 
 function SignUp() {
@@ -38,6 +39,7 @@ function SignUp() {
     lastName: "",
     email: "",
     username: "",
+    phone: "",
     password: "",
     confirmPassword: "",
     phone: "",
@@ -50,6 +52,7 @@ function SignUp() {
     lastName: "",
     email: "",
     username: "",
+    phone: "",
     password: "",
     confirmPassword: "",
     phone: "",
@@ -201,6 +204,9 @@ function SignUp() {
     // if (!/^[\w]+$/.test(signupFormData.username)||signupFormData.username.trim() === "") {
     //   newErrors.username = "input a username and Username must not contain spaces!";
     // }
+    if (signupFormData.phone.trim() === "") {
+      newErrors.phone = "Please enter a valid phone number e.g. US(+1XXXXXXXXXX)!";
+    }
     if (
       signupFormData.password.trim() === "" ||
       signupFormData.password.length < 8
@@ -241,6 +247,7 @@ function SignUp() {
             lastname: signupFormData.lastName,
             email: signupFormData.email,
             username: signupFormData.username,
+            phone_number: signupFormData.phone,
             password: signupFormData.password,
             password_confirmation: signupFormData.confirmPassword,
             phone: signupFormData.phone,
@@ -252,13 +259,13 @@ function SignUp() {
             },
           }
         );
-
         if (response.data.status == "success") {
           Swal.fire({
             icon: "success",
             title: "Email re-sent...",
             text: "Yay 🎉 You're all set Please check your email inbox for the verification link!",
           });
+          console.log('data:', response.data)
           console.log("Form submitted", signupFormData);
 
           setLoading(false);
@@ -302,9 +309,15 @@ function SignUp() {
     return () => clearInterval(timer);
   }, [seconds]);
 
+  const countries = [
+    { code: '+1', name: 'United States' },
+    { code: '+44', name: 'United Kingdom' },
+    { code: '+61', name: 'Australia' },
+    // Add more countries as needed
+  ]
+
   return (
     <div>
-      {/* using conditional operator to hide the confirmation email then when submitted succesfully the form is going to be hidden and the checking of verification text is going to appear*/}
       {showForm ? (
         <section className="relative w-full h-full bg-white px-3 sm:px-4 md:px-6 lg:px-20 py-16 md:py-8 grid items-center grid-cols-1 md:grid-cols-2 gap-16 md:gap-8">
           {/* background image */}
@@ -494,6 +507,28 @@ function SignUp() {
                 </p>
               )}
             </div> */}
+              <div className="flex flex-col gap-1 md:col-span-2">
+                <label htmlFor="email">
+                  Phone Number<span className="text-red-500 ml-2">*</span>
+                </label>
+                {/* <CountriesCode countries={countries} /> */}
+                <input
+                  value={signupFormData.phone}
+                  onChange={handleChange}
+                  type="text"
+                  name="phone"
+                  id="phone"
+                  className="outline-none border border-solid border-textGrey text-blackclr text-base rounded-lg p-2"
+                />
+
+                {errors.phone && (
+                  <p className="text-red-600 text-[0.75rem] lg:text-[1rem]">
+                    {" "}
+                    {errors.phone}{" "}
+                  </p>
+                )}
+              </div>
+
               <div className="flex flex-col gap-1 md:col-span-2">
                 <label htmlFor="password">
                   Password<span className="text-red-500 ml-2">*</span>
