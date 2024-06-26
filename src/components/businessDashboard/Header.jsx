@@ -30,7 +30,8 @@ const Header = ({ handleToggle, toggle }) => {
     country: "",
     zip_code: "",
     size: "",
-    locationName: ""
+    locationName: "",
+    logo: "",
   });
 
   useEffect(() => {
@@ -46,7 +47,6 @@ const Header = ({ handleToggle, toggle }) => {
         );
 
         const businessData = businessProfileResponse.data.data;
-
         setInputDefaultStates({
           businessName: businessData.org_name || "",
           email: businessData.email || "",
@@ -58,8 +58,8 @@ const Header = ({ handleToggle, toggle }) => {
           country: businessData.locations[0].country || "",
           zip_code: businessData.locations[0].zip_code || "",
           locationName: businessData.locations[0].location_name || "",
+          logo: businessData.logo || "",
         });
-
 
         if (businessProfileResponse.status === 200) {
           // console.log(businessProfileResponse.data)
@@ -69,7 +69,7 @@ const Header = ({ handleToggle, toggle }) => {
       } catch (error) {
         console.error(error);
       }
-    }
+    };
 
     fetchBusinessProfileData();
   }, [authToken, id]);
@@ -111,10 +111,13 @@ const Header = ({ handleToggle, toggle }) => {
           <Avatar
             size="sm"
             name={inputDefaultStates.businessName}
-            src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
+            src={inputDefaultStates?.logo}
           />
           {/* <Avatar size='default' className='bg-[#f56a00] align-middle md:text-[1rem] text-[0.85rem] font-semibold text-white'> {userInitials} </Avatar> */}
-          <h2 className="font-bold lg:block hidden text-[1rem]"> {inputDefaultStates.businessName} </h2>
+          <h2 className="font-bold lg:block hidden text-[1rem]">
+            {" "}
+            {inputDefaultStates.businessName}{" "}
+          </h2>
         </div>
       </div>
 
