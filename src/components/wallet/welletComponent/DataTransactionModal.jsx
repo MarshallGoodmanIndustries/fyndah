@@ -2,7 +2,7 @@
 // import { useState } from 'react';
 
 // import { FaDollarSign } from 'react-icons/fa';
-import { TbCurrencyNaira } from 'react-icons/tb';
+import { TbCurrencyDollar, } from 'react-icons/tb';
 import './modal.css'; // Added custom CSS
 // import { ImSpinner9 } from 'react-icons/im';
 
@@ -80,7 +80,8 @@ const DateTransactionModal = ({ isOpenModal, handleCloseModal, isLoading, startD
                                                 <td className="px-6 py-4 whitespace-nowrap">{transactions.type || 'Unknown Type'}</td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <p className="text-1 font-bold flex items-center justify-center">
-                                                        <TbCurrencyNaira className="mr-1 text-sm" size={22} />
+                                                        {/* <TbCurrencyNaira className="mr-1 text-sm" size={22} /> */}
+                                                        <TbCurrencyDollar className="mr-1 text-sm" size={22} />
                                                         {transactions.amount || '0'}
                                                     </p>
                                                 </td>
