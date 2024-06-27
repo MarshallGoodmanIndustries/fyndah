@@ -31,12 +31,6 @@ function ArchivedMessage() {
     const [totalUnreadConversations, setTotalUnreadConversations] = useState("")
     const { authToken, userMsgId } = useContext(AuthContext);
 
-    // testing dummy data
-    const [data, setData] = useState([])
-    const [dataBizz, setDataBizz] = useState([])
-
-
-
 
     // Hide the message list on mobile screens
     const hideTheListOnMobile = () => {
@@ -45,67 +39,14 @@ function ArchivedMessage() {
         }
     };
 
-
-
-
     // Fetch conversations
     useEffect(() => {
-        // dummy data
+        const fetchData = async () => {
 
-        setData([
-            {
-                id: 1,
-                sender: "Alice",
-                message: "Hello, Bob!",
-                timestamp: "12:00 PM"
-            },
-            {
-                id: 2,
-                sender: "Bob",
-                message: "Hi Alice How are you?",
-                timestamp: "12:05 PM"
-            },
-            {
-                id: 3,
-                sender: "Alice",
-                message: "I'm good, thanks How about you?",
-                timestamp: "12:10 PM"
-            },
-            {
-                id: 4,
-                sender: "Bob",
-                message: "Doing great Just finished a project.",
-                timestamp: "12:15 PM"
-            }
-        ])
-    }, [])
+        }
+        fetchData();
+    })
 
-    useEffect(() => {
-        // dummy data
-        const conversationDataBack = [
-            {
-                sender: "Alice",
-                message: "Hello, Bob!",
-                timestamp: "12:00 PM"
-            },
-            {
-                sender: "Bob",
-                message: "Hi Alice How are you?",
-                timestamp: "12:05 PM"
-            },
-            {
-                sender: "Alice",
-                message: "I'm good, thanks How about you?",
-                timestamp: "12:10 PM"
-            },
-            {
-                sender: "Bob",
-                message: "Doing great Just finished a project.",
-                timestamp: "12:15 PM"
-            }
-        ];
-
-    }, [])
     // Fetch messages in a conversation
     const getMessagesInConversation = async () => {
 
@@ -124,6 +65,8 @@ function ArchivedMessage() {
     };
 
 
+    useEffect(() => {
+    }, [])
 
     //format timestamp
     const formatTimestamp = (timestamp) => {
@@ -172,7 +115,7 @@ function ArchivedMessage() {
                 {/* initial lists */}
                 {showListOfBusiness && (
                     <div className="bg-conversation-area text-slate-800 p-6 h-screen overflow-y-scroll lg:col-span-2 pb-20">
-                        {data.length >= 1 && <>
+                        {filteredConversations.length >= 1 && <>
                             <h2 className="text-[1.3rem] font-poppins font-bold mb-1">
                                 Chats{" "}
 
@@ -181,9 +124,9 @@ function ArchivedMessage() {
 
                         <div className=" flex">
                             <div className="w-full flex justify-center">
-                                <h3 className=" text-center font-semibold p-2">Archived</h3>
+                                <h3 className="font-bold text-center p-2">Archived</h3>
                             </div>
-                            <button className="justify-end items-end bg-white p-2 shadow-md rounded-md text-orange-500">Edit</button>
+                            <button className="justify-end items-end">Edit</button>
                         </div>
                         <div className="flex items-center justify-center">
                             <h5 className="font-sm text-center p-6">
@@ -198,17 +141,17 @@ function ArchivedMessage() {
 
 
 
-                        {data.length === 0 ? (
-                            <p className="text-center">No archived chat yet...</p>
+                        {filteredConversations.length === 0 ? (
+                            <p className="text-center">No archived chat yet.</p>
                         ) : (
                             <ul className="list-none p-0">
-                                {data.map((item, index) => (
+                                {filteredConversations.map((item, index) => (
                                     <li
                                         key={index}
                                         onClick={() => {
                                             setShowMessageBox(true);
                                             // setReadReceipt();
-                                            getMessagesInConversation(item.id);
+                                            getMessagesInConversation(item._id);
                                             hideTheListOnMobile();
                                         }}
                                         className={`bg-white shadow-xl border-2 w-full flex gap-3 items-center p-4 rounded cursor-pointer transform transition duration-300 hover:bg-gray-300 ${id === item._id ? 'bg-gray-200' : ''
@@ -241,21 +184,11 @@ function ArchivedMessage() {
                 {/* message component */}
                 {!hideMessageComponent && (
                     <div className="hidden lg:flex bg-message-area items-center justify-center h-screen col-span-3">
-                        <div>Click on any chat to to see conversations</div>
+                        <div>Click on any chat to see a Conversation</div>
                     </div>
                 )}
                 {hideMessageComponent && conversationOnPage && (
                     <ArchivedMessagesArea
-                        rows={rows}
-                        handleSubmit={handleSubmit}
-                        value={value}
-                        handleMessageChange={handleMessageChange}
-                        messageLoading={messageLoading}
-                        conversationOnPage={conversationInChat}
-                        setMessageComponent={setMessageComponent}
-                        setShowListOfBusiness={setShowListOfBusiness}
-                        conversationInChat={conversationInChat}
-                        senderId={senderId}
                     />
                 )}
             </div>
