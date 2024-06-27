@@ -49,13 +49,21 @@ function Leads() {
     [authToken]
   );
 
-  const po = `/businessDashboard/${id}/${name}/posts`;
-  const mes = empty
-    ? empty
-    : "There are Currently no Available Leads to your Business. When they are, you would see them here.";
-  
-    if (!request?.length) return <EmptyLeads data={mes} posts={po} />;
+  // const po = `/businessDashboard/${id}/${name}/posts`;
+  // const mes = empty
+  //   ? empty
+  //   : "There are Currently no Available Leads to your Business. When they are, you would see them here.";
 
+  if (!request?.length)
+    return (
+      <p className="mt-7 font-semibold px-3">
+        <span className="text-2xl font-black pr-2">
+          Purchasing a search request unlocks your lead list!
+        </span>
+        Come back to this page to view your leads and start converting them into
+        customers.
+      </p>
+    );
   return (
     <>
       {open && (
