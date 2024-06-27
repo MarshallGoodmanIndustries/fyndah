@@ -258,7 +258,7 @@ function BusinessProfile() {
       setIsLoading(true);
       setShowButton(false)
       const response = await axios.post(
-        `https://api.fyndah.com/api/v1/organization/${id}`,
+        `https://api.fyndah.com/api/v1/organization/update`,
         {
           logo: selectedFile,
           cover_image: selectedCoverFile

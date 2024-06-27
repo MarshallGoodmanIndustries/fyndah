@@ -112,7 +112,7 @@ const Header = ({ handleToggle, toggle }) => {
           <Avatar
             size="sm"
             name={user}
-            src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
+            src={userData?.profile_photo_path}
           />
           {user && (
             <h2 className="font-bold lg:block hidden text-[1rem]">{user}</h2>

@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { useState, useEffect, useContext } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, Link, } from "react-router-dom";
 import { FaPlus, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
@@ -13,6 +13,7 @@ import {
   Ellipse7,
   signup_bg,
 } from "../../assets/images/index";
+
 // import { Radio, RadioGroup, Stack } from '@chakra-ui/react'
 import axios from "axios";
 // import CountriesCode from "./CountriesCode";
@@ -20,13 +21,13 @@ import axios from "axios";
 
 function SignUp() {
   const { authToken } = useContext(AuthContext);
-
+  const [selectedCountryCode, setSelectedCountryCode] = useState("")
   const [revealPassword, setRevealPassword] = useState(false);
   const [revealConfirmPassword, setRevealConfirmPassword] = useState(false);
   const [showForm, setShowForm] = useState(true);
   // const [value, setValue] = useState('sms')
   const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -68,6 +69,16 @@ function SignUp() {
       [name]: "",
     });
   };
+
+  // Update phone number with country code when selectedCountryCode changes
+  useEffect(() => {
+    if (selectedCountryCode) {
+      const phoneNumber = signupFormData.phone.startsWith(selectedCountryCode) ? signupFormData.phone
+        :
+        selectedCountryCode + signupFormData.phone.replace(/^\+?\d*/, '');
+      setSignupFormData({ ...signupFormData, phone: phoneNumber });
+    }
+  }, [selectedCountryCode]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -180,12 +191,18 @@ function SignUp() {
     }
   };
 
+
+
   const countries = [
-    { code: '+1', name: 'United States' },
-    { code: '+44', name: 'United Kingdom' },
-    { code: '+61', name: 'Australia' },
-    // Add more countries as needed
-  ]
+    { code: '+234', name: 'NG' },
+    { code: '+44', name: 'UK' },
+    { code: '+1', name: 'US' },
+    { code: '+1', name: 'CA' },
+    { code: '+61', name: 'AU' },
+  ];
+  console.log(selectedCountryCode)
+
+
 
   return (
     <div>
@@ -363,15 +380,35 @@ function SignUp() {
                 <label htmlFor="email">
                   Phone Number<span className="text-red-500 ml-2">*</span>
                 </label>
-                {/* <CountriesCode countries={countries} /> */}
-                <input
-                  value={signupFormData.phone}
-                  onChange={handleChange}
-                  type="text"
-                  name="phone"
-                  id="phone"
-                  className="outline-none border border-solid border-textGrey text-blackclr text-base rounded-lg p-2"
-                />
+                <div className="flex flex-row">
+                  {/* country code input form */}
+                  <div>
+                    <div className="flex">
+                      <select
+                        name="phone_number"
+                        id="phone_number"
+                        value={selectedCountryCode}
+                        onChange={(e) => setSelectedCountryCode(e.target.value)}
+                        className="mr-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      >
+                        <option value="">---</option>
+                        {countries.map((country) => (
+                          <option key={country.name} value={country.code}>
+                            {country.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <input
+                    value={signupFormData.phone}
+                    onChange={handleChange}
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    className="p-2 border border-gray-300 rounded-md shadow-sm w-full focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
 
                 {errors.phone && (
                   <p className="text-red-600 text-[0.75rem] lg:text-[1rem]">
@@ -379,6 +416,7 @@ function SignUp() {
                     {errors.phone}{" "}
                   </p>
                 )}
+
               </div>
 
               <div className="flex flex-col gap-1 md:col-span-2">

@@ -110,6 +110,8 @@ function NavBar() {
                 </div>
             </div>
             <LogoutModalUser isOpen={isOpenModal} onClose={LogOutCloseModal} />
+            
+
         </nav>
     )
 }
