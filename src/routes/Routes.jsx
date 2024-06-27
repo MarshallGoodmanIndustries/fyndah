@@ -3,6 +3,7 @@ import {
   LandingPage, SignUp, Login, BusinessProfileSetup, AdProfileSetup, UserProfileSetup,
   AdminLayout, Profile, FavoriteBusiness, LogOut, Messages, CreateBusiness,
   MyBusiness,
+  ArchivedMessage,
 } from "../components/pages";
 import {
   BusinessDashboardLayout, BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
@@ -75,6 +76,11 @@ function Routes() {
         {
           path: 'messages',
           element: <Messages />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: 'messages/archived-messages',
+          element: <ArchivedMessage />,
           errorElement: <PageNotFound />
         },
         {
