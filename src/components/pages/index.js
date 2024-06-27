@@ -12,6 +12,8 @@ import LogOut from "../userDashboard/LogOut.jsx";
 import Messages from "../userDashboard/Messages.jsx";
 import CreateBusiness from "../userDashboard/CreateBusiness.jsx";
 import MyBusiness from "../userDashboard/MyBusiness.jsx";
+import ArchivedMessage from "../userDashboard/ArchivedMessage.jsx";
+
 
 
 
@@ -19,5 +21,5 @@ import MyBusiness from "../userDashboard/MyBusiness.jsx";
 
 export {
     LandingPage, SignUp, Login, BusinessProfileSetup, AdProfileSetup, UserProfileSetup, Profile,
-    AdminLayout, Dashboard, FavoriteBusiness, LogOut, Messages, CreateBusiness, MyBusiness,
+    AdminLayout, Dashboard, FavoriteBusiness, LogOut, Messages, CreateBusiness, MyBusiness, ArchivedMessage,
 };

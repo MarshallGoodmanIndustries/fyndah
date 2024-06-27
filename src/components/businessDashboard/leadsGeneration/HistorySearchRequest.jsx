@@ -110,13 +110,13 @@ function HistorySearchRequest() {
     [authToken]
   );
 
-  const po = `/businessDashboard/${id}/${name}/posts`;
+  const po = `/businessDashboard/${id}/${name}/search-request`;
 
   if (!request?.length)
     return (
       <EmptyLeads
-        data="To get access to search requests, fund your wallet."
-        // data="There are Currently no Search Request Related to your Business. When they are, you would see them here."
+        // data="To get access to search requests, fund your wallet"
+        data="There are Currently no Search Request Related to your Business. When they are, you would see them here."
         posts={po}
       />
     );

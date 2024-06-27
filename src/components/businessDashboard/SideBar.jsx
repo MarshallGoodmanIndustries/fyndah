@@ -174,7 +174,7 @@ const SideBar = ({ handleToggle }) => {
           </div>
         </Link>
 
-        {/* Search Requests History */}
+        {/* Search Requests History
         <Link to={`/businessDashboard/${id}/${name}/search-request-history`}>
           <div
             onClick={handleToggle}
@@ -190,13 +190,13 @@ const SideBar = ({ handleToggle }) => {
               Search Requests History
             </h2>
           </div>
-        </Link>
+        </Link> */}
 
         {/* Leads */}
         <Link to={`/businessDashboard/${id}/${name}/leads`}>
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("leads") ? "bg-white text-textDark" : "text-white"
+            className={`flex cursor-pointer mb-3 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("leads") ? "bg-white text-textDark" : "text-white"
               } `}
           >
             <span>

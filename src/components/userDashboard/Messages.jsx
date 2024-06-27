@@ -8,6 +8,8 @@ import { io } from "socket.io-client";
 import MessageArea from "./MessageArea";
 import { FiSearch } from "react-icons/fi";
 import { format, isYesterday, isToday, differenceInHours } from 'date-fns';
+import { FaArchive } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 function Messages() {
   const [conversationOnPage, setConversationOnPage] = useState([]);
@@ -23,15 +25,14 @@ function Messages() {
   const [hideMessageComponent, setMessageComponent] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredConversations, setFilteredConversations] = useState(conversationOnPage);
-  const [rows, setRows] = useState(1);  
+  const [rows, setRows] = useState(1);
   const [totalUnreadConversations, setTotalUnreadConversations] = useState("")
+  const { authToken, userMsgId } = useContext(AuthContext);
 
-
-  const { authToken, userMsgId} = useContext(AuthContext);
 
   // Hide the message list on mobile screens
   const hideTheListOnMobile = () => {
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < 1000) {
       setShowListOfBusiness(false);
     }
   };
@@ -113,11 +114,11 @@ function Messages() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (value.trim() !== "") {
       setMessageLoading(true);
       setValue("");
-  
+
       try {
         const message = {
           senderId: userMsgId,
@@ -125,10 +126,10 @@ function Messages() {
           message: value,
           createdAt: new Date().toISOString(),
         };
-  
+
         // Optimistically update the UI
         setConversationInChat((prev) => [...prev, message]);
-  
+
         const response = await axios.post(
           `https://axelonepostfeature.onrender.com/api/messages/send-message/user/${id}`,
           { message: value },
@@ -138,12 +139,12 @@ function Messages() {
             },
           }
         );
-  
+
         if (response.status === 200) {
           console.log("Message sent", response.data);
           setValue("");
         }
-  
+
         setMessageLoading(false);
       } catch (error) {
         console.error(error);
@@ -151,17 +152,17 @@ function Messages() {
       }
     }
   };
-  
+
 
   useEffect(() => {
     console.log("Component Mounted");
-    
+
 
     console.log("Creating socket with token:");
     const socket = io('https://axelonepostfeature.onrender.com', {
-        query: {token: authToken },
-        transports: ['websocket'], // Ensure we are using websockets
-        reconnectionAttempts: 3, // Retry connecting 3 times
+      query: { token: authToken },
+      transports: ['websocket'], // Ensure we are using websockets
+      reconnectionAttempts: 3, // Retry connecting 3 times
     });
 
     console.log("Socket created:", socket);
@@ -196,12 +197,12 @@ function Messages() {
     };
   }, [authToken, id]);
 
-   console.log("usermgid: ", userMsgId)
+  console.log("usermgid: ", userMsgId)
 
-   //format timestamp
-   const formatTimestamp = (timestamp) => {
+  //format timestamp
+  const formatTimestamp = (timestamp) => {
     const messageTime = new Date(timestamp);
-  
+
     if (isToday(messageTime)) {
       return format(messageTime, 'p'); // Format as time, e.g., 5:30 PM
     } else if (isYesterday(messageTime)) {
@@ -210,7 +211,7 @@ function Messages() {
       return format(messageTime, 'EEEE'); // Format as day of the week, e.g., 'Monday'
     }
   };
-  
+
 
   //truncate message
   const truncateMessage = (message, maxLength) => {
@@ -232,11 +233,11 @@ function Messages() {
     );
   }, [searchQuery, conversationOnPage]);
 
-   // Function to highlight search query in the text
-   const highlightText = (text, query) => {
+  // Function to highlight search query in the text
+  const highlightText = (text, query) => {
     if (!query) return text;
     const parts = text.split(new RegExp(`(${query})`, 'gi'));
-    return parts.map((part, index) => 
+    return parts.map((part, index) =>
       part.toLowerCase() === query.toLowerCase() ? <span key={index} className="bg-yellow-300">{part}</span> : part
     );
   };
@@ -265,7 +266,7 @@ function Messages() {
         }
       } catch (error) {
         console.error("Error fetching data", error);
-      } 
+      }
     };
 
     getUnreadConversations();
@@ -311,87 +312,103 @@ function Messages() {
 
   return (
     <div>
-      <div className="md:grid font-roboto   grid-cols-5">
+      <div className="lg:grid font-roboto lg:grid-cols-5">
         {/* initial lists */}
         {showListOfBusiness && (
-  <div className="bg-conversation-area text-slate-800 p-6 h-screen overflow-y-scroll md:col-span-2 md: pb-20">
-      {  filteredConversations.length >= 1 && <>
-      <h2 className="text-[1.3rem] font-poppins font-bold mb-1">
-        Chats{" "}
-        
-    </h2>
-    <h2 className="text-[0.9rem] font-poppins font-medium mb-[1rem] text-lightRed"> {filteredConversations.length} Messages, {totalUnreadConversations} Unread </h2></>}
+          <div className="bg-conversation-area text-slate-800 p-6 h-screen overflow-y-scroll lg:col-span-2 pb-20">
+            {filteredConversations.length >= 1 && <>
+              <h2 className="text-[1.3rem] font-poppins font-bold mb-1">
+                Chats{" "}
 
-    <InputGroup className="mb-[1rem]">
-    <InputLeftElement pointerEvents='none'>
-      <FiSearch color='gray.300' />
-    </InputLeftElement>
-    <Input value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} background='gray.200' variant='filled' type='text' placeholder='Search conversations' />
-  </InputGroup>
+              </h2>
+              <h2 className="text-[0.9rem] font-poppins font-medium mb-[1rem] text-lightRed"> {filteredConversations.length} Messages, {totalUnreadConversations} Unread </h2></>}
 
-    {filteredConversations.length === 0 ? (
-      <p className="text-center">No conversations available at the moment. Go to the Feeds and message a business to initiate a conversation.</p>
-    ) : (
-      <ul className="list-none p-0">
-        {filteredConversations.map((item, index) => (
-          <li
-            key={index}
-            onClick={() => {
-              setShowMessageBox(true);
-              // setReadReceipt();
-              getMessagesInConversation(item._id);
-              hideTheListOnMobile();
-            }}
-            className={`bg-white shadow-xl border-2 w-full flex gap-3 items-center p-4 rounded cursor-pointer transform transition duration-300 hover:bg-gray-300 ${
-              id === item._id ? 'bg-gray-200' : ''
-            }`}
-          >
-            <Avatar src={item.members[1].logo} size="sm" />
-            <div className="flex w-full flex-col gap-1">
-              <div className="flex w-full justify-between">
-              <p className="font-medium text-[1rem]"> {highlightText(item.members[1].name, searchQuery)} </p>
-              <span className="text-[10px]">{formatTimestamp(item.lastMessage.createdAt)}</span> 
+            <InputGroup className="mb-[1rem]">
+              <InputLeftElement pointerEvents='none'>
+                <FiSearch color='gray.300' />
+              </InputLeftElement>
+              <Input value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)} background='gray.200' variant='filled' type='text' placeholder='Search conversations' />
+              <div className="p-2">
+                <Link to='archived-messages'>
+                  <span className='relative'>
+                    <FaArchive
+                      className=""
+                      color="red"
+                      size={25}
+                    />
+                    <p className="absolute top-[-7px] left-3 text-white rounded-full bg-lightRed px-1 text-[11px]">
+                      0
+                    </p>
+                  </span>
+                </Link>
               </div>
-            <div className="flex w-full items-center justify-between">
-              <p className="text-[15px]">{truncateMessage(item.lastMessage.message, 45)}</p>
-              {item.unreadCount > 0 && (
-                <p className="text-white rounded-full bg-lightRed px-2 py-1 text-[11px]">
-                  {item.unreadCount}
-                </p>
-              )}
-            </div>
 
-            </div>
-              
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-)}
+
+
+
+            </InputGroup>
+            {filteredConversations.length === 0 ? (
+              <p className="text-center">No conversations available at the moment. Go to the Feeds and message a business to initiate a conversation.</p>
+            ) : (
+              <ul className="list-none p-0">
+                {filteredConversations.map((item, index) => (
+                  <li
+                    key={index}
+                    onClick={() => {
+                      setShowMessageBox(true);
+                      // setReadReceipt();
+                      getMessagesInConversation(item._id);
+                      hideTheListOnMobile();
+                    }}
+                    className={`bg-white shadow-xl border-2 w-full flex gap-3 items-center p-4 rounded cursor-pointer transform transition duration-300 hover:bg-gray-300 ${id === item._id ? 'bg-gray-200' : ''
+                      }`}
+                  >
+                    <Avatar src={item.members[1].logo} size="sm" />
+                    <div className="flex w-full flex-col gap-1">
+                      <div className="flex w-full justify-between">
+                        <p className="font-medium text-[1rem]"> {highlightText(item.members[1].name, searchQuery)} </p>
+                        <span className="text-[10px]">{formatTimestamp(item.lastMessage.createdAt)}</span>
+                      </div>
+                      <div className="flex w-full items-center justify-between">
+                        <p className="text-[15px]">{truncateMessage(item.lastMessage.message, 45)}</p>
+                        {item.unreadCount > 0 && (
+                          <p className="text-white rounded-full bg-lightRed px-2 py-1 text-[11px]">
+                            {item.unreadCount}
+                          </p>
+                        )}
+                      </div>
+
+                    </div>
+
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
 
         {/* message component */}
         {!hideMessageComponent && (
-          <div className="hidden bg-message-area md:flex items-center justify-center h-screen col-span-3">
-            <div>Click on any chat to start a Conversation </div>
+          <div className="hidden lg:flex bg-message-area items-center justify-center h-screen col-span-3">
+            <div>Click on any chat to start a Conversation</div>
           </div>
         )}
         {hideMessageComponent && conversationOnPage && (
           <MessageArea
-          rows={rows}
-          handleSubmit={handleSubmit}
-          value={value}
-          handleMessageChange={handleMessageChange}
-          messageLoading={messageLoading}
-          conversationOnPage={conversationInChat}
-          setMessageComponent={setMessageComponent}
-          setShowListOfBusiness={setShowListOfBusiness}
-          conversationInChat={conversationInChat}
-          senderId={senderId}
-        />
+            rows={rows}
+            handleSubmit={handleSubmit}
+            value={value}
+            handleMessageChange={handleMessageChange}
+            messageLoading={messageLoading}
+            conversationOnPage={conversationInChat}
+            setMessageComponent={setMessageComponent}
+            setShowListOfBusiness={setShowListOfBusiness}
+            conversationInChat={conversationInChat}
+            senderId={senderId}
+          />
         )}
-        </div>
+      </div>
     </div>
   );
 }
