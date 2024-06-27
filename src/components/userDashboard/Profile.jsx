@@ -244,6 +244,33 @@ function Profile() {
 
   }
 
+  // this code i added by ade and it is working for re-sending of verification e mail
+  const reSendVerificationLink = async () => {
+    try {
+      const response = await axios.get(
+        'https://api.fyndah.com/api/v1/auth/email/resend',
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        
+        console.log("is it verified: ", response.data);
+       
+      } else {
+      
+        throw new Error("re-send email link faild");
+      }
+    } catch (error) {
+      
+      console.error("Error fetching data", error);
+    } 
+  };
+
+
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
       <div className="md:flex block items-center gap-[6rem]">
@@ -328,9 +355,13 @@ function Profile() {
             Upload Profile Photo
           </Button>}
 
+          <div className="flex items-center justify-between border gap-4">
           <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
             {fullName}
           </h2>
+
+          <button onClick={reSendVerificationLink}> verify Email </button>
+          </div>
           <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
             {inputDefaultStates.location}
           </h2>
