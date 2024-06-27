@@ -24,6 +24,7 @@ function Messages() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredConversations, setFilteredConversations] = useState(conversationOnPage);
   const [rows, setRows] = useState(1);  
+  const [totalUnreadConversations, setTotalUnreadConversations] = useState("")
 
 
   const { authToken, userMsgId} = useContext(AuthContext);
@@ -240,6 +241,60 @@ function Messages() {
     );
   };
 
+  // fetch unread messages for a user
+  useEffect(() => {
+    const getUnreadConversations = async () => {
+      try {
+        // setLoading(true);
+        const response = await axios.get(
+          `https://axelonepostfeature.onrender.com/api/messages/user/messages/unread`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setTotalUnreadConversations(response.data.totalUnreadConversations);
+          console.log("response: ", response.data);
+          // setLoading(false);
+        } else {
+          // setLoading(false);
+          throw new Error("Getting Total Unread Conversations failed");
+        }
+      } catch (error) {
+        console.error("Error fetching data", error);
+      } 
+    };
+
+    getUnreadConversations();
+  }, [authToken]);
+
+  // const setReadReceipt = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       `https://axelonepostfeature.onrender.com/api/messages/user/messages/read`,
+  //       {
+  //         messageIds : [userMsgId],
+  //         isRead: true
+  //     },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${authToken}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       console.log("Read receipt set", response.data);
+  //     }
+
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -265,7 +320,7 @@ function Messages() {
         Chats{" "}
         
     </h2>
-    <h2 className="text-[0.9rem] font-poppins font-medium mb-[1rem] text-lightRed"> {filteredConversations.length} Messages, 6 Unread </h2></>}
+    <h2 className="text-[0.9rem] font-poppins font-medium mb-[1rem] text-lightRed"> {filteredConversations.length} Messages, {totalUnreadConversations} Unread </h2></>}
 
     <InputGroup className="mb-[1rem]">
     <InputLeftElement pointerEvents='none'>
@@ -284,11 +339,12 @@ function Messages() {
             key={index}
             onClick={() => {
               setShowMessageBox(true);
+              // setReadReceipt();
               getMessagesInConversation(item._id);
               hideTheListOnMobile();
             }}
             className={`bg-white shadow-xl border-2 w-full flex gap-3 items-center p-4 rounded cursor-pointer transform transition duration-300 hover:bg-gray-300 ${
-              id === item._id ? 'bg-gray-300' : ''
+              id === item._id ? 'bg-gray-200' : ''
             }`}
           >
             <Avatar src={item.members[1].logo} size="sm" />
@@ -297,7 +353,14 @@ function Messages() {
               <p className="font-medium text-[1rem]"> {highlightText(item.members[1].name, searchQuery)} </p>
               <span className="text-[10px]">{formatTimestamp(item.lastMessage.createdAt)}</span> 
               </div>
-            <p className="text-[15px]">{truncateMessage(item.lastMessage.message, 50)} </p>
+            <div className="flex w-full items-center justify-between">
+              <p className="text-[15px]">{truncateMessage(item.lastMessage.message, 45)}</p>
+              {item.unreadCount > 0 && (
+                <p className="text-white rounded-full bg-lightRed px-2 py-1 text-[11px]">
+                  {item.unreadCount}
+                </p>
+              )}
+            </div>
 
             </div>
               

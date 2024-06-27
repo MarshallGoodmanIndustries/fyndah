@@ -4,7 +4,8 @@ import { Spinner } from "@chakra-ui/react";
 import { FiArrowLeft } from "react-icons/fi";
 import { format, isToday, isYesterday } from 'date-fns';
 import { IoSend, IoCheckmarkDoneSharp } from "react-icons/io5";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const MessageArea = ({
   setMessageComponent,
@@ -18,6 +19,7 @@ const MessageArea = ({
   rows,
 }) => {
   const messageContainerRef = useRef(null);
+  const { authToken, userMsgId} = useContext(AuthContext);
 
   useEffect(() => {
     if (messageContainerRef.current) {
@@ -67,7 +69,7 @@ const MessageArea = ({
 
   return (
     <div className="md:col-span-3 w-full bg-message-area bg-neutral-100">
-      <div className="p-6 text-white overflow-y-scroll h-screen pb-20 md:fixed top-0" ref={messageContainerRef}>
+      <div className="p-6 text-white overflow-y-scroll h-screen pb-20 md:fixed top-5" ref={messageContainerRef}>
         <FiArrowLeft
           onClick={() => {
             setMessageComponent(false);
@@ -87,12 +89,12 @@ const MessageArea = ({
                 <div
                   key={`${dateString}-${index}`}
                   className={`p-3 rounded-tr-lg rounded-bl-lg flex ${
-                    convo.senderId === senderId ? "justify-end" : "justify-start"
+                    convo.senderId === userMsgId ? "justify-end" : "justify-start"
                   }`}
                 >
                   <div
                     className={`p-3 max-w-[85%] rounded-tr-lg rounded-bl-lg ${
-                      convo.senderId === senderId
+                      convo.senderId === userMsgId
                         ? "bg-blue-500 text-white"
                         : "bg-white text-slate-800"
                     }`}
@@ -100,7 +102,7 @@ const MessageArea = ({
                     <div className="w-full">{convo.message}</div>
                     <div className="text-[10px] items-center gap-1 flex justify-end">
                       <p>{formatTimestamp(convo.timestamp)}</p>
-                      {convo.senderId === senderId && (
+                      {convo.senderId === userMsgId && (
                         <span className={convo.isReadByRecipient ? "text-lightRed" : "text-white"}>
                           <IoCheckmarkDoneSharp size={14} />
                         </span>

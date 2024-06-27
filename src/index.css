@@ -32,6 +32,7 @@
     background-image: url("./assets/images/climpek.png");
     background-repeat: repeat;
     background-color: rgb(243 244 246);
+    width: 100%;
     /* background-position: ; */
 }
 .bg-conversation-area {

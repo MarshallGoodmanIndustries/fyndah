@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AiFillMessage } from "react-icons/ai";
 import { RiLogoutCircleLine } from "react-icons/ri";
@@ -28,6 +28,7 @@ const SideBar = ({ handleToggle }) => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate();
+  const [totalUnreadConversations, setTotalUnreadConversations] = useState("")
 
   // Function to determine if an item is active based on the current path
   const isActive = (path) => location.pathname.includes(path);
@@ -75,6 +76,36 @@ const SideBar = ({ handleToggle }) => {
     }
   };
 
+  // fetch unread messages for a business
+  useEffect(() => {
+    const getUnreadConversations = async () => {
+      try {
+        // setLoading(true);
+        const response = await axios.get(
+          `https://axelonepostfeature.onrender.com/api/messages/org/messages/unread`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setTotalUnreadConversations(response.data.totalUnreadConversations);
+          console.log("response: ", response.data);
+          // setLoading(false);
+        } else {
+          // setLoading(false);
+          throw new Error("Getting Total Unread Conversations failed");
+        }
+      } catch (error) {
+        console.error("Error fetching data", error);
+      } 
+    };
+
+    getUnreadConversations();
+  }, [authToken]);
+
   return (
     <>
       <div className="px-[1rem] text-white font-inter py-[1rem]">
@@ -117,9 +148,12 @@ const SideBar = ({ handleToggle }) => {
               : "text-white"
               } `}
           >
-            <span>
-              <AiFillMessage className="size-[1rem] lg:size-[1.25rem]" />
-            </span>
+            <span className='relative'>
+            <AiFillMessage className='size-[1rem] lg:size-[1.25rem]' />
+            <p className="absolute top-[-5px] left-3 text-white rounded-full bg-lightRed px-1 text-[11px]">
+            {totalUnreadConversations}
+          </p>
+          </span>
             <h2 className="text-[1.1rem] mt-0 font-normal">Messages</h2>
           </div>
         </Link>

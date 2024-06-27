@@ -18,7 +18,7 @@ function Login() {
   const [revealPassword, setRevealPassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { setAuthToken, setUserData, setUserMsgId } = useContext(AuthContext);
+  const { setAuthToken, setUserData, setUserMsgId, userMsgId, authToken } = useContext(AuthContext);
   const [loading,setLoading]=useState(false)
 
   useEffect(() => {
@@ -108,7 +108,33 @@ function Login() {
                 // Navigate to the dashboard
                 navigate("/");
               }
-            }, 3000);
+            }, 1000);
+
+            const sendAutomaticMessage = async () => {
+              try {
+                const response = await axios.post(
+                  `https://axelonepostfeature.onrender.com/api/messages/webhook/user-registered`,
+                  {
+                    msg_id : userMsgId,
+                    username: userData.username
+                },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${authToken}`,
+                    },
+                  }
+                );
+          
+                if (response.status === 200) {
+                  console.log("Automatic message sent", response.data);
+                }
+          
+              } catch (error) {
+                console.error(error)
+              }
+            }
+
+            sendAutomaticMessage();
           } else {
             console.error("User data is not in the expected format or empty");
             Swal.fire({

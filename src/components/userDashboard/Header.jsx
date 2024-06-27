@@ -1,18 +1,55 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { logo_white } from "../../assets/images/index";
 import { FaBell } from "react-icons/fa6";
 import { BsListUl } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, Box, Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Header = ({ handleToggle, toggle }) => {
-  const { userData, } = useContext(AuthContext);
+  const { userData, authToken, userMsgId } = useContext(AuthContext);
 
   const user = userData?.username || ""; // Use optional chaining and provide a default empty string
   const userInitials = user ? user.slice(0, 1) : ""; // Handle empty user gracefully
   const notificationNumber = 0;
+
+  const [notificationMessage, setNotificationMessage] = useState([])
+  const [conversationId, setConversationId] = useState("")
+
+  // Fetch conversations
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // setLoading(true);
+        const response = await axios.get(
+          `https://axelonepostfeature.onrender.com/api/conversations/userconversations/${userMsgId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setNotificationMessage(response.data);
+          console.log("response: ", response.data);
+          // setLoading(false);
+        } else {
+          // setLoading(false);
+          throw new Error("Getting all messages failed");
+        }
+      } catch (error) {
+        console.error("Error fetching notifications", error);
+        // setLoading(false);
+      } 
+    };
+
+    fetchData();
+  }, [authToken, userMsgId]);
+
+  const filteredMessages = notificationMessage.filter(message => message.unreadCount > 0);
 
 
 
@@ -48,12 +85,29 @@ const Header = ({ handleToggle, toggle }) => {
 
       {/* USER PROFILES */}
       <div className="flex items-center justify-end md:gap-[1.8rem] gap-[1rem] lg:col-span-3 xl:col-span-2 col-span-2">
-        <span className="relative cursor-pointer">
+        
+        <Menu>
+      {({ isOpen }) => (
+        <>
+          <MenuButton isActive={isOpen} cursor="pointer" position="relative">
+          <span className="relative cursor-pointer">
           <FaBell className=" size-[18px] md:size-[22px]" />
-          <p className="absolute top-[-5px] left-2 text-white rounded-full bg-navyBlue px-1 text-[11px]">
-            {notificationNumber}
+          <p className="absolute top-[-5px] left-0 text-white rounded-full bg-lightRed px-1 text-[11px]">
+            {filteredMessages.length}
           </p>
         </span>
+          </MenuButton>
+          <MenuList color="black" className="text-black w-[100px] text-[13px] md:text-[1rem] sm:w-auto">
+            {filteredMessages.map((message) => (
+              <MenuItem onClick={() => setConversationId(message._id)} key={message._id}>
+                You have {message.unreadCount} unread Messages from {message.members[1].name}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </>
+      )}
+    </Menu>
+
         <div className="flex gap-3 items-center">
           <Avatar
             size="sm"
