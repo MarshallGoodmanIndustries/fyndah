@@ -15,7 +15,7 @@ const BusinessDashboardLayout = () => {
       <section className='business-header w-full'>
         <Header toggle={toggle} handleToggle={handleToggle} />
       </section>
-        <section className={`business-sidebar w-full max-w-[80%] sm:max-w-[15.625rem] lg:max-w-[22%] z-20 duration-500 ease-in-out sm:block ${toggle ? 'block' : 'hidden'}`}>
+        <section className={`business-sidebar w-full max-w-[80%] sm:w-[250px] z-20 duration-500 ease-in-out sm:block ${toggle ? 'block' : 'hidden'}`}>
           <SideBar handleToggle={handleToggle} toggle={toggle} />
         </section>
         <section className='business-outlet w-full md:w-auto'>
