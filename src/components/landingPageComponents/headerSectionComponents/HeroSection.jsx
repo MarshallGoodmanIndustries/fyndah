@@ -108,12 +108,13 @@ function HeroSection() {
         timerProgressBar: true,
       });
       setTimeout(()=>{
-        sessionStorage.setItem("lastRoute", location.pathname);
-        sessionStorage.setItem("lastServiceName", businessName );
+        sessionStorage.setItem("lastRoute", location.pathname); //set last route in other to be redirected back to current page
+
+        //set search query in other to have it restored when returned back to this page after successful login in.
+        sessionStorage.setItem("lastServiceName", businessName ); 
         sessionStorage.setItem("lastServiceLocation", businessLocation );
         navigate('/login');
       }, 3001);
-      //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
       
     } else {
       
@@ -146,7 +147,14 @@ function HeroSection() {
           sessionStorage.removeItem("lastServiceName");
           sessionStorage.removeItem("lastServiceLocation");
         }
-        console.log(error.message);
+        Swal.fire({
+          icon: "error",
+          title: "Search Request Failed",
+          text: "An error occurred while trying to complete your search. Please try again later.",
+          timer: 5000,
+          timerProgressBar: true,
+          footer: `${error.response.data.message || error.message}`
+        });
       }
     }
   };
