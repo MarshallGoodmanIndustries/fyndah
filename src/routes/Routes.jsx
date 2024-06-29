@@ -7,7 +7,7 @@ import {
 } from "../components/pages";
 import {
   BusinessDashboardLayout, BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
-  Wallet
+  Wallet, BusinessArchiveMessage, 
 } from '../components/businessDashboard/index';
 import Policies, { Tos, Privacy, Refund } from "../components/policy";
 import { PageNotFound } from "../components/errorPages";
@@ -145,6 +145,11 @@ function Routes() {
         {
           path: 'businessmessages',
           element: <BusinessMessages />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: 'businessmessages/business-archived-messages',
+          element: <BusinessArchiveMessage />,
           errorElement: <PageNotFound />
         },
         {

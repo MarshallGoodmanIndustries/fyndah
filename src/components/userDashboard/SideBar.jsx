@@ -100,8 +100,7 @@ const SideBar = ({ handleToggle }) => {
           <h2 className='text-[1.1rem] mt-0 font-normal'>My Business</h2>
         </div>
       </Link>
-
-      <div className='h-[15rem] xl:h-[20rem]' ></div>
+      
       <div className='flex-1'></div>
 
       {/* logout */}

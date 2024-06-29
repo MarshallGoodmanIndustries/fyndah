@@ -100,7 +100,7 @@ function BusinessProfile() {
       formData.append("location_name", inputDefaultStates.locationName);
 
       const response = await axios.post(
-        `https://api.fyndah.com/api/v1/organization/${id}`,
+        `https://api.fyndah.com/api/v1/organization/update`,
         formData,
         {
           headers: {

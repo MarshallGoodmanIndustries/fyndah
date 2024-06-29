@@ -11,7 +11,6 @@ const MessageArea = ({
   setMessageComponent,
   setShowListOfBusiness,
   conversationInChat,
-  senderId,
   messageLoading,
   handleSubmit,
   value,
@@ -19,7 +18,7 @@ const MessageArea = ({
   rows,
 }) => {
   const messageContainerRef = useRef(null);
-  const { authToken, businessMsgId} = useContext(AuthContext);
+  const { authToken, businessMsgId } = useContext(AuthContext);
 
   useEffect(() => {
     if (messageContainerRef.current) {
@@ -68,18 +67,18 @@ const MessageArea = ({
   };
 
   return (
-    <div className="md:col-span-3 w-full bg-message-area bg-neutral-100">
-      <div className="p-6 text-white overflow-y-scroll h-screen pb-20 md:fixed top-5" ref={messageContainerRef}>
+    <div className="lg:col-span-3 font-roboto hidden lg:block w-full bg-message-area bg-neutral-100">
+      <div className="p-4 text-white overflow-y-scroll h-screen pb-20 top-5" ref={messageContainerRef}>
         <FiArrowLeft
           onClick={() => {
             setMessageComponent(false);
             setShowListOfBusiness(true);
           }}
-          className="text-black mb-6 mt-4 font-bold text-xl"
+          className="text-black mb-6 mt-4 font-bold text-xl block lg:hidden"
         />
 
         <div className="block w-full py-[2rem] mx-auto">
-        {Object.keys(groupedMessages).map((dateString) => (
+          {Object.keys(groupedMessages).map((dateString) => (
             <div key={dateString}>
               <div className="relative flex justify-center my-[2rem]">
                 <div className="w-full text-gray-300 bg-gray-300 h-[1px]"></div>
@@ -88,18 +87,17 @@ const MessageArea = ({
               {groupedMessages[dateString].map((convo, index) => (
                 <div
                   key={`${dateString}-${index}`}
-                  className={`p-3 rounded-tr-lg rounded-bl-lg flex ${
-                    convo.senderId === businessMsgId ? "justify-end" : "justify-start"
-                  }`}
+                  className={`p-3 rounded-tr-lg rounded-bl-lg flex ${convo.senderId === businessMsgId ? "justify-end" : "justify-start"
+                    }`}
                 >
                   <div
-                    className={`p-3 max-w-[85%] rounded-tr-lg rounded-bl-lg ${
-                      convo.senderId === businessMsgId
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-slate-800"
-                    }`}
+                    className={`p-3 max-w-[85%] rounded-tr-lg rounded-bl-lg ${convo.senderId === businessMsgId
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-slate-800"
+                      }`}
                   >
-                    <div className="w-full">{convo.message}</div>
+                    {/* <div className="w-full">{convo.message}</div> */}
+                    <pre className="p-1 font-roboto" style={{ whiteSpace: "break-spaces" }}>{convo.message}</pre>
                     <div className="text-[10px] items-center gap-1 flex justify-end">
                       <p>{formatTimestamp(convo.timestamp)}</p>
                       {convo.senderId === businessMsgId && (
@@ -116,7 +114,7 @@ const MessageArea = ({
 
         </div>
 
-        <div className="fixed bottom-0 z-20 w-full md:w-2/4 items-center right-0 px-2 py-3 shadow-lg bg-white border-t border-gray-300">
+        <div className="fixed bottom-0 z-20 w-full lg:w-[770px] md:w-[517px] items-center right-0 px-2 py-3 shadow-lg bg-white border-t border-gray-300">
           <div className="flex items-center space-x-2">
             <textarea
               className="flex-grow  p-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -125,7 +123,7 @@ const MessageArea = ({
               value={value}
               required
               onChange={handleMessageChange}
-              style={{ resize: 'none' }}
+              style={{ resize: 'none', height: '45px', overflowY: 'auto' }}
             ></textarea>
             <button
               onClick={handleSubmit}
