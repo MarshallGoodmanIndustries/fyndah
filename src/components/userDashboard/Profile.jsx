@@ -248,7 +248,7 @@ function Profile() {
   };
 
   return (
-    <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
+    <div className="md:m-[2rem] mr-[1rem] my-[1rem] pl-4 font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
       <div className="md:flex block items-center gap-[6rem]">
         <div>
           <Box
