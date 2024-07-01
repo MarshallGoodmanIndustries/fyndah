@@ -216,10 +216,13 @@ function Profile() {
         }
       );
       if (response.status == 200) {
+        console.log("previous data ", sessionStorage.getItem('userData'))
+        console.log("new response ", response.data.data.profile_photo_path)
         setUserData((prevState) => ({
           ...prevState,
           profile_photo_path: response.data.data.profile_photo_path,
         }));
+        setProfilePhoto(response.data.data.profile_photo_path);
         Swal.fire({
           icon: "success",
           title: "Successful...",
