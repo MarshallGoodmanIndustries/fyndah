@@ -6,8 +6,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 import EmptyLeads from "./EmptyLeads";
 import LinkButton from "./LinkButton";
-import SpinnerFullPage from "./SpinnerFullPage";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link,  useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 // import { useNavigate } from "react-router-dom";
 
