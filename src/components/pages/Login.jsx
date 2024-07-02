@@ -463,7 +463,7 @@ function Login() {
 
                 })}
                 className="cursor-pointer text-accentDark hover:text-[#fdba74] font-semibold text-sm lg:text-sm">
-                Reset password
+                Forgot password
               </Link>
             </div>
 
