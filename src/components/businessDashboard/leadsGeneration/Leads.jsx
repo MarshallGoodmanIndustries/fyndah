@@ -2,10 +2,15 @@ import { useContext, useEffect, useState } from "react";
 import SearchRequestDescriptionHistory from "./SearchRequestDescriptionHistory";
 import { AuthContext } from "../../context/AuthContext";
 import EmptyLeads from "./EmptyLeads";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 function Leads() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const [messageIsLoading, setMessageIsLoading] = useState(false);
+
   const [request, setRequest] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dal, setDal] = useState({});
@@ -49,6 +54,50 @@ function Leads() {
     [authToken]
   );
 
+  const handleCreateConversationWithUser = async () => {
+    if (!authToken) {
+      Swal.fire({
+        icon: "warning",
+        title: "Login required",
+        text: "You will be redirected to the login page.",
+        timer: 3000,
+        timerProgressBar: true,
+      });
+      setTimeout(() => {
+        //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+        sessionStorage.setItem("lastRoute", location.pathname);
+        navigate("/login");
+      }, 3001);
+    } else {
+      setMessageIsLoading(true);
+      try {
+        const response = await axios.post(
+          `https://axelonepostfeature.onrender.com/api/conversations/newconversation/${orgMsgId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          setMessageIsLoading(false);
+          navigate("/dashboard/messages");
+        }
+      } catch (error) {
+        setMessageIsLoading(false);
+        Swal.fire({
+          icon: "error",
+          title: "Action Failed",
+          text: "An error occurred while trying to create a conversation. Please try again later.",
+          timer: 5000,
+          timerProgressBar: true,
+          footer: `${error.response.data.message || error.message}`,
+        });
+      }
+    }
+  };
+
   // const po = `/businessDashboard/${id}/${name}/posts`;
   // const mes = empty
   //   ? empty
@@ -56,12 +105,17 @@ function Leads() {
 
   if (!request?.length)
     return (
-      <p className="mt-7 font-semibold px-3">
-        <span className="text-2xl font-black pr-2">
-          Purchasing a search request unlocks your lead list!
-        </span>
-        Come back to this page to view your leads and start converting them into
+      <p className="mt-28  font-semibold px-3">
+        <p className="flex items-center justify-center">
+          <span className="flex items-center justify-center text-2xl font-black pr-2">
+            Purchasing a search request unlocks your lead list!
+          </span>
+        </p>
+        <p className="flex items-center justify-center pt-5">
+          Come back to this page to view your leads and start converting them into
         customers.
+        </p>
+        
       </p>
     );
   return (
