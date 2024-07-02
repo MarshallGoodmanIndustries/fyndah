@@ -39,6 +39,7 @@ function HeroSection() {
   const [currentPage, setCurrentPage] = useState(1);
   const containsBusinesses = businesses.length > 0;
   const totalPages = Math.ceil(businesses.length / 3);
+  
   const businessesForCurrentPage = businesses?.slice((currentPage - 1) * 3, currentPage * 3);
 
   // autocomplete useEffect
@@ -100,21 +101,21 @@ function HeroSection() {
 
     if (!authToken) {
       
-    Swal.fire({
-        icon: "warning",
-        title: "Login required",
-        text: "You will be redirected to the login page.",
-        timer: 3000,
-        timerProgressBar: true,
-      });
-      setTimeout(()=>{
-        sessionStorage.setItem("lastRoute", location.pathname); //set last route in other to be redirected back to current page
+      Swal.fire({
+          icon: "warning",
+          title: "Login required",
+          text: "You will be redirected to the login page.",
+          timer: 3000,
+          timerProgressBar: true,
+        });
+        setTimeout(()=>{
+          sessionStorage.setItem("lastRoute", location.pathname); //set last route in other to be redirected back to current page
 
-        //set search query in other to have it restored when returned back to this page after successful login in.
-        sessionStorage.setItem("lastServiceName", businessName ); 
-        sessionStorage.setItem("lastServiceLocation", businessLocation );
-        navigate('/login');
-      }, 3001);
+          //set search query in other to have it restored when returned back to this page after successful login in.
+          sessionStorage.setItem("lastServiceName", businessName ); 
+          sessionStorage.setItem("lastServiceLocation", businessLocation );
+          navigate('/login');
+        }, 3001);
       
     } else {
       
@@ -133,9 +134,10 @@ function HeroSection() {
             'Authorization': `Bearer ${authToken}`,
           }
         });
+
         setSearchQueryIsLoading(false);
         if (response.status === 200)
-          setBusinesses(response.data);
+          setBusinesses(response.data.data);
           setRevealSearchQuery(true);
           if(sessionStorage.getItem("lastServiceName") !== null){
               sessionStorage.removeItem("lastServiceName");
@@ -153,7 +155,7 @@ function HeroSection() {
           text: "An error occurred while trying to complete your search. Please try again later.",
           timer: 5000,
           timerProgressBar: true,
-          footer: `${error.response.data.message || error.message}`
+          footer: `${error?.response?.data?.message || error?.message}`
         });
       }
     }
@@ -170,9 +172,7 @@ function HeroSection() {
       }, 90000)
     }
   }, [revealSearchQuery, containsBusinesses])
-
-
-
+  
 
   return (
     <section className="bg-secondary w-full h-full flex flex-col justify-center py-8 px-4 sm:px-5 md:px-6 lg:px-8">
