@@ -9,7 +9,7 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 
 const Header = ({ handleToggle, toggle }) => {
-  const { userData, authToken, businessMsgId } = useContext(AuthContext);
+  const { authToken, businessMsgId } = useContext(AuthContext);
   
   const [notificationMessage, setNotificationMessage] = useState([])
   const [conversationId, setConversationId] = useState("")

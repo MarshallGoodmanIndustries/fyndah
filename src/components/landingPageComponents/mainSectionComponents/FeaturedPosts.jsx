@@ -19,7 +19,7 @@ const FeaturedPosts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const containsPosts = posts.length > 0;
   const totalPages = Math.ceil(posts.length / 9);
-  const postsForCurrentPage = posts.slice((currentPage - 1) * 9, currentPage * 9);
+  const postsForCurrentPage = posts?.slice((currentPage - 1) * 9, currentPage * 9);
 
   // Get featured posts data
   useEffect(()=>{

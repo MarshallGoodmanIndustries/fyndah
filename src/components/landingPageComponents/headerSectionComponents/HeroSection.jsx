@@ -39,7 +39,7 @@ function HeroSection() {
   const [currentPage, setCurrentPage] = useState(1);
   const containsBusinesses = businesses.length > 0;
   const totalPages = Math.ceil(businesses.length / 3);
-  const businessesForCurrentPage = businesses.slice((currentPage - 1) * 3, currentPage * 3);
+  const businessesForCurrentPage = businesses?.slice((currentPage - 1) * 3, currentPage * 3);
 
   // autocomplete useEffect
   useEffect(() => {
