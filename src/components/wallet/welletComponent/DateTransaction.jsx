@@ -35,6 +35,11 @@ const DateTransaction = () => {
         setIsOpen(false)
     }
 
+    const handleClickOPen = () => {
+        setIsOpen(true)
+
+    }
+
     const url = "https://api.fyndah.com/api/v1/organization/wallet/transactions"
     const body = {
         org_id: id,
@@ -109,18 +114,19 @@ const DateTransaction = () => {
 
 
 
+
     return (
         <div className="relative">
             <div className="mt-4 flex sm:flex-row justify-left sm:space-y-0 ">
                 <button
-                    onClick={() => setIsOpen(true)}
+                    onClick={handleClickOPen}
                     className="flex flex-col mr-3  items-center">
                     <FaAngleDown className="p-2 bg-blue-500 hover:text-blue-800 text-white rounded text-4xl" />
                     <span className="text-sm mt-1">Filter Transactions</span>
                 </button>
             </div>
             {isOpen && (
-                <div className=" absolute bg-white p-4 shadow-lg rounded mt-2 w-56">
+                <div className=" absolute right-0 top-full bg-white p-4 shadow-lg rounded mt-2 w-56">
                     <div className="flex justify-between items-center mb-4">
                         <span className="text-lg font-medium">Select Date</span>
                         <button onClick={handleClose} className="text-gray-400 hover:text-gray-600">

@@ -7,9 +7,11 @@ import Posts from "./Posts"
 import BusinessProfile from "./BusinessProfile"
 import Timeline from './Timeline'
 import Wallet from "./Wallet"
+import BusinessArchiveMessage from "./BusinessArchiveMessage"
+import BusinessArchiveMessageArea from "./BusinessArchiveMessageArea"
 
 export {
     BusinessDashboardLayout, Dashboard, Leads, BusinessLogOut, BusinessMessages, Posts,
-    BusinessProfile, Timeline, Wallet,
+    BusinessProfile, Timeline, Wallet, BusinessArchiveMessage, BusinessArchiveMessageArea
     
 }

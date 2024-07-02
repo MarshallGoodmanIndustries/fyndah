@@ -1,4 +1,3 @@
-
 import { Spinner } from "@chakra-ui/react";
 import { FiArrowLeft } from "react-icons/fi";
 import { format, isToday, isYesterday } from 'date-fns';
@@ -6,8 +5,9 @@ import { IoSend, IoCheckmarkDoneSharp } from "react-icons/io5";
 import { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 
-const MessageArea = ({
-  setMessageComponent,
+
+const BusinessArchiveMessageArea = (
+    setMessageComponent,
   setShowListOfBusiness,
   conversationInChat,
   messageLoading,
@@ -15,9 +15,9 @@ const MessageArea = ({
   value,
   handleMessageChange,
   rows,
-}) => {
-  const messageContainerRef = useRef(null);
-  const { authToken, userMsgId } = useContext(AuthContext);
+) => {
+    const messageContainerRef = useRef(null);
+  const { authToken, businessMsgId } = useContext(AuthContext);
 
   useEffect(() => {
     if (messageContainerRef.current) {
@@ -64,7 +64,7 @@ const MessageArea = ({
       return dateString;
     }
   };
-  // bg-neutral-100
+
   return (
     <div className="lg:col-span-3 font-roboto hidden lg:block w-full bg-message-area bg-neutral-100">
       <div className="p-4 text-white overflow-y-scroll h-screen pb-20 top-5" ref={messageContainerRef}>
@@ -81,18 +81,16 @@ const MessageArea = ({
             <div key={dateString}>
               <div className="relative flex justify-center my-[2rem]">
                 <div className="w-full text-gray-300 bg-gray-300 h-[1px]"></div>
-                <div className="text-center py-1 px-2 absolute bg-slate-50 border-gray-300 border-[1px] top-[-15px] z-10 rounded-lg w-fit text-slate-800 font-medium">
-                  {formatDateHeader(dateString)}
-                </div>
+                <div className="text-center py-1 px-2 absolute bg-slate-50 border-gray-300 border-[1px] top-[-15px] z-10 rounded-lg w-fit text-slate-800 font-medium">{formatDateHeader(dateString)}</div>
               </div>
               {groupedMessages[dateString].map((convo, index) => (
                 <div
                   key={`${dateString}-${index}`}
-                  className={`p-3 rounded-tr-lg rounded-bl-lg flex ${convo.senderId === userMsgId ? "justify-end" : "justify-start"
+                  className={`p-3 rounded-tr-lg rounded-bl-lg flex ${convo.senderId === businessMsgId ? "justify-end" : "justify-start"
                     }`}
                 >
                   <div
-                    className={`p-3 max-w-[85%] rounded-tr-lg rounded-bl-lg ${convo.senderId === userMsgId
+                    className={`p-3 max-w-[85%] rounded-tr-lg rounded-bl-lg ${convo.senderId === businessMsgId
                       ? "bg-blue-500 text-white"
                       : "bg-white text-slate-800"
                       }`}
@@ -101,7 +99,7 @@ const MessageArea = ({
                     <pre className="p-1 font-roboto" style={{ whiteSpace: "break-spaces" }}>{convo.message}</pre>
                     <div className="text-[10px] items-center gap-1 flex justify-end">
                       <p>{formatTimestamp(convo.timestamp)}</p>
-                      {convo.senderId === userMsgId && (
+                      {convo.senderId === businessMsgId && (
                         <span className={convo.isReadByRecipient ? "text-lightRed" : "text-white"}>
                           <IoCheckmarkDoneSharp size={14} />
                         </span>
@@ -112,12 +110,13 @@ const MessageArea = ({
               ))}
             </div>
           ))}
+
         </div>
 
         <div className="fixed bottom-0 z-20 w-full lg:w-[770px] md:w-[517px] items-center right-0 px-2 py-3 shadow-lg bg-white border-t border-gray-300">
           <div className="flex items-center space-x-2">
             <textarea
-              className="flex-grow p-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-grow  p-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               rows={rows}
               placeholder="Type your message..."
               value={value}
@@ -138,5 +137,4 @@ const MessageArea = ({
   );
 };
 
-export default MessageArea;
-
+export default BusinessArchiveMessageArea;

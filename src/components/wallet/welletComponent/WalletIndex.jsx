@@ -71,7 +71,7 @@ function WalletIndex() {
                     'Authorization': `Bearer ${authToken}`,
                 }
             })
-            console.log(payment.data)
+            // console.log(payment.data)
             if (payment.data.status === 'success') {
                 setPaystack(payment.data.data.link)
                 isProceedOpenModal()//na here i dey.....
@@ -137,7 +137,7 @@ function WalletIndex() {
 
             setTransactions(response.data.balance);
             setLowBal(response.data.balance);
-            console.log(response.data)
+            // console.log(response.data)
         } catch (error) {
             console.error("Error fetching wallet balance:", error);
             if (axios.isAxiosError(error)) {

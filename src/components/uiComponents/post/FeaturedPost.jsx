@@ -177,21 +177,21 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
             <div className="flex items-center gap-2">
                 {/* user profile image container */}
                 <div className="w-full max-w-12 h-full rounded-full overflow-hidden">
-                    <img src={profileImg} alt="business profile display" />
+                    <img className="w-full max-w-4 " src={profileImg} alt="business profile display" />
                 </div>
-                <h2 className="text-base text-textDark font-poppins font-semibold flex-1">{username}</h2>
+                <h2 className=" w-3 h-10 text-base text-textDark font-poppins font-semibold flex-1">{username}</h2>
                 {/* verified */}
                 {/* <RiVerifiedBadgeFill className="w-4 h-4 text-accent flex-1" /> */}
-                <p className="text-sm text-textDark font-roboto font-light ml-auto">{timeAgo}</p>
+                <p className="text-sm text-textDark font-roboto font-light ml-auto">{timeAgo} ago</p>
             </div>
             <div className="flex flex-col gap-2 w-full">
                 {textContent && (
-                    <p className="text-base text-textDark font-roboto font-normal">{textContent}</p>
+                    <p className="text-base text-textDark font-roboto font-normal">{textContent.substring(0, 80)}...</p>
                 )}
                 {
                     imgContent && (
-                        <div className="w-full h-auto rounded-lg overflow-hidden">
-                            <img src={imgContent} className="w-full h-full object-cover" alt="image describing post" />
+                        <div className="w-full max-h-[12rem] rounded-lg overflow-hidden">
+                            <img src={imgContent} className="max-w-full h-auto" alt="image describing post" />
                         </div>
                     )
                 }

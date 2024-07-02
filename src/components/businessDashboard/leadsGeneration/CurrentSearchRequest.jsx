@@ -1,9 +1,12 @@
 import { useContext, useEffect, useState } from "react";
+import { Button } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/react";
 import SearchRequestDescription from "./SearchRequestDescription";
 import { AuthContext } from "../../context/AuthContext";
+
 import EmptyLeads from "./EmptyLeads";
-import SpinnerFullPage from "./SpinnerFullPage";
-import { useParams } from "react-router-dom";
+import LinkButton from "./LinkButton";
+import { Link,  useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 // import { useNavigate } from "react-router-dom";
 
@@ -69,7 +72,6 @@ function CurrentSearchRequest() {
   const [request, setRequest] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { id, name } = useParams();
-
   const { authToken } = useContext(AuthContext);
 
   const SEARCH_URL = "https://api.fyndah.com/api/v1/search/requests/active";
@@ -137,15 +139,14 @@ function CurrentSearchRequest() {
     });
   }
 
-  const po = `/businessDashboard/${id}/${name}/posts`;
-
-  if (!request?.length)
-    return (
-      <EmptyLeads
-        data="There are Currently no Available Search Request Related to your Business. When they are, you would see them here."
-        posts={po}
-      />
-    );
+  // const po = `/businessDashboard/${id}/${name}/posts`;
+  // if (!request?.length)
+  //   return (
+  //     <EmptyLeads
+  //       data="There are Currently no Available Search Request Related to your Business. When they are, you would see them here."
+  //       posts={po}
+  //     />
+  //   );
 
   // if (!request?.length) return <EmptyLeads posts={po} />;
   // return (
@@ -251,95 +252,90 @@ function CurrentSearchRequest() {
   //   </div>
   // );
 
-  // return (
-  //   <>
-  //     {open && (
-  //       <SearchRequestDescription
-  //         settOpen={setOpen}
-  //         infoOfSearch="Send search datta to the modal"
-  //         requestData={request}
-  //         dal={dal}
-  //         bidRequest={bidRequest}
-  //         key={request.id}
-  //       />
-  //     )}
-  //     <h1 className="flex flex-col items-center justify-center mt-5 mb-10 text-4xl font-black">
-  //       Search Request Related to your Business
-  //     </h1>
-  //     <ul
-  //       role="list"
-  //       className="flex flex-col items-center justify-center mt-5 divide-y divide-gray-100"
-  //     >
-  //       {request?.map((person) => (
-  //         <li key={person.id} className="flex justify-between gap-x-6 py-5">
-  //           <div className="flex min-w-0 gap-x-4">
-  //             <div className="min-w-0 flex-auto">
-  //               <p className="text-sm font-semibold leading-6 text-gray-900">
-  //                 {person.search_term}
-  //               </p>
-  //               <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-  //                 {person.search_filters}
-  //               </p>
-  //             </div>
-  //           </div>
-  //           <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-  //             <p className="text-sm leading-6 text-gray-900">{person.role}</p>
-  //             {/* {person.lastSeen ? (
-  //             <p className="mt-1 text-xs leading-5 text-gray-500">
-  //               Time of Search <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
-  //             </p>
-  //           ) : (
-  //             <div className="mt-1 flex items-center gap-x-1.5">
-  //               <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-  //                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-  //               </div>
-  //               <p className="text-xs leading-5 text-gray-500">Online</p>
-  //             </div>
-  //           )} */}
-  //             <button
-  //               onClick={() => {
-  //                 setOpen(true);
-  //                 setDal({
-  //                   term: person.search_term,
-  //                   filter: person.search_filters,
-  //                 });
-  //               }}
-  //               className="bg-indigo-500 rounded-full px-2 py-0"
-  //               key={person.id}
-  //             >
-  //               View Search Description in depth
-  //             </button>
-  //           </div>
-  //         </li>
-  //       ))}
-  //     </ul>{" "}
-  //   </>
-  // );
-
   return (
-    
-    <ul role="list" className="flex flex-col items-center justify-center mt-5 divide-y divide-gray-100">
-     <button onClick={ Swal.fire({
-      icon: "success",
-      title: "Well.. Error....",
-      text: `${show}`,
-      timer: 2000,
-      timerProgressBar: true,
-    })} className="bg-red-300">DRAGOOO</button>
-      {people.map((person) => (
-        <li key={person.email} className="flex justify-between gap-x-6 py-5">
-          <div className="flex min-w-0 gap-x-4">
-            <img className="blur h-12 w-12 flex-none rounded-full bg-gray-50" src={person.imageUrl} alt="" />
-            <div className="min-w-0 flex-auto">
-              <p className=" blur text-sm font-semibold leading-6 text-gray-900">{person.name}</p>
-              <p className="mt-1 truncate text-xs leading-5 text-gray-500"> <span className="blur">jjdfhvfueiief3344</span> gmail.com</p>
-            </div>
+    <>
+      {/* <p className="flex flex-col items-center justify-center mt-24 px-4 py-3 ">
+    </p> */}
+      <>
+        <div className="flex items-center justify-end mt-16 px-4 py-3  text-2xl">
+          <Link to={`/businessDashboard/${id}/${name}/search-request-history`}>
+            <Button colorScheme="blue">Search Request History</Button>
+          </Link>
+        </div>
+
+        {isLoading ? (
+          <div>
+            <p className="flex flex-col items-center justify-center mt-24 px-4 py-3  text-2xl">
+              We are checking to see if you have any Search Requests
+            </p>
+            <span className=" ml-10 flex items-center justify-center ">
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+              />
+            </span>
           </div>
-          <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-            <p className="text-sm leading-6 text-gray-900">Search Term</p>
-            {person.lastSeen ? (
+        ) : (
+          <>
+            {!isLoading && !request?.length ? (
+              <div className="flex flex-col items-center justify-center mt-24 px-4 py-3 ">
+                <LinkButton to={`/businessDashboard/${id}/${name}/posts`}>
+                  &larr; Back to Posts
+                </LinkButton>
+
+                <p className="mt-7 font-semibold px-3">
+                  <span className="text-2xl font-black pr-2">
+                    Nothing to show yet!
+                  </span>
+                  Keep an eye on this space, and we will display relevant Search
+                  Requests related to your business as soon as they become
+                  available
+                </p>
+              </div>
+            ) : (
+              <>
+                {open && (
+                  <SearchRequestDescription
+                    settOpen={setOpen}
+                    infoOfSearch="Send search datta to the modal"
+                    requestData={request}
+                    dal={dal}
+                    bidRequest={bidRequest}
+                    key={request.id}
+                  />
+                )}
+                <h1 className="flex flex-col items-center justify-center mt-5 mb-10 text-4xl font-black">
+                  Search Request Related to your Business
+                </h1>
+                <ul
+                  role="list"
+                  className="flex flex-col items-center justify-center mt-5 divide-y divide-gray-100"
+                >
+                  {request?.map((person) => (
+                    <li
+                      key={person.id}
+                      className="flex justify-between gap-x-6 py-5"
+                    >
+                      <div className="flex min-w-0 gap-x-4">
+                        <div className="min-w-0 flex-auto">
+                          <p className="text-sm font-semibold leading-6 text-gray-900">
+                            {person.search_term}
+                          </p>
+                          <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                            {person.search_filters}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                        <p className="text-sm leading-6 text-gray-900">
+                          {person.role}
+                        </p>
+                        {/* {person.lastSeen ? (
               <p className="mt-1 text-xs leading-5 text-gray-500">
-                Time of search: <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
+                Time of Search <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
               </p>
             ) : (
               <div className="mt-1 flex items-center gap-x-1.5">
@@ -348,12 +344,70 @@ function CurrentSearchRequest() {
                 </div>
                 <p className="text-xs leading-5 text-gray-500">Online</p>
               </div>
+            )} */}
+                        <button
+                          onClick={() => {
+                            setOpen(true);
+                            setDal({
+                              term: person.search_term,
+                              filter: person.search_filters,
+                            });
+                          }}
+                          className="bg-indigo-500 rounded-full px-2 py-0"
+                          key={person.id}
+                        >
+                          View Search Description in depth
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </>
             )}
-          </div>
-        </li>
-      ))}
-    </ul>
-  )
+          </>
+        )}
+      </>
+    </>
+  );
+
+  // return (
+
+  //   <ul role="list" className="flex flex-col items-center justify-center mt-5 divide-y divide-gray-100">
+  //    <button onClick={ Swal.fire({
+  //     icon: "success",
+  //     title: "Well.. Error....",
+  //     text: `${show}`,
+  //     timer: 2000,
+  //     timerProgressBar: true,
+  //   })} className="bg-red-300">DRAGOOO</button>
+  //     {people.map((person) => (
+  //       <li key={person.email} className="flex justify-between gap-x-6 py-5">
+  //         <div className="flex min-w-0 gap-x-4">
+  //           <img className="blur h-12 w-12 flex-none rounded-full bg-gray-50" src={person.imageUrl} alt="" />
+  //           <div className="min-w-0 flex-auto">
+  //             <p className=" blur text-sm font-semibold leading-6 text-gray-900">{person.name}</p>
+  //             <p className="mt-1 truncate text-xs leading-5 text-gray-500"> <span className="blur">jjdfhvfueiief3344</span> gmail.com</p>
+  //           </div>
+  //         </div>
+  //         <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+  //           <p className="text-sm leading-6 text-gray-900">Search Term</p>
+  //           {person.lastSeen ? (
+  //             <p className="mt-1 text-xs leading-5 text-gray-500">
+  //               Time of search: <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
+  //             </p>
+  //           ) : (
+  //             <div className="mt-1 flex items-center gap-x-1.5">
+  //               <div className="flex-none rounded-full bg-emerald-500/20 p-1">
+  //                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+  //               </div>
+  //               <p className="text-xs leading-5 text-gray-500">Online</p>
+  //             </div>
+  //           )}
+  //         </div>
+  //       </li>
+  //     ))}
+  //   </ul>
+  // )
 }
 
 export default CurrentSearchRequest;

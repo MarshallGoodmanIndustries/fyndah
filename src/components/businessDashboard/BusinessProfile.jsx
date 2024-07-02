@@ -25,14 +25,14 @@ import { ImSpinner9 } from "react-icons/im";
 function BusinessProfile() {
   const { authToken } = useContext(AuthContext);
   const { id } = useParams();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [coverPhoto, setCoverPhoto] = useState(null);
   const [selectedCoverFile, setSelectedCoverFile] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [showButton, setShowButton] = useState(false)
+  const [showButton, setShowButton] = useState(false);
   const navigate = useNavigate();
-  const routeLocation = useLocation()
+  const routeLocation = useLocation();
 
   const [inputDefaultStates, setInputDefaultStates] = useState({
     businessName: "",
@@ -45,7 +45,7 @@ function BusinessProfile() {
     country: "",
     zip_code: "",
     size: "",
-    locationName: ""
+    locationName: "",
   });
 
   const [isEditable, setIsEditable] = useState(false);
@@ -63,7 +63,7 @@ function BusinessProfile() {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
-      setShowButton(true)
+      setShowButton(true);
       setProfilePhoto(URL.createObjectURL(file)); // Set the profile photo immediately
     }
   };
@@ -72,7 +72,7 @@ function BusinessProfile() {
     const file = e.target.files[0];
     if (file) {
       setSelectedCoverFile(file);
-      setShowButton(true)
+      setShowButton(true);
       setCoverPhoto(URL.createObjectURL(file)); // Set the cover photo immediately
     }
   };
@@ -100,7 +100,7 @@ function BusinessProfile() {
       formData.append("location_name", inputDefaultStates.locationName);
 
       const response = await axios.post(
-        `https://api.fyndah.com/api/v1/organization/${id}`,
+        `https://api.fyndah.com/api/v1/organization/update`,
         formData,
         {
           headers: {
@@ -118,7 +118,7 @@ function BusinessProfile() {
           timerProgressBar: true,
         });
         console.log(response.data);
-        console.log(formData)
+        console.log(formData);
       } else {
         setIsLoading(false);
         throw new Error("Profile Update failed");
@@ -165,11 +165,10 @@ function BusinessProfile() {
           locationName: businessData.locations[0].location_name || "",
         });
 
-
         if (businessProfileResponse.status === 200) {
           setProfilePhoto(businessData.logo);
           setCoverPhoto(businessData.cover_image);
-          console.log(businessProfileResponse.data)
+          console.log(businessProfileResponse.data);
         } else {
           setIsLoading(false);
           throw new Error("Profile Details failed");
@@ -179,45 +178,45 @@ function BusinessProfile() {
         setIsLoading(false);
         if (axios.isAxiosError(error)) {
           // Handle AxiosError
-          console.error('Error message:', error.message);
+          console.error("Error message:", error.message);
           if (error.response) {
-            console.error('Status code:', error.response.status);
-            console.error('Response data:', error.response.data);
-            console.error('Response msg:', error.response.data.message);
+            console.error("Status code:", error.response.status);
+            console.error("Response data:", error.response.data);
+            console.error("Response msg:", error.response.data.message);
             if (error.response.data.status === "error") {
-              sessionStorage.setItem('lastRoute', routeLocation.pathname);
-              navigate("/login")
+              sessionStorage.setItem("lastRoute", routeLocation.pathname);
+              navigate("/login");
             }
           } else if (error.request) {
-            console.error('No response received:', error.request);
+            console.error("No response received:", error.request);
           } else {
-            console.error('Request setup error:', error.message);
+            console.error("Request setup error:", error.message);
           }
         } else {
           // Handle non-AxiosError
-          console.error('Unexpected error:', error);
+          console.error("Unexpected error:", error);
         }
       } finally {
         setIsLoading(false);
       }
-    }
+    };
 
     fetchBusinessProfileData();
   }, [authToken, id]);
 
-  const location = `${inputDefaultStates.address}  ${inputDefaultStates.city}`
+  const location = `${inputDefaultStates.address}  ${inputDefaultStates.city}`;
   // console.log("my id:", id)
   const API = "https://api.fyndah.com/api/v1/users/organizations/logout";
   const body = {};
   const handleSwitching = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const responseSwitch = await axios.post(API, body, {
         headers: {
-          'Authorization': `Bearer ${authToken}`
-        }
-      })
-      console.log(responseSwitch.data)
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      console.log(responseSwitch.data);
       if (responseSwitch.data.status == "success") {
         Swal.fire({
           icon: "success",
@@ -227,46 +226,55 @@ function BusinessProfile() {
           timerProgressBar: true,
         });
         sessionStorage.removeItem("lastRoute");
-        navigate('/dashboard/mybusiness');
+        navigate("/dashboard/mybusiness");
       }
     } catch (error) {
       Swal.fire({
         icon: "error",
         title: "Something went wrong..",
         text: "Unexpected error could be your network connection is bad or your session is over try to login again.",
-        footer: `<a href="#">Could not switch. Please try again later. ${error.response?.data?.message || error.message
-          }</a>`,
+        footer: `<a href="#">Could not switch. Please try again later. ${
+          error.response?.data?.message || error.message
+        }</a>`,
       });
-      sessionStorage.setItem("lastRoute", routeLocation.pathname)
+      sessionStorage.setItem("lastRoute", routeLocation.pathname);
       navigate("/login");
-      console.log(error.response ? error.response.data : error.message)
+      console.log(error.response ? error.response.data : error.message);
       setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   if (isLoading) {
-    return <div className="flex items-center justify-center h-screen">
-      <p> <ImSpinner9 className="animate-spin text-blue-500 hover:text-blue-800" size={50} /> </p>
-      <span>Please wait...</span>
-    </div>
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>
+          {" "}
+          <ImSpinner9
+            className="animate-spin text-blue-500 hover:text-blue-800"
+            size={50}
+          />{" "}
+        </p>
+        <span>Please wait...</span>
+      </div>
+    );
   }
 
   const handleSubmitPhoto = async () => {
     try {
       setIsLoading(true);
-      setShowButton(false)
+      setShowButton(false);
       const response = await axios.post(
         `https://api.fyndah.com/api/v1/organization/update`,
         {
           logo: selectedFile,
-          cover_image: selectedCoverFile
+          cover_image: selectedCoverFile,
         },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'multipart/form-data'
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -279,7 +287,8 @@ function BusinessProfile() {
           timer: 2000,
           timerProgressBar: true,
         });
-        console.log(response.data);
+        setProfilePhoto(response.data.data.logo);
+        setCoverPhoto(response.data.data.cover_image);
       } else {
         setIsLoading(false);
         throw new Error("Profile photo Update failed");
@@ -296,8 +305,7 @@ function BusinessProfile() {
     } finally {
       setIsLoading(false);
     }
-
-  }
+  };
 
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem] p-5 sm:p-5  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
@@ -306,7 +314,10 @@ function BusinessProfile() {
         <Box className="w-full absolute rounded-t-3xl h-[160px]">
           <Image
             className="w-full h-[160px] object-cover rounded-full"
-            src={coverPhoto || "https://cdn-icons-png.freepik.com/512/3177/3177440.png"}
+            src={
+              coverPhoto ||
+              "https://cdn-icons-png.freepik.com/512/3177/3177440.png"
+            }
             alt="Profile"
           />
           <Box
@@ -351,7 +362,10 @@ function BusinessProfile() {
           >
             <Image
               className="w-[80px] lg:w-[100px] h-[100px] object-cover rounded-full"
-              src={profilePhoto || "https://cdn-icons-png.freepik.com/512/3177/3177440.png"}
+              src={
+                profilePhoto ||
+                "https://cdn-icons-png.freepik.com/512/3177/3177440.png"
+              }
               alt="Profile"
             />
             <Box
@@ -388,12 +402,14 @@ function BusinessProfile() {
         </div>
       </div>
 
-      {showButton && <Button
-        onClick={handleSubmitPhoto}
-        className="my-2 py-2 px-4 bg-blue-500 text-white rounded"
-      >
-        Upload Profile Photo
-      </Button>}
+      {showButton && (
+        <Button
+          onClick={handleSubmitPhoto}
+          className="my-2 py-2 px-4 bg-blue-500 text-white rounded"
+        >
+          Upload Profile Photo
+        </Button>
+      )}
 
       {/* ACCOUNT DETAILS */}
       <div className="mt-[2.5rem]">
@@ -418,7 +434,6 @@ function BusinessProfile() {
         {/* FORM */}
         <form onSubmit={handleSubmit} action="">
           <div className="lg:grid block grid-cols-2 gap-x-[4rem] gap-y-[2rem]">
-
             {/* BUSINESS NAME */}
             <div className="flex mb-[1rem] lg:mb-0 flex-col gap-2 lg:gap-4">
               <div className="flex items-center justify-between">
@@ -485,7 +500,6 @@ function BusinessProfile() {
                 >
                   Bio
                 </label>
-
               </div>
 
               <Textarea
@@ -537,7 +551,6 @@ function BusinessProfile() {
                 >
                   Business Address
                 </label>
-
               </div>
 
               <InputGroup>
@@ -566,7 +579,6 @@ function BusinessProfile() {
                 >
                   Business City
                 </label>
-
               </div>
 
               <InputGroup>
@@ -595,7 +607,6 @@ function BusinessProfile() {
                 >
                   Business State
                 </label>
-
               </div>
 
               <InputGroup>
@@ -624,7 +635,6 @@ function BusinessProfile() {
                 >
                   Business Country
                 </label>
-
               </div>
 
               <InputGroup>
@@ -653,7 +663,6 @@ function BusinessProfile() {
                 >
                   Zip Code
                 </label>
-
               </div>
 
               <InputGroup>
@@ -682,7 +691,6 @@ function BusinessProfile() {
                 >
                   Location Name
                 </label>
-
               </div>
 
               <InputGroup>
@@ -705,7 +713,13 @@ function BusinessProfile() {
             {/* SAVE BUTTON */}
             <div className="flex flex-col lg:flex-row items-center justify-end mt-[1rem] mr-[1.5rem] w-full gap-[1rem]">
               <Button
-                leftIcon={isLoading ? <ImSpinner9 className="animate-spin" /> : <RiEdit2Fill size="23px" />}
+                leftIcon={
+                  isLoading ? (
+                    <ImSpinner9 className="animate-spin" />
+                  ) : (
+                    <RiEdit2Fill size="23px" />
+                  )
+                }
                 className="py-[1.5rem] rounded-[10px] text-[0.7rem] w-[100%] lg:w-auto lg:text-[1rem]"
                 type="submit"
                 colorScheme="blue"

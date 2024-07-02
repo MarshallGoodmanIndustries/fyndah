@@ -4,6 +4,7 @@ import { useState, useContext } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { BsBoxArrowLeft } from "react-icons/bs";
 import axios from "axios";
+
 import { AuthContext } from "../context/AuthContext";
 import { FaPlus, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
@@ -16,16 +17,12 @@ const ResetPassword = () => {
 
   const query = useQuery();
   const token = query.get("token");
-  useEffect(() => {
-    if (token) {
-      console.log("Current page URL:", window.location.href); // Log the current page URL
-      console.log("Token:", token); // Log the token
-    }
-  }, [token]);
 
   const [tokenSentToTheUser, setTokenSentToTheUser] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
+
     if (token) {
       console.log("Current page URL:", window.location.href); // Log the current page URL
       console.log("Token:", token); // Log the token
@@ -79,7 +76,7 @@ const ResetPassword = () => {
           {
             // tokenSentToTheUser,
             password: password,
-            token: "poXtsZrYDwR6RryJRyYDWYuZGtF4o1GsDKI4pGDh",
+            token: tokenSentToTheUser,
             password_confirmation: confirmPassword,
           },
           {
@@ -97,6 +94,8 @@ const ResetPassword = () => {
             timer: 2000,
               timerProgressBar: true,
           });
+          navigate("/login");
+
           setLoadingPasswordChange(false);
         } else {
           throw new Error("password reset failed");

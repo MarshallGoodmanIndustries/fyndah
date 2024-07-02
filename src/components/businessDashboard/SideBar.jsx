@@ -108,7 +108,7 @@ const SideBar = ({ handleToggle }) => {
 
   return (
     <>
-      <div className="px-[1rem] text-white font-inter py-[1rem]">
+      <div className="px-[1rem] text-white font-inter py-[1rem] overflow-y-auto h-full scrollBar">
         {/* business profile */}
         <Link to="business-profile">
           <div
@@ -174,7 +174,7 @@ const SideBar = ({ handleToggle }) => {
           </div>
         </Link>
 
-        {/* Search Requests History */}
+        {/* Search Requests History
         <Link to={`/businessDashboard/${id}/${name}/search-request-history`}>
           <div
             onClick={handleToggle}
@@ -190,13 +190,13 @@ const SideBar = ({ handleToggle }) => {
               Search Requests History
             </h2>
           </div>
-        </Link>
+        </Link> */}
 
         {/* Leads */}
         <Link to={`/businessDashboard/${id}/${name}/leads`}>
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("leads") ? "bg-white text-textDark" : "text-white"
+            className={`flex cursor-pointer mb-3 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("leads") ? "bg-white text-textDark" : "text-white"
               } `}
           >
             <span>
@@ -210,7 +210,7 @@ const SideBar = ({ handleToggle }) => {
         <Link to="wallet">
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] pb-0 items-center justify-start gap-4 ${isActive("wallet") ? "bg-white text-textDark" : "text-white"
+            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("wallet") ? "bg-white text-textDark" : "text-white"
               } `}
           >
             <span>
@@ -225,7 +225,7 @@ const SideBar = ({ handleToggle }) => {
         {/* Switch Business */}
         <button
           onClick={handleSwitching}
-          className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("logout") ? "bg-white text-textDark" : "text-white"
+          className={`w-full flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("logout") ? "bg-white text-textDark" : "text-white"
             } `}
         >
           <span>
@@ -236,7 +236,7 @@ const SideBar = ({ handleToggle }) => {
         {/* logout */}
         <button
           onClick={LogoutOpenModal}
-          className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("logout") ? "bg-white text-textDark" : "text-white"
+          className={`w-full flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("logout") ? "bg-white text-textDark" : "text-white"
             } `}
         >
           <span>
@@ -277,7 +277,7 @@ const SideBar = ({ handleToggle }) => {
         <Link to="/">
           <div
             onClick={handleToggle}
-            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${isActive("home") ? "bg-white text-textDark" : "text-white"
+            className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] mt-1 items-center justify-start gap-4 ${isActive("home") ? "bg-white text-textDark" : "text-white"
               } `}
           >
             <span>

@@ -11,7 +11,7 @@ import { AiFillPlusCircle } from "react-icons/ai";
 function MyBusiness() {
     const navigate = useNavigate()
     const { authToken } = useContext(AuthContext)
-    const {setBusinessMsgId} = useContext(AuthContext)
+    const { setBusinessMsgId } = useContext(AuthContext)
     const [orgList, setOrgList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -125,8 +125,8 @@ function MyBusiness() {
 
     if (isLoading) {
         return <div className="flex items-center justify-center h-screen">
-            <p> <ImSpinner9 className="animate-spin text-red-500 hover:text-red-800" size={50} /> </p>
-
+            <p> <ImSpinner9 className="animate-spin text-blue-500 hover:text-blue-800" size={50} /></p>
+            <span>Please wait...</span>
         </div>
     } else if (loading) {
         return <div className="flex items-center justify-center h-screen">
@@ -146,7 +146,7 @@ function MyBusiness() {
                             <div className="flex gap-1 items-center" key={business.id}>
                                 <span>
                                     < TbPointFilled className="text-accentDark" />
-                                    
+
                                 </span>
                                 <li onClick={() => handlePathChange(business.id, business.org_name)} className="cursor-pointer hover:text-accentDark" > {business.org_name} </li>
 

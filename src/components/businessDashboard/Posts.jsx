@@ -1,75 +1,112 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {AuthContext} from "../context/AuthContext";
 import axios from "axios";
+import Swal from "sweetalert2";
+
+// components
+import { BuisinessPost } from "../uiComponents";
+
+// images
+import { businesslogo } from "../../assets/images";
+
+// icons
 import { IoIosAdd } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { ImSpinner9 } from "react-icons/im";
-import Swal from "sweetalert2";
 
 
 const Posts = () => {
     const { authToken } = useContext(AuthContext);
-   const [description, setDescription] = useState("");
-   const [image, setImage] = useState(null);
-   const [previewSrc, setPreviewSrc] = useState("");
-   const [isLoading, setIsLoading] = useState(false);
+    const [description, setDescription] = useState("");
+    const [image, setImage] = useState(null);
+    const [previewSrc, setPreviewSrc] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
-   const handleImageChange = (e) => {
+    // business posts related states
+    const [businessPosts, setBuisinessPosts] = useState([]);
+    const containsBusinessPosts = businessPosts?.length > 0;
+
+
+    const handleImageChange = (e) => {
         if(e.target.files){
             setImage(e.target.files[0]);
             setPreviewSrc(URL.createObjectURL(e.target.files[0]));
         }
-   }
+    }
 
-   const handleRemovePreview = (e) => {
-        e.stopPropagation(); //prevent the click event on the cross icon to reach the label and trigger the file input
-        setPreviewSrc("");
-        setImage(null);
-   }
- 
+    const handleRemovePreview = (e) => {
+            e.stopPropagation(); //prevent the click event on the cross icon to reach the label and trigger the file input
+            setPreviewSrc("");
+            setImage(null);
+    }
 
-   const handlePostSubmission = async (e) => {
-        e.preventDefault();
-
-        const url = "https://axelonepostfeature.onrender.com/api/post";
-        setIsLoading(true);
+    // get posts related to business function 
+    const getBusinessPosts = async () => {
+        const url = "https://axelonepostfeature.onrender.com/api/myposts";
         try {
-            const response = await axios.post(
-                url,
-                {description: description, image: image},{
+            const response = await axios.get(url, {
                 headers: {
-                    Authorization: `Bearer ${authToken}`,
-                    'Content-Type': 'multipart/form-data'
-                }}
-            )
-            if (response.data.status == "success") {
+                    "Authorization": `Bearer ${authToken}`
+                }
+            })
+            setBuisinessPosts(response.data.posts);
+        } catch (error) {
+            console.error(error.response.data.message || error.message);
+        }
+    }
+
+
+    // initial rendering of business posts
+    useEffect(() => {
+        getBusinessPosts();
+    }, [])
+
+    const handlePostSubmission = async (e) => {
+            e.preventDefault();
+
+            const url = "https://axelonepostfeature.onrender.com/api/post";
+            setIsLoading(true);
+            try {
+                const response = await axios.post(
+                    url,
+                    {description: description, image: image},{
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                        'Content-Type': 'multipart/form-data'
+                    }}
+                )
+                if (response.data.status == "success") {
+                    setIsLoading(false);
+                    Swal.fire({
+                    icon: "success",
+                    title: "Successful",
+                    text: "Post created successfully.",
+                    timer: 3000,
+                    timerProgressBar: true,
+                    });
+                    setDescription("")
+                    setPreviewSrc("");
+                    setImage(null);
+                    getBusinessPosts();
+                }
+            } catch (error) {
                 setIsLoading(false);
                 Swal.fire({
-                  icon: "success",
-                  title: "Successful",
-                  text: "Post created successfully.",
-                  timer: 3000,
-                  timerProgressBar: true,
+                    icon: "error",
+                    title: "Oops! Something went wrong",
+                    text: "Failed to complete your post. Please try again.",
+                    timer: 3000,
+                    timerProgressBar: true,
+                    footer: `Error Details: ${error.response.data.message}`,
                 });
-                setDescription("")
-                setPreviewSrc("");
-                setImage(null);
-              }
-        } catch (error) {
-            setIsLoading(false);
-            Swal.fire({
-                icon: "error",
-                title: "Oops! Something went wrong",
-                text: "Failed to complete your post. Please try again.",
-                timer: 3000,
-                timerProgressBar: true,
-                footer: `Error Details: ${error.response.data.message}`,
-              });
-        }
-   };
+            }
+    };
+
+   
+   
    
     return (
-        <section className="flex flex-col items-center gap-2 mt-4 mr-6 w-full">            
+        <section className="flex flex-col items-center gap-8 mt-4 mr-6 w-full p-4 ">            
             <form onSubmit={handlePostSubmission} method="post" encType="" className="flex flex-col gap-4 py-4 w-full max-w-80 md:max-w-96">
                 <div className="flex flex-col gap-2">
                     <label htmlFor="description" className="font-poppins font-normal text-base text-textDark">Description</label>
@@ -103,6 +140,32 @@ const Posts = () => {
                     {isLoading ? <ImSpinner9 className="animate-spin text-center" size={22} /> : "Post"}
                 </button>
             </form>
+            {
+                containsBusinessPosts && ( 
+                    <>
+                        <hr className="w-full h-[1px] bg-gray-100" />
+                        <h3 className="font-poppins font-semibold text-2xl text-textDark text-opacity-85">Posts</h3> 
+                    </>
+            )
+            }
+            {/* Business related posts */}
+            <div className="flex flex-col gap-6">
+                {businessPosts.map(post => (
+                    <BuisinessPost 
+                    key={post._id}
+                    postId={post._id}
+                    organizationId={post.organization}
+                    profileImg={businesslogo}
+                    username={post.authorUsername} 
+                    timePosted={post.createdAt}
+                    textContent={post.description} 
+                    imgContent={post.image} 
+                    noOflikes={post.likesCount}
+                    orgMsgId={post.orgmsg_id}
+                    refreshPost={getBusinessPosts}
+                  />
+                ))}
+            </div>
         </section>
     )
 }

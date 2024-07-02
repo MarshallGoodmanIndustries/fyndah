@@ -1,16 +1,16 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { Avatar, Input, InputGroup, InputLeftElement} from "@chakra-ui/react";
 import { ImSpinner9 } from "react-icons/im";
 import { io } from "socket.io-client";
-import MessageArea from "./MessageArea";
-import { FiSearch } from "react-icons/fi";
+import { FiArrowLeft, FiSearch } from "react-icons/fi";
 import { format, isYesterday, isToday} from 'date-fns';
-import { FaArchive } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import BusinessArchiveMessageArea from "./BusinessArchiveMessageArea";
 
-function Messages() {
+function BusinessArchiveMessage() {
   const [conversationOnPage, setConversationOnPage] = useState([]);
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [showListOfBusiness, setShowListOfBusiness] = useState(true);
@@ -26,7 +26,8 @@ function Messages() {
   const [filteredConversations, setFilteredConversations] = useState(conversationOnPage);
   const [rows, setRows] = useState(1);
   const [totalUnreadConversations, setTotalUnreadConversations] = useState("")
-  const { authToken, userMsgId } = useContext(AuthContext);
+  const { authToken, businessMsgId } = useContext(AuthContext);
+
 
    // Socket.IO instance
    const socket = io('https://axelonepostfeature.onrender.com', {
@@ -34,6 +35,12 @@ function Messages() {
     transports: ['websocket'], // Ensure we are using websockets
     reconnectionAttempts: 3, // Retry connecting 3 times
   });
+
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1); // Navigate back to the previous route
+  };
 
   // Hide the message list on mobile screens
   const hideTheListOnMobile = () => {
@@ -48,7 +55,7 @@ function Messages() {
       try {
         setLoading(true);
         const response = await axios.get(
-          `https://axelonepostfeature.onrender.com/api/conversations/userconversations/${userMsgId}`,
+          `https://axelonepostfeature.onrender.com/api/conversations/orgconversations/${businessMsgId}`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -61,7 +68,7 @@ function Messages() {
           const theSenderId = response.data[0].members[0].id;
           const theReceiverId = response.data[1].members[1].id;
           setSenderId(theSenderId);
-          setReceiverId(theReceiverId);
+          setReceiverId(theReceiverId)
           console.log("response: ", response.data);
           setLoading(false);
         } else {
@@ -77,14 +84,14 @@ function Messages() {
     };
 
     fetchData();
-  }, [authToken, userMsgId]);
+  }, [authToken, businessMsgId]);
 
   // Fetch messages in a conversation
   const getMessagesInConversation = async (conversationId) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `https://axelonepostfeature.onrender.com/api/messages/${conversationId}`,
+        `https://axelonepostfeature.onrender.com/api/messages/orgmessages/${conversationId}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -113,7 +120,7 @@ function Messages() {
   const handleMessageChange = (e) => {
     setValue(e.target.value);
 
-    const lineCount = e.target.value.split("\n").length;
+    const lineCount = e.target.value.split('\n').length;
     setRows(lineCount < 11 ? lineCount : 10);
   };
 
@@ -126,7 +133,7 @@ function Messages() {
 
       try {
         const message = {
-          senderId: userMsgId,
+          senderId: businessMsgId,
           conversationId: id,
           message: value,
           createdAt: new Date().toISOString(),
@@ -136,7 +143,7 @@ function Messages() {
         setConversationInChat((prev) => [...prev, message]);
 
         const response = await axios.post(
-          `https://axelonepostfeature.onrender.com/api/messages/send-message/user/${id}`,
+          `https://axelonepostfeature.onrender.com/api/messages/send-message/org/${id}`,
           { message: value },
           {
             headers: {
@@ -186,16 +193,16 @@ function Messages() {
       }
     });
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected from the server");
+    socket.on('disconnect', () => {
+      console.log('Disconnected from the server');
     });
 
-    socket.on("connect_error", (err) => {
-      console.error("Connection Error:", err);
+    socket.on('connect_error', (err) => {
+      console.error('Connection Error:', err);
     });
 
-    socket.on("error", (err) => {
-      console.error("Error:", err);
+    socket.on('error', (err) => {
+      console.error('Error:', err);
     });
 
     return () => {
@@ -204,32 +211,33 @@ function Messages() {
     };
   }, [authToken, id]);
 
-  console.log("usermgid: ", userMsgId)
+  console.log("businessMsgId: ", businessMsgId)
 
   //format timestamp
   const formatTimestamp = (timestamp) => {
     const messageTime = new Date(timestamp);
 
     if (isToday(messageTime)) {
-      return format(messageTime, "p"); // Format as time, e.g., 5:30 PM
+      return format(messageTime, 'p'); // Format as time, e.g., 5:30 PM
     } else if (isYesterday(messageTime)) {
-      return "Yesterday";
+      return 'Yesterday';
     } else {
-      return format(messageTime, "EEEE"); // Format as day of the week, e.g., 'Monday'
+      return format(messageTime, 'EEEE'); // Format as day of the week, e.g., 'Monday'
     }
   };
+
 
   //truncate message
   const truncateMessage = (message, maxLength) => {
     if (message.length <= maxLength) {
       return message;
     }
-    return message.substring(0, maxLength) + "...";
+    return message.substring(0, maxLength) + '...';
   };
 
-  console.log("id: ", id);
+  console.log("id: ", id)
 
-  //search functionality
+  //search functionality 
   useEffect(() => {
     // Filter conversations based on the search query
     setFilteredConversations(
@@ -254,7 +262,7 @@ function Messages() {
       try {
         // setLoading(true);
         const response = await axios.get(
-          `https://axelonepostfeature.onrender.com/api/messages/user/messages/unread`,
+          `https://axelonepostfeature.onrender.com/api/messages/org/messages/unread`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -281,7 +289,7 @@ function Messages() {
   const markAsRead = async (messageId) => {
     try {
       const response = await axios.post(
-        `https://axelonepostfeature.onrender.com/api/messages/user/messages/read`,
+        `https://axelonepostfeature.onrender.com/api/messages/organization/messages/read`,
         {
           conversationId : [messageId],
           isRead: true
@@ -327,9 +335,13 @@ function Messages() {
         {/* initial lists */}
         {showListOfBusiness && (
           <div className="bg-conversation-area text-slate-800 p-6 h-screen overflow-y-scroll lg:col-span-2 pb-20">
+            <FiArrowLeft
+        className="text-black mb-1 mt-0 font-bold text-xl block"
+        onClick={handleGoBack}
+      />
             {filteredConversations.length >= 1 && <>
               <h2 className="text-[1.3rem] font-poppins font-bold mb-1">
-                Chats{" "}
+              Archived{" "}
 
               </h2>
               <h2 className="text-[0.9rem] font-poppins font-medium mb-[1rem] text-lightRed"> {filteredConversations.length} Messages, {totalUnreadConversations} Unread </h2></>}
@@ -340,27 +352,9 @@ function Messages() {
               </InputLeftElement>
               <Input value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)} background='gray.200' variant='filled' type='text' placeholder='Search conversations' />
-              <div className="p-2">
-                <Link to='archived-messages'>
-                  <span className='relative'>
-                    <FaArchive
-                      className="text-gray-500"
-                      // color="red"
-                      size={22}
-                    />
-                    <p className="absolute top-[-7px] left-3 text-white rounded-full bg-lightRed px-1 text-[11px]">
-                      0
-                    </p>
-                  </span>
-                </Link>
-              </div>
-
-
-
-
             </InputGroup>
             {filteredConversations.length === 0 ? (
-              <p className="text-center">No conversations available at the moment. Go to the Feeds and message a business to initiate a conversation.</p>
+              <p className="text-center">No archived chat yet.</p>
             ) : (
               <ul className="list-none p-0">
                 {filteredConversations.map((item, index) => (
@@ -375,14 +369,14 @@ function Messages() {
                     className={`bg-white shadow-xl border-2 w-full flex gap-3 items-center p-4 rounded cursor-pointer transform transition duration-300 hover:bg-gray-300 ${id === item._id ? 'bg-gray-200' : ''
                       }`}
                   >
-                    <Avatar src={item.members[1].logo} size="sm" />
+                    <Avatar src={item.members[1].profilePhotoPath} size="sm" />
                     <div className="flex w-full flex-col gap-1">
                       <div className="flex w-full justify-between">
                         <p className="font-medium text-[1rem]"> {highlightText(item.members[1].name, searchQuery)} </p>
-                        <span className="text-[10px]">{formatTimestamp(item.lastMessage.createdAt)}</span>
+                        <span className="text-[10px]">{item.lastMessage ? formatTimestamp(item.lastMessage.createdAt) : ''}</span>
                       </div>
                       <div className="flex w-full items-center justify-between">
-                        <p className="text-[15px]">{truncateMessage(item.lastMessage.message, 45)}</p>
+                        <p className="text-[15px]">{item.lastMessage ? truncateMessage(item.lastMessage.message, 45) : ''}</p>
                         {item.unreadCount > 0 && (
                           <p className="text-white rounded-full bg-lightRed px-2 py-1 text-[11px]">
                             {item.unreadCount}
@@ -402,25 +396,12 @@ function Messages() {
         {/* message component */}
         {!hideMessageComponent && (
           <div className="hidden lg:flex bg-message-area items-center justify-center h-screen col-span-3">
-            <div>Click on any chat to start a Conversation</div>
+            <p className="mx-2">These chats stay archived when new messages are received.
+            Chats here won't display in your chat log.</p>
           </div>
         )}
-        {/* {hideMessageComponent && conversationOnPage && (
-          <Area2
-            rows={rows}
-            handleSubmit={handleSubmit}
-            value={value}
-            handleMessageChange={handleMessageChange}
-            messageLoading={messageLoading}
-            conversationOnPage={conversationInChat}
-            setMessageComponent={setMessageComponent}
-            setShowListOfBusiness={setShowListOfBusiness}
-            conversationInChat={conversationInChat}
-            senderId={senderId}
-          />
-        )} */}
         {hideMessageComponent && conversationOnPage && (
-          <MessageArea
+          <BusinessArchiveMessageArea
             rows={rows}
             handleSubmit={handleSubmit}
             value={value}
@@ -438,4 +419,4 @@ function Messages() {
   );
 }
 
-export default Messages;
+export default BusinessArchiveMessage;

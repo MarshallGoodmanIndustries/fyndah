@@ -17,7 +17,6 @@ import { AuthContext } from "../context/AuthContext";
 import { ImSpinner9 } from "react-icons/im";
 import { useLocation, useNavigate } from "react-router-dom";
 import ModalComponent from "../uiComponents/ModalComponet";
-import UpdatePassword from "./UpdatePassword";
 
 function Profile() {
   const { authToken, setUserData } = useContext(AuthContext);
@@ -217,10 +216,13 @@ function Profile() {
         }
       );
       if (response.status == 200) {
+        console.log("previous data ", sessionStorage.getItem('userData'))
+        console.log("new response ", response.data.data.profile_photo_path)
         setUserData((prevState) => ({
           ...prevState,
           profile_photo_path: response.data.data.profile_photo_path,
         }));
+        setProfilePhoto(response.data.data.profile_photo_path);
         Swal.fire({
           icon: "success",
           title: "Successful...",
@@ -252,7 +254,7 @@ function Profile() {
 
 
   return (
-    <div className="md:m-[2rem] mr-[1rem] my-[1rem]  font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
+    <div className="md:m-[2rem] mr-[1rem] my-[1rem] pl-4 font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
       <div className="md:flex block items-center gap-[6rem]">
         <div>
           <Box
@@ -522,7 +524,7 @@ function Profile() {
         </form>
       </div>
 
-      <UpdatePassword />
+      
     </div>
   );
 }
