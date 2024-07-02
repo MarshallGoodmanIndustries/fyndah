@@ -17,18 +17,11 @@ const ResetPassword = () => {
 
   const query = useQuery();
   const token = query.get("token");
-
-  const [tokenSentToTheUser, setTokenSentToTheUser] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-
-    if (token) {
-      console.log("Current page URL:", window.location.href); // Log the current page URL
-      console.log("Token:", token); // Log the token
-      setTokenSentToTheUser(token);
-    }
-  }, [token]);
+    console.log("Current page URL:", window.location.href); // Log the current page URL
+  }, []);
 
   const [loadingPasswordChange, setLoadingPasswordChange] = useState(false);
 
@@ -62,8 +55,9 @@ const ResetPassword = () => {
     }
 
     if (password !== confirmPassword) {
-      error.confirmPassword =
-        console.log("The password field confirmation does not match!");
+      error.confirmPassword = console.log(
+        "The password field confirmation does not match!"
+      );
     } else if (confirmPassword.trim() === "") {
       error.confirmPassword = "Password should not be empty!";
       console.log("Password should not be empty!");
@@ -74,9 +68,9 @@ const ResetPassword = () => {
         const response = await axios.post(
           "https://api.fyndah.com/api/v1/auth/password/reset",
           {
-            // tokenSentToTheUser,
+            //
             password: password,
-            token: tokenSentToTheUser,
+            token:token,
             password_confirmation: confirmPassword,
           },
           {
@@ -92,7 +86,7 @@ const ResetPassword = () => {
             title: response.data.message + "...",
             text: "password reset was successful you can now use it to login..",
             timer: 2000,
-              timerProgressBar: true,
+            timerProgressBar: true,
           });
           navigate("/login");
 
@@ -116,9 +110,6 @@ const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(true);
   const [showCPassword, setShowCPassword] = useState(true);
 
-  
-
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -133,68 +124,68 @@ const ResetPassword = () => {
             <label htmlFor="password" className="block text-gray-700">
               New password*
             </label>
-           <div className="flex pl-2 items-center justify-between mt-1  w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-none">
-           <input
-              type={showPassword ? "password" : "text"}
-              id="password"
-              value={password}
-              name="password"
-              onChange={handlePasswordChange}
-              className="w-full p-2"
-            />
-            <p> {error.password} </p>
-            <div>
-              {showPassword ? (
-                <FaRegEye
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setShowPassword(!showPassword);
-                  }}
-                />
-              ) : (
-                <FaRegEyeSlash
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setShowPassword(!showPassword);
-                  }}
-                />
-              )}
+            <div className="flex pl-2 items-center justify-between mt-1  w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-none">
+              <input
+                type={showPassword ? "password" : "text"}
+                id="password"
+                value={password}
+                name="password"
+                onChange={handlePasswordChange}
+                className="w-full p-2"
+              />
+              <p> {error.password} </p>
+              <div>
+                {showPassword ? (
+                  <FaRegEye
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                  />
+                ) : (
+                  <FaRegEyeSlash
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                  />
+                )}
+              </div>
             </div>
-           </div>
             {error.password && <div> {error.password} </div>}
           </div>
-          
+
           <div className="mb-4">
             <label htmlFor="Cpassword" className="block text-gray-700">
-            Confirm password
+              Confirm password
             </label>
-           <div className="flex pl-2 items-center justify-between mt-1  w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-none">
-           <input
-              type={showCPassword ? "password" : "text"}
-              value={confirmPassword}
-              onChange={handleConfirmPassword}
-              name="Cpassword"
-              id="Cpassword"
-              className="w-full p-2"
-            />
-            <div>
-              {showCPassword ? (
-                <FaRegEye
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setShowCPassword(!showCPassword);
-                  }}
-                />
-              ) : (
-                <FaRegEyeSlash
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setShowCPassword(!showCPassword);
-                  }}
-                />
-              )}
+            <div className="flex pl-2 items-center justify-between mt-1  w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-none">
+              <input
+                type={showCPassword ? "password" : "text"}
+                value={confirmPassword}
+                onChange={handleConfirmPassword}
+                name="Cpassword"
+                id="Cpassword"
+                className="w-full p-2"
+              />
+              <div>
+                {showCPassword ? (
+                  <FaRegEye
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setShowCPassword(!showCPassword);
+                    }}
+                  />
+                ) : (
+                  <FaRegEyeSlash
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setShowCPassword(!showCPassword);
+                    }}
+                  />
+                )}
+              </div>
             </div>
-           </div>
             {error.password && <div> {error.password} </div>}
           </div>
         </div>
