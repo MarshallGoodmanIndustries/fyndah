@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { BsActivity } from "react-icons/bs";
 // import { AiOutlineStock } from "react-icons/ai";
-// import { FaHistory } from "react-icons/fa";
+import { FaHistory } from "react-icons/fa";
 import { LuFileSearch2 } from "react-icons/lu";
 import { MdLeaderboard } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
