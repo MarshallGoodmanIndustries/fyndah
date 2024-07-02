@@ -4,6 +4,7 @@ import { useLocation, Link } from "react-router-dom";
 import { FaPlus, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 import {
   Ellipse2,
@@ -169,6 +170,7 @@ function SignUp() {
           setLoading(false);
           setShowForm(false);
           startCounter();
+
 
           console.log("Form submitted", signupFormData);
         } else {
