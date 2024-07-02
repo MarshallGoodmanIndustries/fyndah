@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {
   LandingPage, SignUp, Login, BusinessProfileSetup, AdProfileSetup, UserProfileSetup,
   AdminLayout, Profile, FavoriteBusiness, LogOut, Messages, CreateBusiness,
-  MyBusiness,
+  MyBusiness,ResetPassword,
 } from "../components/pages";
 import {
   BusinessDashboardLayout, BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
@@ -32,6 +32,16 @@ function Routes() {
       element: <SignUp />,
       errorElement: <PageNotFound />
     },
+    {
+      path: "/ResetPassword",
+      element: <ResetPassword />,
+      errorElement: <PageNotFound />
+    },
+    // {
+    //   path: "updatepassword",
+    //   element: <UpdatePassword />,
+    //   errorElement: <PageNotFound />
+    // },
     {
       path: "/login",
       element: <Login />,

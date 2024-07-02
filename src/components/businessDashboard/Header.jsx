@@ -3,19 +3,49 @@ import { logo_white } from "../../assets/images/index";
 import { FaBell } from "react-icons/fa6";
 import { BsListUl } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { AuthContext } from "../context/AuthContext";
+import axios from "axios"; 
 import { Link, useParams } from "react-router-dom";
-import axios from "axios";
 
 const Header = ({ handleToggle, toggle }) => {
-  // const { userData } = useContext(AuthContext);
+  const { userData, authToken, businessMsgId } = useContext(AuthContext);
+  
+  const [notificationMessage, setNotificationMessage] = useState([])
+  const [conversationId, setConversationId] = useState("")
 
-  // const user = userData?.username || ""; // Use optional chaining and provide a default empty string
-  // const userInitials = user ? user.slice(0, 1) : ""; // Handle empty user gracefully
-  const notificationNumber = 0;
+  // Fetch conversations
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // setLoading(true);
+        const response = await axios.get(
+          `https://axelonepostfeature.onrender.com/api/conversations/orgconversations/${businessMsgId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
 
-  const { authToken } = useContext(AuthContext);
+        if (response.status === 200) {
+          setNotificationMessage(response.data);
+          console.log("response: ", response.data);
+          // setLoading(false);
+        } else {
+          // setLoading(false);
+          throw new Error("Getting all messages failed");
+        }
+      } catch (error) {
+        console.error("Error fetching notifications", error);
+        // setLoading(false);
+      } 
+    };
+
+    fetchData();
+  }, [authToken, businessMsgId]);
+
+  const filteredMessages = notificationMessage.filter(message => message.unreadCount > 0);
 
   const { id } = useParams();
 
@@ -30,7 +60,8 @@ const Header = ({ handleToggle, toggle }) => {
     country: "",
     zip_code: "",
     size: "",
-    locationName: ""
+    locationName: "",
+    logo: "",
   });
 
   useEffect(() => {
@@ -46,7 +77,6 @@ const Header = ({ handleToggle, toggle }) => {
         );
 
         const businessData = businessProfileResponse.data.data;
-
         setInputDefaultStates({
           businessName: businessData.org_name || "",
           email: businessData.email || "",
@@ -58,8 +88,8 @@ const Header = ({ handleToggle, toggle }) => {
           country: businessData.locations[0].country || "",
           zip_code: businessData.locations[0].zip_code || "",
           locationName: businessData.locations[0].location_name || "",
+          logo: businessData.logo || "",
         });
-
 
         if (businessProfileResponse.status === 200) {
           // console.log(businessProfileResponse.data)
@@ -69,7 +99,7 @@ const Header = ({ handleToggle, toggle }) => {
       } catch (error) {
         console.error(error);
       }
-    }
+    };
 
     fetchBusinessProfileData();
   }, [authToken, id]);
@@ -100,21 +130,39 @@ const Header = ({ handleToggle, toggle }) => {
 
       {/* USER PROFILES */}
       <div className="flex items-center justify-end md:gap-[1.8rem] gap-[1rem] lg:col-span-3 xl:col-span-2 col-span-2">
-        <span className="relative cursor-pointer">
+      <Menu>
+      {({ isOpen }) => (
+        <>
+          <MenuButton isActive={isOpen} cursor="pointer" position="relative">
+          <span className="relative cursor-pointer">
           <FaBell className=" size-[18px] md:size-[22px]" />
-          <p className="absolute top-[-5px] left-2 text-white rounded-full bg-lightRed px-1 text-[11px]">
-            {" "}
-            {notificationNumber}{" "}
+          <p className="absolute top-[-5px] left-0 text-white rounded-full bg-lightRed px-1 text-[11px]">
+            {filteredMessages.length}
           </p>
         </span>
+          </MenuButton>
+          <MenuList color="black" className="text-black w-[100px] text-[13px] md:text-[1rem] sm:w-auto">
+            {filteredMessages.map((message) => (
+              <MenuItem onClick={() => setConversationId(message._id)} key={message._id}>
+                You have {message.unreadCount} unread Messages from {message.members[1].name}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </>
+      )}
+    </Menu>
+
         <div className="flex gap-3 items-center">
           <Avatar
             size="sm"
             name={inputDefaultStates.businessName}
-            src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
+            src={inputDefaultStates?.logo}
           />
           {/* <Avatar size='default' className='bg-[#f56a00] align-middle md:text-[1rem] text-[0.85rem] font-semibold text-white'> {userInitials} </Avatar> */}
-          <h2 className="font-bold lg:block hidden text-[1rem]"> {inputDefaultStates.businessName} </h2>
+          <h2 className="font-bold lg:block hidden text-[1rem]">
+            {" "}
+            {inputDefaultStates.businessName}{" "}
+          </h2>
         </div>
       </div>
 

@@ -17,14 +17,15 @@ import { AuthContext } from "../context/AuthContext";
 import { ImSpinner9 } from "react-icons/im";
 import { useLocation, useNavigate } from "react-router-dom";
 import ModalComponent from "../uiComponents/ModalComponet";
+import UpdatePassword from "./UpdatePassword";
 
 function Profile() {
-  const { authToken } = useContext(AuthContext);
+  const { authToken, setUserData } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [showButton, setShowButton] = useState(false)
-  const locations = useLocation()
+  const [showButton, setShowButton] = useState(false);
+  const locations = useLocation();
 
   const navigate = useNavigate();
   const [inputDefaultStates, setInputDefaultStates] = useState({
@@ -71,7 +72,7 @@ function Profile() {
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -85,7 +86,7 @@ function Profile() {
           timerProgressBar: true,
         });
 
-        console.log(formData)
+        console.log(formData);
         if (selectedFile) {
           setProfilePhoto(URL.createObjectURL(selectedFile));
         }
@@ -111,7 +112,7 @@ function Profile() {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
-      setShowButton(true)
+      setShowButton(true);
       setProfilePhoto(URL.createObjectURL(file)); // Set the profile photo immediately
     }
   };
@@ -120,7 +121,7 @@ function Profile() {
     const fetchProfileData = async () => {
       try {
         setIsLoading(true);
-        sessionStorage.removeItem("lastRoute")
+        sessionStorage.removeItem("lastRoute");
 
         const profileResponse = await axios.get(
           "https://api.fyndah.com/api/v1/users/profile",
@@ -132,21 +133,21 @@ function Profile() {
         );
 
         const userData = profileResponse.data.data.user;
-        const alldata = sessionStorage.setItem('data', userData)
-        console.log(alldata)
+        const alldata = sessionStorage.setItem("data", userData);
+        console.log(alldata);
         setInputDefaultStates({
           firstName: userData.firstname || "",
           lastName: userData.lastname || "",
           location: userData.address || "",
           phone_number: userData.phone_number || "",
         });
-        setProfilePhoto(userData.profile_photo_path)
-        console.log(profilePhoto)
-        console.log(profileResponse.data)
+        setProfilePhoto(userData.profile_photo_path);
+        console.log(profilePhoto);
+        console.log(profileResponse.data);
         if (profileResponse.status === 200) {
           console.log(profileResponse.data);
           setProfilePhoto(userData.profile_photo_path);
-          console.log(profilePhoto, "image") //console logining the image path
+          console.log(profilePhoto, "image"); //console logining the image path
         } else {
           setIsLoading(false);
           throw new Error("Profile Details failed");
@@ -156,25 +157,24 @@ function Profile() {
         setIsLoading(false);
         if (axios.isAxiosError(error)) {
           // Handle AxiosError
-          console.error('Error message:', error.message);
+          console.error("Error message:", error.message);
           if (error.response) {
-            console.error('Status code:', error.response.status);
-            console.error('Response data:', error.response.data);
-            console.error('Response msg:', error.response.data.message);
+            console.error("Status code:", error.response.status);
+            console.error("Response data:", error.response.data);
+            console.error("Response msg:", error.response.data.message);
             if (error.response.data.status === "error") {
-              sessionStorage.setItem('lastRoute', locations.pathname);
-              navigate("/login")
+              sessionStorage.setItem("lastRoute", locations.pathname);
+              navigate("/login");
             }
           } else if (error.request) {
-            console.error('No response received:', error.request);
+            console.error("No response received:", error.request);
           } else {
-            console.error('Request setup error:', error.message);
+            console.error("Request setup error:", error.message);
           }
         } else {
           // Handle non-AxiosError
-          console.error('Unexpected error:', error);
+          console.error("Unexpected error:", error);
         }
-
       } finally {
         setIsLoading(false);
       }
@@ -190,7 +190,10 @@ function Profile() {
     return (
       <div className="flex items-center justify-center h-screen">
         <p>
-          <ImSpinner9 className="animate-spin text-blue-500 hover:text-blue-800" size={50} />
+          <ImSpinner9
+            className="animate-spin text-blue-500 hover:text-blue-800"
+            size={50}
+          />
         </p>
         <span>Please wait...</span>
       </div>
@@ -200,22 +203,24 @@ function Profile() {
   const handleSubmitPhoto = async () => {
     try {
       setIsLoading(true);
-      setShowButton(false)
+      setShowButton(false);
       const response = await axios.post(
         "https://api.fyndah.com/api/v1/users/profile",
         {
-          profile_photo_path: selectedFile
+          profile_photo_path: selectedFile,
         },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'multipart/form-data'
+            "Content-Type": "multipart/form-data",
           },
         }
       );
-      // console.log(response, profilePhoto)
       if (response.status == 200) {
-        console.log(profilePhoto, "this the file uploaded")
+        setUserData((prevState) => ({
+          ...prevState,
+          profile_photo_path: response.data.data.profile_photo_path,
+        }));
         Swal.fire({
           icon: "success",
           title: "Successful...",
@@ -241,34 +246,9 @@ function Profile() {
     } finally {
       setIsLoading(false);
     }
-
-  }
-
-  // this code i added by ade and it is working for re-sending of verification e mail
-  const reSendVerificationLink = async () => {
-    try {
-      const response = await axios.get(
-        'https://api.fyndah.com/api/v1/auth/email/resend',
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        
-        console.log("is it verified: ", response.data);
-       
-      } else {
-      
-        throw new Error("re-send email link faild");
-      }
-    } catch (error) {
-      
-      console.error("Error fetching data", error);
-    } 
   };
+
+  
 
 
   return (
@@ -284,7 +264,10 @@ function Profile() {
           >
             <Image
               className="w-[80px] lg:w-[100px] h-[100px] object-cover rounded-full"
-              src={profilePhoto || "https://cdn-icons-png.freepik.com/512/3177/3177440.png"}
+              src={
+                profilePhoto ||
+                "https://cdn-icons-png.freepik.com/512/3177/3177440.png"
+              }
               alt="Profile"
             />
             <Box
@@ -348,19 +331,20 @@ function Profile() {
             </Box>
           </Box> */}
 
-          {showButton && <Button
-            onClick={handleSubmitPhoto}
-            className="my-2 py-2 px-4 bg-blue-500 text-white rounded"
-          >
-            Upload Profile Photo
-          </Button>}
+          {showButton && (
+            <Button
+              onClick={handleSubmitPhoto}
+              className="my-2 py-2 px-4 bg-blue-500 text-white rounded"
+            >
+              Upload Profile Photo
+            </Button>
+          )}
 
           <div className="flex items-center justify-between border gap-4">
           <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
             {fullName}
           </h2>
 
-          <button onClick={reSendVerificationLink}> verify Email </button>
           </div>
           <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
             {inputDefaultStates.location}
@@ -503,7 +487,13 @@ function Profile() {
                 Switch to Business Account
               </Button> */}
             <Button
-              leftIcon={isLoading ? <ImSpinner9 className="animate-spin" /> : <RiEdit2Fill size="23px" />}
+              leftIcon={
+                isLoading ? (
+                  <ImSpinner9 className="animate-spin" />
+                ) : (
+                  <RiEdit2Fill size="23px" />
+                )
+              }
               className="py-[1.5rem] rounded-[10px] text-[0.7rem] w-[100%] lg:w-auto lg:text-[1rem]"
               type="submit"
               colorScheme="blue"
@@ -531,6 +521,8 @@ function Profile() {
           {/* </div> */}
         </form>
       </div>
+
+      <UpdatePassword />
     </div>
   );
 }

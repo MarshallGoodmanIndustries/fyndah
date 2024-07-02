@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { useState, useEffect, useContext } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { FaPlus, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
@@ -13,6 +13,7 @@ import {
   Ellipse7,
   signup_bg,
 } from "../../assets/images/index";
+
 // import { Radio, RadioGroup, Stack } from '@chakra-ui/react'
 import axios from "axios";
 // import CountriesCode from "./CountriesCode";
@@ -20,13 +21,13 @@ import axios from "axios";
 
 function SignUp() {
   const { authToken } = useContext(AuthContext);
-
+  const [selectedCountryCode, setSelectedCountryCode] = useState("");
   const [revealPassword, setRevealPassword] = useState(false);
   const [revealConfirmPassword, setRevealConfirmPassword] = useState(false);
   const [showForm, setShowForm] = useState(true);
   // const [value, setValue] = useState('sms')
   const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -72,7 +73,16 @@ function SignUp() {
     });
   };
 
-  // handling submit
+  // Update phone number with country code when selectedCountryCode changes
+  useEffect(() => {
+    if (selectedCountryCode) {
+      const phoneNumber = signupFormData.phone.startsWith(selectedCountryCode)
+        ? signupFormData.phone
+        : selectedCountryCode + signupFormData.phone.replace(/^\+?\d*/, "");
+      setSignupFormData({ ...signupFormData, phone: phoneNumber });
+    }
+  }, [selectedCountryCode]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
@@ -158,6 +168,7 @@ function SignUp() {
 
           setLoading(false);
           setShowForm(false);
+          startCounter();
 
           console.log("Form submitted", signupFormData);
         } else {
@@ -177,144 +188,14 @@ function SignUp() {
     }
   };
 
-  // handling re-send verification mail
-  const handleResend = async (e) => {
-    e.preventDefault();
-    const newErrors = {};
-    setLoading(true);
-
-    if (signupFormData.firstName.trim() === "") {
-      newErrors.firstName = "Please enter a first name!";
-    }
-    if (signupFormData.lastName.trim() === "") {
-      newErrors.lastName = "Please enter a last name!";
-    }
-    // if (!/^[a-zA-Z0-9._@-]+$/.test(signupFormData.username) || signupFormData.username.trim() === "") {
-    //   newErrors.username = "Input a username and Username must not contain spaces!";
-    // }
-    if (
-      !/^[a-zA-Z0-9_]+$/i.test(signupFormData.username) ||
-      signupFormData.username.trim() === "" ||
-      signupFormData.username.length < 5
-    ) {
-      newErrors.username =
-        "Input a username, username must not be less than 5 in characters, Username must not contain spaces or special characters e.g (@,#.%)!";
-    }
-
-    // if (!/^[\w]+$/.test(signupFormData.username)||signupFormData.username.trim() === "") {
-    //   newErrors.username = "input a username and Username must not contain spaces!";
-    // }
-    if (signupFormData.phone.trim() === "") {
-      newErrors.phone = "Please enter a valid phone number e.g. US(+1XXXXXXXXXX)!";
-    }
-    if (
-      signupFormData.password.trim() === "" ||
-      signupFormData.password.length < 8
-    ) {
-      newErrors.password =
-        "Password is required! and make sure password length is not less than eight characters longs";
-    } else if (
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%*#?&])[A-Za-z\d@$%*#?&]{8,}$/.test(
-        signupFormData.password
-      )
-    ) {
-      newErrors.password =
-        "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.";
-    }
-    if (signupFormData.email.trim() === "") {
-      newErrors.email = "Please enter your valid email address!";
-    }
-
-    if (signupFormData.confirmPassword !== signupFormData.password) {
-      newErrors.confirmPassword =
-        "The password field confirmation does not match!";
-    } else if (signupFormData.confirmPassword.trim() === "") {
-      newErrors.confirmPassword = "Password should not be empty!";
-    }
-
-    // Check if there are any errors and update the state
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      setLoading(false);
-
-      window.scrollTo(0, 0);
-    } else {
-      try {
-        const response = await axios.post(
-          "https://api.fyndah.com/api/v1/auth/users",
-          {
-            firstname: signupFormData.firstName,
-            lastname: signupFormData.lastName,
-            email: signupFormData.email,
-            username: signupFormData.username,
-            phone_number: signupFormData.phone,
-            password: signupFormData.password,
-            password_confirmation: signupFormData.confirmPassword,
-            phone: signupFormData.phone,
-          },
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-        if (response.data.status == "success") {
-          Swal.fire({
-            icon: "success",
-            title: "Email re-sent...",
-            text: "Yay 🎉 You're all set Please check your email inbox for the verification link!",
-          });
-          console.log('data:', response.data)
-          console.log("Form submitted", signupFormData);
-
-          setLoading(false);
-          setShowForm(false);
-
-          console.log("Form submitted", signupFormData);
-        } else {
-          throw new Error("Registration failed");
-        }
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "verification rre-send link failed!",
-          footer: `<a href="#">Could not re-send your verification link. Please try again later. ${error.response.data.message}</a>`,
-        });
-        console.error(error.response.data.message);
-        setLoading(false);
-        setShowForm(true);
-      }
-    }
-  };
-  // a timer for re-sending of verification
-  const [seconds, setSeconds] = useState(30);
-
-  useEffect(() => {
-    // Function to decrease the seconds
-    const countdown = () => {
-      setSeconds((prevSeconds) => prevSeconds - 1);
-    };
-
-    // Set an interval to run the countdown function every second
-    const timer = setInterval(countdown, 1000);
-
-    // Clear the interval when the countdown is over
-    if (seconds === 0) {
-      clearInterval(timer);
-    }
-
-    // Cleanup function to clear the interval if the component unmounts
-    return () => clearInterval(timer);
-  }, [seconds]);
-
   const countries = [
-    { code: '+1', name: 'United States' },
-    { code: '+44', name: 'United Kingdom' },
-    { code: '+61', name: 'Australia' },
-    // Add more countries as needed
-  ]
+    { code: "+234", name: "NG" },
+    { code: "+44", name: "UK" },
+    { code: "+1", name: "US" },
+    { code: "+1", name: "CA" },
+    { code: "+61", name: "AU" },
+  ];
+  // console.log(selectedCountryCode)
 
   return (
     <div>
@@ -511,15 +392,34 @@ function SignUp() {
                 <label htmlFor="email">
                   Phone Number<span className="text-red-500 ml-2">*</span>
                 </label>
-                {/* <CountriesCode countries={countries} /> */}
-                <input
-                  value={signupFormData.phone}
-                  onChange={handleChange}
-                  type="text"
-                  name="phone"
-                  id="phone"
-                  className="outline-none border border-solid border-textGrey text-blackclr text-base rounded-lg p-2"
-                />
+                <div className="flex flex-row">
+                  {/* country code input form */}
+                  <div>
+                    <div className="flex">
+                      <select
+                        name="phone_number"
+                        id="phone_number"
+                        value={selectedCountryCode}
+                        onChange={(e) => setSelectedCountryCode(e.target.value)}
+                        className="mr-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="">---</option>
+                        {countries.map((country) => (
+                          <option key={country.name} value={country.code}>
+                            {country.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <input
+                    value={signupFormData.phone}
+                    onChange={handleChange}
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    className="p-2 border border-gray-300 rounded-md shadow-sm w-full focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
 
                 {errors.phone && (
                   <p className="text-red-600 text-[0.75rem] lg:text-[1rem]">
@@ -614,24 +514,16 @@ function SignUp() {
       ) : (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
           <div>
-            <h1 className="text-10 font-bold text-center text-green-500">
+            <h1 className="text-10 font-bold text-center text-green-500 p-5">
               {" "}
-              Welcome aboard Check your email for the verification link !
+              Welcome aboard Check your email for the verification link if you
+              don't receive an email proceed to the <Link
+                to="/login"
+                className="text-accentDark hover:text-[#c2410c] font-semibold text-[1.1rem] lg:text-[1.3rem]">
+                Login
+              </Link> page to get a new
+              verification link!
             </h1>
-            <div className="text-center flex items-center gap-2 items-center justify-center">
-              {" "}
-              didn't received any code?{" "}
-              {seconds < 1 ? (
-                <a
-                  className="text-red font-bold cursor-pointer text-red-400 border-b border-red-500"
-                  onClick={handleResend}>
-                  {" "}
-                  {loading ? "sending..." : "Re-send verification link "}
-                </a>
-              ) : (
-                <p>re-send in {seconds}</p>
-              )}
-            </div>
           </div>
         </div>
       )}

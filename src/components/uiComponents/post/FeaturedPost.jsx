@@ -29,9 +29,10 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
     const [comment, setComment] = useState(false);
     const [commentsData, setCommentsData] = useState([]);
     const [timeAgo, setTimeAgo] = useState();
-    const [isLoading, setIsLoading] = useState(false);
-    
-     
+
+    // loading states
+    const [messageIsLoading, setMessageIsLoading] = useState(false);
+    const [likeIsLoading, setLikeIsLoading] = useState(false);
     
     
     // fetch comments related to postId
@@ -53,11 +54,21 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
     const handleLike = async ()=>{
 
         if(!authToken){
-            //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-            sessionStorage.setItem("lastRoute", location.pathname)
-            navigate('/login');
+            Swal.fire({
+                icon: "warning",
+                title: "Login required",
+                text: "You will be redirected to the login page.",
+                timer: 3000,
+                timerProgressBar: true,
+              });
+              setTimeout(()=>{
+                //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+                sessionStorage.setItem("lastRoute", location.pathname);
+                navigate('/login');
+              }, 3001);
         }else{
             if(!like){
+                setLikeIsLoading(true);
                 const url = `https://axelonepostfeature.onrender.com/api/post/${postId}/like`;
     
                 try {
@@ -67,13 +78,23 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
                         }
                     });
                     if(response.status === 200){
+                        setLikeIsLoading(false);
                         setLike(true);
                         setLikeCount(prevLikeCount => prevLikeCount + 1);
                     }
                 } catch (error) {
-                    console.log(error.message);
+                    setLikeIsLoading(false);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Action Failed",
+                        text: "An error occurred while trying to like the post. Please try again later.",
+                        timer: 5000,
+                        timerProgressBar: true,
+                        footer: `${error.response.data.message || error.message}`
+                      });
                 } 
             }else{
+                setLikeIsLoading(true);
                 const url = `https://axelonepostfeature.onrender.com/api/post/${postId}/unlike`;
                 try {
                     const response = await axios.post(url, {}, {
@@ -83,11 +104,20 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
                     } );
                     
                     if(response.status === 200){
+                        setLikeIsLoading(false);
                         setLike(false);
                         setLikeCount(prevLikeCount => prevLikeCount - 1);
                     }
                 } catch (error) {
-                    console.log(error.message);
+                    setLikeIsLoading(false);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Action Failed",
+                        text: "An error occurred while trying to unlike the post. Please try again later.",
+                        timer: 5000,
+                        timerProgressBar: true,
+                        footer: `${error.response.data.message || error.message}`
+                      });
                 }
                 
             }
@@ -109,7 +139,7 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
                 navigate('/login');
               }, 3001);
         }else{
-            setIsLoading(true);
+            setMessageIsLoading(true);
             try {
                 const response = await axios.post(`https://axelonepostfeature.onrender.com/api/conversations/newconversation/${orgMsgId}`, {}, {
                     headers: {
@@ -117,12 +147,19 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
                     }
                 });
                 if(response.status === 200){
-                    setIsLoading(false);
+                    setMessageIsLoading(false);
                     navigate("/dashboard/messages");
                 }
             } catch (error) {
-                setIsLoading(false);
-                console.log(error.message)
+                setMessageIsLoading(false);
+                Swal.fire({
+                    icon: "error",
+                    title: "Action Failed",
+                    text: "An error occurred while trying to create a conversation. Please try again later.",
+                    timer: 5000,
+                    timerProgressBar: true,
+                    footer: `${error.response.data.message || error.message}`
+                  });
             }
         }
     };
@@ -159,12 +196,15 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
                     )
                 }
             </div>
-            <div className="">
+            <div>
                 {/* no of reactions container*/}
                 <div className="flex items-center gap-4">
                     {/* likes icon container */}
                     <div onClick={handleLike} className="group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
-                        <AiFillLike className={classNames(like ? "text-[#0566FF]" : "text-gray-600" ,"w-5 h-5")}/>
+                        {
+                            likeIsLoading ? <AiOutlineLoading3Quarters className="w-5 h-5 text-gray-600 animate-spin" /> :
+                            <AiFillLike className={classNames(like ? "text-[#0566FF]" : "text-gray-600" ,"w-5 h-5")}/>
+                        }
                         {likeCount}
                     </div>
                     {/* comments icon container */}
@@ -177,7 +217,7 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
                     {organizationId !== userData?.organization_id && (
                         <div onClick={handleCreateConversation} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
                             {
-                                isLoading ? <AiOutlineLoading3Quarters className="w-5 h-5 text-gray-600 animate-spin" /> :
+                                messageIsLoading ? <AiOutlineLoading3Quarters className="w-5 h-5 text-gray-600 animate-spin" /> :
                                 <BiSolidMessageDetail className="w-5 h-5 text-gray-600" />
                             }
                         </div>

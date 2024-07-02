@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaUserLarge } from "react-icons/fa6";
 import { AiFillMessage } from "react-icons/ai";
@@ -7,14 +7,49 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 import { TbBusinessplan } from "react-icons/tb";
 import { FaHome } from 'react-icons/fa';
 import LogoutModalUser from './LogoutModal';
+import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
+
 const SideBar = ({ handleToggle }) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const { authToken} = useContext(AuthContext);
   const location = useLocation();
+  const [totalUnreadConversations, setTotalUnreadConversations] = useState("")
 
   const LogoutOpenModal = () => setIsOpenModal(true);
   const LogOutCloseModal = () => setIsOpenModal(false);
 
   const getLinkClass = (path) => location.pathname.includes(path) ? "bg-white text-textDark" : "text-white";
+
+  // fetch unread messages for a user
+  useEffect(() => {
+    const getUnreadConversations = async () => {
+      try {
+        // setLoading(true);
+        const response = await axios.get(
+          `https://axelonepostfeature.onrender.com/api/messages/user/messages/unread`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setTotalUnreadConversations(response.data.totalUnreadConversations);
+          console.log("response: ", response.data);
+          // setLoading(false);
+        } else {
+          // setLoading(false);
+          throw new Error("Getting Total Unread Conversations failed");
+        }
+      } catch (error) {
+        console.error("Error fetching data", error);
+      } 
+    };
+
+    getUnreadConversations();
+  }, [authToken]);
 
   return (
     <div className='px-[1rem] flex flex-col h-full text-white font-inter py-[1rem]'>
@@ -35,8 +70,10 @@ const SideBar = ({ handleToggle }) => {
         <div onClick={handleToggle}
           className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${getLinkClass('messages')}`}>
           <span className='relative'>
-            <b className='text-red-500 absolute top-0 right-0 -mt-3'> 0 </b>
             <AiFillMessage className='size-[1rem] lg:size-[1.25rem]' />
+            <p className="absolute top-[-5px] left-3 text-white rounded-full bg-lightRed px-1 text-[11px]">
+            {totalUnreadConversations}
+          </p>
           </span>
           <h2 className='text-[1.1rem] mt-0 font-normal'>Messages</h2>
         </div>
