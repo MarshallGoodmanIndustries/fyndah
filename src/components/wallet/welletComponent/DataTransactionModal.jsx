@@ -11,12 +11,14 @@ const DateTransactionModal = ({ isOpenModal, handleCloseModal, isLoading, startD
     // if (!data) {
     //     return <div>Loading...</div>
     // }
+
+    // convert the start date into user readable format
     const startConvert = startDate.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
     });
-
+    // convert the end date format inot readable format
     const endConvert = endDate.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',

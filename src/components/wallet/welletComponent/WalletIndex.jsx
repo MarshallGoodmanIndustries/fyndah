@@ -57,6 +57,8 @@ function WalletIndex() {
     const [isProceedOpen, setIsProceedOpen] = useState(false);
     const isProceedOpenModal = () => setIsProceedOpen(true);
     const isProceedCloseModal = () => setIsProceedOpen(false);
+
+    // this the function for payment 
     const redirectToPayStack = async () => {
         setIsModalOpen(true);
         navigate('');
@@ -116,7 +118,7 @@ function WalletIndex() {
     // };
 
 
-
+    // this fetching the balance of the users
     const fetchWalletBalance = async () => {
         try {
             setIsLoading(true)
@@ -243,8 +245,9 @@ function WalletIndex() {
                         <div className="flex sm:flex-row  sm:space-y-0 mt-11">
                             <h3 className="text-lg font-bold">Transactions history </h3>
                         </div>
+                        {/* this displays the trancation history */}
                         <AllTransaction />
-
+                        {/* this are were all props are pass to different components */}
                         <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToPayStack} loading={isPaystackLoading} />
                         {/* <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} /> */}
                         <StatisticsModal isOpen={StatsIsModalOpen} onClose={StatsCloseModal} />

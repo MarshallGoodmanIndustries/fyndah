@@ -6,8 +6,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 import EmptyLeads from "./EmptyLeads";
 import LinkButton from "./LinkButton";
-import SpinnerFullPage from "./SpinnerFullPage";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 // import { useNavigate } from "react-router-dom";
 
@@ -287,10 +286,12 @@ function CurrentSearchRequest() {
                   &larr; Back to Posts
                 </LinkButton>
 
-                <p className="mt-7 font-semibold px-3">
-                  <span className="text-2xl font-black pr-2">
-                    Nothing to show yet!
-                  </span>
+                <p className="mt-4 font-semibold px-3">
+                  <p>
+                    <span className="flex items-center justify-center text-2xl font-black pr-2">
+                      Nothing to show yet!
+                    </span>
+                  </p>
                   Keep an eye on this space, and we will display relevant Search
                   Requests related to your business as soon as they become
                   available

@@ -11,7 +11,7 @@ const BalanceToDateModal = ({ isOpenModal, handleCloseModal, isLoading, data, st
     // if (!data) {
     //     return <div>Loading...</div>
     // }
-
+    // this convert the date into user readable format
     const dateConvert = startDate.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',

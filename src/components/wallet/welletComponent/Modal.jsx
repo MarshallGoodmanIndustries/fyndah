@@ -8,6 +8,7 @@ function Modal({ addAmountWallet, setAddAmountWallet, isOpen, onClose, onRedirec
     const [error, setError] = useState(true)
 
     if (!isOpen) return null;
+    // this function handle the form input amount
     const handleSubmit = (e) => {
         e.preventDefault();
         if (addAmountWallet) {

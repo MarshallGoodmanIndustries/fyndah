@@ -61,7 +61,7 @@ function Messages() {
           const theSenderId = response.data[0].members[0].id;
           const theReceiverId = response.data[1].members[1].id;
           setSenderId(theSenderId);
-          setReceiverId(theReceiverId)
+          setReceiverId(theReceiverId);
           console.log("response: ", response.data);
           setLoading(false);
         } else {
@@ -113,7 +113,7 @@ function Messages() {
   const handleMessageChange = (e) => {
     setValue(e.target.value);
 
-    const lineCount = e.target.value.split('\n').length;
+    const lineCount = e.target.value.split("\n").length;
     setRows(lineCount < 11 ? lineCount : 10);
   };
 
@@ -186,16 +186,16 @@ function Messages() {
       }
     });
 
-    socket.on('disconnect', () => {
-      console.log('Disconnected from the server');
+    socket.on("disconnect", () => {
+      console.log("Disconnected from the server");
     });
 
-    socket.on('connect_error', (err) => {
-      console.error('Connection Error:', err);
+    socket.on("connect_error", (err) => {
+      console.error("Connection Error:", err);
     });
 
-    socket.on('error', (err) => {
-      console.error('Error:', err);
+    socket.on("error", (err) => {
+      console.error("Error:", err);
     });
 
     return () => {
@@ -211,26 +211,25 @@ function Messages() {
     const messageTime = new Date(timestamp);
 
     if (isToday(messageTime)) {
-      return format(messageTime, 'p'); // Format as time, e.g., 5:30 PM
+      return format(messageTime, "p"); // Format as time, e.g., 5:30 PM
     } else if (isYesterday(messageTime)) {
-      return 'Yesterday';
+      return "Yesterday";
     } else {
-      return format(messageTime, 'EEEE'); // Format as day of the week, e.g., 'Monday'
+      return format(messageTime, "EEEE"); // Format as day of the week, e.g., 'Monday'
     }
   };
-
 
   //truncate message
   const truncateMessage = (message, maxLength) => {
     if (message.length <= maxLength) {
       return message;
     }
-    return message.substring(0, maxLength) + '...';
+    return message.substring(0, maxLength) + "...";
   };
 
-  console.log("id: ", id)
+  console.log("id: ", id);
 
-  //search functionality 
+  //search functionality
   useEffect(() => {
     // Filter conversations based on the search query
     setFilteredConversations(
@@ -406,6 +405,20 @@ function Messages() {
             <div>Click on any chat to start a Conversation</div>
           </div>
         )}
+        {/* {hideMessageComponent && conversationOnPage && (
+          <Area2
+            rows={rows}
+            handleSubmit={handleSubmit}
+            value={value}
+            handleMessageChange={handleMessageChange}
+            messageLoading={messageLoading}
+            conversationOnPage={conversationInChat}
+            setMessageComponent={setMessageComponent}
+            setShowListOfBusiness={setShowListOfBusiness}
+            conversationInChat={conversationInChat}
+            senderId={senderId}
+          />
+        )} */}
         {hideMessageComponent && conversationOnPage && (
           <MessageArea
             rows={rows}

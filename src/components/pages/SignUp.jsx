@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { useState, useEffect, useContext } from "react";
-import { useLocation, Link, } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { FaPlus, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
@@ -21,7 +21,7 @@ import axios from "axios";
 
 function SignUp() {
   const { authToken } = useContext(AuthContext);
-  const [selectedCountryCode, setSelectedCountryCode] = useState("")
+  const [selectedCountryCode, setSelectedCountryCode] = useState("");
   const [revealPassword, setRevealPassword] = useState(false);
   const [revealConfirmPassword, setRevealConfirmPassword] = useState(false);
   const [showForm, setShowForm] = useState(true);
@@ -43,7 +43,9 @@ function SignUp() {
     phone: "",
     password: "",
     confirmPassword: "",
+    // phone: "",
   });
+  // loading state after cliking on register
   const [loading, setLoading] = useState(false);
 
   const [errors, setErrors] = useState({
@@ -54,6 +56,7 @@ function SignUp() {
     phone: "",
     password: "",
     confirmPassword: "",
+    // phone: "",
   });
 
   const handleChange = (e) => {
@@ -73,9 +76,9 @@ function SignUp() {
   // Update phone number with country code when selectedCountryCode changes
   useEffect(() => {
     if (selectedCountryCode) {
-      const phoneNumber = signupFormData.phone.startsWith(selectedCountryCode) ? signupFormData.phone
-        :
-        selectedCountryCode + signupFormData.phone.replace(/^\+?\d*/, '');
+      const phoneNumber = signupFormData.phone.startsWith(selectedCountryCode)
+        ? signupFormData.phone
+        : selectedCountryCode + signupFormData.phone.replace(/^\+?\d*/, "");
       setSignupFormData({ ...signupFormData, phone: phoneNumber });
     }
   }, [selectedCountryCode]);
@@ -91,9 +94,7 @@ function SignUp() {
     if (signupFormData.lastName.trim() === "") {
       newErrors.lastName = "Please enter a last name!";
     }
-    // if (!/^[a-zA-Z0-9._@-]+$/.test(signupFormData.username) || signupFormData.username.trim() === "") {
-    //   newErrors.username = "Input a username and Username must not contain spaces!";
-    // }
+
     if (
       !/^[a-zA-Z0-9_]+$/i.test(signupFormData.username) ||
       signupFormData.username.trim() === "" ||
@@ -103,12 +104,6 @@ function SignUp() {
         "Input a username, username must not be less than 5 in characters, Username must not contain spaces or special characters e.g (@,#.%)!";
     }
 
-    // if (!/^[\w]+$/.test(signupFormData.username)||signupFormData.username.trim() === "") {
-    //   newErrors.username = "input a username and Username must not contain spaces!";
-    // }
-    if (signupFormData.phone.trim() === "") {
-      newErrors.phone = "Please enter a valid phone number e.g. US(+1XXXXXXXXXX)!";
-    }
     if (
       signupFormData.password.trim() === "" ||
       signupFormData.password.length < 8
@@ -126,6 +121,7 @@ function SignUp() {
     if (signupFormData.email.trim() === "") {
       newErrors.email = "Please enter your valid email address!";
     }
+
     if (signupFormData.confirmPassword !== signupFormData.password) {
       newErrors.confirmPassword =
         "The password field confirmation does not match!";
@@ -148,9 +144,9 @@ function SignUp() {
             lastname: signupFormData.lastName,
             email: signupFormData.email,
             username: signupFormData.username,
-            phone_number: signupFormData.phone,
             password: signupFormData.password,
             password_confirmation: signupFormData.confirmPassword,
+            phone: signupFormData.phone,
           },
           {
             headers: {
@@ -159,6 +155,7 @@ function SignUp() {
             },
           }
         );
+
         if (response.data.status == "success") {
           Swal.fire({
             icon: "success",
@@ -167,11 +164,11 @@ function SignUp() {
               "Yay 🎉 You're all set Please check your email inbox for the verification link. Welcome aboard! " +
               signupFormData.username,
           });
-          console.log('data:', response.data)
           console.log("Form submitted", signupFormData);
 
           setLoading(false);
           setShowForm(false);
+          startCounter();
 
           console.log("Form submitted", signupFormData);
         } else {
@@ -191,22 +188,17 @@ function SignUp() {
     }
   };
 
-
-
   const countries = [
-    { code: '+234', name: 'NG' },
-    { code: '+44', name: 'UK' },
-    { code: '+1', name: 'US' },
-    { code: '+1', name: 'CA' },
-    { code: '+61', name: 'AU' },
+    { code: "+234", name: "NG" },
+    { code: "+44", name: "UK" },
+    { code: "+1", name: "US" },
+    { code: "+1", name: "CA" },
+    { code: "+61", name: "AU" },
   ];
-  console.log(selectedCountryCode)
-
-
+  // console.log(selectedCountryCode)
 
   return (
     <div>
-
       {showForm ? (
         <section className="relative w-full h-full bg-white px-3 sm:px-4 md:px-6 lg:px-20 py-16 md:py-8 grid items-center grid-cols-1 md:grid-cols-2 gap-16 md:gap-8">
           {/* background image */}
@@ -376,6 +368,26 @@ function SignUp() {
                 )}
               </div>
 
+              {/* <div className="flex flex-col gap-1 md:col-span-2">
+              <label htmlFor="email">
+                Phone:<span className="text-red-500 ml-2">*</span>
+              </label>
+              <input
+                value={signupFormData.phone}
+                onChange={handleChange}
+                type="number"
+                name="phone"
+                id="phone"
+                className="outline-none border border-solid border-textGrey text-blackclr text-base rounded-lg p-2"
+              />
+
+              {errors.phone && (
+                <p className="text-red-600 text-[0.75rem] lg:text-[1rem]">
+                  {" "}
+                  {errors.phone}{" "}
+                </p>
+              )}
+            </div> */}
               <div className="flex flex-col gap-1 md:col-span-2">
                 <label htmlFor="email">
                   Phone Number<span className="text-red-500 ml-2">*</span>
@@ -389,8 +401,7 @@ function SignUp() {
                         id="phone_number"
                         value={selectedCountryCode}
                         onChange={(e) => setSelectedCountryCode(e.target.value)}
-                        className="mr-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      >
+                        className="mr-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <option value="">---</option>
                         {countries.map((country) => (
                           <option key={country.name} value={country.code}>
@@ -416,7 +427,6 @@ function SignUp() {
                     {errors.phone}{" "}
                   </p>
                 )}
-
               </div>
 
               <div className="flex flex-col gap-1 md:col-span-2">
@@ -503,10 +513,16 @@ function SignUp() {
         </section>
       ) : (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-          <div className="text-center text-green-500">
-            <h1 className="text-10 font-bold">
+          <div>
+            <h1 className="text-10 font-bold text-center text-green-500 p-5">
               {" "}
-              Welcome aboard Check your email for the verification link !
+              Welcome aboard Check your email for the verification link if you
+              don't receive an email proceed to the <Link
+                to="/login"
+                className="text-accentDark hover:text-[#c2410c] font-semibold text-[1.1rem] lg:text-[1.3rem]">
+                Login
+              </Link> page to get a new
+              verification link!
             </h1>
           </div>
         </div>

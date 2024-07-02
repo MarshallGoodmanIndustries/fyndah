@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 function ProceedToPayment({ isOpen, onClose, paystack }) {
 
 
-
+    // this open a new tab for the paystack payment and on successful payment redirect u to fyndah.com
     const handleRedirectToPaystack = () => {
         try {
             if (paystack) {

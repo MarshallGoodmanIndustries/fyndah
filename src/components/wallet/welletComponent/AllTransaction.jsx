@@ -8,6 +8,7 @@ import Swal from "sweetalert2"
 import { TbCurrencyNaira, } from "react-icons/tb"
 // import { FaDownload } from "react-icons/fa"
 
+// function to show all transation history
 function AllTransaction() {
     const { authToken } = useContext(AuthContext)
     const { id } = useParams();

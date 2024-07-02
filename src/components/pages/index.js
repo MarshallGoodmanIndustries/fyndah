@@ -8,11 +8,12 @@ import Profile from "../userDashboard/Profile.jsx";
 import AdminLayout from "../userDashboard/AdminLayout.jsx";
 import Dashboard from "../userDashboard/Dashboard.jsx";
 import FavoriteBusiness from "../userDashboard/FavoriteBusiness.jsx";
-import LogOut from "../userDashboard/LogOut.jsx";
 import Messages from "../userDashboard/Messages.jsx";
 import CreateBusiness from "../userDashboard/CreateBusiness.jsx";
 import MyBusiness from "../userDashboard/MyBusiness.jsx";
-import ArchivedMessage from "../userDashboard/ArchivedMessage.jsx";
+import ResetPassword from "./ResetPassword.jsx"
+import UpdatePassword from "../userDashboard/UpdatePassword.jsx";
+// import ArchivedMessage from "../userDashboard/ArchivedMessage.jsx";
 
 
 
@@ -21,5 +22,6 @@ import ArchivedMessage from "../userDashboard/ArchivedMessage.jsx";
 
 export {
     LandingPage, SignUp, Login, BusinessProfileSetup, AdProfileSetup, UserProfileSetup, Profile,
-    AdminLayout, Dashboard, FavoriteBusiness, LogOut, Messages, CreateBusiness, MyBusiness, ArchivedMessage,
+    AdminLayout, Dashboard, FavoriteBusiness, Messages, CreateBusiness, MyBusiness,ResetPassword,UpdatePassword 
+
 };
