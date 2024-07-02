@@ -16,7 +16,7 @@ import AllTransaction from "./AllTransaction";
 import DateTransaction from "./DateTransaction";
 import StatisticsModal from "./StatisticsModal";
 import ProceedToPayment from "./ProceedToPayment";
-import { TbCurrencyDollar, } from "react-icons/tb";
+import { TbCurrencyNaira, } from "react-icons/tb";
 
 
 
@@ -64,7 +64,7 @@ function WalletIndex() {
         try {
             setIsPaystackLoading(true)
             const details = { amount: addAmountWallet }
-            const API = 'https://api.fyndah.com/api/v1/organization/flutterwave/pay'// still have error here
+            const API = 'https://api.fyndah.com/api/v1/organization/paystack/pay'// paystack api
             const payment = await axios.post(API, details, {
                 headers: {
                     'Accept': 'application/json',
@@ -72,9 +72,10 @@ function WalletIndex() {
                 }
             })
             // console.log(payment.data)
+            // this function holds the link to paystack
             if (payment.data.status === 'success') {
-                setPaystack(payment.data.data.link)
-                isProceedOpenModal()//na here i dey.....
+                setPaystack(payment.data.data.payment_url.url)
+                isProceedOpenModal()//if amount is correct open the modal to continue
             } else {
                 Swal.fire({
                     icon: "error",
@@ -209,8 +210,8 @@ function WalletIndex() {
                             </div>
                         ) : (
                             <p className="text-2xl font-bold flex items-center justify-center">
-                                {/* <TbCurrencyNaira className="mr-1 text-sm" size={22} /> */}
-                                <TbCurrencyDollar className="mr-1 text-sm" size={22} />
+                                <TbCurrencyNaira className="mr-1 text-sm" size={22} />
+                                {/* <TbCurrencyDollar className="mr-1 text-sm" size={22} /> */}
                                 {transactions}
                             </p>
                         )}

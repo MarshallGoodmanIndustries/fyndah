@@ -3,7 +3,7 @@
 
 // import { FaDollarSign } from 'react-icons/fa';
 // import { ImSpinner9 } from 'react-icons/im';
-import { TbCurrencyDollar, } from 'react-icons/tb';
+import { TbCurrencyNaira, } from 'react-icons/tb';
 import './modal.css'; // Added custom CSS
 
 const BalanceToDateModal = ({ isOpenModal, handleCloseModal, isLoading, data, startDate }) => {
@@ -59,8 +59,8 @@ const BalanceToDateModal = ({ isOpenModal, handleCloseModal, isLoading, data, st
 
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <p className='flex justify-center'>
-                                                {/* <TbCurrencyNaira className="mr-1  text-sm" size={22} /> */}
-                                                <TbCurrencyDollar className="mr-1 text-sm" size={22} />
+                                                <TbCurrencyNaira className="mr-1  text-sm" size={22} />
+                                                {/* <TbCurrencyDollar className="mr-1 text-sm" size={22} /> */}
                                                 {data}
                                             </p>
                                         </td>

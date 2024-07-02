@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../context/AuthContext"
 import { useParams } from "react-router-dom"
 import Swal from "sweetalert2"
-import { TbCurrencyDollar, } from "react-icons/tb"
+import { TbCurrencyNaira, } from "react-icons/tb"
 // import { FaDownload } from "react-icons/fa"
 
 function AllTransaction() {
@@ -82,8 +82,8 @@ function AllTransaction() {
                                             <td className="px-6 py-4 break-words max-w-xs">{transaction.type || 'Unknown Type'}</td>
                                             <td className="px-6 py-4 break-words max-w-xs">
                                                 <p className="flex justify-center">
-                                                    {/* <TbCurrencyNaira className="mr-1" size={22} /> */}
-                                                    <TbCurrencyDollar className="mr-1 text-sm" size={22} />
+                                                    <TbCurrencyNaira className="mr-1" size={22} />
+                                                    {/* <TbCurrencyDollar className="mr-1 text-sm" size={22} /> */}
                                                     {transaction.amount || '0'}
                                                 </p>
                                             </td>
