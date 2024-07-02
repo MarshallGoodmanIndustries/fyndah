@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaUserLarge } from "react-icons/fa6";
-import { AiFillMessage } from "react-icons/ai";
-import { BiSolidBusiness } from "react-icons/bi";
+// import { AiFillMessage } from "react-icons/ai";
+// import { BiSolidBusiness } from "react-icons/bi";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { TbBusinessplan } from "react-icons/tb";
 import { FaHome } from 'react-icons/fa';
@@ -66,7 +66,7 @@ const SideBar = ({ handleToggle }) => {
       </Link>
 
       {/* messages */}
-      <Link to='messages'>
+      {/* <Link to='messages'>
         <div onClick={handleToggle}
           className={`flex cursor-pointer mb-1 hover:bg-white rounded-[4px] hover:text-textDark px-[1rem] py-[0.5rem] items-center justify-start gap-4 ${getLinkClass('messages')}`}>
           <span className='relative'>
@@ -77,7 +77,7 @@ const SideBar = ({ handleToggle }) => {
           </span>
           <h2 className='text-[1.1rem] mt-0 font-normal'>Messages</h2>
         </div>
-      </Link>
+      </Link> */}
 
       {/* createbuisness */}
       {/* <Link to='createbuisness'>
