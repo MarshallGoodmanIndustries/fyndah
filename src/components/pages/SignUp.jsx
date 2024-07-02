@@ -43,7 +43,7 @@ function SignUp() {
     phone: "",
     password: "",
     confirmPassword: "",
-    phone: "",
+    // phone: "",
   });
   // loading state after cliking on register
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ function SignUp() {
     phone: "",
     password: "",
     confirmPassword: "",
-    phone: "",
+    // phone: "",
   });
 
   const handleChange = (e) => {
