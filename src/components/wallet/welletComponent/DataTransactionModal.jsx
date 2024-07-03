@@ -2,7 +2,7 @@
 // import { useState } from 'react';
 
 // import { FaDollarSign } from 'react-icons/fa';
-import { TbCurrencyDollar, } from 'react-icons/tb';
+import { TbCurrencyNaira, } from 'react-icons/tb';
 import './modal.css'; // Added custom CSS
 // import { ImSpinner9 } from 'react-icons/im';
 
@@ -11,12 +11,14 @@ const DateTransactionModal = ({ isOpenModal, handleCloseModal, isLoading, startD
     // if (!data) {
     //     return <div>Loading...</div>
     // }
+
+    // convert the start date into user readable format
     const startConvert = startDate.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
     });
-
+    // convert the end date format inot readable format
     const endConvert = endDate.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -80,8 +82,8 @@ const DateTransactionModal = ({ isOpenModal, handleCloseModal, isLoading, startD
                                                 <td className="px-6 py-4 whitespace-nowrap">{transactions.type || 'Unknown Type'}</td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <p className="text-1 font-bold flex items-center justify-center">
-                                                        {/* <TbCurrencyNaira className="mr-1 text-sm" size={22} /> */}
-                                                        <TbCurrencyDollar className="mr-1 text-sm" size={22} />
+                                                        <TbCurrencyNaira className="mr-1 text-sm" size={22} />
+                                                        {/* <TbCurrencyDollar className="mr-1 text-sm" size={22} /> */}
                                                         {transactions.amount || '0'}
                                                     </p>
                                                 </td>

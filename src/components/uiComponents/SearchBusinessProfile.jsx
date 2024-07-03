@@ -1,53 +1,54 @@
-import { useContext, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+// import { useContext, useState } from "react";
+// import { useNavigate, useLocation } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
-import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
-import Swal from "sweetalert2";
-import classNames from "classnames";
+// import { AuthContext } from "../context/AuthContext";
+// import axios from "axios";
+// import Swal from "sweetalert2";
+// import classNames from "classnames";
 // import { RiTimeLine } from "react-icons/ri";
 
-const SearchBusinessProfile = ({org_id, msg_id, businessProfileImg, businessName, businessTitle, businessLocation}) => {
-    const { authToken, userData } = useContext(AuthContext);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [IsLoading, setIsLoading] = useState(false);
+
+//searchBusinessProfile props: org_id, msg_id,
+const SearchBusinessProfile = ({ businessProfileImg, businessName, businessTitle, businessLocation}) => {
+    // const { authToken, userData } = useContext(AuthContext);
+    // const navigate = useNavigate();
+    // const location = useLocation();
+    // const [IsLoading, setIsLoading] = useState(false);
     
 
-    const handleCreateConversation = async ()=> {
-        if(!authToken){
-            //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-            sessionStorage.setItem("lastRoute", location.pathname)
-            navigate('/login');
-          }else{
-            setIsLoading(true);
-            try {
-                const response = await axios.post(`https://axelonepostfeature.onrender.com/api/conversations/newconversation/${msg_id}`, {}, {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`
-                    }
-                });
-                if(response.status === 200){
-                    setIsLoading(false);
-                    Swal.fire({
-                        icon: "success",
-                        title: "Connection Successful",
-                        text: "You will be redirected to your message box.",
-                        timer: 3000,
-                        timerProgressBar: true,
-                      });
-                      setTimeout(()=>{
-                        navigate("/dashboard/messages");
-                      }, 3001);
-                }
-            } catch (error) {
-                setIsLoading(false);
-                console.log(error.message)
-            }
-          }
-    };
-
-    console.log("org_Id:", org_id, "user_org_id:", userData?.organization_id);
+    // const handleCreateConversation = async ()=> {
+    //     if(!authToken){
+    //         //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+    //         sessionStorage.setItem("lastRoute", location.pathname)
+    //         navigate('/login');
+    //       }else{
+    //         setIsLoading(true);
+    //         try {
+    //             const response = await axios.post(`https://axelonepostfeature.onrender.com/api/conversations/newconversation/${msg_id}`, {}, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${authToken}`
+    //                 }
+    //             });
+    //             if(response.status === 200){
+    //                 setIsLoading(false);
+    //                 Swal.fire({
+    //                     icon: "success",
+    //                     title: "Connection Successful",
+    //                     text: "You will be redirected to your message box.",
+    //                     timer: 3000,
+    //                     timerProgressBar: true,
+    //                   });
+    //                   setTimeout(()=>{
+    //                     navigate("/dashboard/messages");
+    //                   }, 3001);
+    //             }
+    //         } catch (error) {
+    //             setIsLoading(false);
+    //             console.log(error.message)
+    //         }
+    //       }
+    // };
+    
   return (
     <div className="bg-primary transition-colors duration-300 rounded-lg w-full max-w-[300px] md:max-w-[80%] lg:max-w-[70%] p-4 flex flex-col md:flex-row md:justify-between gap-4">
         <div className="p-1 max-w-24 h-full mx-auto md:mx-0 bg-secondary rounded-lg">
@@ -63,15 +64,15 @@ const SearchBusinessProfile = ({org_id, msg_id, businessProfileImg, businessName
                 </div>
             </div>
         </div>
-        <div className=" flex flex-col items-center md:items-end gap-2">
-            {org_id !== +userData?.organization_id && (
+        {/* <div className=" flex flex-col items-center md:items-end gap-2"> */}
+            {/* {org_id !== +userData?.organization_id && (
                 <button onClick={handleCreateConversation} className={classNames( IsLoading && "animate-pulse", "bg-accent py-1 px-2 rounded-lg text-primary font-poppins font-light text-sm md:text-base")}>{IsLoading ? "Connecting.." : "Connect"}</button>
-            )}
+            )} */}
             {/* <div className="flex items-center gap-2">
                 <RiTimeLine className="w-4 h-4" />
                 <p className="font-roboto text-gray-600 font-normal text-sm md:text-base">{businessTime}</p>
             </div> */}
-        </div>
+        {/* </div> */}
     </div>
   )
 }

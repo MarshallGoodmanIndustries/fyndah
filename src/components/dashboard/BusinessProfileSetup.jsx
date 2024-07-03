@@ -119,6 +119,9 @@ const BusinessProfileSetup = () => {
     if (inputValues.bio.trim() === "") {
       newErrors.bio = "Please enter your business bio!";
     }
+    if (inputValues.bio.trim() !== "" && inputValues.bio.length > 100) {
+      newErrors.bio = "your business bio must not be more than 100!";
+    }
     if (inputValues.industry.trim() === "") {
       newErrors.industry = "Please enter your business industry!";
     }
@@ -141,7 +144,7 @@ const BusinessProfileSetup = () => {
             address: inputValues.address,
             city: inputValues.city,
             state: inputValues.state,
-            zip_code: inputValues.zipCode,
+            zipcode: inputValues.zipCode,
             country: inputValues.country,
             phone: inputValues.phone,
             email: inputValues.email,
@@ -161,7 +164,7 @@ const BusinessProfileSetup = () => {
           }
         );
 
-        console.log("Response:", response.data);
+        console.log("Response for data:", response.data);
 
         console.log("Form data submitted: ", inputValues);
 
@@ -176,7 +179,7 @@ const BusinessProfileSetup = () => {
             timer: 2000,
             timerProgressBar: true,
           });
-          navigate('/dashboard/mybusiness');
+          navigate("/dashboard/mybusiness");
         } else {
           throw new Error("Unable to submit your business profile");
         }
@@ -199,7 +202,7 @@ const BusinessProfileSetup = () => {
       <div className="grid items-center justify-center xl:px-20 bg-gradient-to-r">
         <div className="p-5 rounded-lg shadow-lg border">
           <h1 className=" font-black text-4xl text-center text-stone-900  mb-4">
-             Business Profile Setup
+            Business Profile Setup
           </h1>
           <h1 className="text-center text-red-500 text-sm mb-4">
             Input marked with asterisks* are mandatory
@@ -207,8 +210,7 @@ const BusinessProfileSetup = () => {
           <form
             className="z-30 py-4 rounded shadow-md bg-white grid p-5 gap-10 border md:grid-cols-2 lg:grid-cols-3 items-center"
             method="post"
-            onSubmit={handleSubmit}
-          >
+            onSubmit={handleSubmit}>
             {/* NAME */}
             <div>
               <label htmlFor="name">
@@ -243,15 +245,13 @@ const BusinessProfileSetup = () => {
                 className="border h-10 p-2 rounded-sm w-full mt-1"
                 name="business_category_id"
                 value={inputValues.business_category_id[0] || ""}
-                onChange={handleCategoryChange}
-              >
+                onChange={handleCategoryChange}>
                 <option value="">Select a business category</option>
                 {categories.map((category) => (
                   <option
                     key={category.id}
                     value={category.id}
-                    className="p-10"
-                  >
+                    className="p-10">
                     {category.name}
                   </option>
                 ))}
@@ -297,15 +297,13 @@ const BusinessProfileSetup = () => {
                 name="business_unit_id"
                 value={inputValues.business_unit_id[0] || ""}
                 onChange={handleSubCategoryChange}
-                className="border h-10 p-2 rounded-sm w-full mt-1"
-              >
+                className="border h-10 p-2 rounded-sm w-full mt-1">
                 <option value="">Select a subcategory</option>
                 {subCategories.map((subCategory) => (
                   <option
                     key={subCategory.id}
                     value={subCategory.id}
-                    className="p-10"
-                  >
+                    className="p-10">
                     {subCategory.name}
                   </option>
                 ))}
@@ -390,7 +388,7 @@ const BusinessProfileSetup = () => {
             {/* POSTAL CODE */}
             <div>
               <label htmlFor="zipCode">
-                Postal Code <span className="text-red-500 ml-2">*</span>{" "}
+                Postal Code {" "}
               </label>{" "}
               <br />
               <input
@@ -497,10 +495,7 @@ const BusinessProfileSetup = () => {
 
             {/* WEBSITE */}
             <div>
-              <label htmlFor="website">
-                Website
-              </label>{" "}
-              <br />
+              <label htmlFor="website">Website</label> <br />
               <input
                 name="website"
                 type="text"
@@ -542,8 +537,7 @@ const BusinessProfileSetup = () => {
                 className={`h-12 bg-accent text-white rounded-md w-full ${loading ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 type="submit"
-                disabled={loading}
-              >
+                disabled={loading}>
                 {loading ? "Submitting..." : "Save Profile"}
               </button>
             </div>

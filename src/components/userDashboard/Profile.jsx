@@ -250,6 +250,9 @@ function Profile() {
     }
   };
 
+  
+
+
   return (
     <div className="md:m-[2rem] mr-[1rem] my-[1rem] pl-4 font-roboto  flex flex-col gap-[1rem] lg:gap-[2rem]">
       <div className="md:flex block items-center gap-[6rem]">
@@ -339,9 +342,12 @@ function Profile() {
             </Button>
           )}
 
+          <div className="flex items-center justify-between border gap-4">
           <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
             {fullName}
           </h2>
+
+          </div>
           <h2 className="text-navyBlue font-semibold text-[0.8rem] lg:text-[1.1rem] capitalize">
             {inputDefaultStates.location}
           </h2>
@@ -517,6 +523,8 @@ function Profile() {
           {/* </div> */}
         </form>
       </div>
+
+      
     </div>
   );
 }

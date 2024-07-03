@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 function ProceedToPayment({ isOpen, onClose, paystack }) {
 
 
-
+    // this open a new tab for the paystack payment and on successful payment redirect u to fyndah.com
     const handleRedirectToPaystack = () => {
         try {
             if (paystack) {
@@ -31,7 +31,7 @@ function ProceedToPayment({ isOpen, onClose, paystack }) {
         <div>
             <div className="relative">
 
-                <div className="fixed animate-zoomIn inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div className="fixed animate-zoomIn p-3 inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-auto">
                         <div className="flex justify-center mb-4">
                             <GiGlobe size={50} color='orange' />

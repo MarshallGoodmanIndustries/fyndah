@@ -14,14 +14,15 @@ import { TimeAgo } from "../../helperComponents";
 // import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { AiFillLike } from "react-icons/ai";
 import { FaComment } from "react-icons/fa6";
-import { BiSolidMessageDetail } from "react-icons/bi";
+// import { BiSolidMessageDetail } from "react-icons/bi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Swal from "sweetalert2";
 
+// organizationId, orgMsgId, (featuredPost props)
+// userData (authContext Variables)
 
-
-const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, timePosted, textContent, imgContent, noOflikes}) => {
-    const { authToken, userData } = useContext(AuthContext);
+const FeaturedPost = ({postId, profileImg, username, timePosted, textContent, imgContent, noOflikes}) => {
+    const { authToken } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
     const [like, setLike] = useState(false);
@@ -31,7 +32,7 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
     const [timeAgo, setTimeAgo] = useState();
 
     // loading states
-    const [messageIsLoading, setMessageIsLoading] = useState(false);
+    // const [messageIsLoading, setMessageIsLoading] = useState(false);
     const [likeIsLoading, setLikeIsLoading] = useState(false);
     
     
@@ -124,45 +125,45 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
         }
     }
     
-    const handleCreateConversation = async ()=> {
-        if(!authToken){
-            Swal.fire({
-                icon: "warning",
-                title: "Login required",
-                text: "You will be redirected to the login page.",
-                timer: 3000,
-                timerProgressBar: true,
-              });
-              setTimeout(()=>{
-                //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-                sessionStorage.setItem("lastRoute", location.pathname);
-                navigate('/login');
-              }, 3001);
-        }else{
-            setMessageIsLoading(true);
-            try {
-                const response = await axios.post(`https://axelonepostfeature.onrender.com/api/conversations/newconversation/${orgMsgId}`, {}, {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`
-                    }
-                });
-                if(response.status === 200){
-                    setMessageIsLoading(false);
-                    navigate("/dashboard/messages");
-                }
-            } catch (error) {
-                setMessageIsLoading(false);
-                Swal.fire({
-                    icon: "error",
-                    title: "Action Failed",
-                    text: "An error occurred while trying to create a conversation. Please try again later.",
-                    timer: 5000,
-                    timerProgressBar: true,
-                    footer: `${error.response.data.message || error.message}`
-                  });
-            }
-        }
-    };
+    // const handleCreateConversation = async ()=> {
+    //     if(!authToken){
+    //         Swal.fire({
+    //             icon: "warning",
+    //             title: "Login required",
+    //             text: "You will be redirected to the login page.",
+    //             timer: 3000,
+    //             timerProgressBar: true,
+    //           });
+    //           setTimeout(()=>{
+    //             //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
+    //             sessionStorage.setItem("lastRoute", location.pathname);
+    //             navigate('/login');
+    //           }, 3001);
+    //     }else{
+    //         setMessageIsLoading(true);
+    //         try {
+    //             const response = await axios.post(`https://axelonepostfeature.onrender.com/api/conversations/newconversation/${orgMsgId}`, {}, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${authToken}`
+    //                 }
+    //             });
+    //             if(response.status === 200){
+    //                 setMessageIsLoading(false);
+    //                 navigate("/dashboard/messages");
+    //             }
+    //         } catch (error) {
+    //             setMessageIsLoading(false);
+    //             Swal.fire({
+    //                 icon: "error",
+    //                 title: "Action Failed",
+    //                 text: "An error occurred while trying to create a conversation. Please try again later.",
+    //                 timer: 5000,
+    //                 timerProgressBar: true,
+    //                 footer: `${error.response.data.message || error.message}`
+    //               });
+    //         }
+    //     }
+    // };
 
 
     useEffect(() => {
@@ -214,14 +215,14 @@ const FeaturedPost = ({postId, organizationId, orgMsgId, profileImg, username, t
                     </div>
 
                     {/* Message icon container */}
-                    {organizationId !== userData?.organization_id && (
+                    {/* {organizationId !== userData?.organization_id && (
                         <div onClick={handleCreateConversation} className="ml-auto group flex items-center text-textDark font-poppins gap-1 cursor-pointer">
                             {
                                 messageIsLoading ? <AiOutlineLoading3Quarters className="w-5 h-5 text-gray-600 animate-spin" /> :
                                 <BiSolidMessageDetail className="w-5 h-5 text-gray-600" />
                             }
                         </div>
-                    )}
+                    )} */}
                 </div>
                     
                 {comment && <FeaturedPost_inner 
