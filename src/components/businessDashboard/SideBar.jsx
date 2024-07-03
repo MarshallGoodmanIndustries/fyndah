@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-// import { AiFillMessage } from "react-icons/ai";
+import { AiFillMessage } from "react-icons/ai";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { BsActivity } from "react-icons/bs";
 // import { AiOutlineStock } from "react-icons/ai";
