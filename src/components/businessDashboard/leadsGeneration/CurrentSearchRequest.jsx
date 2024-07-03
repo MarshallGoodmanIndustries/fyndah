@@ -2,6 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { Spinner } from "@chakra-ui/react";
 import SearchRequestDescription from "./SearchRequestDescription";
+
+import SearchRequestHistoryDropDown from "./SearchRequestHistoryDropDown";
+
 import { AuthContext } from "../../context/AuthContext";
 
 import EmptyLeads from "./EmptyLeads";
@@ -69,7 +72,7 @@ function CurrentSearchRequest() {
   const [open, setOpen] = useState(false);
   const [dal, setDal] = useState("");
   const [show, setShow] = useState("");
-  const [request, setRequest] = useState([]);
+  const [request, setRequest] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const { id, name } = useParams();
   const { authToken } = useContext(AuthContext);
@@ -88,6 +91,7 @@ function CurrentSearchRequest() {
             },
           });
           const data = await res.json();
+          console.log(data);
           setRequest(data);
           console.log(request);
           setIsLoading(false);
@@ -257,10 +261,14 @@ function CurrentSearchRequest() {
       {/* <p className="flex flex-col items-center justify-center mt-24 px-4 py-3 ">
     </p> */}
       <>
-        <div className="flex items-center justify-end mt-16 px-4 py-3  text-2xl">
-          <Link to={`/businessDashboard/${id}/${name}/search-request-history`}>
-            <Button colorScheme="blue">Search Request History</Button>
-          </Link>
+        <div className="flex items-center justify-between mt-16 px-4 py-3  text-2xl">
+          {/* <Link to={`/businessDashboard/${id}/${name}/search-request-history`}> */}
+          
+        <div className=" lg:pl-72">
+            <Button colorScheme="blue" size="lg">Search Request </Button>
+        </div>
+          {/* </Link> */}
+          <SearchRequestHistoryDropDown />
         </div>
 
         {isLoading ? (
