@@ -35,6 +35,8 @@ function LogoutModalUser({ isOpen, onClose }) {
                 sessionStorage.removeItem("authToken");
                 sessionStorage.removeItem("userData");
                 sessionStorage.removeItem("businessId");
+                sessionStorage.removeItem("userMsgId");
+                sessionStorage.removeItem("data");
                 console.log("Logged out successfully");
 
                 Swal.fire({
