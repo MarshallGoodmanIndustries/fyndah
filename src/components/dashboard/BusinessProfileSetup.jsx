@@ -144,7 +144,7 @@ const BusinessProfileSetup = () => {
             address: inputValues.address,
             city: inputValues.city,
             state: inputValues.state,
-            zip_code: inputValues.zipCode,
+            zipcode: inputValues.zipCode,
             country: inputValues.country,
             phone: inputValues.phone,
             email: inputValues.email,
@@ -164,7 +164,7 @@ const BusinessProfileSetup = () => {
           }
         );
 
-        console.log("Response:", response.data);
+        console.log("Response for data:", response.data);
 
         console.log("Form data submitted: ", inputValues);
 
@@ -388,7 +388,7 @@ const BusinessProfileSetup = () => {
             {/* POSTAL CODE */}
             <div>
               <label htmlFor="zipCode">
-                Postal Code <span className="text-red-500 ml-2">*</span>{" "}
+                Postal Code {" "}
               </label>{" "}
               <br />
               <input
@@ -534,9 +534,8 @@ const BusinessProfileSetup = () => {
 
             <div className="md:col-span-2 lg:col-span-3">
               <button
-                className={`h-12 bg-accent text-white rounded-md w-full ${
-                  loading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`h-12 bg-accent text-white rounded-md w-full ${loading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 type="submit"
                 disabled={loading}>
                 {loading ? "Submitting..." : "Save Profile"}
