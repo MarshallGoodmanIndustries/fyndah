@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {
   LandingPage, SignUp, Login, BusinessProfileSetup, AdProfileSetup, UserProfileSetup,
-  AdminLayout, Profile, FavoriteBusiness, LogOut, Messages, CreateBusiness,
-  MyBusiness,
-  ArchivedMessage,
+  AdminLayout, Profile, FavoriteBusiness, Messages, CreateBusiness,
+  MyBusiness,ResetPassword,UpdatePassword
+  // ArchivedMessage,
 } from "../components/pages";
 import {
   BusinessDashboardLayout, BusinessLogOut, BusinessMessages, BusinessProfile, Posts, Timeline,
@@ -11,7 +11,6 @@ import {
 } from '../components/businessDashboard/index';
 import Policies, { Tos, Privacy, Refund } from "../components/policy";
 import { PageNotFound } from "../components/errorPages";
-
 import Leads from "../components/businessDashboard/leadsGeneration/Leads";
 import CurrentSearchRequest from "../components/businessDashboard/leadsGeneration/CurrentSearchRequest";
 import HistorySearchRequest from "../components/businessDashboard/leadsGeneration/HistorySearchRequest";
@@ -20,7 +19,6 @@ import PotentialCustomerData from "../components/businessDashboard/leadsGenerati
 import OnSuccessful from "../components/wallet/welletComponent/OnSuccessful";
 import Onfailed from "../components/wallet/welletComponent/Onfailed";
 // import CountryStateCitySelector from "../components/test/test";
-
 function Routes() {
   const router = createBrowserRouter([
     {
@@ -33,6 +31,16 @@ function Routes() {
       element: <SignUp />,
       errorElement: <PageNotFound />
     },
+    {
+      path: "/ResetPassword",
+      element: <ResetPassword />,
+      errorElement: <PageNotFound />
+    },
+    // {
+    //   path: "updatepassword",
+    //   element: <UpdatePassword />,
+    //   errorElement: <PageNotFound />
+    // },
     {
       path: "/login",
       element: <Login />,
@@ -51,6 +59,11 @@ function Routes() {
         {
           path: 'profile',
           element: <Profile />,
+          errorElement: <PageNotFound />
+        },
+        {
+          path: 'updatepassword',
+          element: <UpdatePassword />,
           errorElement: <PageNotFound />
         },
         {
@@ -79,20 +92,16 @@ function Routes() {
           errorElement: <PageNotFound />
         },
         {
-          path: 'messages/archived-messages',
-          element: <ArchivedMessage />,
-          errorElement: <PageNotFound />
+          // path: 'messages/archived-messages',
+          // element: <ArchivedMessage />,
+          // errorElement: <PageNotFound />
         },
         {
           path: 'createbuisness',
           element: <CreateBusiness />,
           errorElement: <PageNotFound />
         },
-        {
-          path: 'logout',
-          element: <LogOut />,
-          errorElement: <PageNotFound />
-        },
+        
         {
           path: 'mybusiness',
           element: <MyBusiness />,

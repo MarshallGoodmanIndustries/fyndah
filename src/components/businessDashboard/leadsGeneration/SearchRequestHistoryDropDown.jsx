@@ -40,6 +40,7 @@ const DateTransaction = () => {
 
     }
 
+    //  Make this  to be the Search Request History link
     const url = "https://api.fyndah.com/api/v1/organization/wallet/transactions"
     const body = {
         org_id: id,
@@ -113,16 +114,16 @@ const DateTransaction = () => {
     };
 
 
-
-
     return (
         <div className="relative">
-            <div className="mt-4 flex sm:flex-row justify-left sm:space-y-0 ">
+            <div className="mt-4 flex flex-col sm:flex-row justify-left sm:space-y-0 ">
+               <span className="text-sm mt-1  mb-1">Request History</span>
+
                 <button
                     onClick={handleClickOPen}
                     className="flex flex-col mr-3  items-center">
                     <FaAngleDown className="p-2 bg-blue-500 hover:text-blue-800 text-white rounded text-4xl" />
-                    <span className="text-sm mt-1">Filter Transactions</span>
+                    {/* <span className="text-sm mt-1">Filter Request History</span> */}
                 </button>
             </div>
             {isOpen && (

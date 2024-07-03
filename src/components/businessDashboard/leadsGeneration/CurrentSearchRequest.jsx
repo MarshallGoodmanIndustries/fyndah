@@ -2,12 +2,14 @@ import { useContext, useEffect, useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { Spinner } from "@chakra-ui/react";
 import SearchRequestDescription from "./SearchRequestDescription";
+
+import SearchRequestHistoryDropDown from "./SearchRequestHistoryDropDown";
+
 import { AuthContext } from "../../context/AuthContext";
 
 import EmptyLeads from "./EmptyLeads";
 import LinkButton from "./LinkButton";
-import SpinnerFullPage from "./SpinnerFullPage";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 // import { useNavigate } from "react-router-dom";
 
@@ -70,7 +72,7 @@ function CurrentSearchRequest() {
   const [open, setOpen] = useState(false);
   const [dal, setDal] = useState("");
   const [show, setShow] = useState("");
-  const [request, setRequest] = useState([]);
+  const [request, setRequest] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const { id, name } = useParams();
   const { authToken } = useContext(AuthContext);
@@ -89,6 +91,7 @@ function CurrentSearchRequest() {
             },
           });
           const data = await res.json();
+          console.log(data);
           setRequest(data);
           console.log(request);
           setIsLoading(false);
@@ -258,10 +261,14 @@ function CurrentSearchRequest() {
       {/* <p className="flex flex-col items-center justify-center mt-24 px-4 py-3 ">
     </p> */}
       <>
-        <div className="flex items-center justify-end mt-16 px-4 py-3  text-2xl">
-          <Link to={`/businessDashboard/${id}/${name}/search-request-history`}>
-            <Button colorScheme="blue">Search Request History</Button>
-          </Link>
+        <div className="flex items-center justify-between mt-16 px-4 py-3  text-2xl">
+          {/* <Link to={`/businessDashboard/${id}/${name}/search-request-history`}> */}
+          
+        <div className=" lg:pl-72">
+            <Button colorScheme="blue" size="lg">Search Request </Button>
+        </div>
+          {/* </Link> */}
+          <SearchRequestHistoryDropDown />
         </div>
 
         {isLoading ? (
@@ -287,10 +294,12 @@ function CurrentSearchRequest() {
                   &larr; Back to Posts
                 </LinkButton>
 
-                <p className="mt-7 font-semibold px-3">
-                  <span className="text-2xl font-black pr-2">
-                    Nothing to show yet!
-                  </span>
+                <p className="mt-4 font-semibold px-3">
+                  <p>
+                    <span className="flex items-center justify-center text-2xl font-black pr-2">
+                      Nothing to show yet!
+                    </span>
+                  </p>
                   Keep an eye on this space, and we will display relevant Search
                   Requests related to your business as soon as they become
                   available

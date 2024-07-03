@@ -106,7 +106,7 @@ const DateRangePicker = () => {
                 </button>
             </div>
             {isOpen && (
-                <div className="absolute bg-white p-4 shadow-lg rounded mt-2 w-56">
+                <div className="absolute top-full left-0 bg-white p-4 shadow-lg rounded mt-2 w-56">
                     <div className="flex justify-between items-center mb-4">
                         <span className="text-lg font-medium">Select Date</span>
                         <button onClick={handleClose} className="text-gray-400 hover:text-gray-600">

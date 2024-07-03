@@ -216,7 +216,7 @@ const MessageArea = ({
         <div className="fixed bottom-0 z-20 w-full lg:w-[770px] md:w-[517px] items-center right-0 px-2 py-3 shadow-lg bg-white border-t border-gray-300">
           <div className="flex items-center space-x-2">
             <textarea
-              className="flex-grow  p-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-grow p-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               rows={rows}
               placeholder="Type your message..."
               value={value}
@@ -242,3 +242,4 @@ const MessageArea = ({
 };
 
 export default MessageArea;
+

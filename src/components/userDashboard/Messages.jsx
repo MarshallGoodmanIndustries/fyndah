@@ -609,6 +609,20 @@ function Messages() {
             <div>Click on any chat to start a Conversation</div>
           </div>
         )}
+        {/* {hideMessageComponent && conversationOnPage && (
+          <Area2
+            rows={rows}
+            handleSubmit={handleSubmit}
+            value={value}
+            handleMessageChange={handleMessageChange}
+            messageLoading={messageLoading}
+            conversationOnPage={conversationInChat}
+            setMessageComponent={setMessageComponent}
+            setShowListOfBusiness={setShowListOfBusiness}
+            conversationInChat={conversationInChat}
+            senderId={senderId}
+          />
+        )} */}
         {hideMessageComponent && conversationOnPage && (
           <MessageArea
             setConversationInChat={setConversationInChat}

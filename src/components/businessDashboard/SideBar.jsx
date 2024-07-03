@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AiFillMessage } from "react-icons/ai";
+// import { AiFillMessage } from "react-icons/ai";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { BsActivity } from "react-icons/bs";
 // import { AiOutlineStock } from "react-icons/ai";
@@ -164,7 +164,7 @@ const SideBar = ({ handleToggle }) => {
             </span>
             <h2 className="text-[1.1rem] mt-0 font-normal">Messages</h2>
           </div>
-        </Link>
+        </Link> 
 
         {/* Business Search Request */}
         <Link to={`/businessDashboard/${id}/${name}/search-request`}>

@@ -16,7 +16,7 @@ import AllTransaction from "./AllTransaction";
 import DateTransaction from "./DateTransaction";
 import StatisticsModal from "./StatisticsModal";
 import ProceedToPayment from "./ProceedToPayment";
-import { TbCurrencyDollar, } from "react-icons/tb";
+import { TbCurrencyNaira, } from "react-icons/tb";
 
 
 
@@ -57,6 +57,8 @@ function WalletIndex() {
     const [isProceedOpen, setIsProceedOpen] = useState(false);
     const isProceedOpenModal = () => setIsProceedOpen(true);
     const isProceedCloseModal = () => setIsProceedOpen(false);
+
+    // this the function for payment 
     const redirectToPayStack = async () => {
         setIsModalOpen(true);
         navigate('');
@@ -64,17 +66,18 @@ function WalletIndex() {
         try {
             setIsPaystackLoading(true)
             const details = { amount: addAmountWallet }
-            const API = 'https://api.fyndah.com/api/v1/organization/flutterwave/pay'// still have error here
+            const API = 'https://api.fyndah.com/api/v1/organization/paystack/pay'// paystack api
             const payment = await axios.post(API, details, {
                 headers: {
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${authToken}`,
                 }
             })
-            console.log(payment.data)
+            // console.log(payment.data)
+            // this function holds the link to paystack
             if (payment.data.status === 'success') {
-                setPaystack(payment.data.data.link)
-                isProceedOpenModal()//na here i dey.....
+                setPaystack(payment.data.data.payment_url.url)
+                isProceedOpenModal()//if amount is correct open the modal to continue
             } else {
                 Swal.fire({
                     icon: "error",
@@ -115,7 +118,7 @@ function WalletIndex() {
     // };
 
 
-
+    // this fetching the balance of the users
     const fetchWalletBalance = async () => {
         try {
             setIsLoading(true)
@@ -137,7 +140,7 @@ function WalletIndex() {
 
             setTransactions(response.data.balance);
             setLowBal(response.data.balance);
-            console.log(response.data)
+            // console.log(response.data)
         } catch (error) {
             console.error("Error fetching wallet balance:", error);
             if (axios.isAxiosError(error)) {
@@ -209,8 +212,8 @@ function WalletIndex() {
                             </div>
                         ) : (
                             <p className="text-2xl font-bold flex items-center justify-center">
-                                {/* <TbCurrencyNaira className="mr-1 text-sm" size={22} /> */}
-                                <TbCurrencyDollar className="mr-1 text-sm" size={22} />
+                                <TbCurrencyNaira className="mr-1 text-sm" size={22} />
+                                {/* <TbCurrencyDollar className="mr-1 text-sm" size={22} /> */}
                                 {transactions}
                             </p>
                         )}
@@ -242,8 +245,9 @@ function WalletIndex() {
                         <div className="flex sm:flex-row  sm:space-y-0 mt-11">
                             <h3 className="text-lg font-bold">Transactions history </h3>
                         </div>
+                        {/* this displays the trancation history */}
                         <AllTransaction />
-
+                        {/* this are were all props are pass to different components */}
                         <Modal isOpen={isModalOpen} addAmountWallet={addAmountWallet} setAddAmountWallet={setAddAmountWallet} onClose={closeModal} onRedirect={redirectToPayStack} loading={isPaystackLoading} />
                         {/* <PayLeadsForm isOpened={isModalOpen2} payLeadsForm={payLeadsForm} setPayLeadsForm={setPayLeadsForm} onClosed={closeModal2} onRedirected={redirectToPayLeadsForm} /> */}
                         <StatisticsModal isOpen={StatsIsModalOpen} onClose={StatsCloseModal} />
