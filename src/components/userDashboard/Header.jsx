@@ -3,7 +3,7 @@ import { logo_white } from "../../assets/images/index";
 import { FaBell } from "react-icons/fa6";
 import { BsListUl } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
-import { Avatar, Box, Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Avatar, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -12,11 +12,9 @@ const Header = ({ handleToggle, toggle }) => {
   const { userData, authToken, userMsgId } = useContext(AuthContext);
 
   const user = userData?.username || ""; // Use optional chaining and provide a default empty string
-  const userInitials = user ? user.slice(0, 1) : ""; // Handle empty user gracefully
-  const notificationNumber = 0;
 
-  const [notificationMessage, setNotificationMessage] = useState([])
-  const [conversationId, setConversationId] = useState("")
+  const [notificationMessage, setNotificationMessage] = useState([]);
+  const [conversationId, setConversationId] = useState("");
 
   // Fetch conversations
   useEffect(() => {
@@ -43,30 +41,24 @@ const Header = ({ handleToggle, toggle }) => {
       } catch (error) {
         console.error("Error fetching notifications", error);
         // setLoading(false);
-      } 
+      }
     };
 
     fetchData();
   }, [authToken, userMsgId]);
 
-  const filteredMessages = notificationMessage.filter(message => message.unreadCount > 0);
-
-
+  const filteredMessages = notificationMessage.filter(
+    (message) => message.unreadCount > 0
+  );
 
   return (
     <div className="text-white relative sm:px-[2rem] px-[1rem] items-center h-full flex justify-between z-20 font-inter">
       {/* LOGO */}
 
-
-
       <div className="hidden md:block ">
         <Link to="/">
-          <img
-            className="w-[150px] sm:w-[120px]"
-            src={logo_white}
-            alt="" />
+          <img className="w-[150px] sm:w-[120px]" src={logo_white} alt="" />
         </Link>
-
       </div>
 
       <div className="md:hidden min-[500px]:gap-8 gap-4 flex items-center col-span-2">
@@ -82,38 +74,52 @@ const Header = ({ handleToggle, toggle }) => {
         </Link>
       </div>
 
-
       {/* USER PROFILES */}
       <div className="flex items-center justify-end md:gap-[1.8rem] gap-[1rem] lg:col-span-3 xl:col-span-2 col-span-2">
-        
-        <Menu>
-      {({ isOpen }) => (
-        <>
-          <MenuButton isActive={isOpen} cursor="pointer" position="relative">
-          <span className="relative cursor-pointer">
-          <FaBell className=" size-[18px] md:size-[22px]" />
-          <p className="absolute top-[-5px] left-0 text-white rounded-full bg-lightRed px-1 text-[11px]">
-            {filteredMessages.length}
-          </p>
-        </span>
-          </MenuButton>
-          <MenuList color="black" className="text-black w-[100px] text-[13px] md:text-[1rem] sm:w-auto">
-            {filteredMessages.map((message) => (
-              <MenuItem onClick={() => setConversationId(message._id)} key={message._id}>
-                You have {message.unreadCount} unread Messages from {message.members[1].name}
-              </MenuItem>
-            ))}
-          </MenuList>
-        </>
-      )}
-    </Menu>
+        {filteredMessages.length > 0 ? (
+          <Menu>
+            {({ isOpen }) => (
+              <>
+                <MenuButton
+                  isActive={isOpen}
+                  cursor="pointer"
+                  position="relative"
+                >
+                  <span className="relative cursor-pointer">
+                    <FaBell className="size-[18px] md:size-[22px]" />
+                    <p className="absolute top-[-5px] left-0 text-white rounded-full bg-lightRed px-1 text-[11px]">
+                      {filteredMessages.length}
+                    </p>
+                  </span>
+                </MenuButton>
+                <MenuList
+                  color="black"
+                  className="text-black w-[100px] text-[13px] md:text-[1rem] sm:w-auto"
+                >
+                  {filteredMessages.map((message) => (
+                    <MenuItem
+                      onClick={() => setConversationId(message._id)}
+                      key={message._id}
+                    >
+                      You have {message.unreadCount} unread Messages from{" "}
+                      {message.members[1].name}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </>
+            )}
+          </Menu>
+        ) : (
+          <div className="relative cursor-pointer">
+            <FaBell className="size-[18px] md:size-[22px]" />
+            <p className="absolute top-[-5px] left-0 text-white rounded-full bg-lightRed px-1 text-[11px]">
+              {filteredMessages.length}
+            </p>
+          </div>
+        )}
 
         <div className="flex gap-3 items-center">
-          <Avatar
-            size="sm"
-            name={user}
-            src={userData?.profile_photo_path}
-          />
+          <Avatar size="sm" name={user} src={userData?.profile_photo_path} />
           {user && (
             <h2 className="font-bold lg:block hidden text-[1rem]">{user}</h2>
           )}
