@@ -3,6 +3,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import classNames from "classnames";
 import { AuthContext } from "../../context/AuthContext";
+// import Echo from 'laravel-echo';
+// import Pusher from 'pusher-js';
+
 
 // icons
 import { FaBuilding } from "react-icons/fa";
@@ -39,8 +42,34 @@ function HeroSection() {
   const [currentPage, setCurrentPage] = useState(1);
   const containsBusinesses = businesses.length > 0;
   const totalPages = Math.ceil(businesses.length / 3);
-  
   const businessesForCurrentPage = businesses?.slice((currentPage - 1) * 3, currentPage * 3);
+
+
+  // webhook 
+  // const [webhookData, setWebhookData] = useState(null);
+
+  //webhook handler
+  // useEffect(() => {
+    
+  //   const echo = new Echo({
+  //     broadcaster: 'pusher',
+  //     key: '41fdd8aea06bdfcaf6e6', // Pusher App Key
+  //     cluster: 'us2', // Pusher Cluster
+  //     forceTLS: true,
+  //   });
+
+  //   // Listen 4 WebhookEvent on d webhook channel
+  //   echo.channel('webhook').listen('.WebhookEvent', (data) => {
+  //     console.log('Webhook event received:', data);
+  //     setWebhookData(data);
+  //   });
+
+  //   return () => {
+  //     echo.leaveChannel('webhook');
+  //   };
+  // }, []);
+
+  
 
   // autocomplete useEffect
   useEffect(() => {
