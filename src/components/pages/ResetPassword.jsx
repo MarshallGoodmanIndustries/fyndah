@@ -28,10 +28,11 @@ const ResetPassword = () => {
   const [password, setSaveNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const error = {
+ 
+  const [errors, setErrors] = useState({
     password: "",
     confirmPassword: "",
-  };
+  });
 
   const handlePasswordChange = (e) => {
     setSaveNewPassword(e.target.value);
@@ -42,26 +43,41 @@ const ResetPassword = () => {
   };
 
   const sendNewPassword = async () => {
+    setErrors({
+      password: "",
+      confirmPassword: "",
+    });
+    let validationErrors = {};
     if (password.trim() === "" || password.length < 8) {
-      error.password =
-        "Password is required! and make sure password length is not less than eight characters longs";
+      validationErrors.password =
+      "new password should not be empty and it must be equals or more than 8 in characters";
+    console.log(
+      "new password should not be empty and it must be equals or more than 8 in characters"
+    );
+   
     } else if (
       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%*#?&])[A-Za-z\d@$%*#?&]{8,}$/.test(
         password
       )
     ) {
-      error.password =
+      
+      validationErrors.password =
         "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.";
     }
 
     if (password !== confirmPassword) {
-      error.confirmPassword = console.log(
+      validationErrors.confirmPassword = 
         "The password field confirmation does not match!"
-      );
+      
     } else if (confirmPassword.trim() === "") {
-      error.confirmPassword = "Password should not be empty!";
+      validationErrors.confirmPassword = "Password should not be empty!";
       console.log("Password should not be empty!");
-    } else {
+    } 
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    else {
       try {
         setLoadingPasswordChange(true);
 
@@ -133,7 +149,6 @@ const ResetPassword = () => {
                 onChange={handlePasswordChange}
                 className="w-full p-2"
               />
-              <p> {error.password} </p>
               <div>
                 {showPassword ? (
                   <FaRegEye
@@ -152,7 +167,7 @@ const ResetPassword = () => {
                 )}
               </div>
             </div>
-            {error.password && <div> {error.password} </div>}
+            {errors.password && <div className="text-red-500 text-sm mt-1"> {errors.password} </div>}
           </div>
 
           <div className="mb-4">
@@ -186,7 +201,7 @@ const ResetPassword = () => {
                 )}
               </div>
             </div>
-            {error.password && <div> {error.password} </div>}
+            {errors.password && <div className="text-red-500 text-sm mt-1"> {errors.password} </div>}
           </div>
         </div>
         <div className="flex justify-between items-center">

@@ -123,7 +123,7 @@ function Login() {
                 navigate(lastRoute);
               } else {
                 // Navigate to the dashboard
-                navigate("/");
+                navigate("/dashboard/profile");
               }
             }, 1000);
 
