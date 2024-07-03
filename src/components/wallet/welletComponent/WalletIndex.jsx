@@ -1,6 +1,6 @@
 // import React from 'react'
 
-import { FaRegChartBar, } from "react-icons/fa"
+// import { FaRegChartBar, } from "react-icons/fa"
 import { MdPayment } from "react-icons/md"
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Modal from "./Modal";
@@ -38,7 +38,7 @@ function WalletIndex() {
     const closeModal = () => setIsModalOpen(false);
 
     const [StatsIsModalOpen, setStatsIsModalOpen] = useState(false);
-    const StatsOpenModal = () => setStatsIsModalOpen(true);
+    // const StatsOpenModal = () => setStatsIsModalOpen(true);
     const StatsCloseModal = () => setStatsIsModalOpen(false);
 
     // for purchase leads modal
@@ -78,6 +78,7 @@ function WalletIndex() {
             if (payment.data.status === 'success') {
                 setPaystack(payment.data.data.payment_url.url)
                 isProceedOpenModal()//if amount is correct open the modal to continue
+                sessionStorage.removeItem("lastRoute")
             } else {
                 Swal.fire({
                     icon: "error",
@@ -89,16 +90,34 @@ function WalletIndex() {
         } catch (error) {
             setIsPaystackLoading(false)
             console.error("Error fetching wallet balance:", error);
-            if (error.response ? error.response.data : error.message) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops! An error has occurred",
-                    text: "Payment gateway can't initialize right now, try again later.",
-                    timerProgressBar: false,
-                    footer: `<a href="#">You currently can't access the payment gateway rightaway. Please try again later. ${error.message}</a>`,
-
-                });
+            if (axios.isAxiosError(error)) {
+                // Handle AxiosError
+                console.error('Error message:', error.message);
+                if (error.response) {
+                    console.error('Status code:', error.response.status);
+                    console.error('Response data:', error.response.data);
+                    console.error('Response msg:', error.response.data.message);
+                    if (error.response.data.status === "error") {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops!",
+                            text: " Something went wrong.",
+                            timer: 4000,
+                            timerProgressBar: true,
+                            footer: `<a href="#"> ${error.response.data.message}. Please try again</a>`,
+                        });
+                    }
+                } else if (error.request) {
+                    console.error('No response received:', error.request);
+                } else {
+                    console.error('Request setup error:', error.message);
+                }
+            } else {
+                // Handle non-AxiosError
+                console.error('Unexpected error:', error);
             }
+            sessionStorage.setItem("lastRoute", location.pathname)
+            navigate("/login")
         } finally {
             setIsPaystackLoading(false)
         }
@@ -227,10 +246,10 @@ function WalletIndex() {
                             <FaWallet className="p-2 bg-red-200 hover:text-red-800 text-red-500 rounded-full text-4xl" />
                             <span className="text-sm mt-1">Purchase Leads</span>
                         </button> */}
-                        <button className="flex flex-col items-center" onClick={StatsOpenModal}>
+                        {/* <button className="flex flex-col items-center" onClick={StatsOpenModal}>
                             <FaRegChartBar className="p-2 bg-green-200 hover:text-green-800 text-green-500 rounded-full text-4xl" />
                             <span className="text-sm mt-1">Analytics</span>
-                        </button>
+                        </button> */}
                     </div>
                     <div className="mt-6">
                         <hr className="p-2" />
