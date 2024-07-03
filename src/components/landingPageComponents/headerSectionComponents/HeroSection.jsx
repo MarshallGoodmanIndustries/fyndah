@@ -69,7 +69,7 @@ function HeroSection() {
   //   };
   // }, []);
 
-  console.log("webhookData: ", webhookData);
+  
 
   // autocomplete useEffect
   useEffect(() => {
