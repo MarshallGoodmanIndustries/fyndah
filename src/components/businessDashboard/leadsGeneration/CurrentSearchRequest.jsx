@@ -261,10 +261,10 @@ function CurrentSearchRequest() {
       {/* <p className="flex flex-col items-center justify-center mt-24 px-4 py-3 ">
     </p> */}
       <>
-        <div className="flex items-center justify-between mt-16 px-4 py-3  text-2xl">
+        <div className=" gap-x-10 flex items-center justify-between mt-16 px-4 py-3  text-2xl">
           {/* <Link to={`/businessDashboard/${id}/${name}/search-request-history`}> */}
           
-        <div className=" lg:pl-72">
+        <div className="6 lg:pl-72">
             <Button colorScheme="blue" size="lg">Search Request </Button>
         </div>
           {/* </Link> */}
