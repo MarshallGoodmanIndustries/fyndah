@@ -19,7 +19,7 @@ const BusinessProfileSetup = () => {
     subDomain: "",
     website: "",
     size: "",
-    industry: "",
+    // industry: "",
     business_category_id: [],
     business_unit_id: [],
   });
@@ -34,7 +34,7 @@ const BusinessProfileSetup = () => {
     state: "",
     country: "",
     bio: "",
-    industry: "",
+    // industry: "",
     phone: "",
     business_category_id: [],
     business_unit_id: [],
@@ -122,9 +122,9 @@ const BusinessProfileSetup = () => {
     if (inputValues.bio.trim() !== "" && inputValues.bio.length > 100) {
       newErrors.bio = "your business bio must not be more than 100!";
     }
-    if (inputValues.industry.trim() === "") {
-      newErrors.industry = "Please enter your business industry!";
-    }
+    // if (inputValues.industry.trim() === "") {
+    //   newErrors.industry = "Please enter your business industry!";
+    // }
     if (inputValues.phone.trim() === "") {
       newErrors.phone = "Please enter your business phone number!";
     }
@@ -150,7 +150,7 @@ const BusinessProfileSetup = () => {
             email: inputValues.email,
             website: inputValues.website,
             size: inputValues.size,
-            industry: inputValues.industry,
+            // industry: inputValues.industry,
             business_category_ids: inputValues.business_category_id,
             business_unit_ids: inputValues.business_unit_id,
             lat: "-36.2182",
@@ -432,7 +432,7 @@ const BusinessProfileSetup = () => {
             </div>
 
             {/* INDUSTRY */}
-            <div>
+            {/* <div>
               <label htmlFor="industry">
                 Industry <span className="text-red-500 ml-2">*</span>{" "}
               </label>{" "}
@@ -452,7 +452,7 @@ const BusinessProfileSetup = () => {
                   {errors.industry}{" "}
                 </p>
               )}
-            </div>
+            </div> */}
 
             {/* SIZE */}
             <div>
@@ -494,7 +494,7 @@ const BusinessProfileSetup = () => {
             </div>
 
             {/* WEBSITE */}
-            <div>
+            {/* <div>
               <label htmlFor="website">Website</label> <br />
               <input
                 name="website"
@@ -504,10 +504,10 @@ const BusinessProfileSetup = () => {
                 value={inputValues.website}
                 placeholder="Business Website e.g (www.example.com)"
               />
-            </div>
+            </div> */}
 
             {/* SUBDOMAIN */}
-            <div>
+            {/* <div>
               <label htmlFor="subDomain">Subdomain </label> <br />
               <input
                 name="subDomain"
@@ -517,7 +517,7 @@ const BusinessProfileSetup = () => {
                 value={inputValues.subDomain}
                 placeholder="Enter Business Subdomain"
               />
-            </div>
+            </div> */}
 
             {/* ADDRESS */}
             <div className="md:col-span-2 lg:col-span-3">
