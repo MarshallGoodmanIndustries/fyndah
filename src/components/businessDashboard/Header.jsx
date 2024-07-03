@@ -5,14 +5,14 @@ import { BsListUl } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 import { Avatar, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { AuthContext } from "../context/AuthContext";
-import axios from "axios"; 
+import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 
 const Header = ({ handleToggle, toggle }) => {
   const { authToken, businessMsgId } = useContext(AuthContext);
-  
-  const [notificationMessage, setNotificationMessage] = useState([])
-  const [conversationId, setConversationId] = useState("")
+
+  const [notificationMessage, setNotificationMessage] = useState([]);
+  const [conversationId, setConversationId] = useState("");
 
   // Fetch conversations
   useEffect(() => {
@@ -39,13 +39,15 @@ const Header = ({ handleToggle, toggle }) => {
       } catch (error) {
         console.error("Error fetching notifications", error);
         // setLoading(false);
-      } 
+      }
     };
 
     fetchData();
   }, [authToken, businessMsgId]);
 
-  const filteredMessages = notificationMessage.filter(message => message.unreadCount > 0);
+  const filteredMessages = notificationMessage.filter(
+    (message) => message.unreadCount > 0
+  );
 
   const { id } = useParams();
 
@@ -105,7 +107,7 @@ const Header = ({ handleToggle, toggle }) => {
   }, [authToken, id]);
 
   return (
-    <div className="text-white relative sm:px-[2rem] px-[1rem] items-center h-full flex justify-between z-20 font-inter">
+    <div className="text-white relative sm:px-[2rem] px-[1rem] items-center h-full flex justify-between z-50 font-inter">
       {/* LOGO */}
       <div className="hidden md:block ">
         <Link to="/">
@@ -130,27 +132,47 @@ const Header = ({ handleToggle, toggle }) => {
 
       {/* USER PROFILES */}
       <div className="flex items-center justify-end md:gap-[1.8rem] gap-[1rem] lg:col-span-3 xl:col-span-2 col-span-2">
-      <Menu>
-      {({ isOpen }) => (
-        <>
-          <MenuButton isActive={isOpen} cursor="pointer" position="relative">
-          <span className="relative cursor-pointer">
-          <FaBell className=" size-[18px] md:size-[22px]" />
-          <p className="absolute top-[-5px] left-0 text-white rounded-full bg-lightRed px-1 text-[11px]">
-            {filteredMessages.length}
-          </p>
-        </span>
-          </MenuButton>
-          <MenuList color="black" className="text-black w-[100px] text-[13px] md:text-[1rem] sm:w-auto">
-            {filteredMessages.map((message) => (
-              <MenuItem onClick={() => setConversationId(message._id)} key={message._id}>
-                You have {message.unreadCount} unread Messages from {message.members[1].name}
-              </MenuItem>
-            ))}
-          </MenuList>
-        </>
-      )}
-    </Menu>
+        {filteredMessages.length > 0 ? (
+          <Menu>
+            {({ isOpen }) => (
+              <>
+                <MenuButton
+                  isActive={isOpen}
+                  cursor="pointer"
+                  position="relative"
+                >
+                  <span className="relative cursor-pointer">
+                    <FaBell className="size-[18px] md:size-[22px]" />
+                    <p className="absolute top-[-5px] left-0 text-white rounded-full bg-lightRed px-1 text-[11px]">
+                      {filteredMessages.length}
+                    </p>
+                  </span>
+                </MenuButton>
+                <MenuList
+                  color="black"
+                  className="text-black w-[100px] text-[13px] md:text-[1rem] sm:w-auto"
+                >
+                  {filteredMessages.map((message) => (
+                    <MenuItem
+                      onClick={() => setConversationId(message._id)}
+                      key={message._id}
+                    >
+                      You have {message.unreadCount} unread Messages from{" "}
+                      {message.members[1].name}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </>
+            )}
+          </Menu>
+        ) : (
+          <div className="relative cursor-pointer">
+            <FaBell className="size-[18px] md:size-[22px]" />
+            <p className="absolute top-[-5px] left-0 text-white rounded-full bg-lightRed px-1 text-[11px]">
+              {filteredMessages.length}
+            </p>
+          </div>
+        )}
 
         <div className="flex gap-3 items-center">
           <Avatar

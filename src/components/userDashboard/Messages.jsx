@@ -1,14 +1,22 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
-import { Avatar, Input, InputGroup, InputLeftElement} from "@chakra-ui/react";
+import { Avatar, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 import { ImSpinner9 } from "react-icons/im";
 import { io } from "socket.io-client";
 import MessageArea from "./MessageArea";
 import { FiSearch } from "react-icons/fi";
-import { format, isYesterday, isToday} from 'date-fns';
+import { format, isYesterday, isToday } from "date-fns";
 import { FaArchive } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import {
+  Spinner,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 function Messages() {
   const [conversationOnPage, setConversationOnPage] = useState([]);
@@ -22,16 +30,23 @@ function Messages() {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
   const [hideMessageComponent, setMessageComponent] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredConversations, setFilteredConversations] = useState(conversationOnPage);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredConversations, setFilteredConversations] = useState(
+    conversationOnPage
+  );
   const [rows, setRows] = useState(1);
-  const [totalUnreadConversations, setTotalUnreadConversations] = useState("")
+  const [totalUnreadConversations, setTotalUnreadConversations] = useState("");
+  const [selectedConversation, setSelectedConversation] = useState(null);
   const { authToken, userMsgId } = useContext(AuthContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [unreadCounts, setUnreadCounts] = useState({});
+  const [numberofArchiveChats, setNumberOfArchivedChats] = useState("");
+  const [archiveChats, setArchivedChats] = useState([]);
 
-   // Socket.IO instance
-   const socket = io('https://axelonepostfeature.onrender.com', {
+  // Socket.IO instance
+  const socket = io("https://axelonepostfeature.onrender.com", {
     query: { token: authToken },
-    transports: ['websocket'], // Ensure we are using websockets
+    transports: ["websocket"], // Ensure we are using websockets
     reconnectionAttempts: 3, // Retry connecting 3 times
   });
 
@@ -82,7 +97,7 @@ function Messages() {
   // Fetch messages in a conversation
   const getMessagesInConversation = async (conversationId) => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const response = await axios.get(
         `https://axelonepostfeature.onrender.com/api/messages/${conversationId}`,
         {
@@ -132,9 +147,6 @@ function Messages() {
           createdAt: new Date().toISOString(),
         };
 
-        // Optimistically update the UI
-        setConversationInChat((prev) => [...prev, message]);
-
         const response = await axios.post(
           `https://axelonepostfeature.onrender.com/api/messages/send-message/user/${id}`,
           { message: value },
@@ -147,9 +159,13 @@ function Messages() {
 
         if (response.status === 200) {
           console.log("Message sent", response.data);
-          setValue("");
+
+          const emitMessage = response.data.message;
+
           // Emit the new message event
-          socket.emit('send_message', { message: response.data });
+          socket.emit("receiveMessage", { userMsgId, emitMessage });
+          console.log(" conversations in chat: ", conversationInChat);
+          getMessagesInConversation(id);
         }
 
         setMessageLoading(false);
@@ -160,15 +176,13 @@ function Messages() {
     }
   };
 
-
   useEffect(() => {
     console.log("Component Mounted");
 
-
-    console.log("Creating socket with token:");
-    const socket = io('https://axelonepostfeature.onrender.com', {
+    console.log("Creating socket with token:", authToken);
+    const socket = io("https://axelonepostfeature.onrender.com", {
       query: { token: authToken },
-      transports: ['websocket'], // Ensure we are using websockets
+      transports: ["websocket"], // Ensure we are using websockets
       reconnectionAttempts: 3, // Retry connecting 3 times
     });
 
@@ -179,11 +193,10 @@ function Messages() {
       socket.emit("joinRoom", { conversationId: id });
     });
 
-    socket.on("new_message", async (data) => {
+    socket.on("receiveMessage", (data) => {
       console.log("New message received:", data);
-      if (data.conversationId === id) {
-        await getMessagesInConversation(id); // Fetch new messages on receiving a new message
-      }
+      // setConversationInChat(conversationInChat)
+      getMessagesInConversation(id);
     });
 
     socket.on("disconnect", () => {
@@ -202,9 +215,9 @@ function Messages() {
       console.log("Component Unmounted, disconnecting socket");
       socket.disconnect();
     };
-  }, [authToken, id]);
+  }, [authToken, id, conversationInChat]);
 
-  console.log("usermgid: ", userMsgId)
+  console.log("usermgid: ", userMsgId);
 
   //format timestamp
   const formatTimestamp = (timestamp) => {
@@ -242,9 +255,15 @@ function Messages() {
   // Function to highlight search query in the text
   const highlightText = (text, query) => {
     if (!query) return text;
-    const parts = text.split(new RegExp(`(${query})`, 'gi'));
+    const parts = text.split(new RegExp(`(${query})`, "gi"));
     return parts.map((part, index) =>
-      part.toLowerCase() === query.toLowerCase() ? <span key={index} className="bg-yellow-300">{part}</span> : part
+      part.toLowerCase() === query.toLowerCase() ? (
+        <span key={index} className="bg-yellow-300">
+          {part}
+        </span>
+      ) : (
+        part
+      )
     );
   };
 
@@ -283,9 +302,9 @@ function Messages() {
       const response = await axios.post(
         `https://axelonepostfeature.onrender.com/api/messages/user/messages/read`,
         {
-          conversationId : [messageId],
-          isRead: true
-      },
+          conversationId: [messageId],
+          isRead: true,
+        },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -293,30 +312,164 @@ function Messages() {
         }
       );
 
+      const isRead = true;
+
       if (response.status === 200) {
         console.log("Message marked as read");
-        // Update the conversationInChat state to reflect the message as read
-        setConversationInChat((prev) =>
-          prev.map((msg) => (msg.id === messageId ? { ...msg, isReadByRecipient: true } : msg))
-        );
         // Emit the read event
-        socket.emit('read_message', { messageId });
+        socket.emit("messageRead", { messageId, isRead });
+        // Update the conversationInChat state to reflect the message as read
+        // setConversationInChat((prev) =>
+        //   prev.map((msg) =>
+        //     msg.id === messageId ? { ...msg, isReadByRecipient: true } : msg
+        //   )
+        // );
       }
     } catch (error) {
       console.error("Error marking message as read", error);
     }
   };
 
+  const handleContextMenu = (event, message) => {
+    event.preventDefault();
+    setSelectedConversation(message);
+    onOpen();
+  };
+
+  const handleDelete = async () => {
+    try {
+      console.log("Delete message with ID:", id);
+
+      const response = await axios.delete(
+        `https://axelonepostfeature.onrender.com/api/messages/delete/conversation/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      console.log(response.data);
+
+      if (response.status === 200) {
+        // update local state to remove the deleted message from the UI
+        setConversationOnPage(
+          filteredConversations.filter((convo) => convo._id !== id)
+        );
+      }
+    } catch (error) {
+      console.error("There was an error deleting the conversation:", error);
+    }
+
+    onClose();
+  };
+
+  //touch start for hold press div to open the menu
+  const handleTouchStart = (event, conversation) => {
+    const touchStartTime = new Date().getTime();
+    const handleTouchEnd = () => {
+      const touchEndTime = new Date().getTime();
+      if (touchEndTime - touchStartTime > 500) {
+        setSelectedConversation(conversation);
+        onOpen();
+      }
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+    document.addEventListener("touchend", handleTouchEnd);
+  };
+
+  const handleConversationClick = (item) => {
+    setShowMessageBox(true);
+    markAsRead(item._id);
+    setUnreadCounts((prevCounts) => ({
+      ...prevCounts,
+      [item._id]: 0,
+    }));
+    getMessagesInConversation(item._id);
+    hideTheListOnMobile();
+  };
+
+  useEffect(() => {
+    // Initialize the unread counts state with data from the API
+    const initialUnreadCounts = {};
+    filteredConversations.forEach((item) => {
+      initialUnreadCounts[item._id] = item.unreadCount;
+    });
+    setUnreadCounts(initialUnreadCounts);
+  }, [filteredConversations]);
+
+  const handleArchive = async () => {
+    try {
+      console.log("Archiving message with ID:", id);
+
+      const response = await axios.post(
+        `https://axelonepostfeature.onrender.com/api/messages/user/${id}/toggle-archive`,
+        {}, // This is the data parameter, which is empty in this case
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      console.log(" Archive conversation successful: ", response.data);
+
+      if (response.status === 200) {
+        // update local state to remove the deleted message from the UI
+        setConversationOnPage(
+          filteredConversations.filter((convo) => convo._id !== id)
+        );
+      }
+    } catch (error) {
+      console.error("There was an error archiving the conversation:", error);
+    }
+
+    onClose();
+  };
+
+  // Fetch conversations
+  useEffect(() => {
+    const fetchArchiveChats = async () => {
+      try {
+        // setLoading(true);
+        const response = await axios.get(
+          `https://axelonepostfeature.onrender.com/api/messages/user/archived-messages`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const archivedChatslength = response.data;
+          setNumberOfArchivedChats(archivedChatslength.length);
+          console.log("archive chats: ", response.data);
+          console.log("number of archived chats: ", numberofArchiveChats);
+          // setLoading(false);
+        } else {
+          // setLoading(false);
+          throw new Error("Getting all messages failed");
+        }
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArchiveChats();
+  }, [authToken]);
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center gap-4 justify-center h-screen">
         <p>
           <ImSpinner9
             className="animate-spin text-blue-500 hover:text-blue-800"
-            size={50}
+            size={30}
           />
         </p>
-        <span>Please wait...</span>
+        <span>Fetching conversations...</span>
       </div>
     );
   }
@@ -327,71 +480,122 @@ function Messages() {
         {/* initial lists */}
         {showListOfBusiness && (
           <div className="bg-conversation-area text-slate-800 p-6 h-screen overflow-y-scroll lg:col-span-2 pb-20">
-            {filteredConversations.length >= 1 && <>
-              <h2 className="text-[1.3rem] font-poppins font-bold mb-1">
-                Chats{" "}
+            {filteredConversations.length >= 1 && (
+              <>
+                <h2 className="text-[1.3rem] font-poppins font-bold mb-1">
+                  Chats{" "}
+                </h2>
+                <h2 className="text-[0.9rem] font-poppins font-medium mb-[1rem] text-lightRed">
+                  {" "}
+                  {filteredConversations.length} Messages,{" "}
+                  {totalUnreadConversations} Unread{" "}
+                </h2>
+              </>
+            )}
 
-              </h2>
-              <h2 className="text-[0.9rem] font-poppins font-medium mb-[1rem] text-lightRed"> {filteredConversations.length} Messages, {totalUnreadConversations} Unread </h2></>}
+            {filteredConversations.length >= 1 && (
+              <InputGroup className="mb-[1rem]">
+                <InputLeftElement pointerEvents="none">
+                  <FiSearch color="gray.300" />
+                </InputLeftElement>
+                <Input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  background="gray.200"
+                  variant="filled"
+                  type="text"
+                  placeholder="Search conversations"
+                />
+                <div className="p-2">
+                  <Link to="archived-messages">
+                    <span className="relative">
+                      <FaArchive
+                        className="text-gray-500"
+                        // color="red"
+                        size={22}
+                      />
+                      <p className="absolute top-[-7px] left-3 text-white rounded-full bg-lightRed px-1 text-[11px]">
+                        {numberofArchiveChats}
+                      </p>
+                    </span>
+                  </Link>
+                </div>
+              </InputGroup>
+            )}
 
-            <InputGroup className="mb-[1rem]">
-              <InputLeftElement pointerEvents='none'>
-                <FiSearch color='gray.300' />
-              </InputLeftElement>
-              <Input value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)} background='gray.200' variant='filled' type='text' placeholder='Search conversations' />
-              <div className="p-2">
-                <Link to='archived-messages'>
-                  <span className='relative'>
-                    <FaArchive
-                      className="text-gray-500"
-                      // color="red"
-                      size={22}
-                    />
-                    <p className="absolute top-[-7px] left-3 text-white rounded-full bg-lightRed px-1 text-[11px]">
-                      0
-                    </p>
-                  </span>
-                </Link>
-              </div>
-
-
-
-
-            </InputGroup>
             {filteredConversations.length === 0 ? (
-              <p className="text-center">No conversations available at the moment. Go to the Feeds and message a business to initiate a conversation.</p>
+              <p className="text-center">
+                No conversations available at the moment. Go to the Feeds and
+                message a business to initiate a conversation.
+              </p>
             ) : (
               <ul className="list-none p-0">
                 {filteredConversations.map((item, index) => (
                   <li
                     key={index}
-                    onClick={() => {
-                      setShowMessageBox(true);
-                      markAsRead(item._id)
-                      getMessagesInConversation(item._id);
-                      hideTheListOnMobile();
-                    }}
-                    className={`bg-white shadow-xl border-2 w-full flex gap-3 items-center p-4 rounded cursor-pointer transform transition duration-300 hover:bg-gray-300 ${id === item._id ? 'bg-gray-200' : ''
-                      }`}
+                    onClick={() => handleConversationClick(item)}
+                    onContextMenu={(event) =>
+                      handleContextMenu(event, item._id)
+                    }
+                    onTouchStart={(event) => handleTouchStart(event, item._id)}
+                    className={` relative shadow-xl border-2 w-full flex gap-3 items-center p-4 rounded cursor-pointer transform transition duration-300 hover:bg-gray-300 ${
+                      id === item._id ? "bg-gray-300" : "bg-white"
+                    }`}
                   >
                     <Avatar src={item.members[1].logo} size="sm" />
                     <div className="flex w-full flex-col gap-1">
                       <div className="flex w-full justify-between">
-                        <p className="font-medium text-[1rem]"> {highlightText(item.members[1].name, searchQuery)} </p>
-                        <span className="text-[10px]">{formatTimestamp(item.lastMessage.createdAt)}</span>
+                        <p className="font-medium text-[1.1rem]">
+                          {" "}
+                          {highlightText(
+                            item.members[1].name,
+                            searchQuery
+                          )}{" "}
+                        </p>
+                        <span className="text-[10px]">
+                          {item.lastMessage
+                            ? formatTimestamp(item.lastMessage.createdAt)
+                            : ""}
+                        </span>
                       </div>
                       <div className="flex w-full items-center justify-between">
-                        <p className="text-[15px]">{truncateMessage(item.lastMessage.message, 45)}</p>
-                        {item.unreadCount > 0 && (
+                        <p className="text-[16px]">
+                          {item.lastMessage
+                            ? truncateMessage(item.lastMessage.message, 45)
+                            : ""}
+                        </p>
+                        {unreadCounts[item._id] > 0 && (
                           <p className="text-white rounded-full bg-lightRed px-2 py-1 text-[11px]">
-                            {item.unreadCount}
+                            {unreadCounts[item._id]}
                           </p>
                         )}
                       </div>
-
                     </div>
-
+                    {isOpen && selectedConversation === item._id && (
+                      <div className="absolute z-50 top-0 left-0">
+                        <Menu isOpen={isOpen} onClose={onClose}>
+                          <MenuButton as="div" />
+                          <MenuList background="black">
+                            <MenuItem
+                              className="text-[0.8rem]"
+                              background="black"
+                              color="white"
+                              onClick={handleDelete}
+                            >
+                              Delete Conversation
+                            </MenuItem>
+                            <MenuItem
+                              className="text-[0.8rem]"
+                              background="black"
+                              color="white"
+                              onClick={handleArchive}
+                            >
+                              Archive Conversation
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -421,6 +625,7 @@ function Messages() {
         )} */}
         {hideMessageComponent && conversationOnPage && (
           <MessageArea
+            setConversationInChat={setConversationInChat}
             rows={rows}
             handleSubmit={handleSubmit}
             value={value}

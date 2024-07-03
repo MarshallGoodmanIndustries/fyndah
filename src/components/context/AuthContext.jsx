@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [businessId, setBusinessId] = useState(sessionStorage.getItem('businessId') || null);
   const [userMsgId, setUserMsgId] = useState(sessionStorage.getItem('userMsgId') || null);
   const [businessMsgId, setBusinessMsgId] = useState(sessionStorage.getItem('businessMsgId') || null);
+  const [currentRoute, setCurrentRoute] = useState(sessionStorage.getItem('currentRoute') || null)
 
   useEffect(() => {
     if (authToken) {
@@ -51,6 +52,14 @@ export const AuthProvider = ({ children }) => {
     }
   }, [businessId]);
 
+  useEffect(() => {
+    if (currentRoute) {
+      sessionStorage.setItem('currentRoute', currentRoute);
+    } else {
+      sessionStorage.removeItem('currentRoute');
+    }
+  }, [currentRoute]);
+
   return (
     <AuthContext.Provider value={{
       authToken,
@@ -62,7 +71,9 @@ export const AuthProvider = ({ children }) => {
       userMsgId,
       setUserMsgId,
       businessMsgId,
-      setBusinessMsgId
+      setBusinessMsgId,
+      currentRoute,
+      setCurrentRoute
     }}>
       {children}
     </AuthContext.Provider>
