@@ -40,7 +40,7 @@ const DateTransaction = () => {
 
     }
 
-    const url = "https://api.fyndah.com/api/v1/organization/wallet/transactions"
+    const url = "https://test-api.fyndah.com/api/v1/organization/wallet/transactions"
     const body = {
         org_id: id,
         start_date: startDate,

@@ -77,7 +77,7 @@ function CurrentSearchRequest() {
   const { id, name } = useParams();
   const { authToken } = useContext(AuthContext);
 
-  const SEARCH_URL = "https://api.fyndah.com/api/v1/search/requests/active";
+  const SEARCH_URL = "https://test-api.fyndah.com/api/v1/search/requests/active";
   useEffect(
     function () {
       async function retrieveSearchRequest() {
@@ -105,7 +105,7 @@ function CurrentSearchRequest() {
   );
 
   //  Function to place a Bid
-  const BASE_URL = `https://api.fyndah.com/api/v1/search/requests/${id}/bid`;
+  const BASE_URL = `https://test-api.fyndah.com/api/v1/search/requests/${id}/bid`;
   async function bidRequest() {
     const res = await fetch(`${BASE_URL}`, {
       method: "POST",

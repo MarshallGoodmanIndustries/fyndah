@@ -44,7 +44,7 @@ const BusinessProfileSetup = () => {
 
   useEffect(() => {
     axios
-      .get("https://api.fyndah.com/api/v1/organization/categories", {
+      .get("https://test-api.fyndah.com/api/v1/organization/categories", {
         headers: {
           Accept: "application/json",
         },
@@ -136,7 +136,7 @@ const BusinessProfileSetup = () => {
       try {
         setLoading(true); // Set loading state to prevent multiple submissions
         const response = await axios.post(
-          "https://api.fyndah.com/api/v1/organization/create",
+          "https://test-api.fyndah.com/api/v1/organization/create",
           {
             org_name: inputValues.name,
             org_bio: inputValues.bio,

@@ -61,7 +61,7 @@ const UpdatePassword = () => {
         setLoadingPasswordUpdate(true);
 
         const response = await axios.put(
-          "https://api.fyndah.com/api/v1/auth/password/update",
+          "https://test-api.fyndah.com/api/v1/auth/password/update",
           {
             old_password: oldPassword,
             new_password: newPassword,

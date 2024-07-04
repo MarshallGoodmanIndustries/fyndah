@@ -17,7 +17,7 @@ function LogoutModalUser({ isOpen, onClose }) {
         try {
             setIsLoading(true)
             const response = await axios.post(
-                "https://api.fyndah.com/api/v1/auth/logout",
+                "https://test-api.fyndah.com/api/v1/auth/logout",
                 {},
                 {
                     headers: {

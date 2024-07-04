@@ -70,7 +70,7 @@ const Header = ({ handleToggle, toggle }) => {
     const fetchBusinessProfileData = async () => {
       try {
         const businessProfileResponse = await axios.get(
-          `https://api.fyndah.com/api/v1/organization/${id}`,
+          `https://test-api.fyndah.com/api/v1/organization/${id}`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,

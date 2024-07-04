@@ -83,7 +83,7 @@ function HistorySearchRequest() {
 
   const { authToken } = useContext(AuthContext);
 
-  const BASE_URL = "https://api.fyndah.com/api/v1/search/requests/history";
+  const BASE_URL = "https://test-api.fyndah.com/api/v1/search/requests/history";
   useEffect(
     function () {
       async function retrieveSearchRequest() {
