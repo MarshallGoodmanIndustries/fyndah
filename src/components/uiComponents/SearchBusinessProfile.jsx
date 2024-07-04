@@ -18,9 +18,18 @@ const SearchBusinessProfile = ({ businessProfileImg, businessName, businessTitle
 
     const handleCreateConversation = async ()=> {
         if(!authToken){
-            //set the lastRoute so that user can be navigated back to this spot if they happen to not be logged in while trying to access the checkout page
-            sessionStorage.setItem("lastRoute", location.pathname)
+            // redirect to login page
+            Swal.fire({
+                icon: "warning",
+                title: "Login required",
+                text: "You will be redirected to the login page.",
+                timer: 3000,
+                timerProgressBar: true,
+              });
+            setTimeout(()=>{
+            sessionStorage.setItem("lastRoute", location.pathname); //set last route in other to be redirected back to current page
             navigate('/login');
+            }, 3001);
           }else{
             setIsLoading(true);
             try {
@@ -33,7 +42,7 @@ const SearchBusinessProfile = ({ businessProfileImg, businessName, businessTitle
                     setIsLoading(false);
                     Swal.fire({
                         icon: "success",
-                        title: "Connection Successful",
+                        title: "Conversation Creation Successful",
                         text: "You will be redirected to your message box.",
                         timer: 3000,
                         timerProgressBar: true,
@@ -44,7 +53,15 @@ const SearchBusinessProfile = ({ businessProfileImg, businessName, businessTitle
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log(error.message)
+                Swal.fire({
+                    icon: "error",
+                    title: "Conversation Creation Failed",
+                    text: "It seems there was an issue creating your new conversation. Please try again later.",
+                    timer: 3000,
+                    timerProgressBar: true,
+                    footer: `Error details: ${error?.response?.data?.message || error?.message}`
+                });
+                
             }
           }
     };
@@ -66,7 +83,7 @@ const SearchBusinessProfile = ({ businessProfileImg, businessName, businessTitle
         </div>
         <div className=" flex flex-col items-center md:items-end gap-2">
             {org_id !== +userData?.organization_id && (
-                <button onClick={handleCreateConversation} className={classNames( IsLoading && "animate-pulse", "bg-accent py-1 px-2 rounded-lg text-primary font-poppins font-light text-sm md:text-base")}>{IsLoading ? "Connecting.." : "Connect"}</button>
+                <button onClick={handleCreateConversation} className={classNames( IsLoading && "animate-pulse", "bg-accent py-1 px-2 rounded-lg text-primary font-poppins font-light text-sm md:text-base")}>{IsLoading ? "Sending.." : "Send a message"}</button>
             )}
             {/* <div className="flex items-center gap-2">
                 <RiTimeLine className="w-4 h-4" />
