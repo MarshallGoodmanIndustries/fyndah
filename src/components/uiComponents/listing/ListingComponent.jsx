@@ -11,19 +11,17 @@ const ListingComponent = ({logo, cover_image, org_bio, org_name, business_catego
                 <span className="text-textDark font-poppins font-light text-xs">{country}</span>
             </div> */}
         </div>
-        <div className=" flex flex-col gap-2">
-            <div className="p-4 flex-1">
-                <h3 className="font-poppins font-normal text-lg text-textDark">{org_name}</h3>
-                <p className="font-poppins font-light text-sm md:text-base text-textDark mt-1">{org_bio}</p>
+        <div className="p-4 flex-1">
+            <h3 className="font-poppins font-normal text-lg text-textDark">{org_name}</h3>
+            <p className="font-poppins font-light text-sm md:text-base text-textDark mt-1">{org_bio}</p>
+        </div>
+        <div className="p-4 flex items-center gap-2">
+            <div className="w-12 h-12 overflow-hidden rounded-full">
+                <img src={logo} className="w-full h-full object-cover" alt="business logo" />
             </div>
-            <div className="border-t border-gray-200 p-4 flex items-center gap-2">
-                <div className="w-12 h-12 overflow-hidden rounded-full">
-                    <img src={logo} className="w-full h-full object-cover" alt="business logo" />
-                </div>
-                <div>
-                    <h4 className="font-poppins font-normal text-base  text-textDark">{org_name}</h4>
-                    <p className="font-roboto font-light text-sm  text-textDark">{business_categories[0]?.name}</p>
-                </div>
+            <div className="flex-1">
+                <h4 className="font-poppins font-normal text-base text-textDark">{org_name}</h4>
+                <p className="font-roboto font-light text-sm  text-textDark">{business_categories[0]?.name}</p>
             </div>
         </div>
     </div>
