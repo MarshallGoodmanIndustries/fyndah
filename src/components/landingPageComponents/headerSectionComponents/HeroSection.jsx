@@ -102,7 +102,7 @@ function HeroSection() {
   //get business categories
   useEffect(() => {
     axios
-      .get("https://api.fyndah.com/api/v1/organization/categories", {
+      .get("https://test-api.fyndah.com/api/v1/organization/categories", {
         headers: {
           Accept: "application/json",
         },
@@ -148,7 +148,7 @@ function HeroSection() {
       
     } else {
       
-      const url = "https://api.fyndah.com/api/v1/search/business"
+      const url = "https://test-api.fyndah.com/api/v1/search/business"
       const data = {
         "searchTerms": [businessName, businessLocation, +businessCategory]
       };

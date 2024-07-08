@@ -66,7 +66,7 @@ function WalletIndex() {
         try {
             setIsPaystackLoading(true)
             const details = { amount: addAmountWallet }
-            const API = 'https://api.fyndah.com/api/v1/organization/paystack/pay'// paystack api
+            const API = 'https://test-api.fyndah.com/api/v1/organization/paystack/pay'// paystack api
             const payment = await axios.post(API, details, {
                 headers: {
                     'Accept': 'application/json',
@@ -142,7 +142,7 @@ function WalletIndex() {
         try {
             setIsLoading(true)
             const body = { org_id: orgId };
-            const url = 'https://api.fyndah.com/api/v1/organization/wallet/balance';
+            const url = 'https://test-api.fyndah.com/api/v1/organization/wallet/balance';
             const response = await axios.post(
                 url, body,
                 {

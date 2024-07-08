@@ -21,7 +21,7 @@ function Leads() {
 
   // const navigate = useNavigate();
 
-  const BASE_URL = "https://api.fyndah.com/api/v1/leads";
+  const BASE_URL = "https://test-api.fyndah.com/api/v1/leads";
   useEffect(
     function () {
       async function retrieveSearchRequest() {

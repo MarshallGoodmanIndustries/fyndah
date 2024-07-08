@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 function OrganizationSwitchModal({ isOpen, onClose, orgList }) {
     const [isLoading, setIsLoading] = useState(false);
     const { authToken } = useContext(AuthContext)
-    const url = "https://api.fyndah.com/api/v1/users/organizations/1/switch";
+    const url = "https://test-api.fyndah.com/api/v1/users/organizations/1/switch";
     const body = {};
 
 

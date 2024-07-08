@@ -82,7 +82,7 @@ const ResetPassword = () => {
         setLoadingPasswordChange(true);
 
         const response = await axios.post(
-          "https://api.fyndah.com/api/v1/auth/password/reset",
+          "https://test-api.fyndah.com/api/v1/auth/password/reset",
           {
             //
             password: password,
