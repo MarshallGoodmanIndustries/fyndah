@@ -17,7 +17,7 @@ const FeaturedListings = () => {
   const containsFeaturedBusinesses = featuredBusinesses?.length > 0;
 
   useEffect(() => {
-    const url = "https://test-api.fyndah.com/api/v1/organization/featured";
+    const url = "https://api.fyndah.com/api/v1/organization/featured";
     try {
       axios.get(url, {
         headers: {

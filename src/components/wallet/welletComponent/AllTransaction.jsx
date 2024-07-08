@@ -14,7 +14,7 @@ function AllTransaction() {
     const { id } = useParams();
     const [allTransaction, setAllTransaction] = useState([])
 
-    const url = "https://test-api.fyndah.com/api/v1/organization/wallet/all_transactions"
+    const url = "https://api.fyndah.com/api/v1/organization/wallet/all_transactions"
     const body = { org_id: id }
     const handleAllTransaction = async () => {
         try {

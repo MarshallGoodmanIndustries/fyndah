@@ -36,7 +36,7 @@ const SideBar = ({ handleToggle }) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const LogoutOpenModal = () => setIsOpenModal(true);
   const LogOutCloseModal = () => setIsOpenModal(false);
-  const API = "https://test-api.fyndah.com/api/v1/users/organizations/logout";
+  const API = "https://api.fyndah.com/api/v1/users/organizations/logout";
   const body = {};
 
   const handleSwitching = async () => {

@@ -88,7 +88,7 @@ function Login() {
     } else {
       try {
         const response = await axios.post(
-          "https://test-api.fyndah.com/api/v1/auth/login",
+          "https://api.fyndah.com/api/v1/auth/login",
           {
             email_or_username: loginFormData.email,
             password: loginFormData.password,
@@ -192,7 +192,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        "https://test-api.fyndah.com/api/v1/auth/email/resend",
+        "https://api.fyndah.com/api/v1/auth/email/resend",
         {
           email: loginFormData.email,
         },
@@ -236,7 +236,7 @@ function Login() {
     setLoadingPasswordLink(true);
     try {
       const response = await axios.post(
-        "https://test-api.fyndah.com/api/v1/auth/password/forgot",
+        "https://api.fyndah.com/api/v1/auth/password/forgot",
         {
           email: emailThatIsReceivingResetLink,
         },

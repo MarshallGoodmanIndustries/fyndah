@@ -152,7 +152,7 @@ const UserProfileSetup = () => {
   //   const fetchData = async () => {
   //     try {
   //       const countryResponse = await axios.get(
-  //         "https://test-api.fyndah.com/api/v1/locations/countries",
+  //         "https://api.fyndah.com/api/v1/locations/countries",
   //         {
   //           headers: {
   //             Authorization: `Bearer ${authToken}`,
@@ -164,7 +164,7 @@ const UserProfileSetup = () => {
   //       setCountries(countryArray);
 
   //       const stateResponse = await axios.get(
-  //         `https://test-api.fyndah.com/api/v1/locations/states/${countryInput}`,
+  //         `https://api.fyndah.com/api/v1/locations/states/${countryInput}`,
   //         {
   //           headers: {
   //             Authorization: `Bearer ${authToken}`,
@@ -175,7 +175,7 @@ const UserProfileSetup = () => {
   //       setStates(stateResponse.data.states);
 
   //       const citiesResponse = await axios.get(
-  //         `https://test-api.fyndah.com/api/v1/locations/cities/${countryInput}/${stateInput}`,
+  //         `https://api.fyndah.com/api/v1/locations/cities/${countryInput}/${stateInput}`,
   //         {
   //           headers: {
   //             Authorization: `Bearer ${authToken}`,
@@ -209,7 +209,7 @@ const UserProfileSetup = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://test-api.fyndah.com/api/v1/users/profile",
+        "https://api.fyndah.com/api/v1/users/profile",
         {
           country_of_residence: countryInput,
           address: address,

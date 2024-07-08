@@ -34,7 +34,7 @@ const DateRangePicker = () => {
         setIsOpen(false)
     }
 
-    const url = "https://test-api.fyndah.com/api/v1/organization/wallet/balance_at_date"
+    const url = "https://api.fyndah.com/api/v1/organization/wallet/balance_at_date"
     const body = {
         org_id: id,
         date: startDate

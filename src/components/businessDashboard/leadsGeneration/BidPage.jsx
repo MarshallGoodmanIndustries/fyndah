@@ -64,7 +64,7 @@ function BidPage() {
   const [leads, setLeads] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   // const (data) props.location;
-  const BASE_URL = "https://test-api.fyndah.com/api/v1/search/requests/9/bid";
+  const BASE_URL = "https://api.fyndah.com/api/v1/search/requests/9/bid";
   useEffect(function () {
     async function fetchLeads() {
       try {
@@ -92,7 +92,7 @@ function BidPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    await fetch(`https://test-api.fyndah.com/api/v1/search/requests/:activesearchrequestId/bid`, {
+    await fetch(`https://api.fyndah.com/api/v1/search/requests/:activesearchrequestId/bid`, {
       method: "POST",
       body: JSON.stringify({ bid_amount: amount }), // Used in post requests.
       headers: {

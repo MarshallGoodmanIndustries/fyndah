@@ -102,7 +102,7 @@ function HeroSection() {
   //get business categories
   useEffect(() => {
     axios
-      .get("https://test-api.fyndah.com/api/v1/organization/categories", {
+      .get("https://api.fyndah.com/api/v1/organization/categories", {
         headers: {
           Accept: "application/json",
         },
@@ -148,7 +148,7 @@ function HeroSection() {
       
     } else {
       
-      const url = "https://test-api.fyndah.com/api/v1/search/business"
+      const url = "https://api.fyndah.com/api/v1/search/business"
       const data = {
         "searchTerms": [businessName, businessLocation, +businessCategory]
       };
@@ -166,7 +166,8 @@ function HeroSection() {
 
         setSearchQueryIsLoading(false);
         if (response.status === 200)
-          setBusinesses(response.data.data);
+          setBusinesses(response.data.data.results);
+        console.log(response);
           setRevealSearchQuery(true);
           if(sessionStorage.getItem("lastServiceName") !== null){
               sessionStorage.removeItem("lastServiceName");

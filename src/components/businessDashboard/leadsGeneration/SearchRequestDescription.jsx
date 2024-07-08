@@ -14,7 +14,7 @@ export default function SearchRequestDescription({
   const { authToken } = useContext(AuthContext);
   const { id } = useParams();
   const [disabled, setDisabled] = useState(false);
-  // const BASE_URL = `https://test-api.fyndah.com/api/v1/search/requests/${id}/bid`;
+  // const BASE_URL = `https://api.fyndah.com/api/v1/search/requests/${id}/bid`;
   // async function bidRequest() {
   //   const res = await fetch(`${BASE_URL}`, {
   //     method: "POST",

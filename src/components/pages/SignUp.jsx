@@ -139,7 +139,7 @@ function SignUp() {
     } else {
       try {
         const response = await axios.post(
-          "https://test-api.fyndah.com/api/v1/auth/users",
+          "https://api.fyndah.com/api/v1/auth/users",
           {
             firstname: signupFormData.firstName,
             lastname: signupFormData.lastName,

@@ -66,7 +66,7 @@ function Profile() {
       }
 
       const response = await axios.post(
-        "https://test-api.fyndah.com/api/v1/users/profile",
+        "https://api.fyndah.com/api/v1/users/profile",
         formData,
         {
           headers: {
@@ -123,7 +123,7 @@ function Profile() {
         sessionStorage.removeItem("lastRoute");
 
         const profileResponse = await axios.get(
-          "https://test-api.fyndah.com/api/v1/users/profile",
+          "https://api.fyndah.com/api/v1/users/profile",
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -204,7 +204,7 @@ function Profile() {
       setIsLoading(true);
       setShowButton(false);
       const response = await axios.post(
-        "https://test-api.fyndah.com/api/v1/users/profile",
+        "https://api.fyndah.com/api/v1/users/profile",
         {
           profile_photo_path: selectedFile,
         },

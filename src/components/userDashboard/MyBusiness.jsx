@@ -28,7 +28,7 @@ function MyBusiness() {
             // console.log("token provided"); // Logging the token to verify it's present
         }
 
-        const API = 'https://test-api.fyndah.com/api/v1/users/organizations/connected';
+        const API = 'https://api.fyndah.com/api/v1/users/organizations/connected';
 
         try {
             const response = await axios.get(API, {
@@ -79,7 +79,7 @@ function MyBusiness() {
 
 
     const handlePathChange = async (id, org_name) => {
-        const url = `https://test-api.fyndah.com/api/v1/users/organizations/${id}/switch`
+        const url = `https://api.fyndah.com/api/v1/users/organizations/${id}/switch`
         const body = { id: id }
 
         try {

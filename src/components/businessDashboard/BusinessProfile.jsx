@@ -100,7 +100,7 @@ function BusinessProfile() {
       formData.append("location_name", inputDefaultStates.locationName);
 
       const response = await axios.post(
-        `https://test-api.fyndah.com/api/v1/organization/update`,
+        `https://api.fyndah.com/api/v1/organization/update`,
         formData,
         {
           headers: {
@@ -142,7 +142,7 @@ function BusinessProfile() {
       try {
         setIsLoading(true);
         const businessProfileResponse = await axios.get(
-          `https://test-api.fyndah.com/api/v1/organization/${id}`,
+          `https://api.fyndah.com/api/v1/organization/${id}`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -206,7 +206,7 @@ function BusinessProfile() {
 
   const location = `${inputDefaultStates.address}  ${inputDefaultStates.city}`;
   // console.log("my id:", id)
-  const API = "https://test-api.fyndah.com/api/v1/users/organizations/logout";
+  const API = "https://api.fyndah.com/api/v1/users/organizations/logout";
   const body = {};
   const handleSwitching = async () => {
     setIsLoading(true);
@@ -266,7 +266,7 @@ function BusinessProfile() {
       setIsLoading(true);
       setShowButton(false);
       const response = await axios.post(
-        `https://test-api.fyndah.com/api/v1/organization/update`,
+        `https://api.fyndah.com/api/v1/organization/update`,
         {
           logo: selectedFile,
           cover_image: selectedCoverFile,

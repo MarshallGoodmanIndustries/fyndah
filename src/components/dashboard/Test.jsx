@@ -35,7 +35,7 @@ const Test = () => {
 
     try {
       const response = await axios.post(
-        "https://test-api.fyndah.com/api/v1/organization/create",
+        "https://api.fyndah.com/api/v1/organization/create",
         requestOptions,
 
         {

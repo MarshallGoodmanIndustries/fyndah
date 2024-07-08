@@ -22,7 +22,7 @@ const ListingComponent = ({logo, cover_image, org_bio, org_name, business_catego
                 </div>
                 <div>
                     <h4 className="font-poppins font-normal text-base  text-textDark">{org_name}</h4>
-                    <p className="font-roboto font-light text-sm  text-textDark">{business_categories[0].name}</p>
+                    <p className="font-roboto font-light text-sm  text-textDark">{business_categories[0]?.name}</p>
                 </div>
             </div>
         </div>
