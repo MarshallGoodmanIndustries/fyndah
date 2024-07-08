@@ -23,7 +23,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ImSpinner9 } from "react-icons/im";
 
 function BusinessProfile() {
-  const { authToken } = useContext(AuthContext);
+  const { authToken, setReload } = useContext(AuthContext);
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
@@ -119,6 +119,9 @@ function BusinessProfile() {
         });
         console.log(response.data);
         console.log(formData);
+
+        // this would change reload's state in AuthContext so components dependent on it can reload
+        setReload((prevState) => !prevState);
       } else {
         setIsLoading(false);
         throw new Error("Profile Update failed");
@@ -289,6 +292,9 @@ function BusinessProfile() {
         });
         setProfilePhoto(response.data.data.logo);
         setCoverPhoto(response.data.data.cover_image);
+
+         // this would change reload's state in AuthContext so components dependent on it can reload
+         setReload((prevState) => !prevState);
       } else {
         setIsLoading(false);
         throw new Error("Profile photo Update failed");

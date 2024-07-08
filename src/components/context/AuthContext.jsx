@@ -3,6 +3,9 @@ import { createContext, useEffect, useState } from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  // this state serves as a watcher for components inheriting it so reloads can be triggered
+  const [reload, setReload] = useState(false);
+
   const [authToken, setAuthToken] = useState(sessionStorage.getItem('authToken') || null);
   const [userData, setUserData] = useState(
     sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')) : null
@@ -62,6 +65,8 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{
+      reload,
+      setReload,
       authToken,
       setAuthToken,
       userData,

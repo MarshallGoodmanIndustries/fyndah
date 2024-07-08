@@ -9,7 +9,7 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 
 const Header = ({ handleToggle, toggle }) => {
-  const { authToken, businessMsgId } = useContext(AuthContext);
+  const { authToken, businessMsgId, reload } = useContext(AuthContext);
 
   const [notificationMessage, setNotificationMessage] = useState([]);
   const [conversationId, setConversationId] = useState("");
@@ -66,6 +66,7 @@ const Header = ({ handleToggle, toggle }) => {
     logo: "",
   });
 
+  // added the reload state to force a reload of the profile
   useEffect(() => {
     const fetchBusinessProfileData = async () => {
       try {
@@ -104,7 +105,7 @@ const Header = ({ handleToggle, toggle }) => {
     };
 
     fetchBusinessProfileData();
-  }, [authToken, id]);
+  }, [authToken, id, reload]);
 
   return (
     <div className="text-white relative sm:px-[2rem] px-[1rem] items-center h-full flex justify-between z-50 font-inter">
