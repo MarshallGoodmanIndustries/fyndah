@@ -166,7 +166,8 @@ function HeroSection() {
 
         setSearchQueryIsLoading(false);
         if (response.status === 200)
-          setBusinesses(response.data.data);
+          setBusinesses(response.data.data.results);
+        console.log(response);
           setRevealSearchQuery(true);
           if(sessionStorage.getItem("lastServiceName") !== null){
               sessionStorage.removeItem("lastServiceName");
